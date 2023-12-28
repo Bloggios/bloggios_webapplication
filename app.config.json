@@ -1,0 +1,10 @@
+{
+  apps : [
+    {
+      name      : "bloggios-production",
+      script    : "npx",
+      interpreter: "none",
+      args: "serve -s build -p 2000"
+    }
+  ]
+}
