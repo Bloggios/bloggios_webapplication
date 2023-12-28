@@ -19,12 +19,20 @@
  */
 
 import React from 'react';
-import UnauthenticatedHomePage from "./unauthenticatedHomePage";
+import styled from "styled-components";
+import HomeHeader from "./Components/HomeHeader";
 
-const HomePage = () => {
+const UnauthenticatedHomePage = () => {
     return (
-        <UnauthenticatedHomePage />
+        <Wrapper>
+            <HomeHeader />
+        </Wrapper>
     );
 };
 
-export default HomePage;
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+export default UnauthenticatedHomePage;
