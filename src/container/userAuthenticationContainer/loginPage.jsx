@@ -35,7 +35,8 @@ import Typography from "../../component/typography/typography";
 import TextField from "../../component/fields/textField";
 import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
-import {SIGNUP_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {loginUser} from "../../restservices/authApi";
 
 const LoginPage = () => {
 
@@ -94,24 +95,34 @@ const LoginPage = () => {
             return;
         }
 
-        // loginUser(loginData)
-        //     .then((response)=> {
-        //         logger.info(response.body);
-        //         setButtonLoader(false)
-        //         navigate(LANDING_PAGE, {
-        //             replace: true
-        //         })
-        //     }).catch((error)=> {
-        //     console.error(error)
-        //     const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-        //     const snackBarData = {
-        //         isSnackbar: true,
-        //         message: message,
-        //         snackbarType: 'Error'
-        //     }
-        //     dispatch(setSnackbar(snackBarData))
-        //     setButtonLoader(false)
-        // })
+        const clientId = process.env.REACT_APP_CLIENT_ID;
+        const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
+
+        const payload = {
+            email : loginData.entryPoint,
+            password: loginData.password,
+            clientId: clientId,
+            clientSecret: clientSecret
+        }
+
+        loginUser(payload)
+            .then((response)=> {
+                console.log(response)
+                setButtonLoader(false)
+                navigate(HOME_PAGE, {
+                    replace: true
+                })
+            }).catch((error)=> {
+            console.error(error)
+            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error'
+            }
+            dispatch(setSnackbar(snackBarData))
+            setButtonLoader(false)
+        })
     };
 
 
@@ -183,7 +194,7 @@ const LoginPage = () => {
                         helperTextColor={'rgb(255,51,51)'}
                         passwordVisibilityIcon={true}
                         isPassword={true}
-                        maxLength={20}
+                        maxLength={25}
                         value={loginData.password}
                         onChange={(e) => handleInputChange(e, 'password')}
                         isDisabled={buttonLoader}
