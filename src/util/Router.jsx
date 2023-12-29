@@ -20,7 +20,7 @@
 
 import React, {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {HOME_PAGE, LOGIN_PAGE, SIGNUP_PAGE} from "../constant/pathConstants";
+import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, SIGNUP_PAGE} from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 
 const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
@@ -35,6 +35,7 @@ const Router = () => {
                 <Route path={HOME_PAGE} element={<HomePage />} />
                 <Route path={LOGIN_PAGE} element={<LoginPage />} />
                 <Route path={SIGNUP_PAGE} element={<SignupPage />} />
+                <Route path={OTP_PAGE} element={<OtpPage />} />
             </Routes>
         </Suspense>
     );

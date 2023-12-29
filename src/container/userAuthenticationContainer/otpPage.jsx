@@ -33,7 +33,8 @@ import {setSnackbar} from "../../state/snackbarSlice";
 import Typography from "../../component/typography/typography";
 import OtpInput from "../../component/fields/otpInput";
 import SimpleLoader from "../../component/loaders/simpleLoader";
-import {SIGNUP_PAGE} from "../../constant/pathConstants";
+import {LOGIN_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {verifyOtp} from "../../restservices/authApi";
 
 const OtpPage = () => {
 
@@ -76,24 +77,22 @@ const OtpPage = () => {
             userId: userId,
             otp: otpData,
         };
-        // verifyOtp(otpPayload)
-        //     .then((response) => {
-        //         logger.info(response);
-        //         dispatch(clearLoading())
-        //         navigate(LOGIN_PAGE, {
-        //             replace: true
-        //         });
-        //     }).catch((error) => {
-        //     logger.error(error);
-        //     const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-        //     const snackBarData = {
-        //         isSnackbar: true,
-        //         message: message,
-        //         snackbarType: 'Error'
-        //     };
-        //     dispatch(clearLoading());
-        //     dispatch(setSnackbar(snackBarData));
-        // })
+        verifyOtp(otpPayload)
+            .then((response) => {
+                dispatch(clearLoading())
+                navigate(LOGIN_PAGE, {
+                    replace: true
+                });
+            }).catch((error) => {
+            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error'
+            };
+            dispatch(clearLoading());
+            dispatch(setSnackbar(snackBarData));
+        })
     });
 
     const handleResendOtp = () => {
@@ -262,7 +261,6 @@ const Wrapper = styled.div`
   gap: 50px;
   padding-top: 40px;
   min-width: 270px;
-
 `;
 
 const OtpWrapper = styled.div`

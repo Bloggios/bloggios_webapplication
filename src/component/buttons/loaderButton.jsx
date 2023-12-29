@@ -77,7 +77,7 @@ const LoaderButton = ({
     );
 };
 
-const ButtonWrapper = styled.div`
+const ButtonWrapper = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,11 +85,13 @@ const ButtonWrapper = styled.div`
   border: ${(props) => props.border};
   color: ${(props) => props.color};
   transition: all 150ms;
+
   &:hover {
     color: ${(props) => props.hoveredColor};
     background-color: ${(props) => props.hoveredBackgroundColor};
     border: ${(props) => props.hoveredBorder};
   }
+
   &:active {
     color: ${(props) => props.activeColor};
     background-color: ${(props) => props.activeBackgroundColor};

@@ -35,7 +35,8 @@ import IconButton from "../../component/buttons/iconButton";
 import TextField from "../../component/fields/textField";
 import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
-import {LOGIN_PAGE} from "../../constant/pathConstants";
+import {LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
+import {signupUser} from "../../restservices/authApi";
 
 const SignUpPage = () => {
 
@@ -94,6 +95,14 @@ const SignUpPage = () => {
         return errors;
     };
 
+    const handleEnterPress = (event) => {
+        console.log(event)
+        if (event.keyCode === '13') {
+            handleSubmit();
+        }
+    };
+
+
     const handleSubmit = (e) => {
         setButtonLoader(true)
         e.preventDefault();
@@ -106,33 +115,31 @@ const SignUpPage = () => {
             return;
         }
 
-        // signupUser(signupData)
-        //     .then((response) => {
-        //         logger.info(response);
-        //         setButtonLoader(false)
-        //         const snackbarData = {
-        //             isSnackbar: true,
-        //             message: 'OTP sent to your Email. Please verify to continue',
-        //             snackbarType: 'Success'
-        //         };
-        //         dispatch(setSnackbar(snackbarData))
-        //         navigate(OTP_PAGE, {
-        //             replace: true,
-        //             state: {
-        //                 userId: response.userId
-        //             }
-        //         })
-        //     }).catch((error) => {
-        //     logger.error(error)
-        //     const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-        //     const snackBarData = {
-        //         isSnackbar: true,
-        //         message: message,
-        //         snackbarType: 'Error'
-        //     }
-        //     dispatch(setSnackbar(snackBarData))
-        //     setButtonLoader(false)
-        // })
+        signupUser(signupData)
+            .then((response) => {
+                setButtonLoader(false)
+                const snackbarData = {
+                    isSnackbar: true,
+                    message: 'OTP sent to your Email. Please verify to continue',
+                    snackbarType: 'Success'
+                };
+                dispatch(setSnackbar(snackbarData))
+                navigate(OTP_PAGE, {
+                    replace: true,
+                    state: {
+                        userId: response.userId
+                    }
+                })
+            }).catch((error) => {
+            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error'
+            }
+            dispatch(setSnackbar(snackBarData))
+            setButtonLoader(false)
+        })
     };
 
 
@@ -221,6 +228,7 @@ const SignUpPage = () => {
                     borderRadius={'10px'}
                     isLoading={buttonLoader}
                     text={'Sign Up'}
+                    fontSize={'16px'}
                     onClick={handleSubmit}
                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
                     border={'1px solid rgba(255, 255, 255, 0.4)'}
