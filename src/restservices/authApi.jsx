@@ -22,11 +22,14 @@
  */
 
 import {gatewayAxios} from "./baseAxios";
-import {LOGIN_PATH, RESEND_OTP, SIGNUP_PATH, VERIFY_OTP} from "../constant/apiConstants";
+import {LOGIN_PATH, REFRESH_TOKEN, RESEND_OTP, SIGNUP_PATH, VERIFY_OTP} from "../constant/apiConstants";
+
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 
 export const loginUser = (loginPayload) => {
-    return gatewayAxios.post(LOGIN_PATH, loginPayload)
-        .then((response)=> response);
+    return gatewayAxios.post(LOGIN_PATH, loginPayload, {
+        withCredentials: true
+    }).then((response)=> response);
 }
 
 export const signupUser = (signupPayload) => {
@@ -51,4 +54,13 @@ export const resendOtp = (userId) => {
             'userId': userId
         }
     }).then((response)=> response.data);
+}
+
+export const refreshToken = () => {
+    return gatewayAxios.get(REFRESH_TOKEN, {
+        withCredentials: true,
+        headers: {
+            'clientId': CLIENT_ID
+        }
+    }).then((response)=> response);
 }

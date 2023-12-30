@@ -18,10 +18,36 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
+import {useDispatch} from "react-redux";
+import {refreshToken} from "./restservices/authApi";
+import {clearCredentials, setCredentials} from "./state/authSlice";
+import LoaderPage from "./component/loaders/loaderPage";
 
 const App = () => {
+
+    const dispatch = useDispatch();
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        refreshToken()
+            .then((response)=> {
+                const credentials = {
+                    accessToken: response.data.accessToken,
+                    userId: response.data.userId,
+                    isAuthenticated: true
+                }
+                dispatch(setCredentials(credentials));
+                setIsChecking(false);
+            }).catch((error)=> {
+                dispatch(clearCredentials());
+                setIsChecking(false);
+        })
+    }, []);
+
+    if (isChecking) return <LoaderPage />
+
     return (
         <Router />
     );
