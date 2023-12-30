@@ -327,6 +327,7 @@ const ButtonWrapper = styled.button`
   align-items: center;
   justify-content: center;
   transition: all 150ms;
+  padding: 20px 10px;
 
   &:hover {
     background-color: #4258ff;
