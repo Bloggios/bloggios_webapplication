@@ -21,11 +21,13 @@
 import {configureStore} from "@reduxjs/toolkit";
 import loadingSlice from "./loadingSlice";
 import snackbarSlice from "./snackbarSlice";
+import {authSlice} from "./authSlice";
 
 const store = configureStore({
     reducer: {
         loading: loadingSlice,
-        snackbar: snackbarSlice
+        snackbar: snackbarSlice,
+        auth: authSlice.reducer
     }
 })
 

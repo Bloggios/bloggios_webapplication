@@ -37,6 +37,7 @@ import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {loginUser} from "../../restservices/authApi";
+import {setCredentials} from "../../state/authSlice";
 
 const LoginPage = () => {
 
@@ -107,11 +108,16 @@ const LoginPage = () => {
 
         loginUser(payload)
             .then((response)=> {
-                console.log(response)
-                setButtonLoader(false)
+                const credentials = {
+                    accessToken: response.data.accessToken,
+                    userId: response.data.userId,
+                    isAuthenticated: true
+                }
+                dispatch(setCredentials(credentials));
+                setButtonLoader(false);
                 navigate(HOME_PAGE, {
                     replace: true
-                })
+                });
             }).catch((error)=> {
             console.error(error)
             const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
