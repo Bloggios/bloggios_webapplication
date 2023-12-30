@@ -22,7 +22,7 @@
  */
 
 import {gatewayAxios} from "./baseAxios";
-import {LOGIN_PATH, SIGNUP_PATH, VERIFY_OTP} from "../constant/apiConstants";
+import {LOGIN_PATH, RESEND_OTP, SIGNUP_PATH, VERIFY_OTP} from "../constant/apiConstants";
 
 export const loginUser = (loginPayload) => {
     return gatewayAxios.post(LOGIN_PATH, loginPayload)
@@ -41,6 +41,14 @@ export const verifyOtp = (otpPayload) => {
         },
         params: {
             'userId': otpPayload.userId
+        }
+    }).then((response)=> response.data);
+}
+
+export const resendOtp = (userId) => {
+    return gatewayAxios.get(RESEND_OTP, {
+        params: {
+            'userId': userId
         }
     }).then((response)=> response.data);
 }

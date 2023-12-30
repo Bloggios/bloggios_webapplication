@@ -21,3 +21,4 @@
 export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
 export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
 export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
+export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';

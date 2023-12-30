@@ -34,7 +34,7 @@ import Typography from "../../component/typography/typography";
 import OtpInput from "../../component/fields/otpInput";
 import SimpleLoader from "../../component/loaders/simpleLoader";
 import {LOGIN_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
-import {verifyOtp} from "../../restservices/authApi";
+import {resendOtp, verifyOtp} from "../../restservices/authApi";
 
 const OtpPage = () => {
 
@@ -97,30 +97,29 @@ const OtpPage = () => {
 
     const handleResendOtp = () => {
         setIsLoading(true);
-        // resendOtp(userId)
-        //     .then((response) => {
-        //         const snackbarData = {
-        //             isSnackbar: true,
-        //             message: 'OTP sent to your Email',
-        //             snackbarType: 'Success'
-        //         };
-        //         dispatch(setSnackbar(snackbarData))
-        //         setTimeout(() => {
-        //             setIsLoading(false);
-        //             setCountdown(25);
-        //         }, 2000)
-        //     }).catch((error) => {
-        //     logger.error(error);
-        //     setIsLoading(false);
-        //     const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-        //     const snackBarData = {
-        //         isSnackbar: true,
-        //         message: message,
-        //         snackbarType: 'Error'
-        //     }
-        //     dispatch(setSnackbar(snackBarData))
-        //     setCountdown(25);
-        // })
+        resendOtp(userId)
+            .then((response) => {
+                const snackbarData = {
+                    isSnackbar: true,
+                    message: 'OTP sent to your Email',
+                    snackbarType: 'Success'
+                };
+                dispatch(setSnackbar(snackbarData))
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setCountdown(25);
+                }, 2000)
+            }).catch((error) => {
+            setIsLoading(false);
+            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error'
+            }
+            dispatch(setSnackbar(snackBarData))
+            setCountdown(25);
+        })
     }
 
     useEffect(() => {

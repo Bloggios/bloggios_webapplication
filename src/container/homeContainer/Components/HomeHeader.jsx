@@ -52,6 +52,10 @@ const Wrapper = styled.div`
   height: calc(100vh - 72px);
   align-items: center;
   padding-top: 100px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   
   @media(max-width: 650px) {
     padding-top: 70px;
