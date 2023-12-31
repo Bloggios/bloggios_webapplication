@@ -18,17 +18,21 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
+import React from 'react';
+import styled from "styled-components";
+import HomeHeader from "./Components/HomeHeader";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer
-    }
-})
+const UnauthenticatedHomePage = () => {
+    return (
+        <Wrapper>
+            <HomeHeader />
+        </Wrapper>
+    );
+};
 
-export default store;
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+export default UnauthenticatedHomePage;

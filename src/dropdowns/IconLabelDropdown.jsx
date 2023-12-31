@@ -21,8 +21,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../component/tooltips/popoverAvatar";
-import {BsChevronDown, BsChevronUp} from "react-icons/bs";
-import {navbarProfileNotLoggedInList} from "../constant/listConstants";
+import {BsChevronDown} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 const IconLabelDropdown = ({
@@ -107,6 +106,7 @@ const DropdownWrapper = styled.button`
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   letter-spacing: 1px;
+  z-index: 5;
 
   &:hover {
     border: 1px solid rgba(255, 255, 255, 0.6);

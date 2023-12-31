@@ -18,17 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
-
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer
-    }
-})
-
-export default store;
+export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
+export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
+export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
+export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
+export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';

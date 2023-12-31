@@ -19,12 +19,15 @@
  */
 
 import React from 'react';
+import UnauthenticatedHomePage from "./unauthenticatedHomePage";
+import useSeo from "../../globalseo/useSeo";
 
 const HomePage = () => {
+
+    useSeo('homepage');
+
     return (
-        <div>
-            HomePage
-        </div>
+        <UnauthenticatedHomePage />
     );
 };
 

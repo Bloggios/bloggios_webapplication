@@ -12,23 +12,36 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
+import React from 'react';
+import PropTypes from "prop-types";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer
-    }
-})
+const SizedBox = ({
+    spacing,
+    direction,
+                  }) => {
+    return (
+        <div style={{
+            width: direction==='horizontal' ? spacing : 0,
+            height: direction==='vertical' ? spacing : 0
+        }} />
+    );
+};
 
-export default store;
+SizedBox.propTypes = {
+    spacing: PropTypes.string.isRequired,
+    direction: PropTypes.oneOf([
+        "horizontal",
+        "vertical"
+    ])
+}
+
+export default SizedBox;

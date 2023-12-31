@@ -20,16 +20,22 @@
 
 import React, {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {HOME_PAGE} from "../constant/pathConstants";
+import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, SIGNUP_PAGE} from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 
-const HomePage = lazy(()=> import('../container/homeContainer/homePage'))
+const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
+const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
+const SignupPage = lazy(()=> import('../container/userAuthenticationContainer/signUpPage'));
+const OtpPage = lazy(()=> import('../container/userAuthenticationContainer/otpPage'));
 
 const Router = () => {
     return (
         <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
             <Routes>
                 <Route path={HOME_PAGE} element={<HomePage />} />
+                <Route path={LOGIN_PAGE} element={<LoginPage />} />
+                <Route path={SIGNUP_PAGE} element={<SignupPage />} />
+                <Route path={OTP_PAGE} element={<OtpPage />} />
             </Routes>
         </Suspense>
     );

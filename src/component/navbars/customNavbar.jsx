@@ -28,6 +28,7 @@ import {useNavigate} from "react-router-dom";
 import {navbarProfileNotLoggedInList} from "../../constant/listConstants";
 import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
+import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 
 const CustomNavbar = () => {
 
@@ -57,6 +58,7 @@ const CustomNavbar = () => {
                     itemsList={navbarProfileNotLoggedInList}
                 />
             </NavbarWrapper>
+            {width <= 700 && <MemoizedNavbarItemsMobile />}
         </>
     );
 };

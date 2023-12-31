@@ -18,17 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
+import {createSlice} from "@reduxjs/toolkit";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer
+const authSlice = createSlice({
+    name: 'auth',
+    initialState: {
+        userId: null,
+        accessToken: null,
+        isAuthenticated: false
+    },
+    reducers: {
+        setCredentials: (state, action) => {
+            const { userId, accessToken, isAuthenticated } = action.payload;
+            state.userId = userId;
+            state.accessToken = accessToken;
+            state.isAuthenticated=  isAuthenticated
+        },
+        clearCredentials: (state, action) => {
+            state.userId = null
+            state.accessToken = null
+            state.isAuthenticated = false
+        }
     }
-})
+});
 
-export default store;
+export { authSlice }
+
+export const { setCredentials, clearCredentials } = authSlice.actions;

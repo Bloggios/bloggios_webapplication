@@ -1,0 +1,28 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [ BG-1.0 ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ENHANCED_VPS_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.ENHANCED_VPS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /root/bloggios_webapplication
+            pm2 stop bloggios-production
+            rm build -r
+            rm node_modules -r
+            git pull
+            npm cache clean --force 
+            npm install
+            npm run build
+            pm2 restart app.config.json
