@@ -27,3 +27,4 @@ export const LOGIN_PAGE = '/login';
 export const SUPPORT_PAGE = '/';
 export const REPORT_BUG_PAGE = '/';
 export const OTP_PAGE = '/otp';
+export const PROFILE_PAGE = '/auth/profile';

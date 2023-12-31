@@ -23,7 +23,7 @@
 
 import {gatewayAxios} from "./baseAxios";
 import {
-    LOGIN_PATH,
+    LOGIN_PATH, LOGOUT,
     OTP_USERID_REDIRECT,
     REFRESH_TOKEN,
     RESEND_OTP,
@@ -74,6 +74,12 @@ export const refreshToken = () => {
 
 export const otpAuthUserIdRedirect = (authPayload) => {
     return gatewayAxios.post(OTP_USERID_REDIRECT, authPayload, {
+        withCredentials: true
+    }).then((response)=> response);
+}
+
+export const logoutUser = () => {
+    return gatewayAxios.get(LOGOUT, {
         withCredentials: true
     }).then((response)=> response);
 }

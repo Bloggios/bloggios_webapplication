@@ -21,13 +21,13 @@
  * limitations under the License.
  */
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebookF, FaGithub} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import useSeo from "../../globalseo/useSeo";
 import Typography from "../../component/typography/typography";
@@ -35,7 +35,7 @@ import IconButton from "../../component/buttons/iconButton";
 import TextField from "../../component/fields/textField";
 import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
-import {LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
 import {signupUser} from "../../restservices/authApi";
 
 const SignUpPage = () => {
@@ -45,6 +45,7 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [buttonLoader, setButtonLoader] = useState(false);
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     const [signupData, setSignupData] = useState({
         email: '',
@@ -71,6 +72,14 @@ const SignUpPage = () => {
             ...prevHelperText,
             [property]: '',
         }));
+    }, []);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(HOME_PAGE, {
+                replace: true
+            })
+        }
     }, []);
 
     const validateForm = () => {

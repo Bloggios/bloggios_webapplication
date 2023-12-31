@@ -22,7 +22,7 @@ import {
     CHATS_PAGE,
     HOME_PAGE,
     LOGIN_PAGE,
-    NOTIFICATIONS_PAGE,
+    NOTIFICATIONS_PAGE, PROFILE_PAGE,
     REPORT_BUG_PAGE,
     SERVICES_PAGE,
     SIGNUP_PAGE,
@@ -33,6 +33,8 @@ import {BsChatDots} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
+import {FaRegUser} from "react-icons/fa";
+import {IoMdLogOut} from "react-icons/io";
 
 export const navItems = [
     { page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2 /> },
@@ -66,6 +68,33 @@ export const navbarProfileNotLoggedInList = [
         label: 'Report Bug',
         path: REPORT_BUG_PAGE
     }
+]
+
+export const navbarProfileLoggedInList = [
+    {
+        id: 1,
+        icon: <FaRegUser fontSize={'18px'} />,
+        label: 'Profile',
+        path: PROFILE_PAGE
+    },
+    {
+        id: 2,
+        icon: <BiHelpCircle fontSize={'18px'} />,
+        label: 'Help',
+        path: SUPPORT_PAGE
+    },
+    {
+        id: 3,
+        icon: <AiOutlineBug fontSize={'18px'} />,
+        label: 'Report Bug',
+        path: REPORT_BUG_PAGE
+    },
+    {
+        id: 4,
+        icon: <IoMdLogOut fontSize={'18px'} />,
+        label: 'Logout',
+        path: HOME_PAGE
+    },
 ]
 
 export const navItemsList = [
