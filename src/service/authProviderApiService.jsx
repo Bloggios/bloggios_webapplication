@@ -18,9 +18,33 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
-export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
-export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
-export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
-export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
-export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
+import {otpAuthUserIdRedirect} from "../restservices/authApi";
+import {OTP_PAGE} from "../constant/pathConstants";
+import {setSnackbar} from "../state/snackbarSlice";
+
+export const authOtpUserId = (payload, navigate, dispatch) => {
+    console.log("In Method")
+    otpAuthUserIdRedirect(payload)
+        .then((response)=> {
+            const snackbarData = {
+                isSnackbar: true,
+                message: 'Account is not verified. Please verify your Email',
+                snackbarType: 'Warning'
+            };
+            dispatch(setSnackbar(snackbarData))
+            navigate(OTP_PAGE, {
+                replace: true,
+                state: {
+                    userId: response?.data?.userId
+                }
+            })
+        }).catch((error)=> {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+    })
+}

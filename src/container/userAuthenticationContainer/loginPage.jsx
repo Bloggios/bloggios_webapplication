@@ -38,6 +38,8 @@ import Divider from "../../component/divider/divider";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {loginUser} from "../../restservices/authApi";
 import {setCredentials} from "../../state/authSlice";
+import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
+import {authOtpUserId} from "../../service/authProviderApiService";
 
 const LoginPage = () => {
 
@@ -119,14 +121,18 @@ const LoginPage = () => {
                     replace: true
                 });
             }).catch((error)=> {
-            console.error(error)
-            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-            const snackBarData = {
-                isSnackbar: true,
-                message: message,
-                snackbarType: 'Error'
+            console.error(error?.response?.data?.uniqueErrorCode)
+            if (error?.response?.data?.uniqueErrorCode === ACCOUNT_INACTIVE) {
+                authOtpUserId(payload, navigate, dispatch)
+            } else {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData))
             }
-            dispatch(setSnackbar(snackBarData))
             setButtonLoader(false)
         })
     };

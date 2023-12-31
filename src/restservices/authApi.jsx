@@ -22,7 +22,14 @@
  */
 
 import {gatewayAxios} from "./baseAxios";
-import {LOGIN_PATH, REFRESH_TOKEN, RESEND_OTP, SIGNUP_PATH, VERIFY_OTP} from "../constant/apiConstants";
+import {
+    LOGIN_PATH,
+    OTP_USERID_REDIRECT,
+    REFRESH_TOKEN,
+    RESEND_OTP,
+    SIGNUP_PATH,
+    VERIFY_OTP
+} from "../constant/apiConstants";
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 
@@ -62,5 +69,11 @@ export const refreshToken = () => {
         headers: {
             'clientId': CLIENT_ID
         }
+    }).then((response)=> response);
+}
+
+export const otpAuthUserIdRedirect = (authPayload) => {
+    return gatewayAxios.post(OTP_USERID_REDIRECT, authPayload, {
+        withCredentials: true
     }).then((response)=> response);
 }
