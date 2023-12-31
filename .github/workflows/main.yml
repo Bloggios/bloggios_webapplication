@@ -2,7 +2,7 @@ name: Deploy Production
 
 on:
   push:
-    branches: [ BG-1.0 ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -19,9 +19,11 @@ jobs:
           script: |
             cd /root/bloggios_webapplication
             pm2 stop bloggios-production
+            rm .env
             rm build -r
             rm node_modules -r
             git pull
+            cp /root/secrets/bloggios_webapplication/.env /root/bloggios_webapplication
             npm cache clean --force 
             npm install
             npm run build
