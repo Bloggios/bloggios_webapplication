@@ -12,9 +12,9 @@ jobs:
       - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.ENHANCED_VPS_HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.ENHANCED_VPS_PRIVATE_KEY }}
+          host: ${{ secrets.V8_HOST }}
+          username: ${{ secrets.V8_USERNAME }}
+          key: ${{ secrets.V8_VPS_PRIVATE_KEY }}
           port: 22
           script: |
             cd /root/bloggios_webapplication
