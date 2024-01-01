@@ -23,3 +23,6 @@ export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
 export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
 export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
 export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
+export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
+export const PROFILE_ADDED = '/auth-provider/rd/v1.0/profile/is-added';
+export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout'

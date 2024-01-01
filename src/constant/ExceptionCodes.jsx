@@ -18,13 +18,4 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/';
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/';
-export const REPORT_BUG_PAGE = '/';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/auth/profile';
+export const ACCOUNT_INACTIVE = 'BG-AUTH-RD-DE-2023';

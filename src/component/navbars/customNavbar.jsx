@@ -25,15 +25,17 @@ import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import MemoizedNavbarItems from "./NavbarItems";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
-import {navbarProfileNotLoggedInList} from "../../constant/listConstants";
+import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../constant/listConstants";
 import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
+import {useSelector} from "react-redux";
 
 const CustomNavbar = () => {
 
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     return (
         <>
@@ -55,7 +57,7 @@ const CustomNavbar = () => {
                     height={'60%'}
                     source={bloggios_logo}
                     text={'Rohit Parihar'}
-                    itemsList={navbarProfileNotLoggedInList}
+                    itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
                 />
             </NavbarWrapper>
             {width <= 700 && <MemoizedNavbarItemsMobile />}

@@ -18,13 +18,33 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/';
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/';
-export const REPORT_BUG_PAGE = '/';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/auth/profile';
+import {otpAuthUserIdRedirect} from "../restservices/authApi";
+import {OTP_PAGE} from "../constant/pathConstants";
+import {setSnackbar} from "../state/snackbarSlice";
+
+export const authOtpUserId = (payload, navigate, dispatch) => {
+    console.log("In Method")
+    otpAuthUserIdRedirect(payload)
+        .then((response)=> {
+            const snackbarData = {
+                isSnackbar: true,
+                message: 'Account is not verified. Please verify your Email',
+                snackbarType: 'Warning'
+            };
+            dispatch(setSnackbar(snackbarData))
+            navigate(OTP_PAGE, {
+                replace: true,
+                state: {
+                    userId: response?.data?.userId
+                }
+            })
+        }).catch((error)=> {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+    })
+}

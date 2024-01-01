@@ -21,13 +21,13 @@
  * limitations under the License.
  */
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebookF, FaGithub} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import useSeo from "../../globalseo/useSeo";
 import IconButton from "../../component/buttons/iconButton";
@@ -38,6 +38,10 @@ import Divider from "../../component/divider/divider";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {loginUser} from "../../restservices/authApi";
 import {setCredentials} from "../../state/authSlice";
+import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
+import {authOtpUserId} from "../../service/authProviderApiService";
+import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
+import {PROFILE_ADDED} from "../../constant/apiConstants";
 
 const LoginPage = () => {
 
@@ -46,6 +50,8 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [buttonLoader, setButtonLoader] = useState(false);
+    const authenticatedAxios = AuthenticatedAxiosInterceptor();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     const [loginData, setLoginData] = useState({
         entryPoint: '',
@@ -84,6 +90,31 @@ const LoginPage = () => {
         return errors;
     };
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            authenticatedAxios.get(PROFILE_ADDED)
+                .then((response)=> {
+                    setButtonLoader(false);
+                    if (response?.data?.exist === true && response?.data?.event === 'profile') {
+                        navigate(HOME_PAGE);
+                    } else {
+                        navigate(SIGNUP_PAGE);
+                    }
+                }).catch((error)=> {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData))
+                navigate(HOME_PAGE, {
+                    replace: true
+                })
+            })
+        }
+    }, []);
+
     const handleLogin = (e) => {
         setButtonLoader(true);
         e.preventDefault();
@@ -108,25 +139,20 @@ const LoginPage = () => {
 
         loginUser(payload)
             .then((response)=> {
-                const credentials = {
-                    accessToken: response.data.accessToken,
-                    userId: response.data.userId,
-                    isAuthenticated: true
-                }
-                dispatch(setCredentials(credentials));
-                setButtonLoader(false);
-                navigate(HOME_PAGE, {
-                    replace: true
-                });
+                window.location.reload();
             }).catch((error)=> {
-            console.error(error)
-            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-            const snackBarData = {
-                isSnackbar: true,
-                message: message,
-                snackbarType: 'Error'
+            console.error(error?.response?.data?.uniqueErrorCode)
+            if (error?.response?.data?.uniqueErrorCode === ACCOUNT_INACTIVE) {
+                authOtpUserId(payload, navigate, dispatch)
+            } else {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData))
             }
-            dispatch(setSnackbar(snackBarData))
             setButtonLoader(false)
         })
     };

@@ -29,3 +29,12 @@ export const gatewayAxios = axios.create(
         withCredentials: true
     }
 )
+
+export const authenticatedAxios = axios.create(
+    {
+        baseURL: process.env.REACT_APP_API_URL,
+        headers: {
+            'clientId': process.env.REACT_APP_CLIENT_ID
+        }
+    }
+)

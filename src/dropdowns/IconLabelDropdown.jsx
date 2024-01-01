@@ -23,6 +23,10 @@ import styled from "styled-components";
 import PopoverAvatar from "../component/tooltips/popoverAvatar";
 import {BsChevronDown} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
+import {logoutUser} from "../restservices/authApi";
+import {setSnackbar} from "../state/snackbarSlice";
+import {useDispatch} from "react-redux";
+import {HOME_PAGE} from "../constant/pathConstants";
 
 const IconLabelDropdown = ({
                                height,
@@ -41,6 +45,7 @@ const IconLabelDropdown = ({
     const [isShown, setIsShown] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
+    const dispatch = useDispatch();
 
     const handleClickOutside = (e) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -54,6 +59,28 @@ const IconLabelDropdown = ({
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
+
+    const handleNavigation = (item) => {
+        if (item.label === 'Logout') {
+            logoutUser()
+                .then((response)=> {
+                    navigate(HOME_PAGE, {
+                        replace: true
+                    });
+                    window.location.reload();
+                }).catch((error)=> {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData))
+            })
+        } else {
+            navigate(item.path);
+        }
+    }
 
     return (
         <DropdownWrapper
@@ -82,7 +109,7 @@ const IconLabelDropdown = ({
                 transform: isShown ? 'translateY(5%)' : 'translateY(100%)'
             }}>
                 {itemsList.map((item) => (
-                    <DropdownItem onClick={()=> navigate(item.path)} key={item.id}>
+                    <DropdownItem onClick={()=> handleNavigation(item)} key={item.id}>
                         <span>{item.label}</span>
                         {item.icon}
                     </DropdownItem>
