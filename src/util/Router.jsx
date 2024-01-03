@@ -20,8 +20,11 @@
 
 import React, {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, SIGNUP_PAGE} from "../constant/pathConstants";
+import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
+import ProtectedRoute from "./ProtectedRoute";
+import {useSelector} from "react-redux";
+import ProfileAdditionInitial from "../container/profileContainer/ProfileAdditionInitial";
 
 const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
 const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
@@ -29,6 +32,9 @@ const SignupPage = lazy(()=> import('../container/userAuthenticationContainer/si
 const OtpPage = lazy(()=> import('../container/userAuthenticationContainer/otpPage'));
 
 const Router = () => {
+
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+
     return (
         <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
             <Routes>
@@ -36,6 +42,10 @@ const Router = () => {
                 <Route path={LOGIN_PAGE} element={<LoginPage />} />
                 <Route path={SIGNUP_PAGE} element={<SignupPage />} />
                 <Route path={OTP_PAGE} element={<OtpPage />} />
+
+                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+                    <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial />} />
+                </Route>
             </Routes>
         </Suspense>
     );

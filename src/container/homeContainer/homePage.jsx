@@ -18,13 +18,64 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import UnauthenticatedHomePage from "./unauthenticatedHomePage";
 import useSeo from "../../globalseo/useSeo";
+import {useDispatch, useSelector} from "react-redux";
+import {PROFILE_ADDED} from "../../constant/apiConstants";
+import {HOME_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useNavigate} from "react-router-dom";
+import LoaderPage from "../../component/loaders/loaderPage";
+import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
+import {setProfile} from "../../state/profileSlice";
 
 const HomePage = () => {
 
     useSeo('homepage');
+
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {isAdded} = useSelector((state)=> state.profile);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const authenticatedAxios = AuthenticatedAxiosInterceptor();
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        if (isAuthenticated && !isAdded) {
+            authenticatedAxios.get(PROFILE_ADDED)
+                .then((response)=> {
+                    if (response?.data?.exist === true && response?.data?.event === 'profile') {
+                        dispatch(setProfile({isAdded: true}))
+                        setIsChecking(false)
+                    } else {
+                        setIsChecking(false)
+                        const snackBarData = {
+                            isSnackbar: true,
+                            message: 'Please add you Profile Data first',
+                            snackbarType: 'Warning'
+                        }
+                        dispatch(setSnackbar(snackBarData))
+                        navigate(PROFILE_ADDITION_INITIAL);
+                    }
+                }).catch((error)=> {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData))
+                navigate(HOME_PAGE, {
+                    replace: true
+                })
+            })
+        } else {
+            setIsChecking(false)
+        }
+    }, []);
+
+    if (isChecking) return <LoaderPage />
 
     return (
         <UnauthenticatedHomePage />

@@ -65,10 +65,7 @@ export const resendOtp = (userId) => {
 
 export const refreshToken = () => {
     return gatewayAxios.get(REFRESH_TOKEN, {
-        withCredentials: true,
-        headers: {
-            'clientId': CLIENT_ID
-        }
+        withCredentials: true
     }).then((response)=> response);
 }
 

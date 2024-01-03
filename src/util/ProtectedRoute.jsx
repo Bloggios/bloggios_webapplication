@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/';
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/';
-export const REPORT_BUG_PAGE = '/';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/auth/profile';
-export const PROFILE_ADDITION_INITIAL = '/auth/profile-add-initial';
+import {Navigate, Outlet} from "react-router-dom";
+import {LOGIN_PAGE} from "../constant/pathConstants";
+
+const ProtectedRoute = ({isAuthenticated}) => {
+    if (!isAuthenticated) {
+        return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
+    }
+    return <Outlet />
+}
+
+export default ProtectedRoute;

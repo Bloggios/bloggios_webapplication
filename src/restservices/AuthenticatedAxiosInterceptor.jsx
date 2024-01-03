@@ -50,7 +50,10 @@ const AuthenticatedAxiosInterceptor = () => {
                 prevRequest._retry = true;
                 try {
                     const response = await gatewayAxios.get(REFRESH_TOKEN, {
-                        withCredentials: true
+                        withCredentials: true,
+                        headers: {
+                            'clientId': process.env.REACT_APP_CLIENT_ID
+                        }
                     });
                     const authData = { ...response.data, isAuthenticated: true };
                     dispatch(setCredentials(authData));

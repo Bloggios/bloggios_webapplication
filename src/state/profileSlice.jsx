@@ -18,14 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/';
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/';
-export const REPORT_BUG_PAGE = '/';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/auth/profile';
-export const PROFILE_ADDITION_INITIAL = '/auth/profile-add-initial';
+import {createSlice} from "@reduxjs/toolkit";
+
+const profileSlice = createSlice({
+    name: 'profile',
+    initialState: {
+        isAdded: false,
+        name: null,
+        profileImageUrl: null
+    },
+    reducers: {
+        setProfile: (state, action) => {
+            const { isAdded, name, profileImageUrl } = action.payload;
+            state.isAdded = isAdded;
+            state.name = name;
+            state.profileImageUrl=  profileImageUrl;
+        },
+        clearProfile: (state, action) => {
+            state.isAdded = false;
+            state.name = null;
+            state.profileImageUrl=  null;
+        }
+    }
+});
+
+export { profileSlice }
+
+export const { setProfile, clearProfile } = profileSlice.actions;
