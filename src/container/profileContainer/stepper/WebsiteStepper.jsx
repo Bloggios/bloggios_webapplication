@@ -41,7 +41,7 @@ const WebsiteStepper = ({data, setData}) => {
     return (
         <>
             <TextField
-                placeholder={'Website'}
+                placeholder={'Link'}
                 fontSize={'16px'}
                 padding={'10px 10px'}
                 background={'rgba(255, 255, 255, 0.1)'}
@@ -49,7 +49,7 @@ const WebsiteStepper = ({data, setData}) => {
                 helperTextAllowed={false}
                 fontWeight={'400'}
                 value={data.website}
-                onChange={(e) => handleChange(e, 'entryPoint')}
+                onChange={(e) => handleChange(e)}
             />
             <TextSpan>
                 Build your social presence authentically. Enter your name—it's the first step in creating connections and making your profile uniquely yours. Join us in sharing and connecting with others!
