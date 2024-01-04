@@ -26,6 +26,7 @@ import NameStepper from "./stepper/NameStepper";
 import LoaderButton from "../../component/buttons/loaderButton";
 import GenderAndDobStepper from "./stepper/GenderAndDobStepper";
 import BioStepper from "./stepper/BioStepper";
+import WebsiteStepper from "./stepper/WebsiteStepper";
 
 const ProfileAdditionInitial = () => {
 
@@ -95,11 +96,9 @@ const ProfileAdditionInitial = () => {
             <Main>
                 <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
                 <TextWrapper>
-                    <Typography
-                        text={'Stepping Bloggios'}
-                        type={'title'}
-                        family={'Inter'}
-                    />
+                    <TitleText>
+                        Stepping Bloggios
+                    </TitleText>
                 </TextWrapper>
 
                 <StepperWrapper>
@@ -118,6 +117,11 @@ const ProfileAdditionInitial = () => {
                     {
                         currentStep === 3 && (
                             <BioStepper data={data} setData={setData}/>
+                        )
+                    }
+                    {
+                        currentStep === 4 && (
+                            <WebsiteStepper data={data} setData={setData}/>
                         )
                     }
 
@@ -143,7 +147,7 @@ const ProfileAdditionInitial = () => {
                     }
 
                     {
-                        currentStep >= 2 && (
+                        currentStep >= 2 && currentStep < 4 && (
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -172,6 +176,50 @@ const ProfileAdditionInitial = () => {
                                     borderRadius={'10px'}
                                     isLoading={false}
                                     text={'Next'}
+                                    onClick={() => handleNext(2)}
+                                    fontSize={'16px'}
+                                    backgroundColor={'rgba(255, 255, 255, 0.1)'}
+                                    border={'1px solid rgba(255, 255, 255, 0.4)'}
+                                    color={'rgba(255, 255, 255, 0.8)'}
+                                    hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+                                    hoveredColor={'rgba(255, 255, 255, 1)'}
+                                    activeColor={'rgba(255, 255, 255, 0.8)'}
+                                    activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+                                />
+                            </div>
+                        )
+                    }
+
+                    {
+                        currentStep === 4 && (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                gap: '10px'
+                            }}>
+                                <LoaderButton
+                                    width={'95%'}
+                                    height={'40px'}
+                                    borderRadius={'10px'}
+                                    isLoading={false}
+                                    text={'Prev'}
+                                    onClick={() => handlePrev()}
+                                    fontSize={'16px'}
+                                    backgroundColor={'rgba(255, 255, 255, 0.1)'}
+                                    border={'1px solid rgba(255, 255, 255, 0.4)'}
+                                    color={'rgba(255, 255, 255, 0.8)'}
+                                    hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+                                    hoveredColor={'rgba(255, 255, 255, 1)'}
+                                    activeColor={'rgba(255, 255, 255, 0.8)'}
+                                    activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+                                />
+                                <LoaderButton
+                                    width={'95%'}
+                                    height={'40px'}
+                                    borderRadius={'10px'}
+                                    isLoading={false}
+                                    text={'Submit'}
                                     onClick={() => handleNext(2)}
                                     fontSize={'16px'}
                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
@@ -228,6 +276,19 @@ const BloggiosImage = styled.img`
   height: 80px;
 `;
 
+const TitleText = styled.span`
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 25px;
+  letter-spacing: 1px;
+  text-align: center;
+  font-weight: 500;
+  
+  @media(max-width: 350px) {
+    font-size: 22px;
+  }
+`;
+
 const TextWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -241,6 +302,10 @@ const StepperWrapper = styled.div`
   padding: 25px;
   flex-direction: column;
   gap: 20px;
+  
+  @media(max-width: 400px) {
+    padding: 20px 10px;
+  }
 `;
 
 export default ProfileAdditionInitial;

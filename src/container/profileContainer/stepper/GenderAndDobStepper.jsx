@@ -300,6 +300,11 @@ const DobContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-wrap: nowrap;
+  
+  @media (max-width: 340px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const NoteSpan = styled.div`
