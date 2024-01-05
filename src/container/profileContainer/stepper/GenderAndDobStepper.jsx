@@ -77,13 +77,17 @@ const GenderAndDobStepper = ({ data, setData }) => {
         setData({
             ...data,
             gender: gender,
-            date: date
+            dob: date
         });
     }, [gender, date]);
 
     useEffect(() => {
         if (day !== 'Day' && month !== 'Month' && year !== 'Year') {
-            setDate(year + '/' + month + '/' + day);
+            let birthDay = day;
+            if (day < 10) {
+                birthDay = '0' + day;
+            }
+            setDate(year + '-' + month + '-' + birthDay);
         } else if (day === 'Day' && month === 'Month' && year === 'Year') {
             setDate('');
         }

@@ -27,17 +27,28 @@ import LoaderButton from "../../component/buttons/loaderButton";
 import GenderAndDobStepper from "./stepper/GenderAndDobStepper";
 import BioStepper from "./stepper/BioStepper";
 import WebsiteStepper from "./stepper/WebsiteStepper";
+import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
+import {ADD_PROFILE} from "../../constant/apiConstants";
+import {useNavigate} from "react-router-dom";
+import {HOME_PAGE} from "../../constant/pathConstants";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
+import {authenticatedAxios} from "../../restservices/baseAxios";
 
 const ProfileAdditionInitial = () => {
 
     const [currentStep, setCurrentStep] = useState(1);
+    const [buttonLoader, setButtonLoader] = useState(false);
+    const authAxios = AuthenticatedAxiosInterceptor();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [data, setData] = useState(
         {
             name: '',
             website: '',
             gender: '',
-            date: '',
+            dob: '',
             bio: '',
 
         }
@@ -47,20 +58,31 @@ const ProfileAdditionInitial = () => {
         name: '',
     });
 
-    useEffect(() => {
-        console.log(data)
-    }, [data]);
-
-    const handleInputChange = useCallback((e, property) => {
-        setData(prevData => ({
-            ...prevData,
-            [property]: e.target.value,
-        }));
-        setHelperText(prevHelperText => ({
-            ...prevHelperText,
-            [property]: '',
-        }));
-    }, []);
+    const handleProfileSubmit = () => {
+        setButtonLoader(true);
+        if (data.name === '') {
+            setButtonLoader(false);
+            setCurrentStep(1);
+        } else {
+            console.log(data);
+            authenticatedAxios.post(ADD_PROFILE, data)
+                .then((response)=> {
+                    setButtonLoader(false);
+                    navigate(HOME_PAGE, {
+                        replace: true
+                    });
+                }).catch((error)=> {
+                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error'
+                }
+                dispatch(setSnackbar(snackBarData));
+                setButtonLoader(false);
+            })
+        }
+    }
 
     const validateForm = () => {
         const errors = {};
@@ -220,7 +242,7 @@ const ProfileAdditionInitial = () => {
                                     borderRadius={'10px'}
                                     isLoading={false}
                                     text={'Submit'}
-                                    onClick={() => handleNext(2)}
+                                    onClick={() => handleProfileSubmit()}
                                     fontSize={'16px'}
                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
                                     border={'1px solid rgba(255, 255, 255, 0.4)'}
