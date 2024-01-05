@@ -20,10 +20,11 @@
 
 import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
 import {clearCredentials, setCredentials} from "./state/authSlice";
 import LoaderPage from "./component/loaders/loaderPage";
+import {getProfile} from "./restservices/profileApi";
 
 const App = () => {
 
@@ -32,7 +33,7 @@ const App = () => {
 
     useEffect(() => {
         refreshToken()
-            .then((response)=> {
+            .then((response) => {
                 const credentials = {
                     accessToken: response.data.accessToken,
                     userId: response.data.userId,
@@ -40,16 +41,16 @@ const App = () => {
                 }
                 dispatch(setCredentials(credentials));
                 setIsChecking(false);
-            }).catch((error)=> {
-                dispatch(clearCredentials());
-                setIsChecking(false);
+            }).catch((error) => {
+            dispatch(clearCredentials());
+            setIsChecking(false);
         })
     }, []);
 
-    if (isChecking) return <LoaderPage />
+    if (isChecking) return <LoaderPage/>
 
     return (
-        <Router />
+        <Router/>
     );
 };
 

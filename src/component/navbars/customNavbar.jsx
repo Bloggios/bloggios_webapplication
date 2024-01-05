@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
@@ -29,13 +29,45 @@ import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../con
 import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getProfile} from "../../restservices/profileApi";
+import {setProfile} from "../../state/profileSlice";
 
 const CustomNavbar = () => {
 
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
     const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {isAdded, name} = useSelector((state) => state.profile);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isAdded === true) {
+                getProfile()
+                    .then((response)=> {
+                        const data = response.data;
+                        const profileData = {
+                            name: data.name,
+                            isAdded: true,
+                            profileImageUrl: null
+                        }
+                        dispatch(setProfile(profileData))
+                    }).catch((error)=> {
+                        setTimeout(()=> {
+                            getProfile()
+                                .then((response)=> {
+                                    const data = response.data;
+                                    const profileData = {
+                                        name: data.name,
+                                        isAdded: true,
+                                        profileImageUrl: null
+                                    }
+                                    dispatch(setProfile(profileData))
+                                })
+                        }, 2000)
+                })
+        }
+    }, [isAdded]);
 
     return (
         <>
@@ -56,7 +88,7 @@ const CustomNavbar = () => {
                     maxWidth={'170px'}
                     height={'60%'}
                     source={bloggios_logo}
-                    text={'Rohit Parihar'}
+                    text={name ? name : 'Bloggios'}
                     itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
                 />
             </NavbarWrapper>
