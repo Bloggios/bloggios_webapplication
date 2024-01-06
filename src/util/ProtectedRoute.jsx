@@ -18,13 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
-export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
-export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
-export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
-export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
-export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
-export const PROFILE_ADDED = '/auth-provider/wt/v1.0/profile/is-added';
-export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout';
-export const ADD_PROFILE = '/auth-provider/wt/v1.0/profile';
-export const GET_PROFILE = '/auth-provider/rd/v1.0/profile'
+import {Navigate, Outlet} from "react-router-dom";
+import {LOGIN_PAGE} from "../constant/pathConstants";
+
+const ProtectedRoute = ({isAuthenticated}) => {
+    if (!isAuthenticated) {
+        return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
+    }
+    return <Outlet />
+}
+
+export default ProtectedRoute;

@@ -28,3 +28,4 @@ export const SUPPORT_PAGE = '/';
 export const REPORT_BUG_PAGE = '/';
 export const OTP_PAGE = '/otp';
 export const PROFILE_PAGE = '/auth/profile';
+export const PROFILE_ADDITION_INITIAL = '/auth/profile-add-initial';

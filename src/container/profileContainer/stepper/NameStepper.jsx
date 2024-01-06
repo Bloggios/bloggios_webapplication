@@ -18,40 +18,52 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import Router from "./util/Router";
-import {useDispatch, useSelector} from "react-redux";
-import {refreshToken} from "./restservices/authApi";
-import {clearCredentials, setCredentials} from "./state/authSlice";
-import LoaderPage from "./component/loaders/loaderPage";
-import {getProfile} from "./restservices/profileApi";
+import React from 'react';
+import TextField from "../../../component/fields/textField";
+import Typography from "../../../component/typography/typography";
+import styled from "styled-components";
 
-const App = () => {
+const NameStepper = ({data, setData, helperText, setHelperText}) => {
 
-    const dispatch = useDispatch();
-    const [isChecking, setIsChecking] = useState(true);
-
-    useEffect(() => {
-        refreshToken()
-            .then((response) => {
-                const credentials = {
-                    accessToken: response.data.accessToken,
-                    userId: response.data.userId,
-                    isAuthenticated: true
-                }
-                dispatch(setCredentials(credentials));
-                setIsChecking(false);
-            }).catch((error) => {
-            dispatch(clearCredentials());
-            setIsChecking(false);
-        })
-    }, []);
-
-    if (isChecking) return <LoaderPage/>
+    const handleChange = (event) => {
+        setData({
+            ...data,
+            name: event.target.value
+        });
+        setHelperText(prevHelperText => ({
+            ...prevHelperText,
+            name: '',
+        }));
+    }
 
     return (
-        <Router/>
+        <>
+            <TextField
+                placeholder={'Name*'}
+                fontSize={'16px'}
+                padding={'10px 10px'}
+                background={'rgba(255, 255, 255, 0.1)'}
+                borderRadius={'7px'}
+                helperTextAllowed={true}
+                fontWeight={'400'}
+                helperText={helperText.name}
+                helperTextColor={'rgb(255,51,51)'}
+                value={data.name || ''}
+                onChange={(e) => handleChange(e, 'entryPoint')}
+            />
+            <TextSpan>
+                Build your social presence authentically. Enter your name—it's the first step in creating connections and making your profile uniquely yours. Join us in sharing and connecting with others!
+            </TextSpan>
+        </>
     );
 };
 
-export default App;
+const TextSpan = styled.div`
+  width: 100%;
+  font-size: 12px;
+  font-weight: 300;
+  text-align: justify;
+  color: rgba(255, 255, 255, 0.6);
+`;
+
+export default NameStepper;

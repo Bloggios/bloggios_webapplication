@@ -26,7 +26,7 @@ import styled from "styled-components";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebookF, FaGithub} from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import useSeo from "../../globalseo/useSeo";
@@ -48,6 +48,7 @@ const LoginPage = () => {
     useSeo('login');
 
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
     const [buttonLoader, setButtonLoader] = useState(false);
     const authenticatedAxios = AuthenticatedAxiosInterceptor();
@@ -92,26 +93,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            authenticatedAxios.get(PROFILE_ADDED)
-                .then((response)=> {
-                    setButtonLoader(false);
-                    if (response?.data?.exist === true && response?.data?.event === 'profile') {
-                        navigate(HOME_PAGE);
-                    } else {
-                        navigate(SIGNUP_PAGE);
-                    }
-                }).catch((error)=> {
-                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-                const snackBarData = {
-                    isSnackbar: true,
-                    message: message,
-                    snackbarType: 'Error'
-                }
-                dispatch(setSnackbar(snackBarData))
-                navigate(HOME_PAGE, {
-                    replace: true
-                })
-            })
+            navigate(HOME_PAGE);
         }
     }, []);
 

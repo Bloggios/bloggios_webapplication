@@ -18,13 +18,52 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
-export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
-export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
-export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
-export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
-export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
-export const PROFILE_ADDED = '/auth-provider/wt/v1.0/profile/is-added';
-export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout';
-export const ADD_PROFILE = '/auth-provider/wt/v1.0/profile';
-export const GET_PROFILE = '/auth-provider/rd/v1.0/profile'
+import React, {useEffect, useState} from 'react';
+import TextField from "../../../component/fields/textField";
+import styled from "styled-components";
+
+const WebsiteStepper = ({data, setData}) => {
+
+    const [websiteValue, setWebsiteValue] = useState('');
+
+    const handleChange = (event) => {
+        const value = event.target.value;
+        setWebsiteValue(value);
+    }
+
+    useEffect(() => {
+        setData({
+            ...data,
+            website: websiteValue
+        })
+    }, [websiteValue]);
+
+    return (
+        <>
+            <TextField
+                placeholder={'Link'}
+                fontSize={'16px'}
+                padding={'10px 10px'}
+                background={'rgba(255, 255, 255, 0.1)'}
+                borderRadius={'7px'}
+                helperTextAllowed={false}
+                fontWeight={'400'}
+                value={data.website}
+                onChange={(e) => handleChange(e)}
+            />
+            <TextSpan>
+                Build your social presence authentically. Enter your name—it's the first step in creating connections and making your profile uniquely yours. Join us in sharing and connecting with others!
+            </TextSpan>
+        </>
+    );
+};
+
+const TextSpan = styled.div`
+  width: 100%;
+  font-size: 12px;
+  font-weight: 300;
+  text-align: justify;
+  color: rgba(255, 255, 255, 0.6);
+`;
+
+export default WebsiteStepper;

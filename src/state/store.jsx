@@ -22,12 +22,14 @@ import {configureStore} from "@reduxjs/toolkit";
 import loadingSlice from "./loadingSlice";
 import snackbarSlice from "./snackbarSlice";
 import {authSlice} from "./authSlice";
+import {profileSlice} from "./profileSlice";
 
 const store = configureStore({
     reducer: {
         loading: loadingSlice,
         snackbar: snackbarSlice,
-        auth: authSlice.reducer
+        auth: authSlice.reducer,
+        profile: profileSlice.reducer
     }
 })
 
