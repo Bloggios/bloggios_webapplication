@@ -24,12 +24,12 @@ import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} 
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
-import ProfileAdditionInitial from "../container/profileContainer/ProfileAdditionInitial";
 
 const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
 const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
 const SignupPage = lazy(()=> import('../container/userAuthenticationContainer/signUpPage'));
 const OtpPage = lazy(()=> import('../container/userAuthenticationContainer/otpPage'));
+const ProfileAdditionInitial = lazy(()=> import('../container/profileContainer/ProfileAdditionInitial'));
 
 const Router = () => {
 

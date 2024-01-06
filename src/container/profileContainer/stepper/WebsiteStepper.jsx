@@ -34,7 +34,7 @@ const WebsiteStepper = ({data, setData}) => {
     useEffect(() => {
         setData({
             ...data,
-            website: websiteValue
+            link: websiteValue
         })
     }, [websiteValue]);
 

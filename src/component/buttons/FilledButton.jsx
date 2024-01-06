@@ -11,20 +11,30 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
-export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
-export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
-export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
-export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
-export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
-export const PROFILE_ADDED = '/user-provider/wt/v1.0/profile/is-added';
-export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout';
-export const ADD_PROFILE = '/user-provider/wt/v1.0/profile';
-export const GET_PROFILE = '/user-provider/rd/v1.0/profile'
+import React from 'react';
+import styled from "styled-components";
+
+const FilledButton = () => {
+    return (
+        <ButtonWrapper
+            style={{
+                width: '95%',
+                padding: '10px'
+            }}
+        >
+            View Profile
+        </ButtonWrapper>
+    );
+};
+
+const ButtonWrapper = styled.button`
+`;
+
+export default FilledButton;
