@@ -42,30 +42,24 @@ const CustomNavbar = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isAdded === true) {
-                getProfile()
-                    .then((response)=> {
-                        const data = response.data;
-                        const profileData = {
-                            name: data.name,
-                            isAdded: true,
-                            profileImageUrl: null
-                        }
-                        dispatch(setProfile(profileData))
-                    }).catch((error)=> {
-                        setTimeout(()=> {
-                            getProfile()
-                                .then((response)=> {
-                                    const data = response.data;
-                                    const profileData = {
-                                        name: data.name,
-                                        isAdded: true,
-                                        profileImageUrl: null
-                                    }
-                                    dispatch(setProfile(profileData))
-                                })
-                        }, 2000)
-                })
+        const fetchProfile = async () => {
+            try {
+                const response = await getProfile();
+                const { data } = response;
+                const profileData = {
+                    name: data.name,
+                    isAdded: true,
+                    profileImageUrl: null,
+                    bio: data.bio
+                };
+                dispatch(setProfile(profileData));
+            } catch (error) {
+                setTimeout(fetchProfile, 2000);
+            }
+        };
+
+        if (isAdded) {
+            fetchProfile();
         }
     }, [isAdded]);
 

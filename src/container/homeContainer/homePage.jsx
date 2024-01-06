@@ -29,6 +29,7 @@ import {useNavigate} from "react-router-dom";
 import LoaderPage from "../../component/loaders/loaderPage";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {setProfile} from "../../state/profileSlice";
+import AuthenticatedHomePage from "./AuthenticatedHomePage";
 
 const HomePage = () => {
 
@@ -78,7 +79,7 @@ const HomePage = () => {
     if (isChecking) return <LoaderPage />
 
     return (
-        <UnauthenticatedHomePage />
+        isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
     );
 };
 

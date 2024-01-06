@@ -29,10 +29,11 @@ const profileSlice = createSlice({
     },
     reducers: {
         setProfile: (state, action) => {
-            const { isAdded, name, profileImageUrl } = action.payload;
+            const { isAdded, name, profileImageUrl, bio } = action.payload;
             state.isAdded = isAdded;
             state.name = name;
-            state.profileImageUrl=  profileImageUrl;
+            state.profileImageUrl = profileImageUrl;
+            state.bio = bio;
         },
         clearProfile: (state, action) => {
             state.isAdded = false;

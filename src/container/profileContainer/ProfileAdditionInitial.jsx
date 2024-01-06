@@ -46,7 +46,7 @@ const ProfileAdditionInitial = () => {
     const [data, setData] = useState(
         {
             name: '',
-            website: '',
+            link: '',
             gender: '',
             dob: '',
             bio: '',
@@ -240,7 +240,7 @@ const ProfileAdditionInitial = () => {
                                     width={'95%'}
                                     height={'40px'}
                                     borderRadius={'10px'}
-                                    isLoading={false}
+                                    isLoading={buttonLoader}
                                     text={'Submit'}
                                     onClick={() => handleProfileSubmit()}
                                     fontSize={'16px'}
