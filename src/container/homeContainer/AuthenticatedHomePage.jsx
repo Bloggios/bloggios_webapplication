@@ -33,7 +33,7 @@ const AuthenticatedHomePage = () => {
     useSeo('homepage')
 
     const {width} = useWindowDimensions();
-    const {name, bio} = useSelector((state) => state.profile);
+    const {name, bio, email} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
 
@@ -49,11 +49,12 @@ const AuthenticatedHomePage = () => {
                         path={'/beingrohit-exe'}
                         followers={0}
                         following={0}
+                        email={email}
                     />
                 </Suspense>
             </LeftBar>
-            <RightBar>Right Bar</RightBar>
-            <MiddleBar>Width : {width}</MiddleBar>
+            <RightBar></RightBar>
+            <MiddleBar></MiddleBar>
         </Wrapper>
     );
 };
@@ -94,7 +95,6 @@ const LeftBar = styled.div`
 
 const RightBar = styled.div`
   grid-area: Right-Bar;
-  background-color: yellow;
 
   @media (max-width: 1200px) {
     display: none; /* Hide RightBar for screens with width less than 1200px */
@@ -103,7 +103,6 @@ const RightBar = styled.div`
 
 const MiddleBar = styled.div`
   grid-area: Middle-Bar;
-  background-color: midnightblue;
 
   span {
     font-weight: bold;

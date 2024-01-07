@@ -18,8 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import UnauthenticatedHomePage from "./unauthenticatedHomePage";
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import useSeo from "../../globalseo/useSeo";
 import {useDispatch, useSelector} from "react-redux";
 import {PROFILE_ADDED} from "../../constant/apiConstants";
@@ -29,7 +28,10 @@ import {useNavigate} from "react-router-dom";
 import LoaderPage from "../../component/loaders/loaderPage";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {setProfile} from "../../state/profileSlice";
-import AuthenticatedHomePage from "./AuthenticatedHomePage";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+
+const UnauthenticatedHomePage = lazy(()=> import('./unauthenticatedHomePage'));
+const AuthenticatedHomePage = lazy(()=> import('./AuthenticatedHomePage'));
 
 const HomePage = () => {
 
@@ -79,7 +81,11 @@ const HomePage = () => {
     if (isChecking) return <LoaderPage />
 
     return (
-        isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
+        <Suspense fallback={<FallbackLoader width={'100%'} height={'500px'} />}>
+            {
+                isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
+            }
+        </Suspense>
     );
 };
 
