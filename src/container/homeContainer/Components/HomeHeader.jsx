@@ -20,8 +20,12 @@
 
 import React from 'react';
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
+import {SIGNUP_PAGE} from "../../../constant/pathConstants";
 
 const HomeHeader = () => {
+
+    const navigate = useNavigate();
 
     return (
         <Wrapper>
@@ -37,7 +41,7 @@ const HomeHeader = () => {
             <StreamlinedText>
                 Your digital partner for software mastery, social influence, immersive learning, and seamless forms. We transcend boundaries, fostering innovation and crafting a dynamic digital experience. Elevate your journey with Bloggios—where code meets community, and possibilities unfold effortlessly.
             </StreamlinedText>
-            <GetStartedButton className="full-rounded">
+            <GetStartedButton onClick={()=> navigate(SIGNUP_PAGE)} className="full-rounded">
                 <span>Get Started</span>
                 <div className="border full-rounded"></div>
             </GetStartedButton>
