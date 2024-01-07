@@ -31,7 +31,8 @@ const ProfileCard = ({
                          profileImage,
                          followers,
                          following,
-                         path
+                         path,
+                         email
                      }) => {
     return (
         <Wrapper>
@@ -58,7 +59,8 @@ const ProfileCard = ({
 
             <InformationWrapper>
                 <Typography text={name} type={'custom'} family={'Inter'} size={'20px'} weight={300} spacing={'1px'}/>
-                <Typography text={'rakesh@gmail.com'} type={'custom'} family={'Inter'} size={'14px'} weight={200} color={'rgba(255, 255, 255, 0.4)'}/>
+                <Typography text={email} type={'custom'} family={'Inter'} size={'14px'} weight={200}
+                            color={'rgba(255, 255, 255, 0.4)'}/>
             </InformationWrapper>
 
             <BioWrapper>
@@ -71,9 +73,11 @@ const ProfileCard = ({
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'center',
-                margin: '25px 0 20px 0'
+                margin: '25px 0 4px 0'
             }}>
-                <FilledButton />
+                <FilledButton
+                    borderRadius={'0 0 16px 16px'}
+                />
             </div>
         </Wrapper>
     );
@@ -90,6 +94,7 @@ const Wrapper = styled.div`
   border: 1px solid transparent;
   position: relative;
   flex-direction: column;
+  user-select: none;
 `;
 
 const CoverImageWrapper = styled.img`

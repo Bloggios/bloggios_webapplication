@@ -50,7 +50,8 @@ const CustomNavbar = () => {
                     name: data.name,
                     isAdded: true,
                     profileImageUrl: null,
-                    bio: data.bio
+                    bio: data.bio,
+                    email: data.email
                 };
                 dispatch(setProfile(profileData));
             } catch (error) {

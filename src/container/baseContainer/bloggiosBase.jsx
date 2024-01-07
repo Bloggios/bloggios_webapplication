@@ -88,4 +88,9 @@ const AppContainer = styled.main`
   overflow-x: hidden;
   background-color: #121212;
   color: antiquewhite;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

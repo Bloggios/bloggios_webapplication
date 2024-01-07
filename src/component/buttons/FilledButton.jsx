@@ -21,13 +21,31 @@
 import React from 'react';
 import styled from "styled-components";
 
-const FilledButton = () => {
+const FilledButton = ({
+                          width = '98%',
+                          padding = '10px',
+                          borderRadius = '10px',
+                          bgColor = '#000000',
+                          hoveredBgColor = 'rgba(0, 0, 0, 0.6)',
+                          activeBgColor = '#000000',
+                          color = 'rgba(255, 255, 255, 0.6)',
+                          hoveredColor = 'rgba(255, 255, 255, 0.8)',
+                          activeColor = '#e5e5e5',
+                      }) => {
     return (
         <ButtonWrapper
             style={{
-                width: '95%',
-                padding: '10px'
+                width: width,
+                padding: padding,
+                borderRadius: borderRadius
+
             }}
+            color={color}
+            bgColor={bgColor}
+            hoveredBgColor={hoveredBgColor}
+            activeBgColor={activeBgColor}
+            hoveredColor={hoveredColor}
+            activeColor={activeColor}
         >
             View Profile
         </ButtonWrapper>
@@ -35,6 +53,24 @@ const FilledButton = () => {
 };
 
 const ButtonWrapper = styled.button`
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 1px;
+  font-size: 14px;
+  color: ${(props)=> props.color};
+  background-color: ${(props)=> props.bgColor};
+  cursor: pointer;
+  
+  &:hover {
+    background-color: ${(props) => props.hoveredBgColor};
+    color: ${(props)=> props.hoveredColor};
+  }
+  
+  &:active {
+    background-color: ${(props)=> props.activeBgColor};
+    color: ${(props)=> props.activeColor};
+  }
 `;
 
 export default FilledButton;
