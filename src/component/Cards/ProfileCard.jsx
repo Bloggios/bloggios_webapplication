@@ -94,6 +94,7 @@ const Wrapper = styled.div`
   border: 1px solid transparent;
   position: relative;
   flex-direction: column;
+  user-select: none;
 `;
 
 const CoverImageWrapper = styled.img`

@@ -31,27 +31,35 @@ const ChipButton = ({
                         width,
                         borderRadius = '25px',
                         backgroundColor = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
-                        color = '#e5e5e5',
+                        color = 'rgba(255, 255, 255, 0.5)',
                         icon,
                         text,
-                        onClick
+                        onClick,
+                        hoveredBg = 'linear-gradient(225deg, #1a1a1a, #171515)',
+                        activeBg = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
+                        hoveredColor = 'rgba(255, 255, 255, 0.8)',
+                        activeColor = 'rgba(255, 255, 255, 0.6)'
                     }) => {
     return (
         <ButtonWrapper
             onClick={onClick}
+            background={backgroundColor}
+            color={color}
+            hoveredBg={hoveredBg}
+            activeBg={activeBg}
+            hoveredColor={hoveredColor}
+            activeColor={activeColor}
             style={{
                 height,
                 width,
-                borderRadius: borderRadius && '25px',
-                background: backgroundColor,
-                color
+                borderRadius: borderRadius && '25px'
             }}
         >
             {icon}
             <Typography
                 text={text}
                 type="custom"
-                color="rgba(255, 255, 255, 0.7)"
+
                 spacing="1px"
                 family="Poppins"
             />
@@ -71,6 +79,19 @@ const ButtonWrapper = styled.button`
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   user-select: none;
+  color: ${(props) => props.color};
+  background: ${(props) => props.background};
+  transition: all 150ms ease;
+
+  &:hover {
+    background: ${(props) => props.hoveredBg};
+    color: ${(props)=> props.hoveredColor};
+  }
+
+  &:active {
+    background: ${(props) => props.activeBg};
+    color: ${(props)=> props.activeColor};
+  }
 `;
 
 ChipButton.propTypes = {

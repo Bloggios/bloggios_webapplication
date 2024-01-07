@@ -27,6 +27,8 @@ import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
+const CreatePost = lazy(()=> import('../../component/CreatePost/createPostWeb'));
+const CreatePostMobile = lazy(()=> import('../../component/CreatePost/createPostMobile'));
 
 const AuthenticatedHomePage = () => {
 
@@ -54,7 +56,11 @@ const AuthenticatedHomePage = () => {
                 </Suspense>
             </LeftBar>
             <RightBar></RightBar>
-            <MiddleBar></MiddleBar>
+            <MiddleBar>
+                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
+                    {width > 500 ? <CreatePost /> : <CreatePostMobile />}
+                </Suspense>
+            </MiddleBar>
         </Wrapper>
     );
 };
@@ -63,14 +69,13 @@ const Wrapper = styled.div`
   display: grid;
   margin-top: 40px;
   grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
   gap: 0 0;
   grid-auto-flow: row dense;
   grid-template-areas:
     "Left-Bar Middle-Bar Right-Bar";
 
   @media (max-width: 1200px) {
-    grid-template-columns: 1fr 2fr; /* Adjust the column layout for smaller screens */
+    grid-template-columns: 1fr 2fr;
   }
 
   @media (max-width: 750px) {
@@ -89,7 +94,7 @@ const LeftBar = styled.div`
   height: auto;
 
   @media (max-width: 750px) {
-    display: none; /* Hide LeftBar for screens with width less than 700px */
+    display: none;
   }
 `;
 
@@ -97,12 +102,16 @@ const RightBar = styled.div`
   grid-area: Right-Bar;
 
   @media (max-width: 1200px) {
-    display: none; /* Hide RightBar for screens with width less than 1200px */
+    display: none;
   }
 `;
 
 const MiddleBar = styled.div`
   grid-area: Middle-Bar;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   span {
     font-weight: bold;

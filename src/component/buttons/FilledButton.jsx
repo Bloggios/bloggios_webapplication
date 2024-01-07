@@ -60,6 +60,7 @@ const ButtonWrapper = styled.button`
   font-size: 14px;
   color: ${(props)=> props.color};
   background-color: ${(props)=> props.bgColor};
+  cursor: pointer;
   
   &:hover {
     background-color: ${(props) => props.hoveredBgColor};
