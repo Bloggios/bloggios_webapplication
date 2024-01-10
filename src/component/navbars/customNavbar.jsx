@@ -51,7 +51,9 @@ const CustomNavbar = () => {
                     isAdded: true,
                     profileImageUrl: null,
                     bio: data.bio,
-                    email: data.email
+                    email: data.email,
+                    profileImage: data.profileImage,
+                    coverImage: data.coverImage
                 };
                 dispatch(setProfile(profileData));
             } catch (error) {

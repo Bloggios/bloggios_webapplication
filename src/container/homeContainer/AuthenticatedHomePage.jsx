@@ -25,6 +25,7 @@ import {useSelector} from "react-redux";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
+import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(()=> import('../../component/CreatePost/createPostWeb'));
@@ -35,7 +36,7 @@ const AuthenticatedHomePage = () => {
     useSeo('homepage')
 
     const {width} = useWindowDimensions();
-    const {name, bio, email} = useSelector((state) => state.profile);
+    const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
 
@@ -46,8 +47,8 @@ const AuthenticatedHomePage = () => {
                     <ProfileCard
                         name={name}
                         bio={bio}
-                        coverImage={'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-                        profileImage={'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+                        coverImage={coverImage ? coverImage : 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+                        profileImage={profileImage ? profileImage : bloggios_logo}
                         path={'/beingrohit-exe'}
                         followers={0}
                         following={0}
@@ -58,7 +59,7 @@ const AuthenticatedHomePage = () => {
             <RightBar></RightBar>
             <MiddleBar>
                 <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
-                    {width > 500 ? <CreatePost /> : <CreatePostMobile />}
+                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo} /> : <CreatePostMobile />}
                 </Suspense>
             </MiddleBar>
         </Wrapper>
