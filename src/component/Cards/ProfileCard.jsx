@@ -53,8 +53,6 @@ const ProfileCard = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pImage, setPImage] = useState(profileImage);
     const dispatch = useDispatch();
-    const [dimensions, setDimensions] = useState({ width: 0, height: 140 });
-    const [componentRef, size] = useComponentSize();
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -117,29 +115,11 @@ const ProfileCard = ({
         closeModal();
     };
 
-    const handleImageLoad = (event, displayWidth, displayHeight) => {
-        // Retrieve the natural dimensions of the loaded image
-        const { naturalWidth, naturalHeight } = event.target;
-
-        // Calculate the aspect ratio
-        const aspectRatio = naturalWidth / naturalHeight;
-
-        // Calculate the new dimensions based on the desired display width
-        const newWidth = displayWidth || naturalWidth;
-        const newHeight = displayHeight || newWidth / aspectRatio;
-
-        // Update the state with the new dimensions
-        setDimensions({ width: newWidth, height: newHeight });
-    };
-
-
     return (
-        <Wrapper ref={componentRef}>
+        <Wrapper>
             <CoverImageWrapper
                 src={coverImage}
-                onLoad={(e)=> handleImageLoad(e, size.width, 140)}
-
-                style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
+                loading={"lazy"}
             />
             <Avatar
                 position={'absolute'}
