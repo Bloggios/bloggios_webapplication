@@ -27,4 +27,5 @@ export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-us
 export const PROFILE_ADDED = '/user-provider/wt/v1.0/profile/is-added';
 export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout';
 export const ADD_PROFILE = '/user-provider/wt/v1.0/profile';
-export const GET_PROFILE = '/user-provider/rd/v1.0/profile'
+export const GET_PROFILE = '/user-provider/rd/v1.0/profile';
+export const ADD_IMAGE_TO_PROFILE = '/user-provider/wt/v1.0/profile/add-image';
