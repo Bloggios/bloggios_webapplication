@@ -23,6 +23,7 @@ import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import Typography from "../typography/typography";
 import FilledButton from "../buttons/FilledButton";
+import {SlOptionsVertical} from "react-icons/sl";
 
 const ProfileCard = ({
                          name,
@@ -36,7 +37,7 @@ const ProfileCard = ({
                      }) => {
     return (
         <Wrapper>
-            <CoverImageWrapper src={coverImage}/>
+            <CoverImageWrapper src={coverImage} loading="lazy"/>
             <Avatar
                 position={'absolute'}
                 top={'30%'}
@@ -79,6 +80,9 @@ const ProfileCard = ({
                     borderRadius={'0 0 16px 16px'}
                 />
             </div>
+            <FloatingButton>
+                <SlOptionsVertical />
+            </FloatingButton>
         </Wrapper>
     );
 };
@@ -142,6 +146,34 @@ const TextSpan = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 200;
+`;
+
+const FloatingButton = styled.button`
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  border: 1px solid transparent;
+  outline: none;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  
+  &:hover {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  &:active {
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.8);
+  }
 `;
 
 export default ProfileCard;
