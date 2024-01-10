@@ -38,7 +38,7 @@ const CustomNavbar = () => {
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
     const {isAuthenticated} = useSelector((state)=> state.auth);
-    const {isAdded, name} = useSelector((state) => state.profile);
+    const {isAdded, name, profileImage} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const CustomNavbar = () => {
                 <IconLabelDropdown
                     maxWidth={'170px'}
                     height={'60%'}
-                    source={bloggios_logo}
+                    source={profileImage ? profileImage : bloggios_logo}
                     text={name ? name : 'Bloggios'}
                     itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
                 />
