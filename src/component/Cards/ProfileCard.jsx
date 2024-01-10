@@ -18,12 +18,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import Typography from "../typography/typography";
 import FilledButton from "../buttons/FilledButton";
 import {SlOptionsVertical} from "react-icons/sl";
+import FadeModal from "../modal/FadeModal";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
+import {BiImageAdd} from "react-icons/bi";
+import authenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
+import {authenticatedAxios} from "../../restservices/baseAxios";
+import {ADD_IMAGE_TO_PROFILE} from "../../constant/apiConstants";
+import {getProfile} from "../../restservices/profileApi";
+import {setProfile} from "../../state/profileSlice";
+import {useDispatch} from "react-redux";
+import {setSnackbar} from "../../state/snackbarSlice";
 
 const ProfileCard = ({
                          name,
@@ -35,6 +46,70 @@ const ProfileCard = ({
                          path,
                          email
                      }) => {
+
+    const {width} = useWindowDimensions();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const formData = new FormData();
+                formData.append('image', file);
+                formData.append('uploadFor', 'profile');
+
+                authenticatedAxios.post(ADD_IMAGE_TO_PROFILE, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response)=> {
+                    closeModal();
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: response?.data?.message,
+                        snackbarType: 'Success'
+                    };
+                    dispatch(setSnackbar(snackbarData))
+                    setTimeout(async()=> {
+                        const response = await getProfile();
+                        const { data } = response;
+                        const profileData = {
+                            name: data.name,
+                            isAdded: true,
+                            profileImageUrl: null,
+                            bio: data.bio,
+                            email: data.email,
+                            profileImage: data.profileImage,
+                            coverImage: data.coverImage
+                        };
+                        dispatch(setProfile(profileData));
+                    }, 1600)
+                }).catch((error)=> {
+                    const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error'
+                    }
+                    dispatch(setSnackbar(snackBarData));
+                    closeModal();
+                })
+            };
+        }
+    };
+
     return (
         <Wrapper>
             <CoverImageWrapper src={coverImage} loading="lazy"/>
@@ -80,9 +155,38 @@ const ProfileCard = ({
                     borderRadius={'0 0 16px 16px'}
                 />
             </div>
-            <FloatingButton>
+            <FloatingButton onClick={openModal}>
                 <SlOptionsVertical />
             </FloatingButton>
+
+            <FadeModal
+                height={'fit-content'}
+                width={'500px'}
+                padding={'20px'}
+                borderRadius={'16px'}
+                margin={'40px 0 0 0'}
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                bgColor={'#272727'}
+            >
+                <ModalLogoWrapper>
+                    <img src={bloggios_logo} alt="Bloggios" height={'60px'}/>
+                </ModalLogoWrapper>
+
+                <div style={{ width: '100%' }}>
+                    <label htmlFor="image-input" className='bg-modal-label-content'>
+                        <span>Upload Profile Image</span>
+                        <BiImageAdd fontSize={'25px'} color='#28c916' />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="image-input"
+                            style={{ display: 'none' }}
+                            onChange={handleImageChange}
+                        />
+                    </label>
+                </div>
+            </FadeModal>
         </Wrapper>
     );
 };
@@ -174,6 +278,13 @@ const FloatingButton = styled.button`
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: rgba(255, 255, 255, 0.8);
   }
+`;
+
+const ModalLogoWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default ProfileCard;

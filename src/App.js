@@ -32,19 +32,40 @@ const App = () => {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
+        let isMounted = true; // To check if the component is still mounted
+        const timeoutId = setTimeout(() => {
+            if (isMounted) {
+                // Reload the page if still mounted after 2 seconds
+                window.location.reload();
+            }
+        }, 2000);
+
         refreshToken()
             .then((response) => {
-                const credentials = {
-                    accessToken: response.data.accessToken,
-                    userId: response.data.userId,
-                    isAuthenticated: true
+                if (isMounted) {
+                    clearTimeout(timeoutId); // Clear the timeout if the response is received
+                    setIsChecking(false);
+                    const credentials = {
+                        accessToken: response.data.accessToken,
+                        userId: response.data.userId,
+                        isAuthenticated: true
+                    };
+                    dispatch(setCredentials(credentials));
                 }
-                dispatch(setCredentials(credentials));
-                setIsChecking(false);
-            }).catch((error) => {
-            dispatch(clearCredentials());
-            setIsChecking(false);
-        })
+            })
+            .catch((error) => {
+                if (isMounted) {
+                    clearTimeout(timeoutId); // Clear the timeout if an error occurs
+                    dispatch(clearCredentials());
+                    setIsChecking(false);
+                }
+            });
+
+        // Cleanup function to clear the timeout and update the component's state
+        return () => {
+            isMounted = false;
+            clearTimeout(timeoutId);
+        };
     }, []);
 
     if (isChecking) return <LoaderPage/>
