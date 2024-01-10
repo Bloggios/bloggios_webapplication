@@ -45,6 +45,6 @@ export const authOtpUserId = (payload, navigate, dispatch) => {
             message: message,
             snackbarType: 'Error'
         }
-        dispatch(setSnackbar(snackBarData))
+        dispatch(setSnackbar(snackBarData));
     })
 }
