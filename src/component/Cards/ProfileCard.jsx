@@ -36,6 +36,7 @@ import {setProfile} from "../../state/profileSlice";
 import {useDispatch} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
+import useComponentSize from "../../hooks/useComponentSize";
 
 const ProfileCard = ({
                          name,
@@ -52,6 +53,8 @@ const ProfileCard = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pImage, setPImage] = useState(profileImage);
     const dispatch = useDispatch();
+    const [dimensions, setDimensions] = useState({ width: 0, height: 140 });
+    const [componentRef, size] = useComponentSize();
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -114,11 +117,30 @@ const ProfileCard = ({
         closeModal();
     };
 
-    // const debouncedHandleImageChange = debounce(handleImageChange, 300);
+    const handleImageLoad = (event, displayWidth, displayHeight) => {
+        // Retrieve the natural dimensions of the loaded image
+        const { naturalWidth, naturalHeight } = event.target;
+
+        // Calculate the aspect ratio
+        const aspectRatio = naturalWidth / naturalHeight;
+
+        // Calculate the new dimensions based on the desired display width
+        const newWidth = displayWidth || naturalWidth;
+        const newHeight = displayHeight || newWidth / aspectRatio;
+
+        // Update the state with the new dimensions
+        setDimensions({ width: newWidth, height: newHeight });
+    };
+
 
     return (
-        <Wrapper>
-            <CoverImageWrapper src={coverImage} loading="lazy"/>
+        <Wrapper ref={componentRef}>
+            <CoverImageWrapper
+                src={coverImage}
+                onLoad={(e)=> handleImageLoad(e, size.width, 140)}
+
+                style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
+            />
             <Avatar
                 position={'absolute'}
                 top={'30%'}

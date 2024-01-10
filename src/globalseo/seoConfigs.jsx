@@ -18,18 +18,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions';
+const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Rohit Bloggios, Rohit Spring Boot React, Rohit Parihar Developer, Rohit Parihar Software Developer';
 
 const seoConfigs = {
     signup: {
-        title: 'Signup | Bloggios',
+        title: 'Signup Bloggios',
         description: 'Signup for Bloggios to Concatenate your Perceptions.',
         keywords: `${RESERVED_KEYWORDS}, Bloggios Signup, Bloggios Create Account, Start Concatenating Perceptions`,
         author: 'Rohit Parihar',
         ogType: 'website',
     },
     login: {
-        title: 'Login | Bloggios',
+        title: 'Login Bloggios',
         description: 'Login for Bloggios to continue Journey on Bloggios.',
         keywords: `${RESERVED_KEYWORDS}, Bloggios Login, Bloggios Social Login, Continue Concatenating Perceptions`,
         author: 'Rohit Parihar',
