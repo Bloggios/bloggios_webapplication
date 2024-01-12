@@ -36,6 +36,7 @@ import {setProfile} from "../../state/profileSlice";
 import {useDispatch} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
+import useComponentSize from "../../hooks/useComponentSize";
 
 const ProfileCard = ({
                          name,
@@ -114,11 +115,12 @@ const ProfileCard = ({
         closeModal();
     };
 
-    // const debouncedHandleImageChange = debounce(handleImageChange, 300);
-
     return (
         <Wrapper>
-            <CoverImageWrapper src={coverImage} loading="lazy"/>
+            <CoverImageWrapper
+                src={coverImage}
+                loading={"lazy"}
+            />
             <Avatar
                 position={'absolute'}
                 top={'30%'}
