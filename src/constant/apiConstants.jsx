@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const LOGIN_PATH = '/auth-provider/rd/v1.0/authentication/token';
-export const SIGNUP_PATH = '/auth-provider/wt/v1.0/user-auth/auth/register';
-export const VERIFY_OTP = '/auth-provider/rd/v1.0/authentication/verify-otp';
-export const RESEND_OTP = '/auth-provider/rd/v1.0/authentication/resend-otp';
-export const REFRESH_TOKEN = '/auth-provider/rd/v1.0/authentication/refresh-token';
-export const OTP_USERID_REDIRECT = '/auth-provider/rd/v1.0/authentication/otp-userId'
-export const PROFILE_ADDED = '/user-provider/wt/v1.0/profile/is-added';
-export const LOGOUT = '/auth-provider/rd/v1.0/authentication/logout';
-export const ADD_PROFILE = '/user-provider/wt/v1.0/profile';
-export const GET_PROFILE = '/user-provider/rd/v1.0/profile';
-export const ADD_IMAGE_TO_PROFILE = '/user-provider/wt/v1.0/profile/add-image';
+export const LOGIN_PATH = '/auth-provider/v1.0/authentication/token';
+export const SIGNUP_PATH = '/auth-provider/v1.0/user-auth/auth/register';
+export const VERIFY_OTP = '/auth-provider/v1.0/authentication/verify-otp';
+export const RESEND_OTP = '/auth-provider/v1.0/authentication/resend-otp';
+export const REFRESH_TOKEN = '/auth-provider/v1.0/authentication/refresh-token';
+export const OTP_USERID_REDIRECT = '/auth-provider/v1.0/authentication/otp-userId'
+export const PROFILE_ADDED = '/user-provider/v1.0/profile/write/is-added';
+export const LOGOUT = '/auth-provider/v1.0/authentication/logout';
+export const ADD_PROFILE = '/user-provider/v1.0/profile/write';
+export const GET_PROFILE = '/user-provider/v1.0/profile/read';
+export const ADD_IMAGE_TO_PROFILE = '/user-provider/v1.0/profile/write/add-image';
