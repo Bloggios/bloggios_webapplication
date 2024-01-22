@@ -39,7 +39,9 @@ const ChipButton = ({
                         activeBg = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
                         hoveredColor = 'rgba(255, 255, 255, 0.8)',
                         activeColor = 'rgba(255, 255, 255, 0.6)',
-                        cursor = 'pointer'
+                        cursor = 'pointer',
+                        children,
+                        margin
                     }) => {
     return (
         <ButtonWrapper
@@ -54,10 +56,12 @@ const ChipButton = ({
                 height,
                 width,
                 borderRadius: borderRadius && '25px',
-                cursor: cursor
+                cursor: cursor,
+                margin: margin
             }}
         >
             {icon}
+            {children}
             <Typography
                 text={text}
                 type="custom"

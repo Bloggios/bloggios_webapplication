@@ -19,7 +19,7 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {FETCH_POST_TAGS, GET_PROFILE} from "../constant/apiConstants";
+import {ADD_POST, FETCH_POST_TAGS, GET_PROFILE} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {
@@ -34,5 +34,10 @@ export const getTenTags = (tagName, config) => {
     return authenticatedAxios.post(FETCH_POST_TAGS, tagPayload, {
         ...config
     })
+        .then((response)=> response);
+}
+
+export const addPost = (payload) => {
+    return authenticatedAxios.post(ADD_POST, payload)
         .then((response)=> response);
 }

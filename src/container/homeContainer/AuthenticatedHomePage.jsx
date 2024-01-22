@@ -119,6 +119,10 @@ const MiddleBar = styled.div`
   span {
     font-weight: bold;
   }
+  
+  @media (max-width: 500px) {
+    margin-bottom: 70px;
+  }
 `;
 
 export default AuthenticatedHomePage;

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {createRef, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import ChipButton from "../buttons/chipButton";
@@ -26,10 +26,16 @@ import {HiHashtag, HiOutlinePhotograph} from "react-icons/hi";
 import {CgOptions} from "react-icons/cg";
 import {GoMention} from "react-icons/go";
 import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
-import {debounce} from "lodash";
-import {getTenTags} from "../../restservices/postApi";
+import {addPost, getTenTags} from "../../restservices/postApi";
 import axios from "axios";
 import Typography from "../typography/typography";
+import {AiFillDelete} from "react-icons/ai";
+import {authenticatedAxios} from "../../restservices/baseAxios";
+import {ADD_POST_IMAGE} from "../../constant/apiConstants";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
+import {FaLocationDot} from "react-icons/fa6";
+import SimpleLoader from "../loaders/simpleLoader";
 
 const CreatePostWeb = ({
                            image
@@ -38,20 +44,43 @@ const CreatePostWeb = ({
     const [inputValue, setInputValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-
+    const imageRef = createRef();
+    const [selectedImages, setSelectedImages] = useState([]);
+    const dispatch = useDispatch();
+    const [postLoader, setPostLoader] = useState(false);
     let cancelTokenSource;
+
+    const handleImageUploadEvent = () => {
+        imageRef.current.click();
+    }
+
+    const handleImageChange = (event) => {
+        const files = event.target.files;
+        const newImages = Array.from(files).map((file) => {
+            return {
+                name: file.name,
+                size: (file.size / 1024).toFixed(1),
+                file,
+            };
+        });
+        setSelectedImages((prevImages) => [...prevImages, ...newImages]);
+    };
+
+    const removeImage = (index) => {
+        const updatedImages = [...selectedImages];
+        updatedImages.splice(index, 1);
+        setSelectedImages(updatedImages);
+    };
 
     const fetchTags = (value) => {
         if (cancelTokenSource) {
             cancelTokenSource.cancel('Request canceled due to new value');
         }
         cancelTokenSource = axios.CancelToken.source();
-
         getTenTags(value, {
             cancelToken: cancelTokenSource.token
         })
             .then((response) => {
-
                 if (response.data?.object) {
                     const newTags = response.data.object.map(tagItem => ({
                         tagId: tagItem.tagId,
@@ -61,7 +90,23 @@ const CreatePostWeb = ({
                 }
             })
             .catch((error) => {
-
+                if (error.response.status === 400 || error.response.status === 401) {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                } else {
+                    const message = 'Something went wrong while fetching the Tags';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                }
             });
     }
 
@@ -76,13 +121,115 @@ const CreatePostWeb = ({
         }
     };
 
+    const validatePostData = () => {
+        if (inputValue=== '') {
+            const message = "There is nothing to share in your Post";
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error',
+            };
+            dispatch(setSnackbar(snackBarData));
+            return true;
+        } else if (selectedImages.length > 6) {
+            const message = "You cannot add more than 5 Images";
+            const snackBarData = {
+                isSnackbar: true,
+                message: message,
+                snackbarType: 'Error',
+            };
+            dispatch(setSnackbar(snackBarData));
+            return true;
+        }
+        return false;
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(inputValue);
+        if (!validatePostData()) {
+            setPostLoader(true);
+            const postPayload = {
+                postType: 'POST',
+                isImageAdded: selectedImages.length > 0,
+                body: inputValue
+            }
+            addPost(postPayload)
+                .then((response) => {
+                    if (selectedImages.length > 0) {
+                        const formData = new FormData();
+                        selectedImages.forEach((image, index) => {
+                            formData.append('images', image.file);
+                        });
+                        authenticatedAxios.post(ADD_POST_IMAGE + '/' + response.data?.id, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            }
+                        })
+                            .then((response) => {
+                                const snackbarData = {
+                                    isSnackbar: true,
+                                    message: 'Post Created successfully to Bloggios',
+                                    snackbarType: 'Success',
+                                };
+                                dispatch(setSnackbar(snackbarData));
+                                setPostLoader(false);
+                                setSelectedImages([]);
+                                setInputValue('');
+                            }).catch((error) => {
+                            setPostLoader(false);
+                            if (error.response.status === 400 || error.response.status === 401) {
+                                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                                const snackBarData = {
+                                    isSnackbar: true,
+                                    message: message,
+                                    snackbarType: 'Error',
+                                };
+                                dispatch(setSnackbar(snackBarData));
+                            } else {
+                                const message = 'Something went wrong. Please try again later';
+                                const snackBarData = {
+                                    isSnackbar: true,
+                                    message: message,
+                                    snackbarType: 'Error',
+                                };
+                                dispatch(setSnackbar(snackBarData));
+                            }
+                        })
+                    } else {
+                        const snackbarData = {
+                            isSnackbar: true,
+                            message: 'Post Created successfully to Bloggios',
+                            snackbarType: 'Success',
+                        };
+                        dispatch(setSnackbar(snackbarData));
+                        setPostLoader(false);
+                        setSelectedImages([]);
+                        setInputValue('');
+                    }
+                }).catch((error) => {
+                setPostLoader(false);
+                if (error.response.status === 400 || error.response.status === 401) {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                } else {
+                    const message = 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                }
+            });
+        }
     }
 
     useEffect(() => {
-
         const handleInputChange = () => {
             const words = inputValue.split(' ');
             const lastWord = words[words.length - 1];
@@ -93,7 +240,6 @@ const CreatePostWeb = ({
                 setShowSuggestions(false);
             }
         };
-
         handleInputChange();
     }, [inputValue]);
 
@@ -119,12 +265,8 @@ const CreatePostWeb = ({
         }
     }
 
-    useEffect(() => {
-        console.log(suggestions)
-    });
-
     return (
-        <Wrapper onSubmit={handleSubmit}>
+        <Wrapper>
             <RowWrapper>
                 <Avatar
                     size={'60px'}
@@ -145,31 +287,57 @@ const CreatePostWeb = ({
                 display: showSuggestions ? 'flex' : 'none'
             }}>
                 <ScrollButton onClick={() => handleScroll('left')}>
-                    <FaAngleLeft />
+                    <FaAngleLeft/>
                 </ScrollButton>
                 <SuggestionWrapper id="suggestionWrapper">
                     {
                         suggestions.length > 0 ? (
-                            suggestions.map((item)=> (
-                                <SuggestionChipButton key={item.tagId} onClick={()=> handleSuggestionClick(item)}>
+                            suggestions.map((item) => (
+                                <SuggestionChipButton key={item.tagId} onClick={() => handleSuggestionClick(item)}>
                                     {item.tag}
                                 </SuggestionChipButton>
                             ))
                         ) : (
-                            <Typography text={'New Tag will be created'} type={'caption'} />
+                            <Typography text={'New Tag will be created'} type={'caption'}/>
                         )
                     }
                 </SuggestionWrapper>
                 <ScrollButton onClick={() => handleScroll('right')}>
-                    <FaAngleRight />
+                    <FaAngleRight/>
                 </ScrollButton>
             </SuggestionMainDiv>
+
+            <ImageWrapper selectedImages={selectedImages}>
+                {selectedImages.map((image, index) => (
+                    <ImageListItem key={index}>
+                        <ImageListMainDiv>
+                            <ImageListInnerTextDiv>
+                                <FirstSpan>{image.name}</FirstSpan>
+                                <LastSpan>{`${image.size} KB`}</LastSpan>
+                            </ImageListInnerTextDiv>
+                            <DeleteButton onClick={() => removeImage(index)} color={'#ea1818'}>
+                                <AiFillDelete/>
+                            </DeleteButton>
+                        </ImageListMainDiv>
+                    </ImageListItem>
+                ))}
+            </ImageWrapper>
 
             <ButtonsWrapper>
                 <ChipButton
                     text={'Photo'}
                     icon={<HiOutlinePhotograph color={'#1fe49e'} fontSize={'20px'}/>}
-                />
+                    onClick={handleImageUploadEvent}
+                >
+                    <input
+                        multiple
+                        type="file"
+                        accept={"image/*"}
+                        onChange={handleImageChange}
+                        ref={imageRef}
+                        style={{display: 'none'}}
+                    />
+                </ChipButton>
 
                 <ChipButton
                     text={'Hashtag'}
@@ -179,26 +347,22 @@ const CreatePostWeb = ({
                 />
 
                 <ChipButton
-                    text={'Poll'}
-                    icon={<CgOptions color={'#529dff'} fontSize={'20px'}/>}
-                />
-
-                <ChipButton
-                    text={'Mention'}
-                    icon={<GoMention color={'#d9b25f'} fontSize={'20px'}/>}
+                    text={'Location'}
+                    icon={<FaLocationDot color={'#d9b25f'} fontSize={'20px'}/>}
+                    cursor={'not-allowed'}
                 />
             </ButtonsWrapper>
 
             <PostButtonWrapper>
-                <PostButton>
-                    Post
+                <PostButton onClick={handleSubmit}>
+                    {postLoader ? <SimpleLoader size={'4px'}/> : 'Post'}
                 </PostButton>
             </PostButtonWrapper>
         </Wrapper>
     );
 };
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   min-width: 95%;
   max-width: 400px; /* Set a maximum width to prevent it from growing indefinitely */
   margin: 0 auto; /* Center the form horizontally */
@@ -242,17 +406,15 @@ const InputField = styled.textarea`
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
   align-items: center;
-  gap: 5px;
+  gap: 1vw;
   margin: 28px 0 20px 0;
   @media (max-width: 450px) {
     justify-content: space-around;
   }
 
-  @media (min-width: 1400px) {
-    justify-content: space-around;
-  }
+
 `;
 
 const PostButtonWrapper = styled.div`
@@ -263,7 +425,7 @@ const PostButtonWrapper = styled.div`
 `;
 
 const PostButton = styled.button`
-  padding: 10px;
+  height: 34px;
   width: 140px;
   background-color: #4258ff;
   color: #e5e5e5;
@@ -316,6 +478,7 @@ const SuggestionWrapper = styled.div`
   gap: 10px;
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For Internet Explorer and Edge */
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -368,6 +531,71 @@ const ScrollButton = styled.button`
   &:active {
     background-color: rgba(255, 255, 255, 0.3);
     color: rgba(255, 255, 255, 0.7);
+  }
+`;
+
+const ImageWrapper = styled.div`
+  padding-top: 40px;
+  display: ${(props) => (props.selectedImages.length > 0 ? 'block' : 'none')};
+`;
+
+const ImageListMainDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+`;
+
+const ImageListInnerTextDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  align-items: center;
+  width: 100%;
+`;
+
+const FirstSpan = styled.span`
+  max-width: 48%;
+  width: 48%;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 300 !important;
+`;
+
+const LastSpan = styled.span`
+  font-size: 16px;
+  padding-left: 20px;
+  font-weight: 200 !important;
+`;
+
+const DeleteButton = styled.div`
+  height: 40px;
+  width: 40px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: transparent;
+  cursor: pointer;
+  color: rgb(236, 83, 83);
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const ImageListItem = styled.div`
+  & + & {
+    margin-top: 10px; /* Adjust as needed */
   }
 `;
 

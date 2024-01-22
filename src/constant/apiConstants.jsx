@@ -29,4 +29,6 @@ export const LOGOUT = '/auth-provider/v1.0/authentication/logout';
 export const ADD_PROFILE = '/user-provider/v1.0/profile/write';
 export const GET_PROFILE = '/user-provider/v1.0/profile/read';
 export const ADD_IMAGE_TO_PROFILE = '/user-provider/v1.0/profile/write/add-image';
-export const FETCH_POST_TAGS = '/post-provider/v1.0/tag/tags-list'
+export const FETCH_POST_TAGS = '/post-provider/v1.0/tag/tags-list';
+export const ADD_POST = '/post-provider/v1.0/post';
+export const ADD_POST_IMAGE = '/post-provider/v1.0/post/add-images';
