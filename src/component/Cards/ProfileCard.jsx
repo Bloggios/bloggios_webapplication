@@ -262,12 +262,13 @@ const BioWrapper = styled.div`
 `;
 
 const TextSpan = styled.div`
-  max-height: 2.4em;
-  line-height: 1.2;
+  max-height: 2.9em;
+  line-height: 1.4;
   position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 200;
+  white-space: pre-line;
 `;
 
 const FloatingButton = styled.button`

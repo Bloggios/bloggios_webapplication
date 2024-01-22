@@ -38,7 +38,8 @@ const ChipButton = ({
                         hoveredBg = 'linear-gradient(225deg, #1a1a1a, #171515)',
                         activeBg = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
                         hoveredColor = 'rgba(255, 255, 255, 0.8)',
-                        activeColor = 'rgba(255, 255, 255, 0.6)'
+                        activeColor = 'rgba(255, 255, 255, 0.6)',
+                        cursor = 'pointer'
                     }) => {
     return (
         <ButtonWrapper
@@ -52,7 +53,8 @@ const ChipButton = ({
             style={{
                 height,
                 width,
-                borderRadius: borderRadius && '25px'
+                borderRadius: borderRadius && '25px',
+                cursor: cursor
             }}
         >
             {icon}
@@ -76,7 +78,6 @@ const ButtonWrapper = styled.button`
   flex-direction: row;
   gap: 10px;
   align-items: center;
-  cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   user-select: none;
   color: ${(props) => props.color};
@@ -85,12 +86,12 @@ const ButtonWrapper = styled.button`
 
   &:hover {
     background: ${(props) => props.hoveredBg};
-    color: ${(props)=> props.hoveredColor};
+    color: ${(props) => props.hoveredColor};
   }
 
   &:active {
     background: ${(props) => props.activeBg};
-    color: ${(props)=> props.activeColor};
+    color: ${(props) => props.activeColor};
   }
 `;
 
