@@ -104,10 +104,10 @@ const SignUpPage = () => {
         return errors;
     };
 
-    const handleEnterPress = (event) => {
-        console.log(event)
-        if (event.keyCode === '13') {
-            handleSubmit();
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSubmit(event);
         }
     };
 
@@ -209,6 +209,7 @@ const SignUpPage = () => {
                         value={signupData.email}
                         onChange={(e) => handleInputChange(e, 'email')}
                         isDisabled={buttonLoader}
+                        onKeyDown={handleKeyDown}
                     />
                     <TextField
                         placeholder={'Password*'}
@@ -224,6 +225,7 @@ const SignUpPage = () => {
                         value={signupData.password}
                         onChange={(e) => handleInputChange(e, 'password')}
                         isDisabled={buttonLoader}
+                        onKeyDown={handleKeyDown}
                     />
                 </FieldWrapper>
 

@@ -74,6 +74,7 @@ const Wrapper = styled.div`
   grid-auto-flow: row dense;
   grid-template-areas:
     "Left-Bar Middle-Bar Right-Bar";
+  box-sizing: border-box;
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr 2fr;
@@ -113,9 +114,14 @@ const MiddleBar = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 
   span {
     font-weight: bold;
+  }
+  
+  @media (max-width: 500px) {
+    margin-bottom: 70px;
   }
 `;
 

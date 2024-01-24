@@ -139,6 +139,13 @@ const LoginPage = () => {
         })
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleLogin(event);
+        }
+    };
+
 
     return (
         <Wrapper>
@@ -196,6 +203,7 @@ const LoginPage = () => {
                         value={loginData.entryPoint}
                         onChange={(e) => handleInputChange(e, 'entryPoint')}
                         isDisabled={buttonLoader}
+                        onKeyDown={handleKeyDown}
                     />
                     <TextField
                         placeholder={'Password*'}
@@ -212,6 +220,7 @@ const LoginPage = () => {
                         value={loginData.password}
                         onChange={(e) => handleInputChange(e, 'password')}
                         isDisabled={buttonLoader}
+                        onKeyDown={handleKeyDown}
                     />
                 </FieldWrapper>
 

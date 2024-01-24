@@ -59,7 +59,7 @@ const TextField = ({
                        textType,
                        isPassword,
                        maxLength,
-                       isDisabled
+                       isDisabled,
                    }) => {
 
     const [ref, size] = useComponentSize();

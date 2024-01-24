@@ -58,9 +58,10 @@ const BloggiosBase = ({ children }) => {
                 newestOnTop={true}
                 toastStyle={{
                     boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
-                    fontSize: width > 700 ? '14px' : '10px',
+                    fontSize: width > 700 ? '14px' : '12px',
                     fontFamily: "'Inter', san-serif",
-                    width: 'auto',
+                    width: width > 500 ? 'auto' : '95%',
+                    margin: '0 auto',
                     marginBottom: width < 500 && '40px'
                 }}
             />
