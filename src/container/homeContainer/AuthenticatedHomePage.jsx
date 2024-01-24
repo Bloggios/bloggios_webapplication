@@ -26,6 +26,7 @@ import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
+import PostList from "../../component/List/PostList";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(()=> import('../../component/CreatePost/createPostWeb'));
@@ -60,6 +61,9 @@ const AuthenticatedHomePage = () => {
             <MiddleBar>
                 <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
                     {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo} /> : <CreatePostMobile />}
+                </Suspense>
+                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'} />}>
+                    <PostList />
                 </Suspense>
             </MiddleBar>
         </Wrapper>
@@ -109,20 +113,17 @@ const RightBar = styled.div`
 `;
 
 const MiddleBar = styled.div`
-  grid-area: Middle-Bar;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
+    grid-area: Middle-Bar;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    row-gap: 50px;
 
-  span {
-    font-weight: bold;
-  }
-  
-  @media (max-width: 500px) {
-    margin-bottom: 70px;
-  }
+    @media (max-width: 500px) {
+        margin-bottom: 70px;
+    }
 `;
 
 export default AuthenticatedHomePage;

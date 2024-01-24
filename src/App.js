@@ -20,11 +20,13 @@
 
 import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
 import {clearCredentials, setCredentials} from "./state/authSlice";
 import LoaderPage from "./component/loaders/loaderPage";
-import {getProfile} from "./restservices/profileApi";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const App = () => {
 
