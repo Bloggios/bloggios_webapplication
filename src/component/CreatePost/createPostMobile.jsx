@@ -47,6 +47,7 @@ const CreatePostMobile = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const dispatch = useDispatch();
     const [postLoader, setPostLoader] = useState(false);
+    const [tags, setTags] = useState('');
     let cancelTokenSource;
 
     const handleImageUploadEvent = () => {
@@ -233,14 +234,28 @@ const CreatePostMobile = () => {
             const words = inputValue.split(' ');
             const lastWord = words[words.length - 1];
             if (lastWord.startsWith('#')) {
-                fetchTags(lastWord);
+                setTags(lastWord ? lastWord : '#');
                 setShowSuggestions(true);
             } else {
+                setTags('');
                 setShowSuggestions(false);
             }
         };
         handleInputChange();
     }, [inputValue]);
+
+    useEffect(()=> {
+        const debounce = setTimeout(()=> {
+            if (tags.length > 0) {
+                console.log(tags);
+                fetchTags(tags);
+            } else if (tags === '' || tags.length === 0) {
+                setShowSuggestions(false)
+            }
+        }, 500)
+
+        return ()=> clearTimeout(debounce);
+    }, [tags])
 
     const handleSuggestionClick = (suggestion) => {
         const words = inputValue.split(' ');
