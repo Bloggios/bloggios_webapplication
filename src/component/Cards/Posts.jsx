@@ -26,6 +26,7 @@ import Typography from "../typography/typography";
 import {SlOptionsVertical} from "react-icons/sl";
 import {CgProfile} from "react-icons/cg";
 import {MdOutlineReport} from "react-icons/md";
+import ImagesSwiper from "../Swiper/ImagesSwiper";
 
 const swiperItems = [
     {
@@ -64,7 +65,6 @@ const Posts = ({
                }) => {
 
     const [isShown, setIsShown] = useState(false);
-    const [expanded, setExpanded] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleReadMoreClick = () => {
@@ -136,6 +136,12 @@ const Posts = ({
                     </ReadMoreButton>
                 )}
             </PostBodyWrapper>
+
+            {swiperItems && (
+                <ImageSwiperWrapper>
+                    <ImagesSwiper swiperItems={swiperItems} />
+                </ImageSwiperWrapper>
+            )}
         </Wrapper>
     );
 };
@@ -229,7 +235,7 @@ const DropdownWrapper = styled.div`
     height: auto;
     width: 160px;
     padding: 10px;
-    background-color: rgba(28, 28, 28, 0.9);
+    background: rgba(28, 28, 28, 1);
     top: 105%;
     right: 10%;
     border-radius: 16px;
@@ -284,6 +290,14 @@ const TextContainer = styled.div`
     transition: all 500ms ease-in-out;
     text-align: justify;
     line-height: 22px;
+`;
+
+const ImageSwiperWrapper = styled.div`
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
 `;
 
 export default Posts;

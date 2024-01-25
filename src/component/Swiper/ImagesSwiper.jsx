@@ -11,21 +11,21 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *      
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *      
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
 import React from 'react';
-import styled from "styled-components";
-import {IoChevronBackOutline, IoChevronForward} from "react-icons/io5";
+import '../../styles/SwiperStyle.css'
 import {Swiper, SwiperSlide} from "swiper/react";
 import {EffectCreative, Navigation, Zoom} from "swiper/modules";
+import {IoChevronBackOutline, IoChevronForward} from "react-icons/io5";
+import styled from "styled-components";
 
-
-const PostSwiper = ({swiperItems}) => {
+const ImagesSwiper = ({swiperItems}) => {
     return (
         <Swiper
             effect={'creative'}
@@ -44,15 +44,16 @@ const PostSwiper = ({swiperItems}) => {
             modules={[EffectCreative, Navigation, Zoom]}
             className='bloggios-custom-creative-swiper'
         >
-
             {swiperItems.map((item) => (
                 <SwiperSlide key={item.id}>
-                    <div style={{display: 'flex',
+                    <div style={{
+                        display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         width: '100%',
                         borderRadius: '20px',
-                        height: 'auto'}} className="swiper-zoom-container">
+                        height: 'auto'
+                    }} className="swiper-zoom-container">
                         <SwiperImage
                             alt={item.label}
                             src={item.image}
@@ -63,7 +64,6 @@ const PostSwiper = ({swiperItems}) => {
 
                 </SwiperSlide>
             ))}
-
             <div className="swiper-button-prev">
                 <IoChevronBackOutline/>
             </div>
@@ -75,16 +75,16 @@ const PostSwiper = ({swiperItems}) => {
 };
 
 const SwiperImage = styled.img`
-  min-width: 100%;
-  height: 500px;
-  object-fit: contain;
-  aspect-ratio: 1/1;
-  background-color: #272727;
-  border-radius: 20px;
-  @media (max-width: 1000px) {
-    width: 100%;
-    height: auto;
-  }
+    min-width: 100%;
+    height: 524px;
+    object-fit: contain;
+    aspect-ratio: 1/1;
+    background: #272727;
+    border-radius: 20px;
+    @media (max-width: 1000px) {
+        width: 100%;
+        height: auto;
+    }
 `;
 
-export default PostSwiper;
+export default ImagesSwiper;
