@@ -58,3 +58,20 @@
     color: #fff;
     background: #4258ff;
 }
+
+@media (max-width: 500px) {
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        color: #616161 !important;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        height: 25px !important;
+        width: 25px !important;
+        font-size: 12px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+}

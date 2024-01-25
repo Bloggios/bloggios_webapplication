@@ -72,6 +72,7 @@ const Posts = ({
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
+    const {width} = useWindowDimensions();
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
@@ -89,7 +90,7 @@ const Posts = ({
             <PostHeader>
                 <LogoNameWrapper>
                     <Avatar
-                        size={'50px'}
+                        size={width > 500 ? '50px' : '40px'}
                         position={'relative'}
                         image={avatar ? avatar : bloggios_logo}
                     />
@@ -177,6 +178,10 @@ const Wrapper = styled.div`
     box-sizing: border-box; /* Include padding in the width calculation */
     display: flex;
     flex-direction: column;
+    
+    @media(max-width: 500px) {
+        padding: 10px;
+    }
 `;
 
 const PostHeader = styled.div`
@@ -210,6 +215,10 @@ const NameSpan = styled.span`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
+    @media(max-width: 500px) {
+        font-size: 14px;
+    }
 `;
 
 const LocationSpan = styled.span`
@@ -221,6 +230,10 @@ const LocationSpan = styled.span`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media(max-width: 500px) {
+        font-size: 12px;
+    }
 `;
 
 const OptionsMenu = styled.button`
@@ -298,10 +311,8 @@ const ReadMoreButton = styled.button`
     cursor: pointer;
     font-size: 14px;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
-    padding: 2px 0 2px 25px;
-    backdrop-filter: blur(2px);
+    align-self: flex-end;
+    bottom: -10px;
 `;
 
 const TextContainer = styled.div`
@@ -309,6 +320,15 @@ const TextContainer = styled.div`
     transition: all 500ms ease-in-out;
     text-align: justify;
     line-height: 22px;
+    font-weight: 300;
+    
+    @media(max-width: 500px) {
+        font-size: 14px;
+    }
+    
+    @media(max-width: 400px) {
+        
+    }
 `;
 
 const ImageSwiperWrapper = styled.div`
@@ -328,6 +348,11 @@ const PostFooter = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+
+    @media(max-width: 500px) {
+        margin-top: 14px;
+        padding: 5px;
+    }
 `;
 
 const LikeCommentShareWrapper = styled.div`
@@ -336,6 +361,10 @@ const LikeCommentShareWrapper = styled.div`
     justify-content: center;
     flex-direction: row;
     gap: 20px;
+
+    @media(max-width: 450px) {
+        gap: 5px;
+    }
 `;
 
 const IconButton = styled.button`
@@ -363,12 +392,19 @@ const IconButton = styled.button`
         color: rgba(255, 255, 255, 0.6);
         background: rgba(255, 255, 255, 0.07);
     }
+    
+    @media(max-width: 400px) {
+        height: 34px;
+        width: 34px;
+        font-size: 18px;
+    }
 `;
 
 const TimingWrapper = styled.div`
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
     display: flex;
     align-items: center;
+    font-weight: 200;
 `;
 
 export default Posts;
