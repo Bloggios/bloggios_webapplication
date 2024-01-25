@@ -43,6 +43,7 @@ const ImagesSwiper = ({swiperItems}) => {
                 prevEl: '.swiper-button-prev',
                 nextEl: '.swiper-button-next',
             }}
+            lazy={true}
             pagination={{
                 clickable: true,
                 dynamicBullets: true,
@@ -70,7 +71,6 @@ const ImagesSwiper = ({swiperItems}) => {
                         />
                     </div>
                     <div className="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-
                 </SwiperSlide>
             ))}
             <div className="swiper-button-prev">
