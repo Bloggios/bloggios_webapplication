@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -56,13 +56,27 @@ const swiperItems = [
 ]
 
 const Posts = ({
-    avatar,
-    name,
-    location,
-    imagesList
+                   avatar,
+                   name,
+                   location,
+                   imagesList,
+                   postBody = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad earum et, eveniet facilis fuga iusto provident veniam voluptates! A alias blanditiis deleniti deserunt dolor dolores doloribus ea eos, excepturi exercitationem facilis fugit ipsum iste itaque modi mollitia nihil nobis odit officiis optio placeat possimus praesentium quae quis quisquam quod quos sequi soluta suscipit tempora totam veniam veritatis voluptates! Cumque, debitis repellat. Praesentium tempora tenetur voluptates! A architecto culpa cumque deleniti harum nisi repudiandae! Iure maxime, nostrum odit officia possimus voluptate!'
                }) => {
 
     const [isShown, setIsShown] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleReadMoreClick = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const toggleReadMore = () => {
+        setIsExpanded(!isExpanded);
+    };
+
 
     const handleClick = () => {
         if (isShown) {
@@ -90,7 +104,7 @@ const Posts = ({
                 </LogoNameWrapper>
 
                 <OptionsMenu onClick={() => setIsShown(!isShown)}>
-                    <SlOptionsVertical />
+                    <SlOptionsVertical/>
 
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
@@ -109,6 +123,19 @@ const Posts = ({
                     </DropdownWrapper>
                 </OptionsMenu>
             </PostHeader>
+
+            <PostBodyWrapper>
+                <TextContainer style={{
+                    height: isExpanded ? 'auto' : '65px'
+                }}>
+                    {postBody}
+                </TextContainer>
+                {postBody.length > 250 && (
+                    <ReadMoreButton onClick={toggleReadMore}>
+                        {isExpanded ? 'Read Less' : 'Read More'}
+                    </ReadMoreButton>
+                )}
+            </PostBodyWrapper>
         </Wrapper>
     );
 };
@@ -129,12 +156,12 @@ const Wrapper = styled.div`
 `;
 
 const PostHeader = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-  user-select: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    user-select: none;
 `;
 
 const LogoNameWrapper = styled.div`
@@ -185,7 +212,7 @@ const OptionsMenu = styled.button`
     cursor: pointer;
     position: relative;
     transition: background 150ms ease;
-    
+
     &:hover {
         color: rgba(255, 255, 255, 0.8);
         background-color: rgba(0, 0, 0, 0.2);
@@ -198,21 +225,21 @@ const OptionsMenu = styled.button`
 `;
 
 const DropdownWrapper = styled.div`
-  position: absolute;
-  height: auto;
-  width: 160px;
-  padding: 10px;
-  background-color: rgba(28, 28, 28, 0.9);
-  top: 105%;
-  right: 10%;
-  border-radius: 16px;
-  transition: all 250ms ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  z-index: 2;
+    position: absolute;
+    height: auto;
+    width: 160px;
+    padding: 10px;
+    background-color: rgba(28, 28, 28, 0.9);
+    top: 105%;
+    right: 10%;
+    border-radius: 16px;
+    transition: all 250ms ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    z-index: 2;
 `;
 
 const DropDownItemWrapper = styled.div`
@@ -228,6 +255,35 @@ const DropDownItemWrapper = styled.div`
     &:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
+`;
+
+const PostBodyWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 20px 0;
+    padding: 10px;
+`;
+
+const ReadMoreButton = styled.button`
+    border: none;
+    background: linear-gradient(to right, rgba(39, 39, 39, 0.5), rgba(39, 39, 39, 0.8), rgba(39, 39, 39, 1));
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 2px 0 2px 25px;
+    backdrop-filter: blur(2px);
+`;
+
+const TextContainer = styled.div`
+    overflow: hidden;
+    transition: all 500ms ease-in-out;
+    text-align: justify;
+    line-height: 22px;
 `;
 
 export default Posts;
