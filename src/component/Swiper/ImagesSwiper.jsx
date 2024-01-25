@@ -21,11 +21,13 @@
 import React from 'react';
 import '../../styles/SwiperStyle.css'
 import {Swiper, SwiperSlide} from "swiper/react";
-import {EffectCreative, Navigation, Zoom} from "swiper/modules";
+import {EffectCreative, Navigation, Zoom, Pagination} from "swiper/modules";
 import {IoChevronBackOutline, IoChevronForward} from "react-icons/io5";
 import styled from "styled-components";
+import 'swiper/css/pagination';
 
 const ImagesSwiper = ({swiperItems}) => {
+
     return (
         <Swiper
             effect={'creative'}
@@ -41,7 +43,14 @@ const ImagesSwiper = ({swiperItems}) => {
                 prevEl: '.swiper-button-prev',
                 nextEl: '.swiper-button-next',
             }}
-            modules={[EffectCreative, Navigation, Zoom]}
+            pagination={{
+                clickable: true,
+                dynamicBullets: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '"></span>';
+                },
+            }}
+            modules={[EffectCreative, Navigation, Zoom, Pagination]}
             className='bloggios-custom-creative-swiper'
         >
             {swiperItems.map((item) => (

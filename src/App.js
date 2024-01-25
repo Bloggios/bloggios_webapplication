@@ -34,10 +34,9 @@ const App = () => {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        let isMounted = true; // To check if the component is still mounted
+        let isMounted = true;
         const timeoutId = setTimeout(() => {
             if (isMounted) {
-                // Reload the page if still mounted after 2 seconds
                 window.location.reload();
             }
         }, 2000);
@@ -57,13 +56,12 @@ const App = () => {
             })
             .catch((error) => {
                 if (isMounted) {
-                    clearTimeout(timeoutId); // Clear the timeout if an error occurs
+                    clearTimeout(timeoutId);
                     dispatch(clearCredentials());
                     setIsChecking(false);
                 }
             });
 
-        // Cleanup function to clear the timeout and update the component's state
         return () => {
             isMounted = false;
             clearTimeout(timeoutId);
