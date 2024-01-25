@@ -30,14 +30,8 @@ const ImagesSwiper = ({swiperItems}) => {
 
     return (
         <Swiper
-            effect={'creative'}
-            creativeEffect={{
-                prev: {
-                    shadow: true, translate: [0, 0, -400]
-                }, next: {
-                    translate: ['100%', 0, 0]
-                }
-            }}
+            slidesPerView={1}
+            spaceBetween={30}
             zoom={true}
             navigation={{
                 prevEl: '.swiper-button-prev',
@@ -51,7 +45,7 @@ const ImagesSwiper = ({swiperItems}) => {
                     return '<span class="' + className + '"></span>';
                 },
             }}
-            modules={[EffectCreative, Navigation, Zoom, Pagination]}
+            modules={[Navigation, Zoom, Pagination]}
             className='bloggios-custom-creative-swiper'
         >
             {swiperItems.map((item) => (
@@ -84,14 +78,14 @@ const ImagesSwiper = ({swiperItems}) => {
 };
 
 const SwiperImage = styled.img`
-    min-width: 100%;
-    height: 524px;
+    width: 100%;
+    height: 500px;
     object-fit: contain;
     aspect-ratio: 1/1;
     background: #272727;
     border-radius: 20px;
+    overflow: hidden;
     @media (max-width: 1000px) {
-        width: 100%;
         height: auto;
     }
 `;

@@ -27,6 +27,11 @@ import {SlOptionsVertical} from "react-icons/sl";
 import {CgProfile} from "react-icons/cg";
 import {MdOutlineReport} from "react-icons/md";
 import ImagesSwiper from "../Swiper/ImagesSwiper";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {FaHeart, FaRegCommentDots, FaRegHeart} from "react-icons/fa";
+import {IoShareSocialOutline} from "react-icons/io5";
+import {FcLike} from "react-icons/fc";
+import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
 
 const swiperItems = [
     {
@@ -65,13 +70,8 @@ const Posts = ({
                }) => {
 
     const [isShown, setIsShown] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-
-    const handleReadMoreClick = () => {
-        setIsOpen(!isOpen);
-    };
-
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
@@ -142,13 +142,31 @@ const Posts = ({
                     <ImagesSwiper swiperItems={swiperItems} />
                 </ImageSwiperWrapper>
             )}
+
+            <PostFooter>
+                <LikeCommentShareWrapper>
+                    <IconButton onClick={()=> setIsLiked(!isLiked)}>
+                        {isLiked ? <FaHeart color={'red'} /> : <FaRegHeart />}
+                    </IconButton>
+                    <IconButton>
+                        <FaRegCommentDots />
+                    </IconButton>
+                    <IconButton>
+                        <IoShareSocialOutline />
+                    </IconButton>
+                </LikeCommentShareWrapper>
+
+                <TimingWrapper>
+                    1 hr
+                </TimingWrapper>
+            </PostFooter>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
     min-width: 100%;
-    max-width: 400px; /* Set a maximum width to prevent it from growing indefinitely */
+    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
     min-height: 200px;
@@ -179,7 +197,8 @@ const LogoNameWrapper = styled.div`
 const ColumnWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 2px;
 `;
 
 const NameSpan = styled.span`
@@ -293,11 +312,63 @@ const TextContainer = styled.div`
 `;
 
 const ImageSwiperWrapper = styled.div`
-    width: 90%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
+`;
+
+const PostFooter = styled.div`
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    display: flex;
+    margin-top: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const LikeCommentShareWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 20px;
+`;
+
+const IconButton = styled.button`
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    transition: all 150ms ease;
+    
+    &:hover {
+        color: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    &:active {
+        color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.07);
+    }
+`;
+
+const TimingWrapper = styled.div`
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
 `;
 
 export default Posts;

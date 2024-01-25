@@ -39,8 +39,7 @@ const PostList = () => {
 
 const Wrapper = styled.div`
     min-width: 95%;
-    max-width: 400px; /* Set a maximum width to prevent it from growing indefinitely */
-    margin: 0 auto; /* Center the form horizontally */
+    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
     display: flex;
     flex-direction: column;
     gap: 25px;
