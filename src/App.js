@@ -20,11 +20,13 @@
 
 import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
 import {clearCredentials, setCredentials} from "./state/authSlice";
 import LoaderPage from "./component/loaders/loaderPage";
-import {getProfile} from "./restservices/profileApi";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const App = () => {
 
@@ -32,10 +34,9 @@ const App = () => {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        let isMounted = true; // To check if the component is still mounted
+        let isMounted = true;
         const timeoutId = setTimeout(() => {
             if (isMounted) {
-                // Reload the page if still mounted after 2 seconds
                 window.location.reload();
             }
         }, 2000);
@@ -55,13 +56,12 @@ const App = () => {
             })
             .catch((error) => {
                 if (isMounted) {
-                    clearTimeout(timeoutId); // Clear the timeout if an error occurs
+                    clearTimeout(timeoutId);
                     dispatch(clearCredentials());
                     setIsChecking(false);
                 }
             });
 
-        // Cleanup function to clear the timeout and update the component's state
         return () => {
             isMounted = false;
             clearTimeout(timeoutId);
