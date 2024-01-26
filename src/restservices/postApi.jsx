@@ -19,16 +19,12 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_POST, FETCH_POST_TAGS, GET_PROFILE} from "../constant/apiConstants";
+import {ADD_POST, FETCH_POST_TAGS, GET_PROFILE, POST_LIST} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {
         page: 0,
         size: 10,
-        sort: [],
-        absoluteFilters: [],
-        filters: [],
-        field: [],
         texts: [tagName]
     }
     return authenticatedAxios.post(FETCH_POST_TAGS, tagPayload, {
@@ -39,5 +35,14 @@ export const getTenTags = (tagName, config) => {
 
 export const addPost = (payload) => {
     return authenticatedAxios.post(ADD_POST, payload)
+        .then((response)=> response);
+}
+
+export const postList = (page) => {
+    const payload = {
+        page: page,
+        size: 10
+    }
+    return authenticatedAxios.post(POST_LIST, payload)
         .then((response)=> response);
 }

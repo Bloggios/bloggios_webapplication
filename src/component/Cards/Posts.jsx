@@ -33,40 +33,12 @@ import {IoShareSocialOutline} from "react-icons/io5";
 import {FcLike} from "react-icons/fc";
 import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
 
-const swiperItems = [
-    {
-        id: 1,
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        label: 'Bloggios'
-    },
-    {
-        id: 2,
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        label: 'Bloggios'
-    },
-    {
-        id: 3,
-        image: 'https://images.unsplash.com/photo-1579403124614-197f69d8187b?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        label: 'Bloggios'
-    },
-    {
-        id: 4,
-        image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        label: 'Bloggios'
-    },
-    {
-        id: 5,
-        image: 'https://images.unsplash.com/photo-1517650862521-d580d5348145?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        label: 'Bloggios'
-    }
-]
-
 const Posts = ({
                    avatar,
                    name,
                    location,
                    imagesList,
-                   postBody = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad earum et, eveniet facilis fuga iusto provident veniam voluptates! A alias blanditiis deleniti deserunt dolor dolores doloribus ea eos, excepturi exercitationem facilis fugit ipsum iste itaque modi mollitia nihil nobis odit officiis optio placeat possimus praesentium quae quis quisquam quod quos sequi soluta suscipit tempora totam veniam veritatis voluptates! Cumque, debitis repellat. Praesentium tempora tenetur voluptates! A architecto culpa cumque deleniti harum nisi repudiandae! Iure maxime, nostrum odit officia possimus voluptate!'
+                   postBody
                }) => {
 
     const [isShown, setIsShown] = useState(false);
@@ -125,22 +97,26 @@ const Posts = ({
                 </OptionsMenu>
             </PostHeader>
 
-            <PostBodyWrapper>
-                <TextContainer style={{
-                    height: isExpanded ? 'auto' : '65px'
-                }}>
-                    {postBody}
-                </TextContainer>
-                {postBody.length > 250 && (
-                    <ReadMoreButton onClick={toggleReadMore}>
-                        {isExpanded ? 'Read Less' : 'Read More'}
-                    </ReadMoreButton>
-                )}
-            </PostBodyWrapper>
+            {postBody && (
+                <PostBodyWrapper>
+                    <TextContainer style={{
+                        height: isExpanded ? 'auto' : '65px'
+                    }}>
+                        {postBody}
+                    </TextContainer>
+                    {postBody.length > 250 && (
+                        <ReadMoreButton onClick={toggleReadMore}>
+                            {isExpanded ? 'Read Less' : 'Read More'}
+                        </ReadMoreButton>
+                    )}
+                </PostBodyWrapper>
+            )}
 
-            {swiperItems && (
-                <ImageSwiperWrapper>
-                    <ImagesSwiper swiperItems={swiperItems} />
+            {imagesList && (
+                <ImageSwiperWrapper style={{
+                    marginTop: !postBody && '20px'
+                }}>
+                    <ImagesSwiper swiperItems={imagesList} />
                 </ImageSwiperWrapper>
             )}
 

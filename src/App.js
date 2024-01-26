@@ -39,7 +39,7 @@ const App = () => {
             if (isMounted) {
                 window.location.reload();
             }
-        }, 2000);
+        }, 4000);
 
         refreshToken()
             .then((response) => {

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useSelector} from "react-redux";
@@ -27,10 +27,11 @@ import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
 import PostList from "../../component/List/PostList";
+import {postList} from "../../restservices/postApi";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
-const CreatePost = lazy(()=> import('../../component/CreatePost/createPostWeb'));
-const CreatePostMobile = lazy(()=> import('../../component/CreatePost/createPostMobile'));
+const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
+const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPostMobile'));
 
 const AuthenticatedHomePage = () => {
 
@@ -40,6 +41,19 @@ const AuthenticatedHomePage = () => {
     const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
+    const [postListLoading, setPostListLoading] = useState(true);
+    const [postListData, setPostListData] = useState(null);
+
+    useEffect(() => {
+        postList(0)
+            .then((response) => {
+                setPostListData(response.data?.object);
+                setPostListLoading(false)
+            }).catch((error) => {
+            console.log(error)
+            setPostListLoading(false)
+        })
+    }, []);
 
     return (
         <Wrapper>
@@ -58,12 +72,21 @@ const AuthenticatedHomePage = () => {
                 </Suspense>
             </LeftBar>
             <RightBar></RightBar>
-            <MiddleBar>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
-                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo} /> : <CreatePostMobile />}
+            <MiddleBar ref={middleSectionRef}>
+                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
+                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
+                        <CreatePostMobile/>}
                 </Suspense>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'} />}>
-                    <PostList />
+                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                    {
+                        postListLoading && !postListData ? (
+                            <FallbackLoader width={middleSectionSize.width} height={'400px'}/>
+                        ) : (
+                            <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                                <PostList postList={postListData}/>
+                            </Suspense>
+                        )
+                    }
                 </Suspense>
             </MiddleBar>
         </Wrapper>
@@ -71,45 +94,45 @@ const AuthenticatedHomePage = () => {
 };
 
 const Wrapper = styled.div`
-  display: grid;
-  margin-top: 40px;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 0 0;
-  grid-auto-flow: row dense;
-  grid-template-areas:
-    "Left-Bar Middle-Bar Right-Bar";
-  box-sizing: border-box;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr 2fr;
-  }
-
-  @media (max-width: 750px) {
-    grid-template-columns: 1fr;
+    display: grid;
+    margin-top: 40px;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 0 0;
+    grid-auto-flow: row dense;
     grid-template-areas:
+    "Left-Bar Middle-Bar Right-Bar";
+    box-sizing: border-box;
+
+    @media (max-width: 1200px) {
+        grid-template-columns: 1fr 2fr;
+    }
+
+    @media (max-width: 750px) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
     "Middle-Bar";
-  }
+    }
 `;
 
 const LeftBar = styled.div`
-  grid-area: Left-Bar;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto;
+    grid-area: Left-Bar;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
 
-  @media (max-width: 750px) {
-    display: none;
-  }
+    @media (max-width: 750px) {
+        display: none;
+    }
 `;
 
 const RightBar = styled.div`
-  grid-area: Right-Bar;
+    grid-area: Right-Bar;
 
-  @media (max-width: 1200px) {
-    display: none;
-  }
+    @media (max-width: 1200px) {
+        display: none;
+    }
 `;
 
 const MiddleBar = styled.div`
