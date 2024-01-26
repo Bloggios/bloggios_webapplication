@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useSelector} from "react-redux";
@@ -44,16 +44,20 @@ const AuthenticatedHomePage = () => {
     const [postListLoading, setPostListLoading] = useState(true);
     const [postListData, setPostListData] = useState(null);
 
-    useEffect(() => {
-        postList(0)
-            .then((response) => {
-                setPostListData(response.data?.object);
-                setPostListLoading(false)
-            }).catch((error) => {
-            console.log(error)
-            setPostListLoading(false)
-        })
+    const fetchPostList = useCallback(async () => {
+        try {
+            const response = await postList(0); // Replace with your actual API call
+            setPostListData(response.data?.object);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setPostListLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchPostList();
+    }, [fetchPostList]);
 
     return (
         <Wrapper>

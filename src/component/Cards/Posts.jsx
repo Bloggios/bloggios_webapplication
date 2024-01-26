@@ -143,7 +143,7 @@ const Posts = ({
 
 const Wrapper = styled.div`
     min-width: 100%;
-    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
+    max-width: 200px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
     min-height: 200px;
