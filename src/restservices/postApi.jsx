@@ -19,7 +19,7 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_POST, FETCH_POST_TAGS, GET_PROFILE, POST_LIST} from "../constant/apiConstants";
+import {ADD_POST, FETCH_POST_TAGS, POST_LIST} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {

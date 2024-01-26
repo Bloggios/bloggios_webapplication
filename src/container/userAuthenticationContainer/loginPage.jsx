@@ -37,11 +37,9 @@ import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {loginUser} from "../../restservices/authApi";
-import {setCredentials} from "../../state/authSlice";
 import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
-import {PROFILE_ADDED} from "../../constant/apiConstants";
 
 const LoginPage = () => {
 

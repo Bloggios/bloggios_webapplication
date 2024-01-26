@@ -22,7 +22,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import {BsChevronDown} from "react-icons/bs";
 import Typography from "../../../component/typography/typography";
-import TextField from "../../../component/fields/textField";
 
 const GENDER_OPTIONS = ['RATHER_NOT_TO_SAY', 'MALE', 'FEMALE', 'OTHERS', ];
 const MONTH_OPTIONS = ['Month', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];

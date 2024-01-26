@@ -20,7 +20,6 @@
 
 import React from 'react';
 import TextField from "../../../component/fields/textField";
-import Typography from "../../../component/typography/typography";
 import styled from "styled-components";
 
 const NameStepper = ({data, setData, helperText, setHelperText}) => {

@@ -21,7 +21,7 @@
 import React from 'react';
 import '../../styles/SwiperStyle.css'
 import {Swiper, SwiperSlide} from "swiper/react";
-import {EffectCreative, Navigation, Zoom, Pagination} from "swiper/modules";
+import {Navigation, Pagination, Zoom} from "swiper/modules";
 import {IoChevronBackOutline, IoChevronForward} from "react-icons/io5";
 import styled from "styled-components";
 import 'swiper/css/pagination';

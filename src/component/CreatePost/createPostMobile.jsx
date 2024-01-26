@@ -24,15 +24,12 @@ import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
 import ChipButton from "../buttons/chipButton";
 import {HiHashtag, HiOutlinePhotograph} from "react-icons/hi";
-import {CgOptions} from "react-icons/cg";
-import {GoMention} from "react-icons/go";
 import {useDispatch} from "react-redux";
 import axios from "axios";
 import {addPost, getTenTags} from "../../restservices/postApi";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {authenticatedAxios} from "../../restservices/baseAxios";
 import {ADD_POST_IMAGE} from "../../constant/apiConstants";
-import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import Typography from "../typography/typography";
 import {AiFillDelete} from "react-icons/ai";
 import {FaLocationDot} from "react-icons/fa6";

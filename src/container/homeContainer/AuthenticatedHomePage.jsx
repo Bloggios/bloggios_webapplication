@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useDispatch, useSelector} from "react-redux";
@@ -29,7 +29,6 @@ import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
 import PostList from "../../component/List/PostList";
 import {postList} from "../../restservices/postApi";
 import {debounce} from "lodash";
-import {setSnackbar} from "../../state/snackbarSlice";
 import {dispatchError} from "../../service/functions";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
@@ -45,20 +44,22 @@ const AuthenticatedHomePage = () => {
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
     const [postListLoading, setPostListLoading] = useState(true);
-    const [postListData, setPostListData] = useState(null);
-    const {isCreated} = useSelector((state)=> state.postCreate);
+    const [postListData, setPostListData] = useState([]);
+    const {isCreated} = useSelector((state) => state.postCreate);
     const dispatch = useDispatch();
+    const [page, setPage] = useState(0);
 
     const fetchPostList = useCallback(async () => {
+        setPostListLoading(true);
         try {
-            const response = await postList(0); // Replace with your actual API call
-            setPostListData(response.data?.object);
+            const response = await postList(page);
+            setPostListData((prevData) => [...prevData, ...response.data?.object]);
         } catch (error) {
             dispatchError(dispatch, error)
         } finally {
             setPostListLoading(false);
         }
-    }, [setPostListData, setPostListLoading, dispatch]);
+    }, [setPostListData, setPostListLoading, page, dispatch]);
 
     useEffect(() => {
         fetchPostList();
@@ -72,6 +73,23 @@ const AuthenticatedHomePage = () => {
             return () => debouncedFetch.cancel();
         }
     }, [isCreated, fetchPostList]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop ===
+                document.documentElement.offsetHeight
+            ) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <Wrapper>
@@ -95,17 +113,12 @@ const AuthenticatedHomePage = () => {
                     {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
                         <CreatePostMobile/>}
                 </Suspense>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                    {
-                        postListLoading ? (
-                            <FallbackLoader width={middleSectionSize.width} height={'400px'}/>
-                        ) : (
-                            <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                                <PostList postList={postListData}/>
-                            </Suspense>
-                        )
-                    }
-                </Suspense>
+                {postListData && (
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                        <PostList postList={postListData}/>
+                        {postListLoading && <FallbackLoader width={middleSectionSize.width} height={'100px'} />}
+                    </Suspense>
+                )}
             </MiddleBar>
         </Wrapper>
     );
@@ -161,6 +174,7 @@ const MiddleBar = styled.div`
     align-items: center;
     box-sizing: border-box;
     row-gap: 50px;
+    margin-bottom: 20px;
 
     @media (max-width: 500px) {
         margin-bottom: 70px;
