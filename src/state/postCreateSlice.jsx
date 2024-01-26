@@ -18,32 +18,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import styled from "styled-components";
-import Posts from "../Cards/Posts";
+import {createSlice} from "@reduxjs/toolkit";
 
-const PostList = ({postList}) => {
-    return (
-        <Wrapper>
-            {postList.map((post) => (
-                <Posts
-                    key={post.postId}
-                    imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
-                    postBody={post.body}
-                    location={post.location}
-                    userId={post.userId}
-                />
-            ))}
-        </Wrapper>
-    );
-};
+const postCreateSlice = createSlice({
+    name: 'postCreate',
+    initialState: {
+        isCreated: false
+    },
+    reducers: {
+        setPostCreated: (state, action) => {
+            state.isCreated = true;
+        },
+        clearPostCreated: (state, action) => {
+            state.isCreated = false;
+        }
+    }
+});
 
-const Wrapper = styled.div`
-    min-width: 95%;
-    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-`;
-
-export default PostList;
+export {postCreateSlice};
+export const { setPostCreated, clearPostCreated } = postCreateSlice.actions;

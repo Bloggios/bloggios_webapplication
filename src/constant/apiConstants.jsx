@@ -33,3 +33,4 @@ export const FETCH_POST_TAGS = '/post-provider/v1.0/tag/tags-list';
 export const ADD_POST = '/post-provider/v1.0/post';
 export const ADD_POST_IMAGE = '/post-provider/v1.0/post/add-images';
 export const POST_LIST = '/post-provider/v1.0/post/post-list'
+export const GET_USER_PROFILE = '/user-provider/v1.0/profile/read';

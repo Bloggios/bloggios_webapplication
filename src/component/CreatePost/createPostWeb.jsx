@@ -36,6 +36,8 @@ import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {FaLocationDot} from "react-icons/fa6";
 import SimpleLoader from "../loaders/simpleLoader";
+import {clearPostCreated, setPostCreated} from "../../state/postCreateSlice";
+import {dispatchError} from "../../service/functions";
 
 const CreatePostWeb = ({
                            image
@@ -147,6 +149,7 @@ const CreatePostWeb = ({
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        dispatch(clearPostCreated());
         if (!validatePostData()) {
             setPostLoader(true);
             const postPayload = {
@@ -173,28 +176,13 @@ const CreatePostWeb = ({
                                     snackbarType: 'Success',
                                 };
                                 dispatch(setSnackbar(snackbarData));
+                                dispatch(setPostCreated());
                                 setPostLoader(false);
                                 setSelectedImages([]);
                                 setInputValue('');
                             }).catch((error) => {
                             setPostLoader(false);
-                            if (error.response.status === 400 || error.response.status === 401) {
-                                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                                const snackBarData = {
-                                    isSnackbar: true,
-                                    message: message,
-                                    snackbarType: 'Error',
-                                };
-                                dispatch(setSnackbar(snackBarData));
-                            } else {
-                                const message = 'Something went wrong. Please try again later';
-                                const snackBarData = {
-                                    isSnackbar: true,
-                                    message: message,
-                                    snackbarType: 'Error',
-                                };
-                                dispatch(setSnackbar(snackBarData));
-                            }
+                            dispatchError(dispatch, error);
                         })
                     } else {
                         const snackbarData = {
@@ -204,28 +192,13 @@ const CreatePostWeb = ({
                         };
                         dispatch(setSnackbar(snackbarData));
                         setPostLoader(false);
+                        dispatch(setPostCreated());
                         setSelectedImages([]);
                         setInputValue('');
                     }
                 }).catch((error) => {
                 setPostLoader(false);
-                if (error.response.status === 400 || error.response.status === 401) {
-                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                    const snackBarData = {
-                        isSnackbar: true,
-                        message: message,
-                        snackbarType: 'Error',
-                    };
-                    dispatch(setSnackbar(snackBarData));
-                } else {
-                    const message = 'Something went wrong. Please try again later';
-                    const snackBarData = {
-                        isSnackbar: true,
-                        message: message,
-                        snackbarType: 'Error',
-                    };
-                    dispatch(setSnackbar(snackBarData));
-                }
+                dispatchError(dispatch, error);
             });
         }
     }

@@ -23,13 +23,15 @@ import loadingSlice from "./loadingSlice";
 import snackbarSlice from "./snackbarSlice";
 import {authSlice} from "./authSlice";
 import {profileSlice} from "./profileSlice";
+import {postCreateSlice} from "./postCreateSlice";
 
 const store = configureStore({
     reducer: {
         loading: loadingSlice,
         snackbar: snackbarSlice,
         auth: authSlice.reducer,
-        profile: profileSlice.reducer
+        profile: profileSlice.reducer,
+        postCreate: postCreateSlice.reducer
     }
 })
 
