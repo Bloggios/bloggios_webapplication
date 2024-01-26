@@ -84,7 +84,6 @@ const Posts = ({
         const originalDate = new Date(date);
         const currentDate = new Date();
         const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
-        console.log(timeDiffInSeconds)
         if (timeDiffInSeconds < 60) {
             return `${timeDiffInSeconds}s ago`;
         } else if (timeDiffInSeconds < 3600) {

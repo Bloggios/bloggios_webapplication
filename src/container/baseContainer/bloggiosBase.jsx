@@ -53,9 +53,14 @@ const BloggiosBase = ({ children }) => {
             <MemoizedCustomNavbar />
             {isLoading ? <MemoizedLoaderPage /> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
-                limit={2}
-                position={'bottom-center'}
+                limit={width > 600 ? 7 : 2}
+                position={width > 600 ? 'bottom-right' : 'bottom-center'}
                 newestOnTop={true}
+                draggableDirection={width > 600 ? 'x' : 'y'}
+                pauseOnHover={true}
+                pauseOnFocusLoss={false}
+                draggable={true}
+                draggablePercent={100}
                 toastStyle={{
                     boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
                     fontSize: width > 700 ? '14px' : '12px',

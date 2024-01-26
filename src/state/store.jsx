@@ -32,7 +32,8 @@ const store = configureStore({
         auth: authSlice.reducer,
         profile: profileSlice.reducer,
         postCreate: postCreateSlice.reducer
-    }
+    },
+    devTools: false
 })
 
 export default store;

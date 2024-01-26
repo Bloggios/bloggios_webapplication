@@ -68,11 +68,12 @@ const AuthenticatedHomePage = () => {
     useEffect(() => {
         if (isCreated) {
             setPostListLoading(true);
+            setPostListData([]);
             const debouncedFetch = debounce(fetchPostList, 400);
             debouncedFetch();
             return () => debouncedFetch.cancel();
         }
-    }, [isCreated, fetchPostList]);
+    }, [isCreated]);
 
     useEffect(() => {
         const handleScroll = () => {
