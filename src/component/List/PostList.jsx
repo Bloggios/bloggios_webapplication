@@ -23,6 +23,7 @@ import styled from "styled-components";
 import Posts from "../Cards/Posts";
 
 const PostList = ({postList}) => {
+
     return (
         <Wrapper>
             {postList.map((post) => (
@@ -32,6 +33,7 @@ const PostList = ({postList}) => {
                     postBody={post.body}
                     location={post.location}
                     userId={post.userId}
+                    date={post.dateCreated}
                 />
             ))}
         </Wrapper>

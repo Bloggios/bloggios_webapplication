@@ -23,8 +23,6 @@ import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import ChipButton from "../buttons/chipButton";
 import {HiHashtag, HiOutlinePhotograph} from "react-icons/hi";
-import {CgOptions} from "react-icons/cg";
-import {GoMention} from "react-icons/go";
 import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import {addPost, getTenTags} from "../../restservices/postApi";
 import axios from "axios";

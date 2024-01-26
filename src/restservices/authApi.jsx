@@ -23,7 +23,8 @@
 
 import {gatewayAxios} from "./baseAxios";
 import {
-    LOGIN_PATH, LOGOUT,
+    LOGIN_PATH,
+    LOGOUT,
     OTP_USERID_REDIRECT,
     REFRESH_TOKEN,
     RESEND_OTP,

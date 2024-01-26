@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -30,21 +30,21 @@ import ImagesSwiper from "../Swiper/ImagesSwiper";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {FaHeart, FaRegCommentDots, FaRegHeart} from "react-icons/fa";
 import {IoShareSocialOutline} from "react-icons/io5";
-import {FcLike} from "react-icons/fc";
-import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
-import {getProfile, getUserProfile} from "../../restservices/profileApi";
+import {getUserProfile} from "../../restservices/profileApi";
 
 const Posts = ({
                    userId,
                    location,
                    imagesList,
-                   postBody
+                   postBody,
+                   date
                }) => {
 
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const {width} = useWindowDimensions();
+    const [formattedDate, setFormattedDate] = useState('');
     const [userData, setUserData] = useState({
         name: '',
         profileImageLink: ''
@@ -61,9 +61,9 @@ const Posts = ({
         }
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         getUserProfile(userId)
-            .then((response)=> {
+            .then((response) => {
                 setUserData(prevData => ({
                     ...prevData,
                     name: response.data?.name,
@@ -80,6 +80,28 @@ const Posts = ({
         return false;
     }
 
+    const getFormattedDate = (date) => {
+        const originalDate = new Date(date);
+        const currentDate = new Date();
+        const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
+        console.log(timeDiffInSeconds)
+        if (timeDiffInSeconds < 60) {
+            return `${timeDiffInSeconds}s ago`;
+        } else if (timeDiffInSeconds < 3600) {
+            return `${Math.floor(timeDiffInSeconds / 60)}m ago`;
+        } else if (timeDiffInSeconds < 86400) {
+            return `${Math.floor(timeDiffInSeconds / 3600)}h ago`;
+        } else if (timeDiffInSeconds < 604800) {
+            return `${Math.floor(timeDiffInSeconds / 86400)}d ago`;
+        } else if (timeDiffInSeconds < 2592000) {
+            return `${Math.floor(timeDiffInSeconds / 604800)}w ago`;
+        } else if (timeDiffInSeconds < 31536000) {
+            return `${Math.floor(timeDiffInSeconds / 2592000)}mo ago`;
+        } else {
+            return `${Math.floor(timeDiffInSeconds / 31536000)}yr ago`;
+        }
+    }
+
     return (
         <Wrapper onClick={handleClick}>
             <PostHeader>
@@ -93,9 +115,9 @@ const Posts = ({
                         <NameSpan>
                             {userData.name}
                         </NameSpan>
-                        <LocationSpan>
-                            {location ? location : "Maharashtra, Pune"}
-                        </LocationSpan>
+                        <TimeSpan>
+                            {getFormattedDate(date)}
+                        </TimeSpan>
                     </ColumnWrapper>
                 </LogoNameWrapper>
 
@@ -121,7 +143,9 @@ const Posts = ({
             </PostHeader>
 
             {postBody && (
-                <PostBodyWrapper>
+                <PostBodyWrapper style={{
+                    margin: imagesList ? '20px 0' : '20px 0 0 0'
+                }}>
                     <TextContainer style={{
                         height: isExpanded ? 'auto' : '65px'
                     }}>
@@ -139,26 +163,22 @@ const Posts = ({
                 <ImageSwiperWrapper style={{
                     marginTop: !postBody && '20px'
                 }}>
-                    <ImagesSwiper swiperItems={imagesList} />
+                    <ImagesSwiper swiperItems={imagesList}/>
                 </ImageSwiperWrapper>
             )}
 
             <PostFooter>
                 <LikeCommentShareWrapper>
-                    <IconButton onClick={()=> setIsLiked(!isLiked)}>
-                        {isLiked ? <FaHeart color={'red'} /> : <FaRegHeart />}
+                    <IconButton onClick={() => setIsLiked(!isLiked)}>
+                        {isLiked ? <FaHeart color={'red'}/> : <FaRegHeart/>}
                     </IconButton>
                     <IconButton>
-                        <FaRegCommentDots />
+                        <FaRegCommentDots/>
                     </IconButton>
                     <IconButton>
-                        <IoShareSocialOutline />
+                        <IoShareSocialOutline/>
                     </IconButton>
                 </LikeCommentShareWrapper>
-
-                <TimingWrapper>
-                    1 hr
-                </TimingWrapper>
             </PostFooter>
         </Wrapper>
     );
@@ -176,8 +196,8 @@ const Wrapper = styled.div`
     box-sizing: border-box; /* Include padding in the width calculation */
     display: flex;
     flex-direction: column;
-    
-    @media(max-width: 500px) {
+
+    @media (max-width: 500px) {
         padding: 10px;
     }
 `;
@@ -213,13 +233,13 @@ const NameSpan = styled.span`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
-    @media(max-width: 500px) {
+
+    @media (max-width: 500px) {
         font-size: 14px;
     }
 `;
 
-const LocationSpan = styled.span`
+const TimeSpan = styled.span`
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
     font-weight: 200;
@@ -229,7 +249,7 @@ const LocationSpan = styled.span`
     overflow: hidden;
     text-overflow: ellipsis;
 
-    @media(max-width: 500px) {
+    @media (max-width: 500px) {
         font-size: 12px;
     }
 `;
@@ -298,7 +318,6 @@ const PostBodyWrapper = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin: 20px 0 0 0;
     padding: 10px 10px 7px 10px;
 `;
 
@@ -320,8 +339,8 @@ const TextContainer = styled.div`
     line-height: 22px;
     font-weight: 300;
     white-space: pre-line;
-    
-    @media(max-width: 500px) {
+
+    @media (max-width: 500px) {
         font-size: 14px;
     }
 `;
@@ -339,12 +358,12 @@ const PostFooter = styled.div`
     height: auto;
     padding: 10px;
     display: flex;
-    
+
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
-    @media(max-width: 500px) {
+    @media (max-width: 500px) {
         margin-top: 14px;
         padding: 5px;
     }
@@ -357,7 +376,7 @@ const LikeCommentShareWrapper = styled.div`
     flex-direction: row;
     gap: 20px;
 
-    @media(max-width: 450px) {
+    @media (max-width: 450px) {
         gap: 5px;
     }
 `;
@@ -377,18 +396,18 @@ const IconButton = styled.button`
     justify-content: center;
     font-size: 22px;
     transition: all 150ms ease;
-    
+
     &:hover {
         color: rgba(255, 255, 255, 0.8);
         background: rgba(255, 255, 255, 0.1);
     }
-    
+
     &:active {
         color: rgba(255, 255, 255, 0.6);
         background: rgba(255, 255, 255, 0.07);
     }
-    
-    @media(max-width: 400px) {
+
+    @media (max-width: 400px) {
         height: 34px;
         width: 34px;
         font-size: 18px;
