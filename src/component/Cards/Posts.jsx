@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -32,10 +32,10 @@ import {FaHeart, FaRegCommentDots, FaRegHeart} from "react-icons/fa";
 import {IoShareSocialOutline} from "react-icons/io5";
 import {FcLike} from "react-icons/fc";
 import {IoIosHeart, IoIosHeartEmpty} from "react-icons/io";
+import {getProfile, getUserProfile} from "../../restservices/profileApi";
 
 const Posts = ({
-                   avatar,
-                   name,
+                   userId,
                    location,
                    imagesList,
                    postBody
@@ -45,6 +45,10 @@ const Posts = ({
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const {width} = useWindowDimensions();
+    const [userData, setUserData] = useState({
+        name: '',
+        profileImageLink: ''
+    });
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
@@ -57,6 +61,25 @@ const Posts = ({
         }
     }
 
+    useEffect(()=> {
+        getUserProfile(userId)
+            .then((response)=> {
+                setUserData(prevData => ({
+                    ...prevData,
+                    name: response.data?.name,
+                    profileImageLink: response.data?.profileImageLink
+                }));
+            })
+    }, [userId])
+
+    const getReadMoreValue = () => {
+        const split = postBody.split('\n');
+        if (postBody.length > 250 || split.length > 3) {
+            return true;
+        }
+        return false;
+    }
+
     return (
         <Wrapper onClick={handleClick}>
             <PostHeader>
@@ -64,11 +87,11 @@ const Posts = ({
                     <Avatar
                         size={width > 500 ? '50px' : '40px'}
                         position={'relative'}
-                        image={avatar ? avatar : bloggios_logo}
+                        image={userData.profileImageLink ? userData.profileImageLink : bloggios_logo}
                     />
                     <ColumnWrapper>
                         <NameSpan>
-                            {name ? name : "Rohit Parihar"}
+                            {userData.name}
                         </NameSpan>
                         <LocationSpan>
                             {location ? location : "Maharashtra, Pune"}
@@ -104,7 +127,7 @@ const Posts = ({
                     }}>
                         {postBody}
                     </TextContainer>
-                    {postBody.length > 250 && (
+                    {getReadMoreValue() && (
                         <ReadMoreButton onClick={toggleReadMore}>
                             {isExpanded ? 'Read Less' : 'Read More'}
                         </ReadMoreButton>
@@ -143,10 +166,9 @@ const Posts = ({
 
 const Wrapper = styled.div`
     min-width: 100%;
-    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
+    max-width: 200px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
-    min-height: 200px;
     background-color: #272727;
     border-radius: 20px;
     padding: 20px;
@@ -276,8 +298,8 @@ const PostBodyWrapper = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    margin: 20px 0;
-    padding: 10px;
+    margin: 20px 0 0 0;
+    padding: 10px 10px 7px 10px;
 `;
 
 const ReadMoreButton = styled.button`
@@ -288,7 +310,7 @@ const ReadMoreButton = styled.button`
     font-size: 14px;
     position: absolute;
     align-self: flex-end;
-    bottom: -10px;
+    bottom: -14px;
 `;
 
 const TextContainer = styled.div`
@@ -297,13 +319,10 @@ const TextContainer = styled.div`
     text-align: justify;
     line-height: 22px;
     font-weight: 300;
+    white-space: pre-line;
     
     @media(max-width: 500px) {
         font-size: 14px;
-    }
-    
-    @media(max-width: 400px) {
-        
     }
 `;
 
@@ -320,7 +339,7 @@ const PostFooter = styled.div`
     height: auto;
     padding: 10px;
     display: flex;
-    margin-top: 16px;
+    
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

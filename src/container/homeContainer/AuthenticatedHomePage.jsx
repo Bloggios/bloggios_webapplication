@@ -18,16 +18,19 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
 import PostList from "../../component/List/PostList";
 import {postList} from "../../restservices/postApi";
+import {debounce} from "lodash";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {dispatchError} from "../../service/functions";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
@@ -43,17 +46,32 @@ const AuthenticatedHomePage = () => {
     const [leftSectionRef, leftSectionSize] = useComponentSize();
     const [postListLoading, setPostListLoading] = useState(true);
     const [postListData, setPostListData] = useState(null);
+    const {isCreated} = useSelector((state)=> state.postCreate);
+    const dispatch = useDispatch();
+
+    const fetchPostList = useCallback(async () => {
+        try {
+            const response = await postList(0); // Replace with your actual API call
+            setPostListData(response.data?.object);
+        } catch (error) {
+            dispatchError(dispatch, error)
+        } finally {
+            setPostListLoading(false);
+        }
+    }, [setPostListData, setPostListLoading, dispatch]);
 
     useEffect(() => {
-        postList(0)
-            .then((response) => {
-                setPostListData(response.data?.object);
-                setPostListLoading(false)
-            }).catch((error) => {
-            console.log(error)
-            setPostListLoading(false)
-        })
-    }, []);
+        fetchPostList();
+    }, [fetchPostList]);
+
+    useEffect(() => {
+        if (isCreated) {
+            setPostListLoading(true);
+            const debouncedFetch = debounce(fetchPostList, 400);
+            debouncedFetch();
+            return () => debouncedFetch.cancel();
+        }
+    }, [isCreated, fetchPostList]);
 
     return (
         <Wrapper>
@@ -79,7 +97,7 @@ const AuthenticatedHomePage = () => {
                 </Suspense>
                 <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
                     {
-                        postListLoading && !postListData ? (
+                        postListLoading ? (
                             <FallbackLoader width={middleSectionSize.width} height={'400px'}/>
                         ) : (
                             <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>

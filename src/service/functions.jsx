@@ -18,32 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import styled from "styled-components";
-import Posts from "../Cards/Posts";
+import {setSnackbar} from "../state/snackbarSlice";
 
-const PostList = ({postList}) => {
-    return (
-        <Wrapper>
-            {postList.map((post) => (
-                <Posts
-                    key={post.postId}
-                    imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
-                    postBody={post.body}
-                    location={post.location}
-                    userId={post.userId}
-                />
-            ))}
-        </Wrapper>
-    );
-};
-
-const Wrapper = styled.div`
-    min-width: 95%;
-    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-`;
-
-export default PostList;
+export const dispatchError = (dispatch, error) => {
+    if (error.response.status === 400 || error.response.status === 401) {
+        const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error',
+        };
+        dispatch(setSnackbar(snackBarData));
+    } else {
+        const message = 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error',
+        };
+        dispatch(setSnackbar(snackBarData));
+    }
+}
