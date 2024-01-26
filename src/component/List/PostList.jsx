@@ -22,17 +22,17 @@ import React from 'react';
 import styled from "styled-components";
 import Posts from "../Cards/Posts";
 
-const PostList = () => {
+const PostList = ({postList}) => {
     return (
         <Wrapper>
-            <Posts />
-            <Posts />
-            <Posts />
-            <Posts />
-            <Posts />
-            <Posts />
-            <Posts />
-            <Posts />
+            {postList.map((post) => (
+                <Posts
+                    key={post.postId}
+                    imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
+                    postBody={post.body}
+                    location={post.location}
+                />
+            ))}
         </Wrapper>
     );
 };

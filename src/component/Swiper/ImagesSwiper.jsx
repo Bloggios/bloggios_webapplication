@@ -48,8 +48,8 @@ const ImagesSwiper = ({swiperItems}) => {
             modules={[Navigation, Zoom, Pagination]}
             className='bloggios-custom-creative-swiper'
         >
-            {swiperItems.map((item) => (
-                <SwiperSlide key={item.id}>
+            {swiperItems.map((item, index) => (
+                <SwiperSlide key={index}>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -59,8 +59,8 @@ const ImagesSwiper = ({swiperItems}) => {
                         height: 'auto'
                     }} className="swiper-zoom-container">
                         <SwiperImage
-                            alt={item.label}
-                            src={item.image}
+                            alt={item}
+                            src={item}
                             loading={'lazy'}
                         />
                     </div>
