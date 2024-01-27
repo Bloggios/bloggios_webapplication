@@ -77,9 +77,9 @@ const AuthenticatedHomePage = () => {
 
     useEffect(() => {
         const handleScroll = () => {
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
             if (
-                window.innerHeight + document.documentElement.scrollTop ===
-                document.documentElement.offsetHeight
+                scrollTop + clientHeight >= scrollHeight - 5
             ) {
                 setPage((prevPage) => prevPage + 1);
             }
