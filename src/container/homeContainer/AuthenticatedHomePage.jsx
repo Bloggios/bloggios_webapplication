@@ -76,14 +76,15 @@ const AuthenticatedHomePage = () => {
     }, [isCreated]);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-            if (
-                scrollTop + clientHeight >= scrollHeight - 100
-            ) {
+        const handleScroll = debounce(() => {
+            const { scrollY, innerHeight } = window;
+            const { offsetHeight } = document.body;
+
+            if (scrollY + innerHeight >= offsetHeight - 200) {
+                // Adjust the offset (200 in this case) based on your preference
                 setPage((prevPage) => prevPage + 1);
             }
-        };
+        }, 200); // Adjust the debounce delay (in milliseconds) based on your preference
 
         window.addEventListener('scroll', handleScroll);
 
