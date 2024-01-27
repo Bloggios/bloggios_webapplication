@@ -79,7 +79,7 @@ const AuthenticatedHomePage = () => {
         const handleScroll = () => {
             const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
             if (
-                scrollTop + clientHeight >= scrollHeight - 5
+                scrollTop + clientHeight >= scrollHeight - 100
             ) {
                 setPage((prevPage) => prevPage + 1);
             }
