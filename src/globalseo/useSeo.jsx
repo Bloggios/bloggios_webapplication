@@ -23,7 +23,7 @@ import seoConfigs from "./seoConfigs";
 
 const useSeo = (pageKey) => {
     useEffect(() => {
-        const { title, description, keywords, author, ogType } = seoConfigs[pageKey];
+        const { title, description, keywords, author, ogType, ogUrl, ogImage, ogTitle, ogDescription } = seoConfigs[pageKey];
 
         document.title = title;
 
@@ -42,9 +42,12 @@ const useSeo = (pageKey) => {
         updateMetaTag('description', description);
         updateMetaTag('keywords', keywords);
         updateMetaTag('author', author);
-        updateMetaTag('og:title', title);
-        updateMetaTag('og:description', description);
+        updateMetaTag('title', title);
+        updateMetaTag('og:title', ogTitle);
+        updateMetaTag('og:description', ogDescription);
         updateMetaTag('og:type', ogType);
+        updateMetaTag('og:url', ogUrl);
+        updateMetaTag('og:image', ogImage);
 
         return () => {
             const metaTags = document.querySelectorAll('meta[name^="description"], meta[property^="og:"]');

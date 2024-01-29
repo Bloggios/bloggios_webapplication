@@ -18,30 +18,55 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Rohit Bloggios, Rohit Spring Boot React, Rohit Parihar Developer, Rohit Parihar Software Developer';
+import bloggios_logo from '../asset/svg/bg_logo_black.svg'
+
+const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Bloggios, Bloggios Social Media, Social Media, Bloggios Q & A, Q & A, Encrypted Chatting, Bloggios Chatting, Bloggios Encrypted Chatting, Bloggios IT Solutions, IT Solutions, Bloggios Software development, Software development, IT support, Bloggios IT Support, Bloggios SEO, SEO, Bloggios Marketing, Bloggios Connection platform, Connection Platform, web developer, technology, innovation, online community';
 
 const seoConfigs = {
     signup: {
         title: 'Signup Bloggios',
-        description: 'Signup for Bloggios to Concatenate your Perceptions.',
-        keywords: `${RESERVED_KEYWORDS}, Bloggios Signup, Bloggios Create Account, Start Concatenating Perceptions`,
+        description: 'Sign up for a Bloggios account and unlock the full potential of our platform. Enjoy Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions. Join our community and thrive.',
+        keywords: `${RESERVED_KEYWORDS}, Bloggios Signup, Bloggios Create Account, Start Concatenating Perceptions, Create account on Bloggios, social media registration, IT Solutions registration, encrypted chatting registration, online community registration`,
         author: 'Rohit Parihar',
         ogType: 'website',
+        ogTitle: 'Sign Up for Bloggios - Empowering Connections and IT Solutions',
+        ogDescription: 'Sign up for a Bloggios account and unlock the full potential of our platform. Enjoy Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions. Join our community and thrive.',
+        ogImage: bloggios_logo,
+        ogUrl: 'https://bloggios.com/signup'
     },
     login: {
         title: 'Login Bloggios',
-        description: 'Login for Bloggios to continue Journey on Bloggios.',
-        keywords: `${RESERVED_KEYWORDS}, Bloggios Login, Bloggios Social Login, Continue Concatenating Perceptions`,
+        description: 'Login to your Bloggios account and enjoy Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions. Connect and engage with our vibrant community.',
+        keywords: `${RESERVED_KEYWORDS}, Bloggios Login, Bloggios Social Login, Continue Concatenating Perceptions, Login Bloggios`,
         author: 'Rohit Parihar',
         ogType: 'website',
+        ogTitle: 'Login to Bloggios - Empowering Connections and IT Solutions',
+        ogDescription: 'Login to your Bloggios account and enjoy Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions. Connect and engage with our vibrant community.',
+        ogImage: bloggios_logo,
+        ogUrl: 'https://bloggios.com/login'
     },
     homepage: {
         title: 'Bloggios Home',
-        description: "Bloggios developed by Rohit Parihar (rohitparih@gmail.com) has too many services like Social Media Integration, Polls, Teaching and Learning platform, Forms, Tech and Software Development services, and many more. Bloggios's main motto is to allow humans to share their ideas or learnings that's why Bloggios say's 'Let's Concatenate our Perceptions.",
-        keywords: `${RESERVED_KEYWORDS}, Bloggios Login, Bloggios Social Login, Continue Concatenating Perceptions`,
+        description: "Join Bloggios' vibrant social community. Share, engage, and build meaningful connections with like-minded individuals.",
+        keywords: `${RESERVED_KEYWORDS}, Bloggios Home, Bloggios Social Login, Continue Concatenating Perceptions`,
         author: 'Rohit Parihar',
         ogType: 'website',
+        ogTitle: 'Welcome to Bloggios - Empowering Connections and IT Solutions',
+        ogDescription: 'Get Started with Bloggios and explore the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!',
+        ogImage: bloggios_logo,
+        ogUrl: 'https://bloggios.com'
     },
+    authHomePage: {
+        title: 'Bloggios Home',
+        description: "Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!",
+        keywords: `${RESERVED_KEYWORDS}, Bloggios Home, Create Post, Bloggios Posts, Bloggios Hashtags, #bloggios, Bloggios User Posts, User Posts, All Bloggios Posts, Bloggios data, Bloggios Profile, User Profile, Edit Profile`,
+        author: 'Rohit Parihar',
+        ogType: 'website',
+        ogTitle: 'Welcome to Bloggios - Empowering Connections and IT Solutions',
+        ogDescription: 'Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!',
+        ogImage: bloggios_logo,
+        ogUrl: 'https://bloggios.com'
+    }
 }
 
 export default seoConfigs;
