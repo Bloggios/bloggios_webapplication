@@ -18,10 +18,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import bloggios_logo from "../../asset/svg/bg_logo_rounded_black.svg";
-import Typography from "../../component/typography/typography";
 import NameStepper from "./stepper/NameStepper";
 import LoaderButton from "../../component/buttons/loaderButton";
 import GenderAndDobStepper from "./stepper/GenderAndDobStepper";

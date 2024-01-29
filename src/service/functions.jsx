@@ -18,51 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import TextField from "../../../component/fields/textField";
-import styled from "styled-components";
+import {setSnackbar} from "../state/snackbarSlice";
 
-const NameStepper = ({data, setData, helperText, setHelperText}) => {
-
-    const handleChange = (event) => {
-        setData({
-            ...data,
-            name: event.target.value
-        });
-        setHelperText(prevHelperText => ({
-            ...prevHelperText,
-            name: '',
-        }));
+export const dispatchError = (dispatch, error) => {
+    if (error.response.status === 400 || error.response.status === 401) {
+        const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error',
+        };
+        dispatch(setSnackbar(snackBarData));
+    } else {
+        const message = 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error',
+        };
+        dispatch(setSnackbar(snackBarData));
     }
-
-    return (
-        <>
-            <TextField
-                placeholder={'Name*'}
-                fontSize={'16px'}
-                padding={'10px 10px'}
-                background={'rgba(255, 255, 255, 0.1)'}
-                borderRadius={'7px'}
-                helperTextAllowed={true}
-                fontWeight={'400'}
-                helperText={helperText.name}
-                helperTextColor={'rgb(255,51,51)'}
-                value={data.name || ''}
-                onChange={(e) => handleChange(e, 'entryPoint')}
-            />
-            <TextSpan>
-                Build your social presence authentically. Enter your name—it's the first step in creating connections and making your profile uniquely yours. Join us in sharing and connecting with others!
-            </TextSpan>
-        </>
-    );
-};
-
-const TextSpan = styled.div`
-  width: 100%;
-  font-size: 12px;
-  font-weight: 300;
-  text-align: justify;
-  color: rgba(255, 255, 255, 0.6);
-`;
-
-export default NameStepper;
+}

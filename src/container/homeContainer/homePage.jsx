@@ -22,7 +22,7 @@ import React, {lazy, Suspense, useEffect, useState} from 'react';
 import useSeo from "../../globalseo/useSeo";
 import {useDispatch, useSelector} from "react-redux";
 import {PROFILE_ADDED} from "../../constant/apiConstants";
-import {HOME_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, PROFILE_ADDITION_INITIAL} from "../../constant/pathConstants";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useNavigate} from "react-router-dom";
 import LoaderPage from "../../component/loaders/loaderPage";

@@ -19,50 +19,35 @@
  */
 
 import React from 'react';
-import TextField from "../../../component/fields/textField";
 import styled from "styled-components";
+import Posts from "../Cards/Posts";
+import FallbackLoader from "../loaders/fallbackLoader";
 
-const NameStepper = ({data, setData, helperText, setHelperText}) => {
-
-    const handleChange = (event) => {
-        setData({
-            ...data,
-            name: event.target.value
-        });
-        setHelperText(prevHelperText => ({
-            ...prevHelperText,
-            name: '',
-        }));
-    }
+const PostList = ({postList, postListLoading}) => {
 
     return (
-        <>
-            <TextField
-                placeholder={'Name*'}
-                fontSize={'16px'}
-                padding={'10px 10px'}
-                background={'rgba(255, 255, 255, 0.1)'}
-                borderRadius={'7px'}
-                helperTextAllowed={true}
-                fontWeight={'400'}
-                helperText={helperText.name}
-                helperTextColor={'rgb(255,51,51)'}
-                value={data.name || ''}
-                onChange={(e) => handleChange(e, 'entryPoint')}
-            />
-            <TextSpan>
-                Build your social presence authentically. Enter your name—it's the first step in creating connections and making your profile uniquely yours. Join us in sharing and connecting with others!
-            </TextSpan>
-        </>
+        <Wrapper>
+            {postList.map((post) => (
+                <Posts
+                    key={post.postId}
+                    imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
+                    postBody={post.body}
+                    location={post.location}
+                    userId={post.userId}
+                    date={post.dateCreated}
+                />
+            ))}
+            {postListLoading && <FallbackLoader width={'100%'} height={'100px'} />}
+        </Wrapper>
     );
 };
 
-const TextSpan = styled.div`
-  width: 100%;
-  font-size: 12px;
-  font-weight: 300;
-  text-align: justify;
-  color: rgba(255, 255, 255, 0.6);
+const Wrapper = styled.div`
+    min-width: 95%;
+    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 `;
 
-export default NameStepper;
+export default PostList;

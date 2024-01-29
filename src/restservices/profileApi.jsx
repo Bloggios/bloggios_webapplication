@@ -19,9 +19,14 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {GET_PROFILE} from "../constant/apiConstants";
+import {GET_PROFILE, GET_USER_PROFILE} from "../constant/apiConstants";
 
 export const getProfile = () => {
     return authenticatedAxios.get(GET_PROFILE)
+        .then((response)=> response);
+}
+
+export const getUserProfile = (userId) => {
+    return authenticatedAxios.get(GET_USER_PROFILE + '/' + userId)
         .then((response)=> response);
 }

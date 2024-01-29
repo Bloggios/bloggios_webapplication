@@ -18,27 +18,89 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
+import PostList from "../../component/List/PostList";
+import {postList} from "../../restservices/postApi";
+import {debounce} from "lodash";
+import {dispatchError} from "../../service/functions";
+import {clearPostCreated} from "../../state/postCreateSlice";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
-const CreatePost = lazy(()=> import('../../component/CreatePost/createPostWeb'));
-const CreatePostMobile = lazy(()=> import('../../component/CreatePost/createPostMobile'));
+const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
+const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPostMobile'));
 
 const AuthenticatedHomePage = () => {
 
-    useSeo('homepage')
+    useSeo('authHomePage')
 
     const {width} = useWindowDimensions();
     const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
+    const [postListLoading, setPostListLoading] = useState(true);
+    const [postListData, setPostListData] = useState([]);
+    const {isCreated} = useSelector((state) => state.postCreate);
+    const dispatch = useDispatch();
+    const [page, setPage] = useState(0);
+    const [endPage, setEndPage] = useState(false);
+
+    const fetchPostList = useCallback(async () => {
+        if (!endPage) {
+            setPostListLoading(true);
+            try {
+                const response = await postList(page);
+                if (response.data?.object.length === 0) {
+                    setEndPage(true);
+                }
+                setPostListData((prevData) => [...prevData, ...response.data?.object]);
+            } catch (error) {
+                dispatchError(dispatch, error)
+            } finally {
+                setPostListLoading(false);
+            }
+        }
+    }, [setPostListData, setPostListLoading, page, dispatch, endPage]);
+
+    useEffect(() => {
+        fetchPostList();
+    }, [fetchPostList]);
+
+    useEffect(() => {
+        if (isCreated) {
+            setPostListLoading(true);
+            setPostListData([]);
+            setPage(0);
+            setEndPage(false);
+            const debouncedFetch = debounce(fetchPostList, 1000);
+            debouncedFetch();
+            return () => {
+                dispatch(clearPostCreated());
+                debouncedFetch.cancel();
+            };
+        }
+    }, [isCreated]);
+
+    useEffect(() => {
+        const handleScroll = debounce(() => {
+            const { scrollY, innerHeight } = window;
+            const { offsetHeight } = document.body;
+
+            if (scrollY + innerHeight >= offsetHeight - 250) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        }, 200);
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <Wrapper>
@@ -57,72 +119,76 @@ const AuthenticatedHomePage = () => {
                 </Suspense>
             </LeftBar>
             <RightBar></RightBar>
-            <MiddleBar>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
-                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo} /> : <CreatePostMobile />}
+            <MiddleBar ref={middleSectionRef}>
+                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
+                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
+                        <CreatePostMobile/>}
                 </Suspense>
+                {postListData && (
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                        <PostList postList={postListData} postListLoading={postListLoading}/>
+                    </Suspense>
+                )}
             </MiddleBar>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-  display: grid;
-  margin-top: 40px;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 0 0;
-  grid-auto-flow: row dense;
-  grid-template-areas:
-    "Left-Bar Middle-Bar Right-Bar";
-  box-sizing: border-box;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr 2fr;
-  }
-
-  @media (max-width: 750px) {
-    grid-template-columns: 1fr;
+    display: grid;
+    margin-top: 40px;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 0 0;
+    grid-auto-flow: row dense;
     grid-template-areas:
+    "Left-Bar Middle-Bar Right-Bar";
+    box-sizing: border-box;
+
+    @media (max-width: 1200px) {
+        grid-template-columns: 1fr 2fr;
+    }
+
+    @media (max-width: 750px) {
+        grid-template-columns: 1fr;
+        grid-template-areas:
     "Middle-Bar";
-  }
+    }
 `;
 
 const LeftBar = styled.div`
-  grid-area: Left-Bar;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto;
+    grid-area: Left-Bar;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
 
-  @media (max-width: 750px) {
-    display: none;
-  }
+    @media (max-width: 750px) {
+        display: none;
+    }
 `;
 
 const RightBar = styled.div`
-  grid-area: Right-Bar;
+    grid-area: Right-Bar;
 
-  @media (max-width: 1200px) {
-    display: none;
-  }
+    @media (max-width: 1200px) {
+        display: none;
+    }
 `;
 
 const MiddleBar = styled.div`
-  grid-area: Middle-Bar;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
+    grid-area: Middle-Bar;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    row-gap: 50px;
+    margin-bottom: 20px;
 
-  span {
-    font-weight: bold;
-  }
-  
-  @media (max-width: 500px) {
-    margin-bottom: 70px;
-  }
+    @media (max-width: 500px) {
+        margin-bottom: 70px;
+    }
 `;
 
 export default AuthenticatedHomePage;
