@@ -30,6 +30,7 @@ import PostList from "../../component/List/PostList";
 import {postList} from "../../restservices/postApi";
 import {debounce} from "lodash";
 import {dispatchError} from "../../service/functions";
+import {clearPostCreated} from "../../state/postCreateSlice";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
@@ -37,7 +38,7 @@ const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPos
 
 const AuthenticatedHomePage = () => {
 
-    useSeo('homepage')
+    useSeo('authHomePage')
 
     const {width} = useWindowDimensions();
     const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
@@ -48,18 +49,24 @@ const AuthenticatedHomePage = () => {
     const {isCreated} = useSelector((state) => state.postCreate);
     const dispatch = useDispatch();
     const [page, setPage] = useState(0);
+    const [endPage, setEndPage] = useState(false);
 
     const fetchPostList = useCallback(async () => {
-        setPostListLoading(true);
-        try {
-            const response = await postList(page);
-            setPostListData((prevData) => [...prevData, ...response.data?.object]);
-        } catch (error) {
-            dispatchError(dispatch, error)
-        } finally {
-            setPostListLoading(false);
+        if (!endPage) {
+            setPostListLoading(true);
+            try {
+                const response = await postList(page);
+                if (response.data?.object.length === 0) {
+                    setEndPage(true);
+                }
+                setPostListData((prevData) => [...prevData, ...response.data?.object]);
+            } catch (error) {
+                dispatchError(dispatch, error)
+            } finally {
+                setPostListLoading(false);
+            }
         }
-    }, [setPostListData, setPostListLoading, page, dispatch]);
+    }, [setPostListData, setPostListLoading, page, dispatch, endPage]);
 
     useEffect(() => {
         fetchPostList();
@@ -69,9 +76,14 @@ const AuthenticatedHomePage = () => {
         if (isCreated) {
             setPostListLoading(true);
             setPostListData([]);
-            const debouncedFetch = debounce(fetchPostList, 400);
+            setPage(0);
+            setEndPage(false);
+            const debouncedFetch = debounce(fetchPostList, 1000);
             debouncedFetch();
-            return () => debouncedFetch.cancel();
+            return () => {
+                dispatch(clearPostCreated());
+                debouncedFetch.cancel();
+            };
         }
     }, [isCreated]);
 
@@ -80,14 +92,11 @@ const AuthenticatedHomePage = () => {
             const { scrollY, innerHeight } = window;
             const { offsetHeight } = document.body;
 
-            if (scrollY + innerHeight >= offsetHeight - 200) {
-                // Adjust the offset (200 in this case) based on your preference
+            if (scrollY + innerHeight >= offsetHeight - 250) {
                 setPage((prevPage) => prevPage + 1);
             }
-        }, 200); // Adjust the debounce delay (in milliseconds) based on your preference
-
+        }, 200);
         window.addEventListener('scroll', handleScroll);
-
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -117,8 +126,7 @@ const AuthenticatedHomePage = () => {
                 </Suspense>
                 {postListData && (
                     <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                        <PostList postList={postListData}/>
-                        {postListLoading && <FallbackLoader width={middleSectionSize.width} height={'100px'} />}
+                        <PostList postList={postListData} postListLoading={postListLoading}/>
                     </Suspense>
                 )}
             </MiddleBar>

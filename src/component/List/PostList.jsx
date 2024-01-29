@@ -21,8 +21,9 @@
 import React from 'react';
 import styled from "styled-components";
 import Posts from "../Cards/Posts";
+import FallbackLoader from "../loaders/fallbackLoader";
 
-const PostList = ({postList}) => {
+const PostList = ({postList, postListLoading}) => {
 
     return (
         <Wrapper>
@@ -36,6 +37,7 @@ const PostList = ({postList}) => {
                     date={post.dateCreated}
                 />
             ))}
+            {postListLoading && <FallbackLoader width={'100%'} height={'100px'} />}
         </Wrapper>
     );
 };
