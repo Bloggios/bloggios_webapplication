@@ -27,6 +27,7 @@ import LoaderPage from "./component/loaders/loaderPage";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import {gatewayAxios} from "./restservices/baseAxios";
 
 const App = () => {
 
@@ -40,6 +41,13 @@ const App = () => {
                 window.location.reload();
             }
         }, 4000);
+
+        gatewayAxios.get("/auth-provider/v1.0/authentication/user-ip")
+            .then((response) => {
+                console.log(response.data);
+            }).catch((error)=> {
+            console.error(error);
+        })
 
         refreshToken()
             .then((response) => {
