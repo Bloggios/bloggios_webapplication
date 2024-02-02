@@ -18,4 +18,4 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const ACCOUNT_INACTIVE = 'BG-AUTH-RD-DE-2023';
+export const ACCOUNT_INACTIVE = 'BG-AUTH-DE-2004';
