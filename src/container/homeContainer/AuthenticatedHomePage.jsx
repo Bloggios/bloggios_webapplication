@@ -26,7 +26,6 @@ import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
-import PostList from "../../component/List/PostList";
 import {postList} from "../../restservices/postApi";
 import {debounce} from "lodash";
 import {dispatchError} from "../../service/functions";
@@ -35,6 +34,8 @@ import {clearPostCreated} from "../../state/postCreateSlice";
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
 const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPostMobile'));
+const PostList = lazy(()=> import('../../component/List/PostList'));
+const ProfileSuggestions = lazy(()=> import('../../component/Cards/ProfileSuggestions'));
 
 const AuthenticatedHomePage = () => {
 
@@ -44,6 +45,7 @@ const AuthenticatedHomePage = () => {
     const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
+    const [rightSectionRef, rightSectionSize] = useComponentSize();
     const [postListLoading, setPostListLoading] = useState(true);
     const [postListData, setPostListData] = useState([]);
     const {isCreated} = useSelector((state) => state.postCreate);
@@ -118,7 +120,11 @@ const AuthenticatedHomePage = () => {
                     />
                 </Suspense>
             </LeftBar>
-            <RightBar></RightBar>
+            <RightBar ref={rightSectionRef}>
+                <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
+                    <ProfileSuggestions />
+                </Suspense>
+            </RightBar>
             <MiddleBar ref={middleSectionRef}>
                 <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
                     {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
@@ -170,6 +176,11 @@ const LeftBar = styled.div`
 
 const RightBar = styled.div`
     grid-area: Right-Bar;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
 
     @media (max-width: 1200px) {
         display: none;
