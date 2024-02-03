@@ -27,11 +27,12 @@ const SmallProfileCard = ({
     bio,
     name,
     email,
-    image
+    image,
+    key
                           }) => {
 
     return (
-        <Wrapper>
+        <Wrapper key={key}>
             <RowWrapper>
                 <Avatar size={'50px'} image={image ? image : bloggios_logo} borderRadius={'50%'} />
                 <ColumnWrapper>

@@ -32,7 +32,7 @@ import {authenticatedAxios} from "../../restservices/baseAxios";
 import {ADD_IMAGE_TO_PROFILE} from "../../constant/apiConstants";
 import {getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
 
@@ -47,9 +47,7 @@ const ProfileCard = ({
                          email
                      }) => {
 
-    const {width} = useWindowDimensions();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pImage, setPImage] = useState(profileImage);
     const dispatch = useDispatch();
 
     const openModal = () => {
@@ -92,6 +90,8 @@ const ProfileCard = ({
                                     email: data.email,
                                     profileImage: data.profileImage,
                                     coverImage: data.coverImage,
+                                    followers: data.followers,
+                                    following: data.following
                                 };
                                 dispatch(setProfile(profileData));
                             });

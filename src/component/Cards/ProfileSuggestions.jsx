@@ -18,26 +18,80 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import SmallProfileCard from "./SmallProfileCard";
+import {LuRefreshCcw} from "react-icons/lu";
+import {profileSuggestions} from "../../restservices/profileApi";
+import FallbackLoader from "../loaders/fallbackLoader";
 
 const ProfileSuggestions = () => {
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [profileList, setProfileList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [dataMessage, setResponseDataMessage] = useState('');
+
+    useEffect(() => {
+        fetchProfileSuggestions(currentPage);
+    }, [currentPage]);
+
+    const fetchProfileSuggestions = (page) => {
+        if (!isLoading) {
+            setIsLoading(true);
+            const payload = {
+                page: page,
+                size: 10
+            };
+            profileSuggestions(payload)
+                .then((response) => {
+                    const data = response.data;
+                    setIsLoading(false);
+                    setTotalRecords(data.totalRecordsCount);
+                    setProfileList(data.object);
+                }).catch((error)=> {
+                    console.log(error);
+            })
+        }
+    }
+
+    const handleNextPage = () => {
+        const nextPage = (currentPage + 1) % Math.ceil(totalRecords / 10);
+        setCurrentPage(nextPage);
+    };
+
     return (
         <Wrapper>
-            <TitleSpan>
-                New Accounts
-            </TitleSpan>
+            <RowWrapper>
+                <TitleSpan>
+                    New Accounts
+                </TitleSpan>
+                <RefreshButton onClick={handleNextPage}>
+                    <LuRefreshCcw/>
+                </RefreshButton>
+            </RowWrapper>
 
             <ProfileCardWrapper>
-                <SmallProfileCard name={'Rohit Parihar'} email={'rohitparih@gmail.com'} bio={'Developer of Bloggios application\n' +
-                    'Software Developer'} />
-                <SmallProfileCard name={'Rakesh Shaw'} email={'rakesh5.cu@gmail.com'} bio={'Tester of Bloggios application'} />
-                <SmallProfileCard name={'Atharva Gawande'} email={'atharvagawande19@gmail.com'} bio={'Developer and Tester of Bloggios Application\nSoftware Engineer'} />
-                <SmallProfileCard name={'Tarun Bisht'} email={'tarun@gmail.com'} />
-                <SmallProfileCard name={'Rohit Parihar'} email={'rohitparih@gmail.com'} bio={'Developer of Bloggios application\n' +
-                    'Software Developer'} />
-                <SmallProfileCard name={'Rakesh Shaw'} email={'rakesh5.cu@gmail.com'} bio={'Tester of Bloggios application'} />
+                {isLoading ? (
+                    <FallbackLoader width={'100%'} height={'200px'}/>
+                ) : (
+                    profileList.length > 0 ? (
+                        profileList.map((item)=> (
+                            <SmallProfileCard
+                                key={item.userId}
+                                name={item.name}
+                                bio={item.bio}
+                                image={item.profileImage}
+                                email={item.email}
+                            />
+                        ))
+                    ) : (
+                        <ErrorText>
+                            No Profile's Found
+                        </ErrorText>
+                    )
+                )}
             </ProfileCardWrapper>
         </Wrapper>
     );
@@ -56,10 +110,42 @@ const Wrapper = styled.div`
     gap: 20px;
 `;
 
+const RowWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
 const TitleSpan = styled.span`
     font-size: 20px;
     font-weight: 400;
     letter-spacing: 1px;
+`;
+
+const RefreshButton = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: none;
+    padding: 7px;
+    border-radius: 50%;
+    background-color: #4258ff;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 100ms ease;
+
+    &:hover {
+        background-color: rgba(66, 88, 255, 0.9);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:active {
+        background-color: #4258ff;
+        color: rgba(255, 255, 255, 0.6);
+    }
 `;
 
 const ProfileCardWrapper = styled.div`
@@ -68,6 +154,11 @@ const ProfileCardWrapper = styled.div`
     align-items: center;
     gap: 20px;
     width: 100%;
+`;
+
+const ErrorText = styled.span`
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
 `;
 
 export default ProfileSuggestions;
