@@ -149,6 +149,7 @@ const Wrapper = styled.div`
     grid-template-areas:
     "Left-Bar Middle-Bar Right-Bar";
     box-sizing: border-box;
+    margin-bottom: 20px;
 
     @media (max-width: 1200px) {
         grid-template-columns: 1fr 2fr;
@@ -195,7 +196,6 @@ const MiddleBar = styled.div`
     align-items: center;
     box-sizing: border-box;
     row-gap: 50px;
-    margin-bottom: 20px;
 
     @media (max-width: 500px) {
         margin-bottom: 70px;
