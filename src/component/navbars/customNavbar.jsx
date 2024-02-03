@@ -30,7 +30,7 @@ import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
-import {getProfile} from "../../restservices/profileApi";
+import {getFollow, getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
 
 const CustomNavbar = () => {
@@ -45,7 +45,9 @@ const CustomNavbar = () => {
         const fetchProfile = async () => {
             try {
                 const response = await getProfile();
+                const followResponse = await getFollow();
                 const { data } = response;
+                const followData = followResponse.data;
                 const profileData = {
                     name: data.name,
                     isAdded: true,
@@ -53,7 +55,9 @@ const CustomNavbar = () => {
                     bio: data.bio,
                     email: data.email,
                     profileImage: data.profileImage,
-                    coverImage: data.coverImage
+                    coverImage: data.coverImage,
+                    followers: followData.followers,
+                    following: followData.following
                 };
                 dispatch(setProfile(profileData));
             } catch (error) {

@@ -34,3 +34,4 @@ export const ADD_POST = '/post-provider/v1.0/post';
 export const ADD_POST_IMAGE = '/post-provider/v1.0/post/add-images';
 export const POST_LIST = '/post-provider/v1.0/post/post-list'
 export const GET_USER_PROFILE = '/user-provider/v1.0/profile';
+export const COUNT_FOLLOW = '/user-provider/v1.0/follow-api/count-follow';

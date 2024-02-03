@@ -42,7 +42,7 @@ const AuthenticatedHomePage = () => {
     useSeo('authHomePage')
 
     const {width} = useWindowDimensions();
-    const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
+    const {name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
     const [rightSectionRef, rightSectionSize] = useComponentSize();
@@ -114,8 +114,8 @@ const AuthenticatedHomePage = () => {
                         coverImage={coverImage ? coverImage : 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
                         profileImage={profileImage ? profileImage : bloggios_logo}
                         path={'/beingrohit-exe'}
-                        followers={0}
-                        following={0}
+                        followers={followers}
+                        following={following}
                         email={email}
                     />
                 </Suspense>
