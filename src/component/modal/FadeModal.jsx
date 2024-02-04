@@ -18,39 +18,39 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from "styled-components";
 
 const ModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  opacity: ${({isOpen}) => (isOpen ? '1' : '0')};
-  backdrop-filter: blur(${({isOpen}) => (isOpen ? '10px' : '0')});
-  visibility: ${({isOpen}) => (isOpen ? 'visible' : 'hidden')};
-  z-index: 20;
-  will-change: opacity, visibility;
-  transform: translateZ(0); /* Hardware acceleration */
-  transition: all 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    opacity: ${({isOpen}) => (isOpen ? '1' : '0')};
+    backdrop-filter: blur(${({isOpen}) => (isOpen ? '10px' : '0')});
+    visibility: ${({isOpen}) => (isOpen ? 'visible' : 'hidden')};
+    z-index: 20;
+    will-change: opacity, visibility;
+    transform: translateZ(0); /* Hardware acceleration */
+    transition: all 0.3s ease-in-out;
 `;
 
 const ModalContent = styled.div`
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    //transform: ${({isOpen}) => (isOpen ? 'translateY(0)' : 'translateY(-100%)')} translateZ(0); /* Hardware acceleration */
-  transform: translateZ(0);
-  will-change: transform;
-  transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        //transform: ${({isOpen}) => (isOpen ? 'translateY(0)' : 'translateY(-100%)')} translateZ(0); /* Hardware acceleration */
+    transform: translateZ(0);
+    will-change: transform;
+    transition: transform 0.3s ease-in-out;
 `;
 
 const CloseButton = styled.button`
-  margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
+    margin-top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
 `;
 
 const FadeModal = ({
@@ -62,11 +62,26 @@ const FadeModal = ({
                        margin,
                        padding,
                        borderRadius,
-                       bgColor
+                       bgColor,
+                       border
                    }) => {
     const handleClose = () => {
         onClose();
     };
+
+    useEffect(() => {
+        // Handle body overflow based on modal state
+        const handleBodyOverflow = () => {
+            document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+        };
+
+        handleBodyOverflow();
+
+        return () => {
+            // Revert body overflow when the component is unmounted
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
 
     return (
         <ModalWrapper isOpen={isOpen} onClick={handleClose}>
@@ -77,6 +92,7 @@ const FadeModal = ({
                 padding: padding,
                 borderRadius: borderRadius,
                 backgroundColor: bgColor,
+                border: border,
                 display: 'flex',
                 flexDirection: 'column'
             }} isOpen={isOpen} onClick={(e) => e.stopPropagation()}>

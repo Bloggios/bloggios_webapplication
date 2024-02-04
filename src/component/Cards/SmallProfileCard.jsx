@@ -18,23 +18,62 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
+import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
 
-const SmallProfileCard = ({
-    bio,
-    name,
-    email,
-    image,
-    key
-                          }) => {
+const SmallProfileCard = ({ bio, name, email, image, userId }) => {
+    const [isFollowing, setIsFollowing] = useState(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        checkFollowing(userId)
+            .then((response) => {
+                setIsFollowing(response.data?.isFollowing);
+            })
+            .catch(() => {
+                setIsFollowing(false);
+            });
+    }, [userId]);
+
+    const handleFollowing = useCallback(
+        (event) => {
+            event.preventDefault();
+            setIsFollowing(!isFollowing);
+
+            const followAction = isFollowing ? unfollowUser : followUser;
+
+            followAction(userId)
+                .then((response) => {
+                    setIsFollowing(!isFollowing);
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: response.data?.message,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                })
+                .catch((error) => {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                });
+        },
+        [dispatch, isFollowing, userId]
+    );
 
     return (
-        <Wrapper key={key}>
+        <Wrapper key={userId}>
             <RowWrapper>
-                <Avatar size={'50px'} image={image ? image : bloggios_logo} borderRadius={'50%'} />
+                <Avatar size="50px" image={image || bloggios_logo} borderRadius="50%" />
                 <ColumnWrapper>
                     <NameSpan>{name}</NameSpan>
                     <EmailSpan>{email}</EmailSpan>
@@ -42,18 +81,12 @@ const SmallProfileCard = ({
             </RowWrapper>
 
             <BioWrapper>
-                <BioSpan>
-                    {bio}
-                </BioSpan>
+                <BioSpan>{bio}</BioSpan>
             </BioWrapper>
 
             <ButtonsWrapper>
-                <ViewProfile>
-                    Profile
-                </ViewProfile>
-                <Message>
-                    Message
-                </Message>
+                <ViewProfile onClick={handleFollowing}>{isFollowing ? 'Unfollow' : 'Follow'}</ViewProfile>
+                <Message>Message</Message>
             </ButtonsWrapper>
         </Wrapper>
     );

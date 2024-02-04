@@ -25,14 +25,13 @@ import Typography from "../typography/typography";
 import FilledButton from "../buttons/FilledButton";
 import {SlOptionsVertical} from "react-icons/sl";
 import FadeModal from "../modal/FadeModal";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import {BiImageAdd} from "react-icons/bi";
 import {authenticatedAxios} from "../../restservices/baseAxios";
 import {ADD_IMAGE_TO_PROFILE} from "../../constant/apiConstants";
 import {getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
 

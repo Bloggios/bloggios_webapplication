@@ -36,3 +36,6 @@ export const POST_LIST = '/post-provider/v1.0/post/post-list'
 export const GET_USER_PROFILE = '/user-provider/v1.0/profile';
 export const COUNT_FOLLOW = '/user-provider/v1.0/follow-api/count-follow';
 export const PROFILE_SUGGESTIONS = '/user-provider/v1.0/profile/suggestions';
+export const CHECK_FOLLOWING = '/user-provider/v1.0/follow-api/is-following';
+export const FOLLOW_USER = '/user-provider/v1.0/follow-api/follow';
+export const UNFOLLOW_USER = '/user-provider/v1.0/follow-api/unfollow';

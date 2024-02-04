@@ -24,6 +24,8 @@ import SmallProfileCard from "./SmallProfileCard";
 import {LuRefreshCcw} from "react-icons/lu";
 import {profileSuggestions} from "../../restservices/profileApi";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
 
 const ProfileSuggestions = () => {
 
@@ -32,6 +34,7 @@ const ProfileSuggestions = () => {
     const [profileList, setProfileList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [dataMessage, setResponseDataMessage] = useState('');
+    const dispatch = useDispatch();
 
     useEffect(() => {
         fetchProfileSuggestions(currentPage);
@@ -58,6 +61,14 @@ const ProfileSuggestions = () => {
 
     const handleNextPage = () => {
         const nextPage = (currentPage + 1) % Math.ceil(totalRecords / 10);
+        if (currentPage === 0 && nextPage === 0) {
+            const snackbarData = {
+                isSnackbar: true,
+                message: 'No more profiles for suggestion',
+                snackbarType: 'Warning'
+            };
+            dispatch(setSnackbar(snackbarData))
+        }
         setCurrentPage(nextPage);
     };
 
@@ -79,7 +90,8 @@ const ProfileSuggestions = () => {
                     profileList.length > 0 ? (
                         profileList.map((item)=> (
                             <SmallProfileCard
-                                key={item.userId}
+                                key={item.profileId}
+                                userId={item.userId}
                                 name={item.name}
                                 bio={item.bio}
                                 image={item.profileImage}
