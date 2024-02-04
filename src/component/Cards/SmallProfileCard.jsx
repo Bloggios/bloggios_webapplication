@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
@@ -26,74 +26,54 @@ import {checkFollowing, followUser, unfollowUser} from "../../restservices/follo
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 
-const SmallProfileCard = ({
-    bio,
-    name,
-    email,
-    image,
-    key,
-    userId
-                          }) => {
-
-    const [isFollowing, setIsFollowing] = React.useState(false);
+const SmallProfileCard = ({ bio, name, email, image, userId }) => {
+    const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
 
-    useEffect(()=> {
+    useEffect(() => {
         checkFollowing(userId)
-            .then((response)=> {
+            .then((response) => {
                 setIsFollowing(response.data?.isFollowing);
-            }).catch((error)=> {
+            })
+            .catch(() => {
                 setIsFollowing(false);
-        })
-    }, [])
+            });
+    }, [userId]);
 
-    const handleFollowing = (data) => {
-        setIsFollowing(!isFollowing);
-        if (isFollowing) {
-            unfollowUser(data)
-                .then((response)=> {
-                    setIsFollowing(false);
+    const handleFollowing = useCallback(
+        (event) => {
+            event.preventDefault();
+            setIsFollowing(!isFollowing);
+
+            const followAction = isFollowing ? unfollowUser : followUser;
+
+            followAction(userId)
+                .then((response) => {
+                    setIsFollowing(!isFollowing);
                     const snackbarData = {
                         isSnackbar: true,
                         message: response.data?.message,
                         snackbarType: 'Success',
                     };
                     dispatch(setSnackbar(snackbarData));
-                }).catch((error)=> {
-                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                const snackBarData = {
-                    isSnackbar: true,
-                    message: message,
-                    snackbarType: 'Error',
-                };
-                dispatch(setSnackbar(snackBarData));
-            });
-        } else {
-            followUser(data)
-                .then((response)=> {
-                    setIsFollowing(true);
-                    const snackbarData = {
+                })
+                .catch((error) => {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
                         isSnackbar: true,
-                        message: response.data?.message,
-                        snackbarType: 'Success',
+                        message: message,
+                        snackbarType: 'Error',
                     };
-                    dispatch(setSnackbar(snackbarData));
-                }).catch((error)=> {
-                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                const snackBarData = {
-                    isSnackbar: true,
-                    message: message,
-                    snackbarType: 'Error',
-                };
-                dispatch(setSnackbar(snackBarData));
-            });
-        }
-    }
+                    dispatch(setSnackbar(snackBarData));
+                });
+        },
+        [dispatch, isFollowing, userId]
+    );
 
     return (
         <Wrapper key={userId}>
             <RowWrapper>
-                <Avatar size={'50px'} image={image ? image : bloggios_logo} borderRadius={'50%'} />
+                <Avatar size="50px" image={image || bloggios_logo} borderRadius="50%" />
                 <ColumnWrapper>
                     <NameSpan>{name}</NameSpan>
                     <EmailSpan>{email}</EmailSpan>
@@ -101,18 +81,12 @@ const SmallProfileCard = ({
             </RowWrapper>
 
             <BioWrapper>
-                <BioSpan>
-                    {bio}
-                </BioSpan>
+                <BioSpan>{bio}</BioSpan>
             </BioWrapper>
 
             <ButtonsWrapper>
-                <ViewProfile onClick={()=> handleFollowing(userId)}>
-                    {isFollowing ? 'Unfollow' : 'Follow'}
-                </ViewProfile>
-                <Message>
-                    Message
-                </Message>
+                <ViewProfile onClick={handleFollowing}>{isFollowing ? 'Unfollow' : 'Follow'}</ViewProfile>
+                <Message>Message</Message>
             </ButtonsWrapper>
         </Wrapper>
     );

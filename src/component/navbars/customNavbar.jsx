@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
@@ -32,6 +32,7 @@ import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
 import {getFollow, getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
+import WebSearchBar from "../modal/WebSearchBar";
 
 const CustomNavbar = () => {
 
@@ -39,6 +40,7 @@ const CustomNavbar = () => {
     const navigate = useNavigate();
     const {isAuthenticated} = useSelector((state)=> state.auth);
     const {isAdded, name, profileImage} = useSelector((state) => state.profile);
+    const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -70,6 +72,21 @@ const CustomNavbar = () => {
         }
     }, [isAdded]);
 
+    useEffect(()=> {
+        const handleKeyPress = (event) => {
+            if (event.key === '/') {
+                if (!isSearchBarOpen) {
+                    event.preventDefault();
+                    setIsSearchBarOpen(true);
+                }
+            }
+        };
+            document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isSearchBarOpen, setIsSearchBarOpen])
+
     return (
         <>
             <NavbarWrapper>
@@ -81,7 +98,9 @@ const CustomNavbar = () => {
                                    size="48px"
                                    cursor={'pointer'}
                                    isTooltipAllowed={true}/>
-                    <SearchBarInput type={'text'} placeholder={'# Explore Bloggios'} maxLength={20}/>
+                    <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
+                        Explore Bloggios
+                    </SearchBarInput>
                 </LogoSearchBarWrapper>
                 {width > 700 && <MemoizedNavbarItems/>}
 
@@ -94,6 +113,13 @@ const CustomNavbar = () => {
                 />
             </NavbarWrapper>
             {width <= 700 && <MemoizedNavbarItemsMobile />}
+
+            <WebSearchBar
+                isOpen={isSearchBarOpen}
+                onClose={()=> setIsSearchBarOpen(false)}
+            >
+                Rohit
+            </WebSearchBar>
         </>
     );
 };
@@ -115,7 +141,7 @@ const LogoSearchBarWrapper = styled.div`
   height: 100%;
 `;
 
-const SearchBarInput = styled.input`
+const SearchBarInput = styled.div`
   padding: 7px 10px;
   width: 220px;
   outline: none;
@@ -124,6 +150,7 @@ const SearchBarInput = styled.input`
   font-size: 16px;
   font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
+    font-weight: 200;
   background-color: #272727;
   color: rgba(255, 255, 255, 0.6);
   &::placeholder {
