@@ -18,21 +18,80 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
+import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
 
 const SmallProfileCard = ({
     bio,
     name,
     email,
     image,
-    key
+    key,
+    userId
                           }) => {
 
+    const [isFollowing, setIsFollowing] = React.useState(false);
+    const dispatch = useDispatch();
+
+    useEffect(()=> {
+        checkFollowing(userId)
+            .then((response)=> {
+                setIsFollowing(response.data?.isFollowing);
+            }).catch((error)=> {
+                setIsFollowing(false);
+        })
+    }, [])
+
+    const handleFollowing = (data) => {
+        setIsFollowing(!isFollowing);
+        if (isFollowing) {
+            unfollowUser(data)
+                .then((response)=> {
+                    setIsFollowing(false);
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: response.data?.message,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                }).catch((error)=> {
+                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error',
+                };
+                dispatch(setSnackbar(snackBarData));
+            });
+        } else {
+            followUser(data)
+                .then((response)=> {
+                    setIsFollowing(true);
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: response.data?.message,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                }).catch((error)=> {
+                const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: message,
+                    snackbarType: 'Error',
+                };
+                dispatch(setSnackbar(snackBarData));
+            });
+        }
+    }
+
     return (
-        <Wrapper key={key}>
+        <Wrapper key={userId}>
             <RowWrapper>
                 <Avatar size={'50px'} image={image ? image : bloggios_logo} borderRadius={'50%'} />
                 <ColumnWrapper>
@@ -48,8 +107,8 @@ const SmallProfileCard = ({
             </BioWrapper>
 
             <ButtonsWrapper>
-                <ViewProfile>
-                    Profile
+                <ViewProfile onClick={()=> handleFollowing(userId)}>
+                    {isFollowing ? 'Unfollow' : 'Follow'}
                 </ViewProfile>
                 <Message>
                     Message
