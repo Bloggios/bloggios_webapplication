@@ -18,30 +18,4 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {authenticatedAxios} from "./baseAxios";
-import {COUNT_FOLLOW, GET_PROFILE, GET_USER_PROFILE, PROFILE_LIST, PROFILE_SUGGESTIONS} from "../constant/apiConstants";
-
-export const getProfile = () => {
-    return authenticatedAxios.get(GET_PROFILE)
-        .then((response)=> response);
-}
-
-export const getUserProfile = (userId) => {
-    return authenticatedAxios.get(GET_USER_PROFILE + '/' + userId)
-        .then((response)=> response);
-}
-
-export const getFollow = () => {
-    return authenticatedAxios.get(COUNT_FOLLOW)
-        .then((response)=> response);
-}
-
-export const profileSuggestions = (payload) => {
-    return authenticatedAxios.post(PROFILE_SUGGESTIONS, payload)
-        .then((response)=> response);
-}
-
-export const searchProfileList = (payload) => {
-    return authenticatedAxios.post(PROFILE_LIST, payload)
-        .then((response)=> response);
-}
+export const SEARCH_EMPTY_RESPONSE = 'No Result Found'

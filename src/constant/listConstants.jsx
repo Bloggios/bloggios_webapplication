@@ -201,4 +201,15 @@ export const bloggiosLinksList = [
         icon: <FaQuestion />,
         path: SERVICES_PAGE
     }
+];
+
+export const globalSearchList = [
+    {
+        id: 1,
+        label: 'Users'
+    },
+    {
+        id: 2,
+        label: 'Posts'
+    }
 ]

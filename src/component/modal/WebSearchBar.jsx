@@ -22,31 +22,124 @@ import React, {useEffect, useRef, useState} from 'react';
 import FadeModal from "./FadeModal";
 import styled from "styled-components";
 import {IoIosSearch} from "react-icons/io";
-import Typography from "../typography/typography";
-import {bloggiosLinksList, bloggiosTechLinksList} from "../../constant/listConstants";
+import {bloggiosLinksList, bloggiosTechLinksList, globalSearchList} from "../../constant/listConstants";
 import {useNavigate} from "react-router-dom";
+import {BsChevronDown} from "react-icons/bs";
+import {searchPostList} from "../../restservices/postApi";
+import {searchProfileList} from "../../restservices/profileApi";
+import {setSnackbar} from "../../state/snackbarSlice";
+import {useDispatch} from "react-redux";
+import {SEARCH_EMPTY_RESPONSE} from "../../constant/ReponseMessages";
+import SearchPostSmallComponent from "../Cards/SearchPostSmallComponent";
+import {VscSearchStop} from "react-icons/vsc";
+import FallbackLoader from "../loaders/fallbackLoader";
+import SearchUserSmallComponent from "../Cards/SearchUserSmallComponent";
 
 const WebSearchBar = ({
-    isOpen,
-    onClose
+                          isOpen,
+                          onClose
                       }) => {
 
     const inputRef = useRef(null);
     const [inputValue, setInputValue] = useState('');
     const navigate = useNavigate();
+    const [value, setValue] = useState('');
+    const [isShown, setIsShown] = useState(false);
+    const dropdownRef = useRef(null);
+    const [postPage, setPostPage] = useState(0);
+    const [userPage, setUserPage] = useState(0);
+    const [userList, setUserList] = useState([]);
+    const [postList, setPostList] = useState([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [emptyResponse, setEmptyResponse] = useState('')
+    const dispatch = useDispatch();
 
-    useEffect(()=> {
-        const debounce = setTimeout(()=> {
-            if (inputValue.length > 0) {
-                fetchSearch(inputValue);
-            }
-        }, 500)
+    const handleClickOutside = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setIsShown(false);
+        }
+    };
 
-        return ()=> clearTimeout(debounce);
+    useEffect(() => {
+        if (inputValue.length > 0) {
+            setIsShown(false);
+            setSearchLoading(true);
+            setEmptyResponse('');
+            const debounce = setTimeout(() => {
+                if (inputValue.length > 0) {
+                    fetchSearch(inputValue);
+                }
+            }, 500)
+
+            return () => clearTimeout(debounce);
+        } else if (inputValue.length === 0) {
+            setUserList([]);
+            setPostList([]);
+            setSearchLoading(false);
+        }
     }, [inputValue])
 
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
     const fetchSearch = (input) => {
-        console.log(input);
+        if (input.length > 2) {
+            if (value === 'Posts') {
+                setPostList([]);
+                const postPayload = {
+                    page: postPage,
+                    size: 16,
+                    texts: [input]
+                };
+                searchPostList(postPayload)
+                    .then((response) => {
+                        if (response.data?.object.length > 0) {
+                            setPostList(response.data?.object);
+                        } else {
+                            setEmptyResponse(SEARCH_EMPTY_RESPONSE + " : " + input);
+                        }
+                        setSearchLoading(false);
+                    })
+            } else {
+                setUserList([]);
+                const userPayload = {
+                    page: userPage,
+                    size: 16,
+                    listSearch: {
+                        texts: [input]
+                    }
+                }
+                searchProfileList(userPayload)
+                    .then((response) => {
+                        if (response.data?.object.length > 0) {
+                            setUserList(response.data?.object);
+                        } else {
+                            setEmptyResponse(SEARCH_EMPTY_RESPONSE + " : " + input);
+                        }
+                        setSearchLoading(false);
+                    }).catch((error) => {
+                    setInputValue('');
+                    setSearchLoading(false);
+                    setUserList([]);
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                })
+            }
+        } else if (input.length < 3) {
+            setSearchLoading(false);
+            setUserList([]);
+            setPostList([]);
+            setEmptyResponse("Minimum 3 Characters required")
+        }
     }
 
     useEffect(() => {
@@ -66,14 +159,38 @@ const WebSearchBar = ({
         };
     }, [isOpen, onClose]);
 
-    if (!isOpen) {
-        return null;
-    }
+    useEffect(() => {
+        console.log("Is Loading : " + searchLoading);
+        console.log("Empty Response : " + emptyResponse);
+        console.log("User List" + userList);
+        console.log("Post List" + postList);
+        console.log("-----------------------------------------------")
+    }, [inputValue])
 
     const handleBloggiosPathClick = (path) => {
         navigate(path);
         onClose();
     }
+
+    const handleSearchTypeDropdownClick = (label) => {
+        setEmptyResponse('');
+        setUserList([]);
+        setPostList([]);
+        setValue(label);
+        setIsShown(false);
+    }
+
+    useEffect(()=> {
+        if (!isOpen) {
+            setInputValue('');
+        }
+    }, [isOpen])
+
+    useEffect(()=> {
+        setInputValue('');
+        setUserList([]);
+        setPostList([])
+    }, [value])
 
     return (
         <>
@@ -90,87 +207,179 @@ const WebSearchBar = ({
                     border={'1px solid rgba(255, 255, 255, 0.1)'}
                 >
                     <ModelHeader>
-                        <IoIosSearch />
+                        <IoIosSearch/>
                         <SearchBar
                             autoFocus={true}
                             type={"text"}
                             ref={inputRef}
                             value={inputValue}
-                            onChange={(e)=> setInputValue(e.target.value)}
+                            onChange={(e) => setInputValue(e.target.value)}
                         />
+                        <ValueDropdownWrapper ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                            <DropdownWrapper>
+                                <span>{value ? value : globalSearchList[0].label}</span>
+                                <div style={{
+                                    transform: isShown && 'rotate(180deg)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    transition: 'all 150ms ease-in-out'
+                                }}>
+                                    <BsChevronDown/>
+                                </div>
+                            </DropdownWrapper>
+
+                            <DropdownItems style={{
+                                visibility: isShown ? 'visible' : 'hidden',
+                                opacity: isShown ? 1 : 0
+                            }}>
+                                {globalSearchList.map((item) => (
+                                    <DropdownItem onClick={() => handleSearchTypeDropdownClick(item.label)}
+                                                  key={item.id}>
+                                        <span>{item.label}</span>
+                                    </DropdownItem>
+                                ))}
+                            </DropdownItems>
+                        </ValueDropdownWrapper>
                     </ModelHeader>
 
-                    <ModelContentWrapper>
-                        {
-                            inputValue.length > 0 ? (
-                                <Typography text={'Not Results Found'} />
-                            ) : (
-                                <Wrapper>
-                                    <BloggiosWrapper style={{
-                                        paddingBottom: '16px',
-                                        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
-                                    }} >
-                                        <TextSpan style={{
-                                            textAlign: 'center'
+                    {searchLoading === true ? (
+                        <ModelContentWrapper>
+                            <FallbackLoader
+                                height={'280px'}
+                                width={'100%'}
+                            />
+                        </ModelContentWrapper>
+                    ) : (
+                        <ModelContentWrapper>
+                            {
+                                inputValue.length > 0 ? (
+                                    value === 'Posts' ? (
+                                        postList.length > 0 ? (
+                                            <ListWrapper>
+                                                {postList.map((post) => (
+                                                    <SearchPostSmallComponent
+                                                        key={post.userId}
+                                                        postBody={post.body}
+                                                        userId={post.userId}
+                                                    />
+                                                ))}
+                                            </ListWrapper>
+                                        ) : (
+                                            <NotResultFoundWrapper>
+                                                <div style={{
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '50px',
+                                                    color: 'rgba(255,255,255,0.6)'
+                                                }}>
+                                                    <VscSearchStop/>
+                                                </div>
+                                                <NotFoundMessage>
+                                                    {emptyResponse}
+                                                </NotFoundMessage>
+                                            </NotResultFoundWrapper>
+                                        )
+                                    ) : (
+                                        userList.length > 0 ? (
+                                            <ListWrapper>
+                                                {userList.map((user) => (
+                                                    <SearchUserSmallComponent
+                                                        key={user.userId}
+                                                        name={user.name}
+                                                        email={user.email}
+                                                        userId={user.userId}
+                                                        image={user.profileImage}
+                                                    />
+                                                ))}
+                                            </ListWrapper>
+                                        ) : (
+                                            <NotResultFoundWrapper>
+                                                <div style={{
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '50px',
+                                                    color: 'rgba(255,255,255,0.6)'
+                                                }}>
+                                                    <VscSearchStop/>
+                                                </div>
+                                                <NotFoundMessage>
+                                                    {emptyResponse}
+                                                </NotFoundMessage>
+                                            </NotResultFoundWrapper>
+                                        )
+                                    )
+                                ) : (
+                                    <Wrapper>
+                                        <BloggiosWrapper style={{
+                                            paddingBottom: '16px',
+                                            borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
                                         }}>
-                                            Bloggios
-                                        </TextSpan>
+                                            <TextSpan style={{
+                                                textAlign: 'center'
+                                            }}>
+                                                Bloggios
+                                            </TextSpan>
 
-                                        <BloggiosTechGrid>
-                                            {bloggiosLinksList.map((item)=> (
-                                                <BloggiosTechItems
-                                                    key={item.label}
-                                                    onClick={()=> handleBloggiosPathClick(item.path)}
-                                                >
-                                                    <div style={{
-                                                        height: '25px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        fontSize: '22px',
-                                                    }}>
-                                                        {item.icon}
-                                                    </div>
+                                            <BloggiosTechGrid>
+                                                {bloggiosLinksList.map((item) => (
+                                                    <BloggiosTechItems
+                                                        key={item.label}
+                                                        onClick={() => handleBloggiosPathClick(item.path)}
+                                                    >
+                                                        <div style={{
+                                                            height: '25px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            fontSize: '22px',
+                                                        }}>
+                                                            {item.icon}
+                                                        </div>
 
-                                                    <ListTextSpan>
-                                                        {item.label}
-                                                    </ListTextSpan>
-                                                </BloggiosTechItems>
-                                            ))}
-                                        </BloggiosTechGrid>
-                                    </BloggiosWrapper>
-                                    <BloggiosWrapper>
-                                        <TextSpan style={{
-                                            textAlign: 'center'
-                                        }}>
-                                            Bloggios Tech
-                                        </TextSpan>
+                                                        <ListTextSpan>
+                                                            {item.label}
+                                                        </ListTextSpan>
+                                                    </BloggiosTechItems>
+                                                ))}
+                                            </BloggiosTechGrid>
+                                        </BloggiosWrapper>
+                                        <BloggiosWrapper>
+                                            <TextSpan style={{
+                                                textAlign: 'center'
+                                            }}>
+                                                Bloggios Tech
+                                            </TextSpan>
 
-                                        <BloggiosTechGrid>
-                                            {bloggiosTechLinksList.map((item)=> (
-                                                <BloggiosTechItems
-                                                    key={item.label}
-                                                    onClick={()=> window.open(item.path, '_blank')}
-                                                >
-                                                    <div style={{
-                                                        height: '25px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        fontSize: '22px',
-                                                    }}>
-                                                        {item.icon}
-                                                    </div>
+                                            <BloggiosTechGrid>
+                                                {bloggiosTechLinksList.map((item) => (
+                                                    <BloggiosTechItems
+                                                        key={item.label}
+                                                        onClick={() => window.open(item.path, '_blank')}
+                                                    >
+                                                        <div style={{
+                                                            height: '25px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            fontSize: '22px',
+                                                        }}>
+                                                            {item.icon}
+                                                        </div>
 
-                                                    <ListTextSpan>
-                                                        {item.label}
-                                                    </ListTextSpan>
-                                                </BloggiosTechItems>
-                                            ))}
-                                        </BloggiosTechGrid>
-                                    </BloggiosWrapper>
-                                </Wrapper>
-                            )
-                        }
-                    </ModelContentWrapper>
+                                                        <ListTextSpan>
+                                                            {item.label}
+                                                        </ListTextSpan>
+                                                    </BloggiosTechItems>
+                                                ))}
+                                            </BloggiosTechGrid>
+                                        </BloggiosWrapper>
+                                    </Wrapper>
+                                )
+                            }
+                        </ModelContentWrapper>
+                    )}
                 </FadeModal>
             )}
         </>
@@ -272,10 +481,106 @@ const ListTextSpan = styled.span`
     letter-spacing: 1px;
 `;
 
-const RowWrapper = styled.div`
+const ValueDropdownWrapper = styled.div`
+    width: auto;
+    height: auto;
+    outline: none;
+    position: relative;
+    min-width: 100px;
+`;
+
+const DropdownWrapper = styled.button`
     width: 100%;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 150ms ease;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(16, 23, 32, 1);
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 7px;
+    border-radius: 10px;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    z-index: 2;
+
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:active {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:focus {
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.8);
+    }
+`;
+
+const DropdownItems = styled.div`
+    width: 100%;
+    background-color: rgba(16, 23, 32, 1);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 250ms ease;
+`;
+
+const DropdownItem = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 7px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+
+    &:hover {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+`;
+
+const NotResultFoundWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 70px 0;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+`;
+
+const NotFoundMessage = styled.span`
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+`;
+
+const ListWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
 `;
 
 export default WebSearchBar;

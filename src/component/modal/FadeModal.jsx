@@ -70,7 +70,6 @@ const FadeModal = ({
     };
 
     useEffect(() => {
-        // Handle body overflow based on modal state
         const handleBodyOverflow = () => {
             document.body.style.overflow = isOpen ? 'hidden' : 'auto';
         };
@@ -78,10 +77,13 @@ const FadeModal = ({
         handleBodyOverflow();
 
         return () => {
-            // Revert body overflow when the component is unmounted
             document.body.style.overflow = 'auto';
         };
     }, [isOpen]);
+
+    if (!isOpen) {
+        return null;
+    }
 
     return (
         <ModalWrapper isOpen={isOpen} onClick={handleClose}>
