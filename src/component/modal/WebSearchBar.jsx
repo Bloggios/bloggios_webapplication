@@ -34,6 +34,7 @@ import SearchPostSmallComponent from "../Cards/SearchPostSmallComponent";
 import {VscSearchStop} from "react-icons/vsc";
 import FallbackLoader from "../loaders/fallbackLoader";
 import SearchUserSmallComponent from "../Cards/SearchUserSmallComponent";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const WebSearchBar = ({
                           isOpen,
@@ -53,12 +54,19 @@ const WebSearchBar = ({
     const [searchLoading, setSearchLoading] = useState(false);
     const [emptyResponse, setEmptyResponse] = useState('')
     const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
 
     const handleClickOutside = (e) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
             setIsShown(false);
         }
     };
+
+    useEffect(()=> {
+        if (width < 500) {
+            onClose();
+        }
+    }, [width])
 
     useEffect(() => {
         if (inputValue.length > 0) {
@@ -289,7 +297,7 @@ const WebSearchBar = ({
                                                         key={user.userId}
                                                         name={user.name}
                                                         email={user.email}
-                                                        userId={user.userId}
+                                                        fetchedUserId={user.userId}
                                                         image={user.profileImage}
                                                     />
                                                 ))}

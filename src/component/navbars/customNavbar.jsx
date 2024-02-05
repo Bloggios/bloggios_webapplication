@@ -33,6 +33,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getFollow, getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
 import WebSearchBar from "../modal/WebSearchBar";
+import {IoIosSearch} from "react-icons/io";
 
 const CustomNavbar = () => {
 
@@ -99,7 +100,9 @@ const CustomNavbar = () => {
                                    cursor={'pointer'}
                                    isTooltipAllowed={true}/>
                     <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
-                        Explore Bloggios
+                        <IoIosSearch />
+                        <span>Explore Bloggios</span>
+                        <SearchButton>/</SearchButton>
                     </SearchBarInput>
                 </LogoSearchBarWrapper>
                 {width > 700 && <MemoizedNavbarItems/>}
@@ -142,29 +145,47 @@ const LogoSearchBarWrapper = styled.div`
 `;
 
 const SearchBarInput = styled.div`
-  padding: 7px 10px;
-  width: 220px;
-  outline: none;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  font-size: 16px;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 1px;
+    padding: 7px 10px;
+    width: 240px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
     font-weight: 200;
-  background-color: #272727;
-  color: rgba(255, 255, 255, 0.6);
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 14px;
-    font-weight: 200;
-    letter-spacing: 2px;
-  }
-  &:focus {
+    background-color: #272727;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    &:focus {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 870px) {
+        display: none;
+    }
+`;
+
+const SearchButton = styled.div`
+    height: 22px;
+    aspect-ratio: 1/1;
     border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  @media (max-width: 870px) {
-    display: none;
-  }
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
 `;
 
 const MemoizedCustomNavbar = React.memo(CustomNavbar);

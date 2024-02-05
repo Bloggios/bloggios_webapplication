@@ -22,19 +22,20 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from "../../state/snackbarSlice";
 
 const SearchUserSmallComponent = ({
     name,
     email,
-    userId,
+    fetchedUserId,
     image
                                   }) => {
 
     const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
+    const {userId} = useSelector((state)=> state.auth);
 
     useEffect(() => {
         checkFollowing(userId)
@@ -96,9 +97,11 @@ const SearchUserSmallComponent = ({
             </div>
 
             <ButtonsWrapper>
-                <FollowButton onClick={handleFollowing}>
-                    {isFollowing ? 'Unfollow' : 'Follow'}
-                </FollowButton>
+                {fetchedUserId!==userId && (
+                    <FollowButton onClick={handleFollowing}>
+                        {isFollowing ? 'Unfollow' : 'Follow'}
+                    </FollowButton>
+                )}
                 <ViewProfileButton>
                     Profile
                 </ViewProfileButton>
