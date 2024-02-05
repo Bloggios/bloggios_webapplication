@@ -99,11 +99,13 @@ const CustomNavbar = () => {
                                    size="48px"
                                    cursor={'pointer'}
                                    isTooltipAllowed={true}/>
-                    <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
-                        <IoIosSearch />
-                        <span>Explore Bloggios</span>
-                        <SearchButton>/</SearchButton>
-                    </SearchBarInput>
+                    {isAuthenticated && (
+                        <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
+                            <IoIosSearch />
+                            <span>Explore Bloggios</span>
+                            <SearchButton>/</SearchButton>
+                        </SearchBarInput>
+                    )}
                 </LogoSearchBarWrapper>
                 {width > 700 && <MemoizedNavbarItems/>}
 
