@@ -46,3 +46,8 @@ export const postList = (page) => {
     return authenticatedAxios.post(POST_LIST, payload)
         .then((response)=> response);
 }
+
+export const searchPostList = (payload) => {
+    return authenticatedAxios.post(POST_LIST, payload)
+        .then((response)=> response);
+}

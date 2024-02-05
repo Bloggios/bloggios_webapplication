@@ -48,6 +48,9 @@ const TooltipWrapper = ({
             case 'bottom':
                 setTooltipPosition({top: '100%', left: '50%', transform: 'translate(-50%, 60%)'});
                 break;
+            case 'right' :
+                setTooltipPosition({top: '50%', left: '160%', transform: 'translate(-50%, 0)'});
+                break;
             default:
                 setTooltipPosition({bottom: '100%', left: '50%', transform: 'translate(-50%, 60%)'});
         }
