@@ -35,8 +35,8 @@ const SearchPostSmallComponent = ({
     useEffect(() => {
         getUserProfile(userId)
             .then((response) => {
-                setImage(response.data?.profileImageLink);
-                setName(response.data?.name);
+                setImage(response.data.profileImageLink ? response.data.profileImageLink : '');
+                setName(response.data.name ? response.data.name : '');
             }).catch((error) => {
             console.log(error);
         })

@@ -167,14 +167,6 @@ const WebSearchBar = ({
         };
     }, [isOpen, onClose]);
 
-    useEffect(() => {
-        console.log("Is Loading : " + searchLoading);
-        console.log("Empty Response : " + emptyResponse);
-        console.log("User List" + userList);
-        console.log("Post List" + postList);
-        console.log("-----------------------------------------------")
-    }, [inputValue])
-
     const handleBloggiosPathClick = (path) => {
         navigate(path);
         onClose();
