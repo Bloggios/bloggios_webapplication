@@ -38,7 +38,7 @@ const SearchUserSmallComponent = ({
     const {userId} = useSelector((state)=> state.auth);
 
     useEffect(() => {
-        checkFollowing(userId)
+        checkFollowing(fetchedUserId)
             .then((response) => {
                 setIsFollowing(response.data?.isFollowing);
             })
@@ -54,7 +54,7 @@ const SearchUserSmallComponent = ({
 
             const followAction = isFollowing ? unfollowUser : followUser;
 
-            followAction(userId)
+            followAction(fetchedUserId)
                 .then((response) => {
                     setIsFollowing(!isFollowing);
                     const snackbarData = {
