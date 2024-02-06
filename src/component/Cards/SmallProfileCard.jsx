@@ -25,6 +25,7 @@ import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
+import {setIsCreated} from "../../state/isCreatedSlice";
 
 const SmallProfileCard = ({ bio, name, email, image, userId }) => {
     const [isFollowing, setIsFollowing] = useState(false);
@@ -56,6 +57,10 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
                         snackbarType: 'Success',
                     };
                     dispatch(setSnackbar(snackbarData));
+                    const payload = {
+                        isFollowed: true
+                    }
+                    dispatch(setIsCreated(payload));
                 })
                 .catch((error) => {
                     const message = error?.response?.data?.message || 'Something went wrong. Please try again later';

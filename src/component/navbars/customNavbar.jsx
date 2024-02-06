@@ -34,14 +34,16 @@ import {getFollow, getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
 import WebSearchBar from "../modal/WebSearchBar";
 import {IoIosSearch} from "react-icons/io";
+import {clearIsCreated} from "../../state/isCreatedSlice";
 
 const CustomNavbar = () => {
 
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
     const {isAuthenticated} = useSelector((state)=> state.auth);
-    const {isAdded, name, profileImage} = useSelector((state) => state.profile);
+    const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
+    const {isFollowed} = useSelector((state)=> state.isCreated);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -88,6 +90,27 @@ const CustomNavbar = () => {
         };
     }, [isSearchBarOpen, setIsSearchBarOpen])
 
+    useEffect(() => {
+        if (isFollowed) {
+            getFollow()
+                .then((response)=> {
+                    const profileData = {
+                        name: name,
+                        isAdded: true,
+                        profileImageUrl: null,
+                        bio: bio,
+                        email: email,
+                        profileImage: profileImage,
+                        coverImage: coverImage,
+                        followers: response.data?.followers,
+                        following: response.data?.following
+                    };
+                    dispatch(setProfile(profileData));
+                    dispatch(clearIsCreated());
+                })
+        }
+    }, [isFollowed]);
+
     return (
         <>
             <NavbarWrapper>
@@ -122,9 +145,7 @@ const CustomNavbar = () => {
             <WebSearchBar
                 isOpen={isSearchBarOpen}
                 onClose={()=> setIsSearchBarOpen(false)}
-            >
-                Rohit
-            </WebSearchBar>
+            />
         </>
     );
 };

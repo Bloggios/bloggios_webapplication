@@ -25,6 +25,7 @@ import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import {useDispatch, useSelector} from "react-redux";
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from "../../state/snackbarSlice";
+import {setIsCreated} from "../../state/isCreatedSlice";
 
 const SearchUserSmallComponent = ({
     name,
@@ -63,6 +64,10 @@ const SearchUserSmallComponent = ({
                         snackbarType: 'Success',
                     };
                     dispatch(setSnackbar(snackbarData));
+                    const payload = {
+                        isFollowed: true
+                    }
+                    dispatch(setIsCreated(payload));
                 })
                 .catch((error) => {
                     const message = error?.response?.data?.message || 'Something went wrong. Please try again later';

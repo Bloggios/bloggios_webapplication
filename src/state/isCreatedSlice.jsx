@@ -18,24 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
-import {profileSlice} from "./profileSlice";
-import {postCreateSlice} from "./postCreateSlice";
-import {isCreatedSlice} from "./isCreatedSlice";
+import {createSlice} from "@reduxjs/toolkit";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer,
-        profile: profileSlice.reducer,
-        postCreate: postCreateSlice.reducer,
-        isCreated: isCreatedSlice.reducer
+const isCreatedSlice = createSlice({
+    name: 'isCreated',
+    initialState: {
+        isFollowed: false,
     },
-    devTools: true
-})
+    reducers: {
+        setIsCreated: (state, action) => {
+            const { isFollowed } = action.payload;
+            state.isFollowed = isFollowed;
+        },
+        clearIsCreated: (state, action) => {
+            state.isFollowed = false;
+        }
+    }
+});
 
-export default store;
+export { isCreatedSlice }
+
+export const { setIsCreated, clearIsCreated } = isCreatedSlice.actions;
