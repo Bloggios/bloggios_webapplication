@@ -40,6 +40,7 @@ import {loginUser} from "../../restservices/authApi";
 import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
+import {GOOGLE_AUTH_URL} from "../../restservices/baseAxios";
 
 const LoginPage = () => {
 
@@ -165,7 +166,11 @@ const LoginPage = () => {
                         activeBackgroundColor={'#e5e5e5'}
                         isTooltipAllowed={true}
                         tooltip={'Login with Google'}
+                        onClick={() => window.open(GOOGLE_AUTH_URL)}
                     />
+                    <a href={GOOGLE_AUTH_URL}>
+                        Google
+                    </a>
                     <IconButton
                         icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
                         background={'#e5e5e5'}

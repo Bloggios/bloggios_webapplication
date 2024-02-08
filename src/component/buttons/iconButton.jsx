@@ -40,7 +40,8 @@ const IconButton = ({
                         activeColor,
                         cursor,
                         tooltip,
-                        isTooltipAllowed
+                        isTooltipAllowed,
+                        onClick
                     }) => {
 
     return (
@@ -52,6 +53,7 @@ const IconButton = ({
             whiteSpace={'nowrap'}
         >
             <Wrapper
+                onClick={onClick}
                 border={border}
                 hoveredBorder={hoveredBorder}
                 activeBorder={activeBorder}

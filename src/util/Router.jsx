@@ -24,6 +24,8 @@ import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} 
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
+import OAuthRedirectHandler from "./OAuthRedirectHandler";
+import ProfilePage from "../container/profileContainer/ProfilePage";
 
 const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
 const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
@@ -42,6 +44,8 @@ const Router = () => {
                 <Route path={LOGIN_PAGE} element={<LoginPage />} />
                 <Route path={SIGNUP_PAGE} element={<SignupPage />} />
                 <Route path={OTP_PAGE} element={<OtpPage />} />
+                <Route path="/oauth2/redirect" Component={OAuthRedirectHandler} />
+                <Route path='/profile' element={<ProfilePage />} />
 
                 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
                     <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial />} />

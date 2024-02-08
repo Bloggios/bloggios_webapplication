@@ -12,37 +12,20 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import axios from "axios";
+import React from 'react';
 
-const AUTH_BASE_URL = 'https://auth.bloggios.cloud';
+const ProfilePage = () => {
+    return (
+        <div>
+            Profile Page
+        </div>
+    );
+};
 
-export const OAUTH2_REDIRECT_URI = `${window.location.origin}/oauth2/redirect`
-export const GOOGLE_AUTH_URL = AUTH_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
-
-export const gatewayAxios = axios.create(
-    {
-        baseURL: process.env.REACT_APP_API_URL,
-        withCredentials: true,
-        headers: {
-            'clientId': process.env.REACT_APP_CLIENT_ID
-        }
-    }
-)
-
-export const authenticatedAxios = axios.create(
-    {
-        baseURL: process.env.REACT_APP_API_URL,
-        headers: {
-            'clientId': process.env.REACT_APP_CLIENT_ID
-        }
-    }
-)
+export default ProfilePage;
