@@ -26,7 +26,7 @@ import MemoizedNavbarItems from "./NavbarItems";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
 import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../constant/listConstants";
-import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
+import IconLabelDropdown from "../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";

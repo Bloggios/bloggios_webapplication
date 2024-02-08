@@ -20,13 +20,13 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
-import PopoverAvatar from "../component/tooltips/popoverAvatar";
+import PopoverAvatar from "../tooltips/popoverAvatar";
 import {BsChevronDown} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
-import {logoutUser} from "../restservices/authApi";
-import {setSnackbar} from "../state/snackbarSlice";
+import {logoutUser} from "../../restservices/authApi";
+import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
-import {HOME_PAGE} from "../constant/pathConstants";
+import {HOME_PAGE} from "../../constant/pathConstants";
 
 const IconLabelDropdown = ({
                                height,
