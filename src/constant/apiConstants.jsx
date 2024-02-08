@@ -40,3 +40,4 @@ export const CHECK_FOLLOWING = '/user-provider/v1.0/follow-api/is-following';
 export const FOLLOW_USER = '/user-provider/v1.0/follow-api/follow';
 export const UNFOLLOW_USER = '/user-provider/v1.0/follow-api/unfollow';
 export const PROFILE_LIST = '/user-provider/v1.0/profile/profile-list';
+export const REFRESH_TOKEN_SOCIAL = '/auth-provider/v1.0/authentication/refresh-token-social';
