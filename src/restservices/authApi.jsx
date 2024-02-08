@@ -26,7 +26,7 @@ import {
     LOGIN_PATH,
     LOGOUT,
     OTP_USERID_REDIRECT,
-    REFRESH_TOKEN,
+    REFRESH_TOKEN, REFRESH_TOKEN_SOCIAL,
     RESEND_OTP,
     SIGNUP_PATH,
     VERIFY_OTP
@@ -79,5 +79,14 @@ export const otpAuthUserIdRedirect = (authPayload) => {
 export const logoutUser = () => {
     return gatewayAxios.get(LOGOUT, {
         withCredentials: true
+    }).then((response)=> response);
+}
+
+export const refreshTokenSocial = (refreshToken) => {
+    return gatewayAxios.get(REFRESH_TOKEN_SOCIAL, {
+        withCredentials: true,
+        params: {
+            'token': refreshToken
+        }
     }).then((response)=> response);
 }

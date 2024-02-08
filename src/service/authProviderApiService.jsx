@@ -23,7 +23,6 @@ import {OTP_PAGE} from "../constant/pathConstants";
 import {setSnackbar} from "../state/snackbarSlice";
 
 export const authOtpUserId = (payload, navigate, dispatch) => {
-    console.log("In Method")
     otpAuthUserIdRedirect(payload)
         .then((response)=> {
             const snackbarData = {

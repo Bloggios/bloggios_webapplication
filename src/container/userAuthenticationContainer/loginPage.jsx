@@ -145,6 +145,9 @@ const LoginPage = () => {
         }
     };
 
+    const openGoogleAuth = () => {
+        window.location.href = GOOGLE_AUTH_URL
+    }
 
     return (
         <Wrapper>
@@ -166,11 +169,8 @@ const LoginPage = () => {
                         activeBackgroundColor={'#e5e5e5'}
                         isTooltipAllowed={true}
                         tooltip={'Login with Google'}
-                        onClick={() => window.open(GOOGLE_AUTH_URL)}
+                        onClick={openGoogleAuth}
                     />
-                    <a href={GOOGLE_AUTH_URL}>
-                        Google
-                    </a>
                     <IconButton
                         icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
                         background={'#e5e5e5'}
