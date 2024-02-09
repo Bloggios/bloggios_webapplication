@@ -35,6 +35,7 @@ import OtpInput from "../../component/fields/otpInput";
 import SimpleLoader from "../../component/loaders/simpleLoader";
 import {LOGIN_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {resendOtp, verifyOtp} from "../../restservices/authApi";
+import BloggiosBase from "../baseContainer/bloggiosBase";
 
 const OtpPage = () => {
 
@@ -133,121 +134,123 @@ const OtpPage = () => {
     }, [isLoading, countdown]);
 
     return (
-        <Wrapper>
-            <IconWrapper>
-                <LuShieldCheck/>
-            </IconWrapper>
+        <BloggiosBase>
+            <Wrapper>
+                <IconWrapper>
+                    <LuShieldCheck/>
+                </IconWrapper>
 
-            <TextWrapper>
-                {
-                    width > 500 ? (
-                        <>
-                            <Typography
-                                text={'Please verify your Email'}
-                                type={'title'}
-                            />
-                            <Typography
-                                text={'We have sent you an email for OTP'}
-                                type={'custom'}
-                                color={'rgba(255, 255, 255, 0.6)'}
-                                size={'16px'}
-                                spacing={'1px'}
-                                family={'Inter'}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <Typography
-                                text={'Please verify your Email'}
-                                type={'custom'}
-                                size={'20px'}
-                                spacing={'1px'}
-                                weight={400}
-                                family={'Inter'}
-                            />
-                            <Typography
-                                text={'We have sent you an email for OTP'}
-                                type={'custom'}
-                                color={'rgba(255, 255, 255, 0.6)'}
-                                size={'12px'}
-                                spacing={'1px'}
-                                family={'Inter'}
-                            />
-                        </>
-                    )
-                }
-            </TextWrapper>
+                <TextWrapper>
+                    {
+                        width > 500 ? (
+                            <>
+                                <Typography
+                                    text={'Please verify your Email'}
+                                    type={'title'}
+                                />
+                                <Typography
+                                    text={'We have sent you an email for OTP'}
+                                    type={'custom'}
+                                    color={'rgba(255, 255, 255, 0.6)'}
+                                    size={'16px'}
+                                    spacing={'1px'}
+                                    family={'Inter'}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <Typography
+                                    text={'Please verify your Email'}
+                                    type={'custom'}
+                                    size={'20px'}
+                                    spacing={'1px'}
+                                    weight={400}
+                                    family={'Inter'}
+                                />
+                                <Typography
+                                    text={'We have sent you an email for OTP'}
+                                    type={'custom'}
+                                    color={'rgba(255, 255, 255, 0.6)'}
+                                    size={'12px'}
+                                    spacing={'1px'}
+                                    family={'Inter'}
+                                />
+                            </>
+                        )
+                    }
+                </TextWrapper>
 
-            <OtpWrapper id={'OTPGroup'} data-autosubmit={true} ref={componentRef}>
-                <OtpInput
-                    id={'input1'}
-                    value={inputValue.input1}
-                    onValueChange={handleInputChange}
-                    previousId={null}
-                    handleSubmit={handleSubmit}
-                    nextId={'input2'}
-                    autofocus={true}
-                />
-                <OtpInput
-                    id={'input2'}
-                    value={inputValue.input2}
-                    onValueChange={handleInputChange}
-                    previousId={'input1'}
-                    handleSubmit={handleSubmit}
-                    nextId={'input3'}
-                />
-                <OtpInput
-                    id={'input3'}
-                    value={inputValue.input3}
-                    onValueChange={handleInputChange}
-                    previousId={'input2'}
-                    handleSubmit={handleSubmit}
-                    nextId={'input4'}
-                />
-                <Splitter>&ndash;</Splitter>
-                <OtpInput
-                    id={'input4'}
-                    value={inputValue.input4}
-                    onValueChange={handleInputChange}
-                    previousId={'input3'}
-                    handleSubmit={handleSubmit}
-                    nextId={'input5'}
-                />
-                <OtpInput
-                    id={'input5'}
-                    value={inputValue.input5}
-                    onValueChange={handleInputChange}
-                    previousId={'input4'}
-                    handleSubmit={handleSubmit}
-                    nextId={'input6'}
-                />
-                <OtpInput
-                    id={'input6'}
-                    value={inputValue.input6}
-                    onValueChange={handleInputChange}
-                    previousId={'input5'}
-                    handleSubmit={handleSubmit}
-                />
-            </OtpWrapper>
+                <OtpWrapper id={'OTPGroup'} data-autosubmit={true} ref={componentRef}>
+                    <OtpInput
+                        id={'input1'}
+                        value={inputValue.input1}
+                        onValueChange={handleInputChange}
+                        previousId={null}
+                        handleSubmit={handleSubmit}
+                        nextId={'input2'}
+                        autofocus={true}
+                    />
+                    <OtpInput
+                        id={'input2'}
+                        value={inputValue.input2}
+                        onValueChange={handleInputChange}
+                        previousId={'input1'}
+                        handleSubmit={handleSubmit}
+                        nextId={'input3'}
+                    />
+                    <OtpInput
+                        id={'input3'}
+                        value={inputValue.input3}
+                        onValueChange={handleInputChange}
+                        previousId={'input2'}
+                        handleSubmit={handleSubmit}
+                        nextId={'input4'}
+                    />
+                    <Splitter>&ndash;</Splitter>
+                    <OtpInput
+                        id={'input4'}
+                        value={inputValue.input4}
+                        onValueChange={handleInputChange}
+                        previousId={'input3'}
+                        handleSubmit={handleSubmit}
+                        nextId={'input5'}
+                    />
+                    <OtpInput
+                        id={'input5'}
+                        value={inputValue.input5}
+                        onValueChange={handleInputChange}
+                        previousId={'input4'}
+                        handleSubmit={handleSubmit}
+                        nextId={'input6'}
+                    />
+                    <OtpInput
+                        id={'input6'}
+                        value={inputValue.input6}
+                        onValueChange={handleInputChange}
+                        previousId={'input5'}
+                        handleSubmit={handleSubmit}
+                    />
+                </OtpWrapper>
 
-            <ButtonWrapper
-                onClick={handleResendOtp}
-                disabled={countdown > 0}
-                style={{
-                    width: size.width,
-                    height: size.height,
-                    cursor: isLoading || countdown > 0 ? 'not-allowed' : 'pointer'
-                }}
-            >
-                {isLoading ? <SimpleLoader size={'5px'}/> : countdown > 0 ? (<CountdownWrapper>
-                    <Typography text={'Resend  In'} type={'custom'} size={width > 500 ? '22px' : '18px'}/>
-                    <CircularContainer>
-                        {countdown}
-                    </CircularContainer>
-                </CountdownWrapper>) : 'Resend OTP'}
+                <ButtonWrapper
+                    onClick={handleResendOtp}
+                    disabled={countdown > 0}
+                    style={{
+                        width: size.width,
+                        height: size.height,
+                        cursor: isLoading || countdown > 0 ? 'not-allowed' : 'pointer'
+                    }}
+                >
+                    {isLoading ? <SimpleLoader size={'5px'}/> : countdown > 0 ? (<CountdownWrapper>
+                        <Typography text={'Resend  In'} type={'custom'} size={width > 500 ? '22px' : '18px'}/>
+                        <CircularContainer>
+                            {countdown}
+                        </CircularContainer>
+                    </CountdownWrapper>) : 'Resend OTP'}
 
-            </ButtonWrapper>
-        </Wrapper>
+                </ButtonWrapper>
+            </Wrapper>
+        </BloggiosBase>
     );
 };
 

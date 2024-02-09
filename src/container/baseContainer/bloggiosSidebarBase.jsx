@@ -11,32 +11,29 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
 import React, {useCallback, useEffect} from 'react';
 import styled from "styled-components";
+import MemoizedSidebar from "../../component/navbars/Sidebar";
 import {useDispatch, useSelector} from "react-redux";
+import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import PropTypes from "prop-types";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import MemoizedLoaderPage from "../../component/loaders/loaderPage";
-import MemoizedCustomNavbar from "../../component/navbars/customNavbar";
 
-const BloggiosBase = ({
-                          children
-                      }) => {
+const BloggiosSidebarBase = ({children}) => {
 
-    const dispatch = useDispatch();
-    const {width} = useWindowDimensions();
     const {isLoading} = useSelector((state) => state.loading);
     const {snackbarType, message, isSnackbar} = useSelector((state) => state.snackbar);
+    const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
 
     const handleSnackbar = useCallback(() => {
         if (isSnackbar) {
@@ -52,7 +49,7 @@ const BloggiosBase = ({
 
     return (
         <AppContainer>
-            <MemoizedCustomNavbar />
+            <MemoizedSidebar />
             {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
                 limit={width > 600 ? 7 : 2}
@@ -76,33 +73,24 @@ const BloggiosBase = ({
     );
 };
 
-BloggiosBase.propTypes = {
+const AppContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+`;
+
+BloggiosSidebarBase.propTypes = {
     children: PropTypes.node.isRequired
 };
 
-BloggiosBase.defaultProps = {
-    bar: 'navbar'
-}
-
-export default BloggiosBase;
+export default BloggiosSidebarBase;
 
 const ChildrenComponent = ({children}) => <>{children}</>;
 
 ChildrenComponent.propTypes = {
     children: PropTypes.node.isRequired,
 };
-
-const AppContainer = styled.main`
-    width: 100vw;
-    min-height: 100vh;
-    min-width: 250px;
-    height: auto;
-    overflow-x: hidden;
-    background-color: #121212;
-    color: antiquewhite;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-`;

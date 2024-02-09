@@ -35,6 +35,7 @@ import {setProfile} from "../../state/profileSlice";
 import WebSearchBar from "../modal/WebSearchBar";
 import {IoIosSearch} from "react-icons/io";
 import {clearIsCreated} from "../../state/isCreatedSlice";
+import {RxSlash} from "react-icons/rx";
 
 const CustomNavbar = () => {
 
@@ -126,7 +127,7 @@ const CustomNavbar = () => {
                         <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
                             <IoIosSearch />
                             <span>Explore Bloggios</span>
-                            <SearchButton>/</SearchButton>
+                            <SearchButton><RxSlash /></SearchButton>
                         </SearchBarInput>
                     )}
                 </LogoSearchBarWrapper>

@@ -20,18 +20,29 @@
 
 import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
 import {clearCredentials, setCredentials} from "./state/authSlice";
 import LoaderPage from "./component/loaders/loaderPage";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import {useNavigate} from "react-router-dom";
+import {HOME_PAGE, PROFILE_ADDITION_INITIAL} from "./constant/pathConstants";
+import {PROFILE_ADDED} from "./constant/apiConstants";
+import {setProfile} from "./state/profileSlice";
+import {setSnackbar} from "./state/snackbarSlice";
+import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
 
 const App = () => {
 
     const dispatch = useDispatch();
     const [isChecking, setIsChecking] = useState(true);
+    const [isProfileFetching, setIsProfileFetching] = useState(true);
+    const {isAdded} = useSelector((state)=> state.profile);
+    const navigate = useNavigate();
+    const authenticatedAxios = AuthenticatedAxiosInterceptor();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     useEffect(() => {
         let isMounted = true;
@@ -68,7 +79,45 @@ const App = () => {
         };
     }, []);
 
-    if (isChecking) return <LoaderPage/>
+    useEffect(() => {
+        if (!isChecking) {
+            if (isAuthenticated && !isAdded) {
+                authenticatedAxios.get(PROFILE_ADDED)
+                    .then((response)=> {
+                        if (response?.data?.exist === true && response?.data?.event === 'profile') {
+                            dispatch(setProfile({isAdded: true}))
+                            setIsChecking(false);
+                            setIsProfileFetching(false);
+                        } else {
+                            setIsChecking(false);
+                            setIsProfileFetching(false);
+                            const snackBarData = {
+                                isSnackbar: true,
+                                message: 'Please add you Profile Data first',
+                                snackbarType: 'Warning'
+                            }
+                            dispatch(setSnackbar(snackBarData))
+                            navigate(PROFILE_ADDITION_INITIAL);
+                        }
+                    }).catch((error)=> {
+                    const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error'
+                    }
+                    dispatch(setSnackbar(snackBarData))
+                    navigate(HOME_PAGE, {
+                        replace: true
+                    })
+                })
+            } else {
+                setIsProfileFetching(false)
+            }
+        }
+    }, [isChecking]);
+
+    if (isProfileFetching) return <LoaderPage/>
 
     return (
         <Router/>
