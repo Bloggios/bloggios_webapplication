@@ -18,31 +18,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import {useDispatch, useSelector} from "react-redux";
-import Divider from "../divider/divider";
-import {IoIosSearch, IoIosSettings} from "react-icons/io";
+import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import WebSearchBar from "../modal/WebSearchBar";
 import {RxSlash} from "react-icons/rx";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {setSnackbar} from "../../state/snackbarSlice";
-import {useNavigate} from "react-router-dom";
 import {getFollow, getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import {MdOutlineSecurity} from "react-icons/md";
+import FallbackLoader from "../loaders/fallbackLoader";
+import IconButton from "../buttons/iconButton";
+import IconLabelButton from "../buttons/IconLabelButton";
+import {logoutUser} from "../../restservices/authApi";
+import {useNavigate} from "react-router-dom";
+import {HOME_PAGE} from "../../constant/pathConstants";
+import {setSnackbar} from "../../state/snackbarSlice";
+
+const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarProfileContainer'));
+const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
 
 const Sidebar = () => {
 
-    const PROFILE_PATH = '/profile/';
-    const ACTIVITY_PATH = '/activity/';
-    const SECURITY_PATH = '/security';
-    const SETTING_PATH = '/setting';
-
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
-    const {userId} = useSelector((state)=> state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -91,107 +89,71 @@ const Sidebar = () => {
         };
     }, [isSearchBarOpen, setIsSearchBarOpen])
 
-    const handlePageNavigation = (page, route) => {
-        if (window.location.pathname.startsWith(page) || window.location.pathname === page) {
-            const snackbarData = {
+    const handleLogout = () => {
+        logoutUser()
+            .then((response)=> {
+                navigate(HOME_PAGE, {
+                    replace: true
+                });
+                window.location.reload();
+            }).catch((error)=> {
+            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+            const snackBarData = {
                 isSnackbar: true,
-                message: 'You are currently on selected page',
-                snackbarType: 'Warning'
-            };
-            dispatch(setSnackbar(snackbarData))
-        } else {
-            navigate(route);
-        }
+                message: message,
+                snackbarType: 'Error'
+            }
+            dispatch(setSnackbar(snackBarData))
+        })
     }
 
     return (
         <>
             <Wrapper>
-                <ProfileContainer>
-                    <img
-                        src={profileImage ? profileImage : bloggios_logo}
-                        alt={name}
-                        height={'44px'}
-                        style={{
-                            borderRadius: '50%',
-                            height: '44px',
-                            width: '44px',
-                            aspectRatio: '1/1'
-                        }}
-                    />
-                    <ColumnWrapper>
-                        <NameSpan>{name}</NameSpan>
-                        <EmailSpan>{email}</EmailSpan>
-                    </ColumnWrapper>
-                </ProfileContainer>
+                <div style={{
+                    width: '100%'
+                }}>
+                    <Suspense fallback={<FallbackLoader height={'160px'} width={'100%'} />}>
+                        <MemoizedSidebarProfileContainer
+                            profileImage={profileImage}
+                            name={name}
+                            email={email}
+                        />
+                    </Suspense>
 
-                <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
-                    <IoIosSearch fontSize={'16px'} />
-                    <span>Explore Bloggios</span>
-                    <SearchButton><RxSlash /></SearchButton>
-                </SearchBarInput>
+                    <SearchBarInput onClick={() => setIsSearchBarOpen(!isSearchBarOpen)}>
+                        <IoIosSearch fontSize={'16px'}/>
+                        <span>Explore Bloggios</span>
+                        <SearchButton><RxSlash/></SearchButton>
+                    </SearchBarInput>
 
-                <Divider verticalSpacing={'40px'}/>
+                    <div style={{
+                        width: '100%',
+                        border: '1px dashed rgba(255, 255, 255, 0.2)',
+                        margin: '20px 0'
+                    }}/>
 
-                <Tiles>
-                    {/*{*/}
-                    {/*    icon: <BiHomeAlt2/>,*/}
-                    {/*    path: HOME_PAGE,*/}
-                    {/*    tooltip: 'Home'*/}
-                    {/*},*/}
-                    {/*{*/}
-                    {/*    icon: <CgProfile />,*/}
-                    {/*    path: ,*/}
-                    {/*    tooltip: 'Chats'*/}
-                    {/*},*/}
-                    {/*{*/}
-                    {/*    icon: <IoNotificationsOutline/>,*/}
-                    {/*    path: NOTIFICATIONS_PAGE,*/}
-                    {/*    tooltip: 'Notifications'*/}
-                    {/*},*/}
-                    {/*{*/}
-                    {/*    icon: <VscSettingsGear/>,*/}
-                    {/*    path: SERVICES_PAGE,*/}
-                    {/*    tooltip: 'Services'*/}
-                    {/*},*/}
+                    <Suspense fallback={<FallbackLoader height={'250px'} width={'100%'} />}>
+                        <MemoizedSidebarTiles />
+                    </Suspense>
+                </div>
 
-                    <Tile
-                        active={window.location.pathname.startsWith(PROFILE_PATH)}
-                        onClick={()=> handlePageNavigation(PROFILE_PATH, '/profile/' + userId)}
-                    >
-                        <TileSpan>Profile</TileSpan>
-                        <FaUserAlt />
-                    </Tile>
-
-                    <Tile
-                        active={window.location.pathname.startsWith(ACTIVITY_PATH)}
-                        onClick={()=> handlePageNavigation(ACTIVITY_PATH, '/activity/' + userId)}
-                    >
-                        <TileSpan>Activity</TileSpan>
-                        <FaHistory />
-                    </Tile>
-
-                    <Tile
-                        active={window.location.pathname.startsWith(SECURITY_PATH)}
-                        onClick={()=> handlePageNavigation(SECURITY_PATH, '/security')}
-                    >
-                        <TileSpan>Security</TileSpan>
-                        <MdOutlineSecurity />
-                    </Tile>
-
-                    <Tile
-                        active={window.location.pathname.startsWith(SETTING_PATH)}
-                        onClick={()=> handlePageNavigation(SETTING_PATH, '/setting')}
-                    >
-                        <TileSpan>Setting</TileSpan>
-                        <IoIosSettings />
-                    </Tile>
-                </Tiles>
+                <IconLabelButton
+                    text={'Logout'}
+                    icon={<IoMdLogOut fontSize={'20px'} />}
+                    bgColor={'#1c1b1b'}
+                    fontSize={'14px'}
+                    color={'rgba(255, 255, 255, 0.8)'}
+                    hColor={'rgba(255, 255, 255, 1)'}
+                    hBgColor={'#4258ff'}
+                    padding={'10px 16px'}
+                    onClick={handleLogout}
+                />
             </Wrapper>
 
             <WebSearchBar
                 isOpen={isSearchBarOpen}
-                onClose={()=> setIsSearchBarOpen(false)}
+                onClose={() => setIsSearchBarOpen(false)}
             />
         </>
     );
@@ -199,7 +161,7 @@ const Sidebar = () => {
 
 const Wrapper = styled.div`
     height: 100%;
-    width: 16vw;
+    width: 280px;
     background-color: #0c0c0c;
     display: flex;
     flex-direction: column;
@@ -208,50 +170,7 @@ const Wrapper = styled.div`
     padding: 20px 10px;
     overflow-y: auto;
     gap: 10px;
-`;
-
-const ProfileContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    background-color: #1c1b1b;
-    padding: 7px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1);
-    gap: 10px;
-    align-items: center;
-`;
-
-const ColumnWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 4px;
-`;
-
-const NameSpan = styled.span`
-    font-size: 15px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 1);
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: all 150ms ease;
-`;
-
-const EmailSpan = styled.span`
-    font-size: 12px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.8);
-    width: 160px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: all 150ms ease;
+    justify-content: space-between;
 `;
 
 const SearchBarInput = styled.div`
@@ -297,44 +216,6 @@ const SearchButton = styled.div`
     align-items: center;
     justify-content: center;
     margin-left: auto;
-`;
-
-const Tiles = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 16px;
-    max-height: 70vh;
-`;
-
-const Tile = styled.button`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: ${(props) => (props.active ? 'rgba(66,88,255,0.8)' : '#1c1b1b')};
-    padding: 16px;
-    color: ${(props) => (props.active ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.8)')};
-    border-radius: 10px;
-    outline: none;
-    border: none;
-    font-size: 16px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 250ms ease;
-    
-    &:hover {
-        background-color: #4258ff;
-        color: rgba(255, 255, 255, 1);
-    }
-`;
-
-const TileSpan = styled.span`
-    width: 70%;
-    text-align: left;
-    text-overflow: ellipsis;
-    overflow: hidden;
 `;
 
 const MemoizedSidebar = React.memo(Sidebar);
