@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
@@ -28,15 +28,6 @@ import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import MemoizedCustomNavbar from "../../component/navbars/customNavbar";
-import {useLocation} from "react-router-dom";
-import {
-    CHATS_PAGE,
-    HOME_PAGE,
-    LOGIN_PAGE,
-    NOTIFICATIONS_PAGE, OTP_PAGE,
-    SERVICES_PAGE,
-    SIGNUP_PAGE
-} from "../../constant/pathConstants";
 
 const BloggiosBase = ({
                           children
@@ -86,8 +77,7 @@ const BloggiosBase = ({
 };
 
 BloggiosBase.propTypes = {
-    children: PropTypes.node.isRequired,
-    bar: PropTypes.oneOf(['navbar', 'sidebar', 'none'])
+    children: PropTypes.node.isRequired
 };
 
 BloggiosBase.defaultProps = {

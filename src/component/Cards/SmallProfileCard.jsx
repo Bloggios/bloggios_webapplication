@@ -26,10 +26,12 @@ import {checkFollowing, followUser, unfollowUser} from "../../restservices/follo
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {setIsCreated} from "../../state/isCreatedSlice";
+import {useNavigate} from "react-router-dom";
 
 const SmallProfileCard = ({ bio, name, email, image, userId }) => {
     const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         checkFollowing(userId)
@@ -43,6 +45,7 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
 
     const handleFollowing = useCallback(
         (event) => {
+            event.stopPropagation();
             event.preventDefault();
             setIsFollowing(!isFollowing);
 
@@ -76,26 +79,50 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
     );
 
     return (
-        <Wrapper key={userId}>
-            <RowWrapper>
-                <Avatar size="50px" image={image || bloggios_logo} borderRadius="50%" />
-                <ColumnWrapper>
-                    <NameSpan>{name}</NameSpan>
-                    <EmailSpan>{email}</EmailSpan>
-                </ColumnWrapper>
-            </RowWrapper>
+            <Wrapper onClick={()=> navigate('/profile/' + userId)} key={userId}>
+                <RowWrapper>
+                    <Avatar size="50px" image={image || bloggios_logo} borderRadius="50%" />
+                    <ColumnWrapper>
+                        <NameSpan className={'name-span'}>{name}</NameSpan>
+                        <EmailSpan>{email}</EmailSpan>
+                    </ColumnWrapper>
+                </RowWrapper>
 
-            <BioWrapper>
-                <BioSpan>{bio}</BioSpan>
-            </BioWrapper>
+                <BioWrapper>
+                    <BioSpan>{bio}</BioSpan>
+                </BioWrapper>
 
-            <ButtonsWrapper>
-                <ViewProfile onClick={handleFollowing}>{isFollowing ? 'Unfollow' : 'Follow'}</ViewProfile>
-                <Message>Message</Message>
-            </ButtonsWrapper>
-        </Wrapper>
+                <ButtonsWrapper>
+                    <ViewProfile onClick={handleFollowing}>{isFollowing ? 'Unfollow' : 'Follow'}</ViewProfile>
+                    <Message>Message</Message>
+                </ButtonsWrapper>
+            </Wrapper>
     );
 };
+
+const NameSpan = styled.span`
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 150ms ease;
+`;
+
+const EmailSpan = styled.span`
+    font-size: 12px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 150ms ease;
+`;
 
 const Wrapper = styled.div`
     display: flex;
@@ -106,7 +133,18 @@ const Wrapper = styled.div`
     border-radius: 20px;
     padding: 10px;
     gap: 14px;
+    cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+
+    &:hover {
+        ${NameSpan} {
+            color: rgba(255, 255, 255, 1);
+        }
+        
+        ${EmailSpan} {
+            color: rgba(255, 255, 255, 0.8);
+        }
+    }
 `;
 
 const RowWrapper = styled.div`
@@ -119,28 +157,6 @@ const ColumnWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-`;
-
-const NameSpan = styled.span`
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.8);
-    width: 160px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-`;
-
-const EmailSpan = styled.span`
-    font-size: 12px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-    width: 160px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 `;
 
 const BioWrapper = styled.div`

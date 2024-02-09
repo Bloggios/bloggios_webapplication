@@ -25,7 +25,6 @@ import App from './App';
 import {Provider} from "react-redux";
 import store from "./state/store";
 import {BrowserRouter} from "react-router-dom";
-import BloggiosBase from "./container/baseContainer/bloggiosBase";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

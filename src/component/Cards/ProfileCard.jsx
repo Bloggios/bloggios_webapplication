@@ -31,9 +31,10 @@ import {authenticatedAxios} from "../../restservices/baseAxios";
 import {ADD_IMAGE_TO_PROFILE} from "../../constant/apiConstants";
 import {getProfile} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
 
 const ProfileCard = ({
                          name,
@@ -47,7 +48,9 @@ const ProfileCard = ({
                      }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const {userId} = useSelector((state)=> state.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -157,6 +160,7 @@ const ProfileCard = ({
                 margin: '25px 0 4px 0'
             }}>
                 <FilledButton
+                    onClick={()=> navigate('/profile/' + userId)}
                     borderRadius={'0 0 16px 16px'}
                 />
             </div>

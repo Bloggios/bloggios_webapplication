@@ -18,37 +18,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import React from 'react';
+import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
 
-const profileSlice = createSlice({
-    name: 'profile',
-    initialState: {
-        isAdded: false,
-        name: null,
-        profileImageUrl: null
-    },
-    reducers: {
-        setProfile: (state, action) => {
-            const { isAdded, name, profileImageUrl, bio, email, profileImage, coverImage, followers, following, userId } = action.payload;
-            state.isAdded = isAdded;
-            state.name = name;
-            state.profileImageUrl = profileImageUrl;
-            state.bio = bio;
-            state.email = email;
-            state.profileImage = profileImage;
-            state.coverImage = coverImage;
-            state.followers = followers;
-            state.following = following;
-            state.userId = userId;
-        },
-        clearProfile: (state, action) => {
-            state.isAdded = false;
-            state.name = null;
-            state.profileImageUrl=  null;
-        }
-    }
-});
+const SecurityPage = () => {
+    return (
+        <BloggiosSidebarBase>
 
-export { profileSlice }
+        </BloggiosSidebarBase>
+    );
+};
 
-export const { setProfile, clearProfile } = profileSlice.actions;
+export default SecurityPage;

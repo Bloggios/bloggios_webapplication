@@ -212,4 +212,4 @@ export const globalSearchList = [
         id: 2,
         label: 'Posts'
     }
-]
+];

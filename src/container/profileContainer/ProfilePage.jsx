@@ -18,15 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
+import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
+import {useParams} from "react-router-dom";
+import styled from "styled-components";
 
 const ProfilePage = () => {
 
+    const {userId} = useParams();
+
     return (
-        <div>
-            Profile Page
-        </div>
+        <BloggiosSidebarBase>
+            <Wrapper>{userId}</Wrapper>
+        </BloggiosSidebarBase>
     );
 };
+
+const Wrapper = styled.div`
+    flex: 1;
+`;
 
 export default ProfilePage;

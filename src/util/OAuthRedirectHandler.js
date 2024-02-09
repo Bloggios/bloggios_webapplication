@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setCredentials} from "../state/authSlice";
 import {setSnackbar} from "../state/snackbarSlice";

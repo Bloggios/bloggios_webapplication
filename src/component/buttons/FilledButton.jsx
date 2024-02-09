@@ -31,6 +31,7 @@ const FilledButton = ({
                           color = 'rgba(255, 255, 255, 0.6)',
                           hoveredColor = 'rgba(255, 255, 255, 0.8)',
                           activeColor = '#e5e5e5',
+                          onClick
                       }) => {
     return (
         <ButtonWrapper
@@ -40,6 +41,7 @@ const FilledButton = ({
                 borderRadius: borderRadius
 
             }}
+            onClick={onClick}
             color={color}
             bgColor={bgColor}
             hoveredBgColor={hoveredBgColor}
@@ -53,24 +55,24 @@ const FilledButton = ({
 };
 
 const ButtonWrapper = styled.button`
-  border: none;
-  outline: none;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 1px;
-  font-size: 14px;
-  color: ${(props)=> props.color};
-  background-color: ${(props)=> props.bgColor};
-  cursor: pointer;
-  
-  &:hover {
-    background-color: ${(props) => props.hoveredBgColor};
-    color: ${(props)=> props.hoveredColor};
-  }
-  
-  &:active {
-    background-color: ${(props)=> props.activeBgColor};
-    color: ${(props)=> props.activeColor};
-  }
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+    font-size: 14px;
+    color: ${(props) => props.color};
+    background-color: ${(props) => props.bgColor};
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${(props) => props.hoveredBgColor};
+        color: ${(props) => props.hoveredColor};
+    }
+
+    &:active {
+        background-color: ${(props) => props.activeBgColor};
+        color: ${(props) => props.activeColor};
+    }
 `;
 
 export default FilledButton;

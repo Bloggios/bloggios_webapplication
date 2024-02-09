@@ -18,14 +18,79 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
+import styled from "styled-components";
+import MemoizedSidebar from "../../component/navbars/Sidebar";
+import {useDispatch, useSelector} from "react-redux";
+import MemoizedLoaderPage from "../../component/loaders/loaderPage";
+import PropTypes from "prop-types";
+import {toast, ToastContainer} from "react-toastify";
+import {clearSnackbar} from "../../state/snackbarSlice";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
-const BloggiosSidebarBase = () => {
+const BloggiosSidebarBase = ({children}) => {
+
+    const {isLoading} = useSelector((state) => state.loading);
+    const {snackbarType, message, isSnackbar} = useSelector((state) => state.snackbar);
+    const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
+
+    const handleSnackbar = useCallback(() => {
+        if (isSnackbar) {
+            const toastFunction = toast[snackbarType.toLowerCase()] || toast;
+            toastFunction(message);
+            dispatch(clearSnackbar());
+        }
+    }, [isSnackbar, snackbarType, message, dispatch]);
+
+    useEffect(() => {
+        handleSnackbar();
+    }, [handleSnackbar]);
+
     return (
-        <div>
-            
-        </div>
+        <AppContainer>
+            <MemoizedSidebar />
+            {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
+            <ToastContainer
+                limit={width > 600 ? 7 : 2}
+                position={width > 600 ? 'bottom-right' : 'bottom-center'}
+                newestOnTop={true}
+                draggableDirection={width > 600 ? 'x' : 'y'}
+                pauseOnHover={true}
+                pauseOnFocusLoss={false}
+                draggable={true}
+                draggablePercent={100}
+                toastStyle={{
+                    boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
+                    fontSize: width > 700 ? '14px' : '12px',
+                    fontFamily: "'Inter', san-serif",
+                    width: width > 500 ? 'auto' : '95%',
+                    margin: '0 auto',
+                    marginBottom: width < 500 && '40px'
+                }}
+            />
+        </AppContainer>
     );
 };
 
+const AppContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: hidden;
+`;
+
+BloggiosSidebarBase.propTypes = {
+    children: PropTypes.node.isRequired
+};
+
 export default BloggiosSidebarBase;
+
+const ChildrenComponent = ({children}) => <>{children}</>;
+
+ChildrenComponent.propTypes = {
+    children: PropTypes.node.isRequired,
+};
