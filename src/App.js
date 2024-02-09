@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import Router from "./util/Router";
 import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
@@ -27,6 +27,16 @@ import LoaderPage from "./component/loaders/loaderPage";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import BloggiosBase from "./container/baseContainer/bloggiosBase";
+import {useLocation} from "react-router-dom";
+import {
+    CHATS_PAGE,
+    HOME_PAGE, LOGIN_PAGE,
+    NOTIFICATIONS_PAGE,
+    OTP_PAGE,
+    PROFILE_ADDITION_INITIAL, PROFILE_PAGE, REPORT_BUG_PAGE,
+    SERVICES_PAGE, SETTING_PAGE, SIGNUP_PAGE, SUPPORT_PAGE
+} from "./constant/pathConstants";
 
 const App = () => {
 

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
@@ -28,13 +28,24 @@ import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import MemoizedCustomNavbar from "../../component/navbars/customNavbar";
+import {useLocation} from "react-router-dom";
+import {
+    CHATS_PAGE,
+    HOME_PAGE,
+    LOGIN_PAGE,
+    NOTIFICATIONS_PAGE, OTP_PAGE,
+    SERVICES_PAGE,
+    SIGNUP_PAGE
+} from "../../constant/pathConstants";
 
-const BloggiosBase = ({ children }) => {
+const BloggiosBase = ({
+                          children
+                      }) => {
 
     const dispatch = useDispatch();
-    const { width } = useWindowDimensions();
-    const { isLoading } = useSelector((state) => state.loading);
-    const { snackbarType, message, isSnackbar } = useSelector((state)=> state.snackbar);
+    const {width} = useWindowDimensions();
+    const {isLoading} = useSelector((state) => state.loading);
+    const {snackbarType, message, isSnackbar} = useSelector((state) => state.snackbar);
 
     const handleSnackbar = useCallback(() => {
         if (isSnackbar) {
@@ -51,7 +62,7 @@ const BloggiosBase = ({ children }) => {
     return (
         <AppContainer>
             <MemoizedCustomNavbar />
-            {isLoading ? <MemoizedLoaderPage /> : <ChildrenComponent>{children}</ChildrenComponent>}
+            {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
                 limit={width > 600 ? 7 : 2}
                 position={width > 600 ? 'bottom-right' : 'bottom-center'}
@@ -76,27 +87,32 @@ const BloggiosBase = ({ children }) => {
 
 BloggiosBase.propTypes = {
     children: PropTypes.node.isRequired,
+    bar: PropTypes.oneOf(['navbar', 'sidebar', 'none'])
 };
+
+BloggiosBase.defaultProps = {
+    bar: 'navbar'
+}
 
 export default BloggiosBase;
 
-const ChildrenComponent = ({ children }) => <>{children}</>;
+const ChildrenComponent = ({children}) => <>{children}</>;
 
 ChildrenComponent.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
 const AppContainer = styled.main`
-  width: 100vw;
-  min-height: 100vh;
-  min-width: 250px;
-  height: auto;
-  overflow-x: hidden;
-  background-color: #121212;
-  color: antiquewhite;
-  -ms-overflow-style: none;
-  
-  &::-webkit-scrollbar {
-    display: none;
-  }
+    width: 100vw;
+    min-height: 100vh;
+    min-width: 250px;
+    height: auto;
+    overflow-x: hidden;
+    background-color: #121212;
+    color: antiquewhite;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;

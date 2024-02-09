@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
 import useSeo from "../../globalseo/useSeo";
 import {useDispatch, useSelector} from "react-redux";
 import {PROFILE_ADDED} from "../../constant/apiConstants";
@@ -29,6 +29,7 @@ import LoaderPage from "../../component/loaders/loaderPage";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {setProfile} from "../../state/profileSlice";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
+import BloggiosBase from "../baseContainer/bloggiosBase";
 
 const UnauthenticatedHomePage = lazy(()=> import('./unauthenticatedHomePage'));
 const AuthenticatedHomePage = lazy(()=> import('./AuthenticatedHomePage'));
@@ -81,11 +82,13 @@ const HomePage = () => {
     if (isChecking) return <LoaderPage />
 
     return (
-        <Suspense fallback={<FallbackLoader width={'100%'} height={'500px'} />}>
-            {
-                isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
-            }
-        </Suspense>
+        <BloggiosBase>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'500px'} />}>
+                {
+                    isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
+                }
+            </Suspense>
+        </BloggiosBase>
     );
 };
 

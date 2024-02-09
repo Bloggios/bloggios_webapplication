@@ -41,6 +41,7 @@ import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {GOOGLE_AUTH_URL} from "../../restservices/baseAxios";
+import BloggiosBase from "../baseContainer/bloggiosBase";
 
 const LoginPage = () => {
 
@@ -150,107 +151,109 @@ const LoginPage = () => {
     }
 
     return (
-        <Wrapper>
-            <LoginMain>
-                <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
-                <TextWrapper>
-                    <Typography
+        <BloggiosBase>
+            <Wrapper>
+                <LoginMain>
+                    <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
+                    <TextWrapper>
+                        <Typography
+                            text={'Login'}
+                            type={'title'}
+                            family={'Inter'}
+                        />
+                    </TextWrapper>
+
+                    <SocialLoginButtonWrapper>
+                        <IconButton
+                            icon={<FcGoogle fontSize={'20px'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Login with Google'}
+                            onClick={openGoogleAuth}
+                        />
+                        <IconButton
+                            icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Login with Facebook'}
+                        />
+                        <IconButton
+                            icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Login with Github'}
+                        />
+                    </SocialLoginButtonWrapper>
+
+                    <DividerWrapper>
+                        <Line/>
+                        <Typography text={'or'} type={'custom'} family={'Inter'} color={'rgba(255, 255, 255, 0.4)'} weight={300}/>
+                        <Line/>
+                    </DividerWrapper>
+
+                    <FieldWrapper>
+                        <TextField
+                            placeholder={'Email*'}
+                            fontSize={'16px'}
+                            padding={'10px 10px'}
+                            background={'rgba(255, 255, 255, 0.1)'}
+                            borderRadius={'7px'}
+                            helperTextAllowed={true}
+                            value={loginData.entryPoint}
+                            onChange={(e) => handleInputChange(e, 'entryPoint')}
+                            isDisabled={buttonLoader}
+                            onKeyDown={handleKeyDown}
+                        />
+                        <TextField
+                            placeholder={'Password*'}
+                            fontSize={'16px'}
+                            padding={'10px 10px'}
+                            background={'rgba(255, 255, 255, 0.1)'}
+                            borderRadius={'7px'}
+                            helperTextAllowed={true}
+                            helperText={helperText.password}
+                            helperTextColor={'rgb(255,51,51)'}
+                            passwordVisibilityIcon={true}
+                            isPassword={true}
+                            maxLength={25}
+                            value={loginData.password}
+                            onChange={(e) => handleInputChange(e, 'password')}
+                            isDisabled={buttonLoader}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </FieldWrapper>
+
+                    <LoaderButton
+                        width={'95%'}
+                        height={'40px'}
+                        borderRadius={'10px'}
+                        isLoading={buttonLoader}
                         text={'Login'}
-                        type={'title'}
-                        family={'Inter'}
-                    />
-                </TextWrapper>
-
-                <SocialLoginButtonWrapper>
-                    <IconButton
-                        icon={<FcGoogle fontSize={'20px'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Login with Google'}
-                        onClick={openGoogleAuth}
-                    />
-                    <IconButton
-                        icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Login with Facebook'}
-                    />
-                    <IconButton
-                        icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Login with Github'}
-                    />
-                </SocialLoginButtonWrapper>
-
-                <DividerWrapper>
-                    <Line/>
-                    <Typography text={'or'} type={'custom'} family={'Inter'} color={'rgba(255, 255, 255, 0.4)'} weight={300}/>
-                    <Line/>
-                </DividerWrapper>
-
-                <FieldWrapper>
-                    <TextField
-                        placeholder={'Email*'}
+                        onClick={handleLogin}
                         fontSize={'16px'}
-                        padding={'10px 10px'}
-                        background={'rgba(255, 255, 255, 0.1)'}
-                        borderRadius={'7px'}
-                        helperTextAllowed={true}
-                        value={loginData.entryPoint}
-                        onChange={(e) => handleInputChange(e, 'entryPoint')}
-                        isDisabled={buttonLoader}
-                        onKeyDown={handleKeyDown}
+                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
+                        border={'1px solid rgba(255, 255, 255, 0.4)'}
+                        color={'rgba(255, 255, 255, 0.8)'}
+                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+                        hoveredColor={'rgba(255, 255, 255, 1)'}
+                        activeColor={'rgba(255, 255, 255, 0.8)'}
+                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
                     />
-                    <TextField
-                        placeholder={'Password*'}
-                        fontSize={'16px'}
-                        padding={'10px 10px'}
-                        background={'rgba(255, 255, 255, 0.1)'}
-                        borderRadius={'7px'}
-                        helperTextAllowed={true}
-                        helperText={helperText.password}
-                        helperTextColor={'rgb(255,51,51)'}
-                        passwordVisibilityIcon={true}
-                        isPassword={true}
-                        maxLength={25}
-                        value={loginData.password}
-                        onChange={(e) => handleInputChange(e, 'password')}
-                        isDisabled={buttonLoader}
-                        onKeyDown={handleKeyDown}
-                    />
-                </FieldWrapper>
 
-                <LoaderButton
-                    width={'95%'}
-                    height={'40px'}
-                    borderRadius={'10px'}
-                    isLoading={buttonLoader}
-                    text={'Login'}
-                    onClick={handleLogin}
-                    fontSize={'16px'}
-                    backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                    border={'1px solid rgba(255, 255, 255, 0.4)'}
-                    color={'rgba(255, 255, 255, 0.8)'}
-                    hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                    hoveredColor={'rgba(255, 255, 255, 1)'}
-                    activeColor={'rgba(255, 255, 255, 0.8)'}
-                    activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                />
+                    <Divider verticalSpacing={'10px'} />
 
-                <Divider verticalSpacing={'10px'} />
-
-                <CreateAccount onClick={()=> navigate(SIGNUP_PAGE)}>
-                    Create Account
-                </CreateAccount>
-            </LoginMain>
-        </Wrapper>
+                    <CreateAccount onClick={()=> navigate(SIGNUP_PAGE)}>
+                        Create Account
+                    </CreateAccount>
+                </LoginMain>
+            </Wrapper>
+        </BloggiosBase>
     );
 };
 

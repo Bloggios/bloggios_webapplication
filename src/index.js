@@ -29,11 +29,9 @@ import BloggiosBase from "./container/baseContainer/bloggiosBase";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-      <BrowserRouter>
-          <BloggiosBase>
-              <App />
-          </BloggiosBase>
-      </BrowserRouter>
-  </Provider>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </Provider>
 );

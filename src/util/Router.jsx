@@ -18,40 +18,53 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} from "../constant/pathConstants";
+import {
+    HOME_PAGE,
+    LOGIN_PAGE,
+    OTP_PAGE,
+    PROFILE_ADDITION_INITIAL,
+    PROFILE_PAGE,
+    SIGNUP_PAGE
+} from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 import ProfilePage from "../container/profileContainer/ProfilePage";
+import BloggiosBase from "../container/baseContainer/bloggiosBase";
 
-const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
-const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
-const SignupPage = lazy(()=> import('../container/userAuthenticationContainer/signUpPage'));
-const OtpPage = lazy(()=> import('../container/userAuthenticationContainer/otpPage'));
-const ProfileAdditionInitial = lazy(()=> import('../container/profileContainer/ProfileAdditionInitial'));
+const HomePage = lazy(() => import('../container/homeContainer/homePage'));
+const LoginPage = lazy(() => import('../container/userAuthenticationContainer/loginPage'));
+const SignupPage = lazy(() => import('../container/userAuthenticationContainer/signUpPage'));
+const OtpPage = lazy(() => import('../container/userAuthenticationContainer/otpPage'));
+const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/ProfileAdditionInitial'));
 
 const Router = () => {
 
-    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {isAuthenticated} = useSelector((state) => state.auth);
+    const [barData, setBarData] = useState('navbar');
+
+    const handleBarData = (data) => {
+        setBarData(data);
+    }
 
     return (
-        <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
-            <Routes>
-                <Route path={HOME_PAGE} element={<HomePage />} />
-                <Route path={LOGIN_PAGE} element={<LoginPage />} />
-                <Route path={SIGNUP_PAGE} element={<SignupPage />} />
-                <Route path={OTP_PAGE} element={<OtpPage />} />
-                <Route path="/oauth2/redirect" Component={OAuthRedirectHandler} />
-                <Route path='/profile' element={<ProfilePage />} />
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                <Routes>
+                    <Route path={HOME_PAGE} element={<HomePage />}/>
+                    <Route path={LOGIN_PAGE} element={<LoginPage/>}/>
+                    <Route path={SIGNUP_PAGE} element={<SignupPage/>}/>
+                    <Route path={OTP_PAGE} element={<OtpPage/>}/>
+                    <Route path="/oauth2/redirect" Component={OAuthRedirectHandler}/>
+                    <Route path={PROFILE_PAGE} element={<ProfilePage />}/>
 
-                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-                    <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial />} />
-                </Route>
-            </Routes>
-        </Suspense>
+                    <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
+                        <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
+                    </Route>
+                </Routes>
+            </Suspense>
     );
 };
 

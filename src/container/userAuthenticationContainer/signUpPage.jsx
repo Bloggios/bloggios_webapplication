@@ -37,6 +37,7 @@ import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
 import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
 import {signupUser} from "../../restservices/authApi";
+import BloggiosBase from "../baseContainer/bloggiosBase";
 
 const SignUpPage = () => {
 
@@ -153,111 +154,113 @@ const SignUpPage = () => {
 
 
     return (
-        <Wrapper>
-            <SignupMain>
-                <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
-                <TextWrapper>
-                    <Typography
-                        text={'Create Account'}
-                        type={'title'}
-                        family={'Inter'}
-                    />
-                </TextWrapper>
+        <BloggiosBase>
+            <Wrapper>
+                <SignupMain>
+                    <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
+                    <TextWrapper>
+                        <Typography
+                            text={'Create Account'}
+                            type={'title'}
+                            family={'Inter'}
+                        />
+                    </TextWrapper>
 
-                <SocialLoginButtonWrapper>
-                    <IconButton
-                        icon={<FcGoogle fontSize={'20px'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Signup with Google'}
-                    />
-                    <IconButton
-                        icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Signup with Facebook'}
-                    />
-                    <IconButton
-                        icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}
-                        background={'#e5e5e5'}
-                        hoveredBackgroundColor={'#edf7ff'}
-                        activeBackgroundColor={'#e5e5e5'}
-                        isTooltipAllowed={true}
-                        tooltip={'Signup with Github'}
-                    />
-                </SocialLoginButtonWrapper>
+                    <SocialLoginButtonWrapper>
+                        <IconButton
+                            icon={<FcGoogle fontSize={'20px'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Signup with Google'}
+                        />
+                        <IconButton
+                            icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Signup with Facebook'}
+                        />
+                        <IconButton
+                            icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}
+                            background={'#e5e5e5'}
+                            hoveredBackgroundColor={'#edf7ff'}
+                            activeBackgroundColor={'#e5e5e5'}
+                            isTooltipAllowed={true}
+                            tooltip={'Signup with Github'}
+                        />
+                    </SocialLoginButtonWrapper>
 
-                <DividerWrapper>
-                    <Line/>
-                    <Typography text={'OR'} type={'custom'} color={'rgba(255, 255, 255, 0.4)'} weight={100}/>
-                    <Line/>
-                </DividerWrapper>
+                    <DividerWrapper>
+                        <Line/>
+                        <Typography text={'OR'} type={'custom'} color={'rgba(255, 255, 255, 0.4)'} weight={100}/>
+                        <Line/>
+                    </DividerWrapper>
 
-                <FieldWrapper>
-                    <TextField
-                        placeholder={'Email*'}
+                    <FieldWrapper>
+                        <TextField
+                            placeholder={'Email*'}
+                            fontSize={'16px'}
+                            padding={'10px 10px'}
+                            background={'rgba(255, 255, 255, 0.1)'}
+                            borderRadius={'7px'}
+                            helperTextAllowed={true}
+                            helperText={helperText.email}
+                            value={signupData.email}
+                            onChange={(e) => handleInputChange(e, 'email')}
+                            isDisabled={buttonLoader}
+                            onKeyDown={handleKeyDown}
+                        />
+                        <TextField
+                            placeholder={'Password*'}
+                            fontSize={'16px'}
+                            padding={'10px 10px'}
+                            background={'rgba(255, 255, 255, 0.1)'}
+                            borderRadius={'7px'}
+                            helperTextAllowed={true}
+                            helperText={helperText.password}
+                            passwordVisibilityIcon={true}
+                            isPassword={true}
+                            maxLength={20}
+                            value={signupData.password}
+                            onChange={(e) => handleInputChange(e, 'password')}
+                            isDisabled={buttonLoader}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </FieldWrapper>
+
+                    <SignupTextWrapper>
+                        By clicking Sign Up, you agree to our Terms, Privacy Policy and Cookies Policy.
+                    </SignupTextWrapper>
+
+                    <LoaderButton
+                        width={'95%'}
+                        height={'40px'}
+                        borderRadius={'10px'}
+                        isLoading={buttonLoader}
+                        text={'Sign Up'}
                         fontSize={'16px'}
-                        padding={'10px 10px'}
-                        background={'rgba(255, 255, 255, 0.1)'}
-                        borderRadius={'7px'}
-                        helperTextAllowed={true}
-                        helperText={helperText.email}
-                        value={signupData.email}
-                        onChange={(e) => handleInputChange(e, 'email')}
-                        isDisabled={buttonLoader}
-                        onKeyDown={handleKeyDown}
+                        onClick={handleSubmit}
+                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
+                        border={'1px solid rgba(255, 255, 255, 0.4)'}
+                        color={'rgba(255, 255, 255, 0.8)'}
+                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+                        hoveredColor={'rgba(255, 255, 255, 1)'}
+                        activeColor={'rgba(255, 255, 255, 0.8)'}
+                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
                     />
-                    <TextField
-                        placeholder={'Password*'}
-                        fontSize={'16px'}
-                        padding={'10px 10px'}
-                        background={'rgba(255, 255, 255, 0.1)'}
-                        borderRadius={'7px'}
-                        helperTextAllowed={true}
-                        helperText={helperText.password}
-                        passwordVisibilityIcon={true}
-                        isPassword={true}
-                        maxLength={20}
-                        value={signupData.password}
-                        onChange={(e) => handleInputChange(e, 'password')}
-                        isDisabled={buttonLoader}
-                        onKeyDown={handleKeyDown}
-                    />
-                </FieldWrapper>
 
-                <SignupTextWrapper>
-                    By clicking Sign Up, you agree to our Terms, Privacy Policy and Cookies Policy.
-                </SignupTextWrapper>
+                    <Divider verticalSpacing={'10px'} />
 
-                <LoaderButton
-                    width={'95%'}
-                    height={'40px'}
-                    borderRadius={'10px'}
-                    isLoading={buttonLoader}
-                    text={'Sign Up'}
-                    fontSize={'16px'}
-                    onClick={handleSubmit}
-                    backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                    border={'1px solid rgba(255, 255, 255, 0.4)'}
-                    color={'rgba(255, 255, 255, 0.8)'}
-                    hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                    hoveredColor={'rgba(255, 255, 255, 1)'}
-                    activeColor={'rgba(255, 255, 255, 0.8)'}
-                    activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                />
+                    <AlreadyAccount onClick={()=> navigate(LOGIN_PAGE)}>
+                        Already Account ? Login
+                    </AlreadyAccount>
 
-                <Divider verticalSpacing={'10px'} />
-
-                <AlreadyAccount onClick={()=> navigate(LOGIN_PAGE)}>
-                    Already Account ? Login
-                </AlreadyAccount>
-
-            </SignupMain>
-        </Wrapper>
+                </SignupMain>
+            </Wrapper>
+        </BloggiosBase>
     );
 };
 
