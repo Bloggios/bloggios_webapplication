@@ -21,6 +21,7 @@
 import {
     CHATS_PAGE,
     HOME_PAGE,
+    LANDING_PAGE,
     LOGIN_PAGE,
     NOTIFICATIONS_PAGE,
     PROFILE_PAGE,
@@ -43,8 +44,15 @@ import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
 
-export const navItems = [
+export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
+    {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
+    {page: NOTIFICATIONS_PAGE, tooltip: 'Notifications', icon: <IoNotificationsOutline/>},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <VscSettingsGear/>},
+];
+
+export const loggedOutNavItems = [
+    {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
     {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
     {page: NOTIFICATIONS_PAGE, tooltip: 'Notifications', icon: <IoNotificationsOutline/>},
     {page: SERVICES_PAGE, tooltip: 'Services', icon: <VscSettingsGear/>},

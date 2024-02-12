@@ -30,7 +30,7 @@ import IconLabelDropdown from "../dropdowns/IconLabelDropdown";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
-import {getFollow, getProfile} from "../../restservices/profileApi";
+import {getFollow} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
 import WebSearchBar from "../modal/WebSearchBar";
 import {IoIosSearch} from "react-icons/io";
@@ -46,35 +46,6 @@ const CustomNavbar = () => {
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isFollowed} = useSelector((state)=> state.isCreated);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await getProfile();
-                const followResponse = await getFollow();
-                const { data } = response;
-                const followData = followResponse.data;
-                const profileData = {
-                    name: data.name,
-                    isAdded: true,
-                    profileImageUrl: null,
-                    bio: data.bio,
-                    email: data.email,
-                    profileImage: data.profileImage,
-                    coverImage: data.coverImage,
-                    followers: followData.followers,
-                    following: followData.following
-                };
-                dispatch(setProfile(profileData));
-            } catch (error) {
-                setTimeout(fetchProfile, 2000);
-            }
-        };
-
-        if (isAdded) {
-            fetchProfile();
-        }
-    }, [isAdded]);
 
     useEffect(()=> {
         const handleKeyPress = (event) => {

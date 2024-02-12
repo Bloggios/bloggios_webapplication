@@ -18,21 +18,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import styled from "styled-components";
-import {navItems} from "../../constant/listConstants";
+import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants";
+import {useSelector} from "react-redux";
 
 const NavbarItemsMobile = () => {
 
     const navigate = useNavigate();
     const { width } = useWindowDimensions();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
-    return (
-        <Wrapper style={{width: width}}>
-            <ItemsWrapper>
-                {navItems.map((item)=> (
+    const getNavbarItems = useCallback(()=> {
+        return (
+            isAuthenticated ? (
+                loggedInNavItems.map((item)=> (
                     <NavItems
                         key={item.page}
                         onClick={() => navigate(item.page)}
@@ -40,7 +42,25 @@ const NavbarItemsMobile = () => {
                     >
                         {item.icon}
                     </NavItems>
-                ))}
+                ))
+            ) : (
+                loggedOutNavItems.map((item)=> (
+                    <NavItems
+                        key={item.page}
+                        onClick={() => navigate(item.page)}
+                        active={window.location.pathname === item.page}
+                    >
+                        {item.icon}
+                    </NavItems>
+                ))
+            )
+        )
+    }, [isAuthenticated, navigate])
+
+    return (
+        <Wrapper style={{width: width}}>
+            <ItemsWrapper>
+                {getNavbarItems()}
             </ItemsWrapper>
         </Wrapper>
     );

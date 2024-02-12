@@ -34,6 +34,7 @@ import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {authenticatedAxios} from "../../restservices/baseAxios";
 import BloggiosBase from "../baseContainer/bloggiosBase";
+import {fetchProfileAndDispatch} from "../../service/functions";
 
 const ProfileAdditionInitial = () => {
 
@@ -64,10 +65,10 @@ const ProfileAdditionInitial = () => {
             setButtonLoader(false);
             setCurrentStep(1);
         } else {
-            console.log(data);
             authenticatedAxios.post(ADD_PROFILE, data)
                 .then((response)=> {
                     setButtonLoader(false);
+                    fetchProfileAndDispatch(dispatch);
                     navigate(HOME_PAGE, {
                         replace: true
                     });

@@ -18,28 +18,49 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import TooltipWrapper from "../tooltips/tooltipWrapper";
-import {navItems} from "../../constant/listConstants";
+import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const NavbarItems = () => {
 
     const navigate = useNavigate();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+
+    const getNavBarItems = useCallback(()=> {
+        return (
+            isAuthenticated ? (
+                loggedInNavItems.map((item) => (
+                    <TooltipWrapper key={item.page} tooltip={item.tooltip}>
+                        <NavItem
+                            onClick={() => navigate(item.page)}
+                            active={window.location.pathname === item.page}
+                        >
+                            {item.icon}
+                        </NavItem>
+                    </TooltipWrapper>
+                ))
+            ) : (
+                loggedOutNavItems.map((item) => (
+                    <TooltipWrapper key={item.page} tooltip={item.tooltip}>
+                        <NavItem
+                            onClick={() => navigate(item.page)}
+                            active={window.location.pathname === item.page}
+                        >
+                            {item.icon}
+                        </NavItem>
+                    </TooltipWrapper>
+                ))
+            )
+        )
+    }, [isAuthenticated, navigate])
 
     return (
         <ItemsWrapper>
-            {navItems.map((item) => (
-                <TooltipWrapper key={item.page} tooltip={item.tooltip}>
-                    <NavItem
-                        onClick={() => navigate(item.page)}
-                        active={window.location.pathname === item.page}
-                    >
-                        {item.icon}
-                    </NavItem>
-                </TooltipWrapper>
-            ))}
+            {getNavBarItems()}
         </ItemsWrapper>
     );
 };

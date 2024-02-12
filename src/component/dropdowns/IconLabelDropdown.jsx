@@ -23,10 +23,8 @@ import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import {BsChevronDown} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
-import {logoutUser} from "../../restservices/authApi";
-import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
-import {HOME_PAGE} from "../../constant/pathConstants";
+import {initLogout} from "../../service/functions";
 
 const IconLabelDropdown = ({
                                height,
@@ -62,21 +60,7 @@ const IconLabelDropdown = ({
 
     const handleNavigation = (item) => {
         if (item.label === 'Logout') {
-            logoutUser()
-                .then((response)=> {
-                    navigate(HOME_PAGE, {
-                        replace: true
-                    });
-                    window.location.reload();
-                }).catch((error)=> {
-                const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-                const snackBarData = {
-                    isSnackbar: true,
-                    message: message,
-                    snackbarType: 'Error'
-                }
-                dispatch(setSnackbar(snackBarData))
-            })
+            initLogout(navigate, dispatch)
         } else {
             navigate(item.path);
         }

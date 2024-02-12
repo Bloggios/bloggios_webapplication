@@ -19,6 +19,12 @@
  */
 
 import {setSnackbar} from "../state/snackbarSlice";
+import {gatewayAxios} from "../restservices/baseAxios";
+import {PROFILE_ADDED} from "../constant/apiConstants";
+import {setProfile} from "../state/profileSlice";
+import {HOME_PAGE, LANDING_PAGE, PROFILE_ADDITION_INITIAL} from "../constant/pathConstants";
+import {getFollow, getProfile} from "../restservices/profileApi";
+import {logoutUser} from "../restservices/authApi";
 
 export const dispatchError = (dispatch, error) => {
     if (error.response.status === 400 || error.response.status === 401) {
@@ -38,4 +44,79 @@ export const dispatchError = (dispatch, error) => {
         };
         dispatch(setSnackbar(snackBarData));
     }
+}
+
+export const checkIsProfileAdded = (accessToken, dispatch, navigate) => {
+    gatewayAxios.get(PROFILE_ADDED, {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        }
+    })
+        .then((response) => {
+            if (response?.data?.exist === true && response?.data?.event === 'profile') {
+                dispatch(setProfile({isAdded: true}))
+                fetchProfileAndDispatch(dispatch);
+            } else {
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: 'Please add you Profile Data first',
+                    snackbarType: 'Warning'
+                }
+                dispatch(setSnackbar(snackBarData))
+                navigate(PROFILE_ADDITION_INITIAL);
+            }
+        }).catch((error) => {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+        navigate(HOME_PAGE, {
+            replace: true
+        })
+    })
+}
+
+export const fetchProfileAndDispatch = async (dispatch) => {
+    try {
+        const response = await getProfile();
+        const followResponse = await getFollow();
+        const { data } = response;
+        const followData = followResponse.data;
+        const profileData = {
+            name: data.name,
+            isAdded: true,
+            profileImageUrl: null,
+            bio: data.bio,
+            email: data.email,
+            userId: data.userId,
+            profileImage: data.profileImage,
+            coverImage: data.coverImage,
+            followers: followData.followers,
+            following: followData.following
+        };
+        dispatch(setProfile(profileData));
+    } catch (error) {
+        setTimeout(fetchProfileAndDispatch, 2000);
+    }
+};
+
+export const initLogout = (navigate, dispatch) => {
+    logoutUser()
+        .then((response)=> {
+            navigate(LANDING_PAGE, {
+                replace: true
+            });
+            window.location.reload();
+        }).catch((error)=> {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+    })
 }
