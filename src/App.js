@@ -28,11 +28,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import {useNavigate} from "react-router-dom";
-import {HOME_PAGE, PROFILE_ADDITION_INITIAL} from "./constant/pathConstants";
-import {PROFILE_ADDED} from "./constant/apiConstants";
-import {setProfile} from "./state/profileSlice";
-import {setSnackbar} from "./state/snackbarSlice";
 import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
+import {checkIsProfileAdded} from "./service/functions";
 
 const App = () => {
 
@@ -56,13 +53,18 @@ const App = () => {
             .then((response) => {
                 if (isMounted) {
                     clearTimeout(timeoutId); // Clear the timeout if the response is received
-                    setIsChecking(false);
                     const credentials = {
                         accessToken: response.data.accessToken,
                         userId: response.data.userId,
                         isAuthenticated: true
                     };
                     dispatch(setCredentials(credentials));
+                    checkIsProfileAdded(
+                        credentials.accessToken,
+                        dispatch,
+                        navigate
+                    )
+                    setIsChecking(false);
                 }
             })
             .catch((error) => {
@@ -79,45 +81,7 @@ const App = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (!isChecking) {
-            if (isAuthenticated && !isAdded) {
-                authenticatedAxios.get(PROFILE_ADDED)
-                    .then((response)=> {
-                        if (response?.data?.exist === true && response?.data?.event === 'profile') {
-                            dispatch(setProfile({isAdded: true}))
-                            setIsChecking(false);
-                            setIsProfileFetching(false);
-                        } else {
-                            setIsChecking(false);
-                            setIsProfileFetching(false);
-                            const snackBarData = {
-                                isSnackbar: true,
-                                message: 'Please add you Profile Data first',
-                                snackbarType: 'Warning'
-                            }
-                            dispatch(setSnackbar(snackBarData))
-                            navigate(PROFILE_ADDITION_INITIAL);
-                        }
-                    }).catch((error)=> {
-                    const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-                    const snackBarData = {
-                        isSnackbar: true,
-                        message: message,
-                        snackbarType: 'Error'
-                    }
-                    dispatch(setSnackbar(snackBarData))
-                    navigate(HOME_PAGE, {
-                        replace: true
-                    })
-                })
-            } else {
-                setIsProfileFetching(false)
-            }
-        }
-    }, [isChecking]);
-
-    if (isProfileFetching) return <LoaderPage/>
+    if (isChecking) return <LoaderPage/>
 
     return (
         <Router/>

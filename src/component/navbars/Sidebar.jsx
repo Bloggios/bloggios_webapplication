@@ -24,15 +24,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import WebSearchBar from "../modal/WebSearchBar";
 import {RxSlash} from "react-icons/rx";
-import {getFollow, getProfile} from "../../restservices/profileApi";
-import {setProfile} from "../../state/profileSlice";
 import FallbackLoader from "../loaders/fallbackLoader";
-import IconButton from "../buttons/iconButton";
 import IconLabelButton from "../buttons/IconLabelButton";
-import {logoutUser} from "../../restservices/authApi";
 import {useNavigate} from "react-router-dom";
-import {HOME_PAGE} from "../../constant/pathConstants";
-import {setSnackbar} from "../../state/snackbarSlice";
+import {initLogout} from "../../service/functions";
 
 const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarProfileContainer'));
 const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
@@ -43,36 +38,6 @@ const Sidebar = () => {
     const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await getProfile();
-                const followResponse = await getFollow();
-                const { data } = response;
-                const followData = followResponse.data;
-                const profileData = {
-                    userId: data.userId,
-                    name: data.name,
-                    isAdded: true,
-                    profileImageUrl: null,
-                    bio: data.bio,
-                    email: data.email,
-                    profileImage: data.profileImage,
-                    coverImage: data.coverImage,
-                    followers: followData.followers,
-                    following: followData.following
-                };
-                dispatch(setProfile(profileData));
-            } catch (error) {
-                setTimeout(fetchProfile, 2000);
-            }
-        };
-
-        if (isAdded) {
-            fetchProfile();
-        }
-    }, [isAdded]);
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
@@ -90,21 +55,7 @@ const Sidebar = () => {
     }, [isSearchBarOpen, setIsSearchBarOpen])
 
     const handleLogout = () => {
-        logoutUser()
-            .then((response)=> {
-                navigate(HOME_PAGE, {
-                    replace: true
-                });
-                window.location.reload();
-            }).catch((error)=> {
-            const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
-            const snackBarData = {
-                isSnackbar: true,
-                message: message,
-                snackbarType: 'Error'
-            }
-            dispatch(setSnackbar(snackBarData))
-        })
+        initLogout(navigate, dispatch)
     }
 
     return (

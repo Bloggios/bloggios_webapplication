@@ -30,6 +30,7 @@ import {postList} from "../../restservices/postApi";
 import {debounce} from "lodash";
 import {dispatchError} from "../../service/functions";
 import {clearPostCreated} from "../../state/postCreateSlice";
+import BloggiosBase from "../baseContainer/bloggiosBase";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
@@ -39,7 +40,7 @@ const ProfileSuggestions = lazy(()=> import('../../component/Cards/ProfileSugges
 
 const AuthenticatedHomePage = () => {
 
-    useSeo('authHomePage')
+    useSeo('authHomePage');
 
     const {width} = useWindowDimensions();
     const {name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
@@ -105,41 +106,43 @@ const AuthenticatedHomePage = () => {
     }, []);
 
     return (
-        <Wrapper>
-            {width > 750 && (
-                <LeftBar ref={leftSectionRef}>
-                    <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width}/>}>
-                        <ProfileCard
-                            name={name}
-                            bio={bio}
-                            coverImage={coverImage ? coverImage : 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-                            profileImage={profileImage ? profileImage : bloggios_logo}
-                            followers={followers}
-                            following={following}
-                            email={email}
-                        />
-                    </Suspense>
-                </LeftBar>
-            )}
-            {width > 1200 && (
-                <RightBar ref={rightSectionRef}>
-                    <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
-                        <ProfileSuggestions />
-                    </Suspense>
-                </RightBar>
-            )}
-            <MiddleBar ref={middleSectionRef}>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
-                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
-                        <CreatePostMobile/>}
-                </Suspense>
-                {postListData && (
-                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                        <PostList postList={postListData} postListLoading={postListLoading}/>
-                    </Suspense>
+        <BloggiosBase>
+            <Wrapper>
+                {width > 750 && (
+                    <LeftBar ref={leftSectionRef}>
+                        <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width}/>}>
+                            <ProfileCard
+                                name={name}
+                                bio={bio}
+                                coverImage={coverImage ? coverImage : 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+                                profileImage={profileImage ? profileImage : bloggios_logo}
+                                followers={followers}
+                                following={following}
+                                email={email}
+                            />
+                        </Suspense>
+                    </LeftBar>
                 )}
-            </MiddleBar>
-        </Wrapper>
+                {width > 1200 && (
+                    <RightBar ref={rightSectionRef}>
+                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
+                            <ProfileSuggestions />
+                        </Suspense>
+                    </RightBar>
+                )}
+                <MiddleBar ref={middleSectionRef}>
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
+                        {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
+                            <CreatePostMobile/>}
+                    </Suspense>
+                    {postListData && (
+                        <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                            <PostList postList={postListData} postListLoading={postListLoading}/>
+                        </Suspense>
+                    )}
+                </MiddleBar>
+            </Wrapper>
+        </BloggiosBase>
     );
 };
 

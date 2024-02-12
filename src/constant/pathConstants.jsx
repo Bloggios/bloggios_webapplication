@@ -18,7 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/';
+export const HOME_PAGE = '/home';
+export const LANDING_PAGE = '/'
 export const CHATS_PAGE = '/chats';
 export const NOTIFICATIONS_PAGE = '/notifications';
 export const SERVICES_PAGE = '/services';
