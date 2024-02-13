@@ -107,17 +107,6 @@ const CreatePostMobile = () => {
             });
     }
 
-    const handleScroll = (direction) => {
-        const scrollContainer = document.getElementById('suggestionWrapper');
-        const scrollAmount = 150; // You can adjust this value as needed
-
-        if (direction === 'left') {
-            scrollContainer.scrollLeft -= scrollAmount;
-        } else if (direction === 'right') {
-            scrollContainer.scrollLeft += scrollAmount;
-        }
-    };
-
     const validatePostData = () => {
         if (inputValue === '') {
             const message = "There is nothing to share in your Post";

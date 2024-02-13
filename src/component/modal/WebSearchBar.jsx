@@ -583,4 +583,6 @@ const ListWrapper = styled.div`
     gap: 10px;
 `;
 
-export default WebSearchBar;
+const MemoizedWebSearchBar = React.memo(WebSearchBar);
+
+export default MemoizedWebSearchBar;

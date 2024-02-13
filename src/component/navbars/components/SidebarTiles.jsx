@@ -28,6 +28,7 @@ import {IoIosSettings} from "react-icons/io";
 import styled from "styled-components";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const SidebarTiles = () => {
 
@@ -38,9 +39,13 @@ const SidebarTiles = () => {
 
     const {userId} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
+    const {height} = useWindowDimensions();
 
     return (
-        <Tiles>
+        <Tiles style={{
+            paddingBottom: height < 700 ? '16px' : 0,
+            borderBottom: height < 700 ? '1px dashed rgba(255,255,255,0.2)' : '1px solid transparent'
+        }}>
 
             <Tile
                 active={window.location.pathname === HOME_PAGE}
@@ -112,7 +117,6 @@ const Tiles = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 16px;
-    max-height: 70vh;
 `;
 
 const Tile = styled.button`
@@ -120,7 +124,7 @@ const Tile = styled.button`
     display: flex;
     align-items: center;
     gap: 16px;
-    background-color: ${(props) => (props.active ? 'rgba(66,88,255,0.8)' : '#1c1b1b')};
+    background-color: ${(props) => (props.active ? 'rgba(66,88,255,0.8)' : 'transparent')};
     padding: 12px 16px;
     color: ${(props) => (props.active ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.8)')};
     border-radius: 10px;

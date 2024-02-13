@@ -27,6 +27,7 @@ import PropTypes from "prop-types";
 import {toast, ToastContainer} from "react-toastify";
 import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import MemoizedSidebarCompressed from "../../component/navbars/SidebarCompressed";
 
 const BloggiosSidebarBase = ({children}) => {
 
@@ -47,9 +48,17 @@ const BloggiosSidebarBase = ({children}) => {
         handleSnackbar();
     }, [handleSnackbar]);
 
+    const getSidebar = useCallback(()=> {
+        if (width > 1200) {
+            return <MemoizedSidebar />
+        } else {
+            return <MemoizedSidebarCompressed />
+        }
+    }, [width])
+
     return (
         <AppContainer>
-            <MemoizedSidebar />
+            {getSidebar()}
             {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
                 limit={width > 600 ? 7 : 2}
@@ -81,6 +90,7 @@ const AppContainer = styled.div`
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;
+    background-color: #1e1e1e;
 `;
 
 BloggiosSidebarBase.propTypes = {

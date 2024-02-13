@@ -11,9 +11,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
@@ -21,18 +21,17 @@
 import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
-import {IoIosSearch, IoMdLogOut} from "react-icons/io";
-import {RxSlash} from "react-icons/rx";
-import FallbackLoader from "../loaders/fallbackLoader";
-import IconLabelButton from "../buttons/IconLabelButton";
 import {useNavigate} from "react-router-dom";
+import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
+import SimpleLoader from "../loaders/simpleLoader";
 import {initLogout} from "../../service/functions";
+import {IoIosSearch, IoMdLogOut} from "react-icons/io";
+import FallbackLoader from "../loaders/fallbackLoader";
 
-const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarProfileContainer'));
-const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
+const MemoizedCompressedSidebarTile = lazy(()=> import('./components/CompressedSidebarTile'));
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
-const Sidebar = () => {
+const SidebarCompressed = () => {
 
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
@@ -62,45 +61,26 @@ const Sidebar = () => {
         <>
             <Wrapper>
                 <SideBarRoundedWrapper>
-                    <div style={{
-                        width: '100%'
-                    }}>
-                        <Suspense fallback={<FallbackLoader height={'160px'} width={'100%'}/>}>
-                            <MemoizedSidebarProfileContainer
-                                profileImage={profileImage}
-                                name={name}
-                                email={email}
-                            />
+                    <SidebarPrimarySection>
+                        <UserAvatar src={profileImage ? profileImage : bloggios_logo} alt={name} />
+                        <SearchBarIcon onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
+                            <IoIosSearch/>
+                        </SearchBarIcon>
+                        <Suspense fallback={<SimpleLoader size={'4px'} />}>
+                            <MemoizedCompressedSidebarTile />
                         </Suspense>
+                    </SidebarPrimarySection>
 
-                        <SearchBarInput onClick={() => setIsSearchBarOpen(!isSearchBarOpen)}>
-                            <IoIosSearch fontSize={'16px'}/>
-                            <span>Explore Bloggios</span>
-                            <SearchButton><RxSlash/></SearchButton>
-                        </SearchBarInput>
-
-                        <div style={{
-                            width: '100%',
-                            border: '1px dashed rgba(255, 255, 255, 0.2)',
-                            margin: '20px 0'
-                        }}/>
-
-                        <Suspense fallback={<FallbackLoader height={'250px'} width={'100%'}/>}>
-                            <MemoizedSidebarTiles/>
-                        </Suspense>
-                    </div>
-
-                    <IconLabelButton
-                        text={'Logout'}
-                        icon={<IoMdLogOut fontSize={'20px'} color={'rgb(215,59,59)'}/>}
-                        bgColor={'#1c1b1b'}
-                        fontSize={'14px'}
-                        color={'rgba(255, 255, 255, 0.8)'}
-                        hColor={'rgba(255, 255, 255, 1)'}
-                        hBgColor={'#4258ff'}
-                        padding={'10px 16px'}
-                        onClick={handleLogout}
-                    />
+                    <TileWrapper>
+                        <TileIconButton
+                            onClick={handleLogout}
+                        >
+                            <IoMdLogOut />
+                        </TileIconButton>
+                        <TooltipContent>
+                            Logout
+                        </TooltipContent>
+                    </TileWrapper>
                 </SideBarRoundedWrapper>
             </Wrapper>
 
@@ -116,8 +96,9 @@ const Sidebar = () => {
 
 const Wrapper = styled.div`
     height: 100%;
+    width: auto;
     background-color: transparent;
-    padding: 20px;
+    padding: 20px 10px;
 `;
 
 const SideBarRoundedWrapper = styled.div`
@@ -135,25 +116,28 @@ const SideBarRoundedWrapper = styled.div`
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 `;
 
-const SearchBarInput = styled.div`
-    padding: 7px 10px;
-    width: 100%;
-    outline: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 1px;
-    font-weight: 200;
-    background-color: #272727;
-    color: rgba(255, 255, 255, 0.6);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
+const UserAvatar = styled.img`
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
     cursor: pointer;
-    margin-top: 20px;
+`;
+
+const SearchBarIcon = styled.button`
+    outline: none;
+    background-color: #272727;
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
     border: 1px solid transparent;
     box-shadow: inset 0 0 2px transparent;
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
 
     &:focus {
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -164,22 +148,79 @@ const SearchBarInput = styled.div`
     &:hover {
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.8);
     }
 `;
 
-const SearchButton = styled.div`
-    height: 22px;
-    aspect-ratio: 1/1;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
+const SidebarPrimarySection = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    flex-direction: column;
+`;
+
+const TooltipContent = styled.span`
+    background-color: #4258ff;
+    color: #f5f5f5;
+    text-align: center;
+    border-radius: 6px;
+    padding: 6px 12px;
+    position: absolute;
+    z-index: 1;
+    left: 80px;
+    opacity: 0;
+    visibility: hidden;
+
+    &::after {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        margin-left: -10px;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #4258ff transparent transparent;
+    }
+`;
+
+const TileWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: auto;
+
+    &:hover {
+        ${TooltipContent} {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    }
+`;
+
+const TileIconButton = styled.button`
+    height: 40px;
+    width: 40px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: auto;
+    color: #e5e5e5;
+    cursor: pointer;
+    font-size: 20px;
+    color: rgb(215,59,59);
+    transition: all 250ms ease;
+
+    &:hover {
+        background-color: #4258ff;
+        color: rgba(255, 255, 255, 1);
+    }
 `;
 
-const MemoizedSidebar = React.memo(Sidebar);
+const MemoizedSidebarCompressed = React.memo(SidebarCompressed);
 
-export default MemoizedSidebar;
+export default MemoizedSidebarCompressed;

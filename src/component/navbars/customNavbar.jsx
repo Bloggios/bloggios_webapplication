@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
@@ -32,10 +32,12 @@ import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
 import {getFollow} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import WebSearchBar from "../modal/WebSearchBar";
 import {IoIosSearch} from "react-icons/io";
 import {clearIsCreated} from "../../state/isCreatedSlice";
 import {RxSlash} from "react-icons/rx";
+import FallbackLoader from "../loaders/fallbackLoader";
+
+const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
 const CustomNavbar = () => {
 
@@ -114,10 +116,12 @@ const CustomNavbar = () => {
             </NavbarWrapper>
             {width <= 700 && <MemoizedNavbarItemsMobile />}
 
-            <WebSearchBar
-                isOpen={isSearchBarOpen}
-                onClose={()=> setIsSearchBarOpen(false)}
-            />
+            <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
+                <MemoizedWebSearchBar
+                    isOpen={isSearchBarOpen}
+                    onClose={() => setIsSearchBarOpen(false)}
+                />
+            </Suspense>
         </>
     );
 };

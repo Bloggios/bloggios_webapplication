@@ -18,39 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
-import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
-import {useParams} from "react-router-dom";
-import styled from "styled-components";
-import {useDispatch} from "react-redux";
-import {clearLoading, initiateLoading} from "../../state/loadingSlice";
-import {uuidValidator} from "../../util/ComponentValidators";
+import {UUID_REGEX} from "../constant/ServiceConstants";
 
-const ProfilePage = () => {
-
-    const {userId} = useParams();
-    const dispatch = useDispatch();
-    const [validUuid, setValidUuid] = useState(true);
-
-    useLayoutEffect(()=> {
-        dispatch(initiateLoading(true));
-        const isValidUuid = uuidValidator(userId);
-        if (!isValidUuid) {
-            dispatch(clearLoading());
-            setValidUuid(false);
-        } else {
-            dispatch(clearLoading())
-        }
-    }, [userId])
-
-    return (
-        <BloggiosSidebarBase>
-        </BloggiosSidebarBase>
-    );
-};
-
-const Wrapper = styled.div`
-    flex: 1;
-`;
-
-export default ProfilePage;
+export const uuidValidator = (uuid) => {
+    return UUID_REGEX.test(uuid);
+}
