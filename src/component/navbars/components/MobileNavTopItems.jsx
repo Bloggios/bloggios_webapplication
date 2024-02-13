@@ -18,40 +18,63 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
-import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
-import {useParams} from "react-router-dom";
+import React from 'react';
 import styled from "styled-components";
-import {useDispatch} from "react-redux";
-import {clearLoading, initiateLoading} from "../../state/loadingSlice";
-import {uuidValidator} from "../../util/ComponentValidators";
+import Avatar from "../../avatars/avatar";
+import bloggios_logo from '../../../asset/svg/bg-accent_rounded.svg'
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {IoIosSearch} from "react-icons/io";
 
-const ProfilePage = () => {
+const MobileNavTopItems = () => {
 
-    const {userId} = useParams();
-    const dispatch = useDispatch();
-    const [validUuid, setValidUuid] = useState(true);
-
-    useLayoutEffect(()=> {
-        dispatch(initiateLoading(true));
-        const isValidUuid = uuidValidator(userId);
-        if (!isValidUuid) {
-            dispatch(clearLoading());
-            setValidUuid(false);
-        } else {
-            dispatch(clearLoading())
-        }
-    }, [userId])
+    const {width} = useWindowDimensions();
 
     return (
-        <BloggiosSidebarBase>
-            {userId}
-        </BloggiosSidebarBase>
+        <Wrapper>
+            <Avatar
+                size={width > 380 ? '50px' : '40px'}
+                borderRadius={'50%'}
+                image={bloggios_logo}
+            />
+            <SearchIconWrapper>
+                <IoIosSearch />
+            </SearchIconWrapper>
+        </Wrapper>
     );
 };
 
-const Wrapper = styled.div`
-    flex: 1;
+const Wrapper = styled.nav`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    padding: 2vw;
 `;
 
-export default ProfilePage;
+const SearchIconWrapper = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #4258ff;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    touch-action: manipulation;
+    
+    &:active {
+        color: rgba(255, 255, 255, 1);
+    }
+    
+    @media (max-width: 380px) {
+        height: 30px;
+        width: 30px;
+        font-size: 18px;
+    }
+`;
+
+const MemoizedMobileNavTopItems = React.memo(MobileNavTopItems);
+export default MemoizedMobileNavTopItems;

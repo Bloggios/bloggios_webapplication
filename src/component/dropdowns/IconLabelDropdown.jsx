@@ -81,11 +81,11 @@ const IconLabelDropdown = ({
                 border: isShown ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid transparent'
             }}
         >
-            <PopoverAvatar source={source} size="34px"/>
+            <PopoverAvatar source={source} size="34px" borderRadius={'50%'}/>
             <DropdownText style={{
                 fontSize: fontSize
             }}>{text}</DropdownText>
-            <BsChevronDown fontSize={'18px'} />
+            <BsChevronDown fontSize={'18px'} style={{marginLeft: 'auto'}} />
 
             <DropdownItems style={{
                 visibility: isShown ? 'visible' : 'hidden',
@@ -104,28 +104,29 @@ const IconLabelDropdown = ({
 };
 
 const DropdownWrapper = styled.button`
-  outline: none;
-  border: 1px solid transparent;
-  transition: all 150ms ease;
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  user-select: none;
-  padding: 0 7px;
-  gap: 10px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  letter-spacing: 1px;
-  z-index: 5;
+    outline: none;
+    border: 1px solid transparent;
+    transition: all 150ms ease;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    padding: 0 7px;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+    z-index: 5;
+    min-width: 160px;
 
-  &:hover {
-    border: 1px solid rgba(255, 255, 255, 0.6);
-  }
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
 
-  &:active {
-    border: 1px solid rgba(255, 255, 255, 0.4);
-  }
+    &:active {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
 `;
 
 const DropdownText = styled.span`

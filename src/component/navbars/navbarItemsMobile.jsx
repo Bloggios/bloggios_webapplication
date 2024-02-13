@@ -24,6 +24,7 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import styled from "styled-components";
 import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants";
 import {useSelector} from "react-redux";
+import MemoizedLoggedInMobileNavItems from "./components/LoggedInMobileNavItems";
 
 const NavbarItemsMobile = () => {
 
@@ -34,34 +35,26 @@ const NavbarItemsMobile = () => {
     const getNavbarItems = useCallback(()=> {
         return (
             isAuthenticated ? (
-                loggedInNavItems.map((item)=> (
-                    <NavItems
-                        key={item.page}
-                        onClick={() => navigate(item.page)}
-                        active={window.location.pathname === item.page}
-                    >
-                        {item.icon}
-                    </NavItems>
-                ))
+                <MemoizedLoggedInMobileNavItems />
             ) : (
-                loggedOutNavItems.map((item)=> (
-                    <NavItems
-                        key={item.page}
-                        onClick={() => navigate(item.page)}
-                        active={window.location.pathname === item.page}
-                    >
-                        {item.icon}
-                    </NavItems>
-                ))
+                <ItemsWrapper>
+                    {loggedOutNavItems.map((item)=> (
+                        <NavItems
+                            key={item.page}
+                            onClick={() => navigate(item.page)}
+                            active={window.location.pathname === item.page}
+                        >
+                            {item.icon}
+                        </NavItems>
+                    ))}
+                </ItemsWrapper>
             )
         )
     }, [isAuthenticated, navigate])
 
     return (
         <Wrapper style={{width: width}}>
-            <ItemsWrapper>
                 {getNavbarItems()}
-            </ItemsWrapper>
         </Wrapper>
     );
 };

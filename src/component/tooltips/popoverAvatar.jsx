@@ -61,44 +61,48 @@ const PopoverAvatar = ({
                 cursor: cursor
             }}
         >
-            <img src={source} alt="Bloggios" height="100%" style={{ borderRadius, backgroundColor: "transparent" }} />
+            <img src={source} alt="Bloggios" height={size} style={{
+                borderRadius: borderRadius,
+                aspectRatio: '1/1',
+                backgroundColor: "transparent"
+            }} />
         </PopoverWrapper>
     );
 };
 
 const PopoverWrapper = styled.button`
-  height: ${(props) => props.size};
-  width: ${(props) => props.size};
-  outline: none;
-  border: none;
-  padding: 0;
-  position: relative;
-  background-color: transparent;
+    height: ${(props) => props.size};
+    width: ${(props) => props.size};
+    outline: none;
+    border: none;
+    padding: 0;
+    position: relative;
+    background-color: transparent;
 
-  &::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    padding: 3px 6px;
-    border-radius: 4px;
-    transition: 0.3s;
-    opacity: 0;
-    font-family: 'Inter', sans-serif;
-    visibility: hidden;
-    top: ${(props) => props.top};
-    bottom: ${(props) => props.bottom};
-    left: ${(props) => props.left};
-    right: ${(props) => props.right};
-    background: ${(props) => props.background};
-    transform: ${(props) => props.transform};
-    color: ${(props) => props.color};
-    font-size: ${(props) => props.fontSize};
-  }
+    &::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        padding: 3px 6px;
+        border-radius: 4px;
+        transition: 0.3s;
+        opacity: 0;
+        font-family: 'Inter', sans-serif;
+        visibility: hidden;
+        top: ${(props) => props.top};
+        bottom: ${(props) => props.bottom};
+        left: ${(props) => props.left};
+        right: ${(props) => props.right};
+        background: ${(props) => props.background};
+        transform: ${(props) => props.transform};
+        color: ${(props) => props.color};
+        font-size: ${(props) => props.fontSize};
+    }
 
-  &:hover::before {
-    opacity: ${(props) => props.opacity};
-    visibility: ${(props) => props.visibility};
-    translate: ${(props) => props.translate};
-  }
+    &:hover::before {
+        opacity: ${(props) => props.opacity};
+        visibility: ${(props) => props.visibility};
+        translate: ${(props) => props.translate};
+    }
 `;
 
 PopoverAvatar.propTypes = {

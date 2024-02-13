@@ -18,40 +18,32 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
-import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
-import {useParams} from "react-router-dom";
+import React from 'react';
 import styled from "styled-components";
-import {useDispatch} from "react-redux";
-import {clearLoading, initiateLoading} from "../../state/loadingSlice";
-import {uuidValidator} from "../../util/ComponentValidators";
 
-const ProfilePage = () => {
-
-    const {userId} = useParams();
-    const dispatch = useDispatch();
-    const [validUuid, setValidUuid] = useState(true);
-
-    useLayoutEffect(()=> {
-        dispatch(initiateLoading(true));
-        const isValidUuid = uuidValidator(userId);
-        if (!isValidUuid) {
-            dispatch(clearLoading());
-            setValidUuid(false);
-        } else {
-            dispatch(clearLoading())
-        }
-    }, [userId])
-
+const LoggedInMobileNavItems = () => {
     return (
-        <BloggiosSidebarBase>
-            {userId}
-        </BloggiosSidebarBase>
+        <Wrapper>
+
+        </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    flex: 1;
+    position: fixed;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    z-index: 18;
+    
+    @media (min-width: 701px) {
+        display: none;
+    }
 `;
 
-export default ProfilePage;
+const MemoizedLoggedInMobileNavItems = React.memo(LoggedInMobileNavItems);
+
+export default MemoizedLoggedInMobileNavItems;

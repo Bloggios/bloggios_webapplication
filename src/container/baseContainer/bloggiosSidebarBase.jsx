@@ -28,6 +28,8 @@ import {toast, ToastContainer} from "react-toastify";
 import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedSidebarCompressed from "../../component/navbars/SidebarCompressed";
+import LoggedInMobileNavItems from "../../component/navbars/components/LoggedInMobileNavItems";
+import MemoizedMobileNavTopItems from "../../component/navbars/components/MobileNavTopItems";
 
 const BloggiosSidebarBase = ({children}) => {
 
@@ -51,8 +53,10 @@ const BloggiosSidebarBase = ({children}) => {
     const getSidebar = useCallback(()=> {
         if (width > 1200) {
             return <MemoizedSidebar />
-        } else {
+        } else if (width > 700) {
             return <MemoizedSidebarCompressed />
+        } else if (width <= 700) {
+            return <MemoizedMobileNavTopItems />
         }
     }, [width])
 
@@ -78,6 +82,7 @@ const BloggiosSidebarBase = ({children}) => {
                     marginBottom: width < 500 && '40px'
                 }}
             />
+            {width <= 700 && <LoggedInMobileNavItems />}
         </AppContainer>
     );
 };
@@ -91,6 +96,10 @@ const AppContainer = styled.div`
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: #1e1e1e;
+    
+    @media (max-width: 700px) {
+        flex-direction: column;
+    }
 `;
 
 BloggiosSidebarBase.propTypes = {
