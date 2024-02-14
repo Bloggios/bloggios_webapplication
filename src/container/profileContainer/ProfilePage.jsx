@@ -18,21 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
+import React, { Suspense, useLayoutEffect, useState } from 'react';
 import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import {useDispatch} from "react-redux";
-import {clearLoading, initiateLoading} from "../../state/loadingSlice";
-import {uuidValidator} from "../../util/ComponentValidators";
+import { useDispatch } from "react-redux";
+import { clearLoading, initiateLoading } from "../../state/loadingSlice";
+import { uuidValidator } from "../../util/ComponentValidators";
+import ProfileSuggestions from '../../component/Cards/ProfileSuggestions';
+import FallbackLoader from '../../component/loaders/fallbackLoader';
+import ProfileHeader from '../../component/Cards/ProfileHeader';
 
 const ProfilePage = () => {
 
-    const {userId} = useParams();
+    const { userId } = useParams();
     const dispatch = useDispatch();
     const [validUuid, setValidUuid] = useState(true);
 
-    useLayoutEffect(()=> {
+    useLayoutEffect(() => {
         dispatch(initiateLoading(true));
         const isValidUuid = uuidValidator(userId);
         if (!isValidUuid) {
@@ -45,13 +48,40 @@ const ProfilePage = () => {
 
     return (
         <BloggiosSidebarBase>
-            {userId}
+            <Wrapper>
+                <LeftSection>
+                    <ProfileHeader />
+                </LeftSection>
+
+                <RightSection>
+                    Rohit
+                </RightSection>
+            </Wrapper>
         </BloggiosSidebarBase>
     );
 };
 
 const Wrapper = styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    padding: 20px 20px 20px 10px;
+    overflow-y: auto;
+    gap: 20px;
+`;
+
+const LeftSection = styled.div`
+    flex: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const RightSection = styled.div`
     flex: 1;
+    height: 100%;
+    background-color: cyan;
 `;
 
 export default ProfilePage;
