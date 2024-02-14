@@ -18,28 +18,59 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../../avatars/avatar";
 import bloggios_logo from '../../../asset/svg/bg-accent_rounded.svg'
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {IoIosSearch} from "react-icons/io";
+import FallbackLoader from "../../loaders/fallbackLoader";
+import {useSelector} from "react-redux";
+import MemoizedWebSearchBar from "../../modal/WebSearchBar";
 
 const MobileNavTopItems = () => {
 
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {width} = useWindowDimensions();
 
+    useEffect(()=> {
+        const handleKeyPress = (event) => {
+            if (event.key === '/') {
+                if (!isSearchBarOpen) {
+                    event.preventDefault();
+                    setIsSearchBarOpen(true);
+                }
+            }
+        };
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isSearchBarOpen, setIsSearchBarOpen])
+
     return (
-        <Wrapper>
-            <Avatar
-                size={width > 380 ? '50px' : '40px'}
-                borderRadius={'50%'}
-                image={bloggios_logo}
-            />
-            <SearchIconWrapper>
-                <IoIosSearch />
-            </SearchIconWrapper>
-        </Wrapper>
+        <>
+            <Wrapper>
+                <Avatar
+                    size={width > 380 ? '50px' : '40px'}
+                    borderRadius={'50%'}
+                    image={bloggios_logo}
+                />
+                <SearchIconWrapper onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
+                    <IoIosSearch />
+                </SearchIconWrapper>
+            </Wrapper>
+
+            <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
+                {isAuthenticated && (
+                    <MemoizedWebSearchBar
+                        isOpen={isSearchBarOpen}
+                        onClose={() => setIsSearchBarOpen(false)}
+                    />
+                )}
+            </Suspense>
+        </>
     );
 };
 

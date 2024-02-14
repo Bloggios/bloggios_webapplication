@@ -19,23 +19,20 @@
  */
 
 import React, {useEffect, useRef, useState} from 'react';
-import styled from "styled-components";
-import {GoHome, GoPlusCircle} from "react-icons/go";
-import {useDispatch, useSelector} from "react-redux";
-import bloggios_logo from '../../../asset/svg/bg_logo_rounded_black.svg'
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {BsChatDots} from "react-icons/bs";
-import {IoNotificationsOutline} from "react-icons/io5";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {IoIosSettings, IoMdLogOut} from "react-icons/io";
-import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";
-import {initLogout} from "../../../service/functions";
+import {LANDING_PAGE, LOGIN_PAGE, SERVICES_PAGE, SIGNUP_PAGE} from "../../../constant/pathConstants";
+import {GoHome, GoPlusCircle} from "react-icons/go";
+import bloggios_logo from "../../../asset/svg/bg_logo_rounded_black.svg";
+import styled from "styled-components";
+import {GrServices} from "react-icons/gr";
+import {FaCode} from "react-icons/fa";
+import {MdLogin, MdOutlineContactSupport} from "react-icons/md";
+import {LuUserPlus} from "react-icons/lu";
+import {AiOutlineBug} from "react-icons/ai";
 
-const LoggedInMobileNavItems = () => {
+const LoggedOutMobileNavItems = () => {
 
-    const {name, profileImage} = useSelector((state)=> state.profile);
-    const {userId} = useSelector((state)=> state.auth);
     const [isShown, setIsShown] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
@@ -54,32 +51,27 @@ const LoggedInMobileNavItems = () => {
         };
     }, []);
 
-    const handleLogout = () => {
-        initLogout(navigate, dispatch)
-    }
-
     return (
         <Wrapper>
             <BottomBar>
                 <NavItem
-                    onClick={() => navigate(HOME_PAGE)}
-                    active={window.location.pathname === '/home'}
+                    onClick={() => navigate(LANDING_PAGE)}
+                    active={window.location.pathname === '/'}
                 >
                     <GoHome />
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate(CHATS_PAGE)}
-                    active={window.location.pathname === CHATS_PAGE}
+                    onClick={() => navigate(SERVICES_PAGE)}
+                    active={window.location.pathname === SERVICES_PAGE}
                 >
-                    <BsChatDots />
+                    <GrServices />
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate(NOTIFICATIONS_PAGE)}
-                    active={window.location.pathname === NOTIFICATIONS_PAGE}
+                    onClick={() => window.open('https://tech.bloggios.com', 'blank')}
                 >
-                    <IoNotificationsOutline />
+                    <FaCode />
                 </NavItem>
 
                 <NavItem
@@ -94,8 +86,8 @@ const LoggedInMobileNavItems = () => {
                     onClick={()=> setIsShown(!isShown)}
                 >
                     <ProfileImage
-                        src={profileImage ? profileImage : bloggios_logo}
-                        alt={name}
+                        src={bloggios_logo}
+                        alt={'Bloggios'}
                     />
                 </NavItem>
 
@@ -105,34 +97,29 @@ const LoggedInMobileNavItems = () => {
                     transform: isShown ? 'translateY(5%)' : 'translateY(100%)'
                 }}>
                     <DropdownItem
-                        onClick={()=> navigate('/profile/' + userId)}
-                        active={window.location.pathname.includes(PROFILE_PATH_MATCHER)}
+                        onClick={()=> navigate(LOGIN_PAGE)}
+                        active={window.location.pathname === LOGIN_PAGE}
                     >
-                        <FaUserAlt fontSize={'16px'}/>
-                        Profile
+                        <MdLogin fontSize={'16px'}/>
+                        Login
                     </DropdownItem>
 
                     <DropdownItem
-                        onClick={()=> navigate('/activity/' + userId)}
-                        active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
+                        onClick={()=> navigate(SIGNUP_PAGE)}
+                        active={window.location.pathname === SIGNUP_PAGE}
                     >
-                        <FaHistory fontSize={'16px'}/>
-                        Activity
+                        <LuUserPlus fontSize={'16px'}/>
+                        Sign Up
                     </DropdownItem>
 
-                    <DropdownItem
-                        onClick={()=> navigate(SETTING_PAGE)}
-                        active={window.location.pathname === SETTING_PAGE}
-                    >
-                        <IoIosSettings fontSize={'16px'}/>
-                        Setting
+                    <DropdownItem>
+                        <AiOutlineBug fontSize={'16px'}/>
+                        Report Bug
                     </DropdownItem>
 
-                    <DropdownItem
-                        onClick={handleLogout}
-                    >
-                        <IoMdLogOut fontSize={'16px'}/>
-                        Logout
+                    <DropdownItem>
+                        <MdOutlineContactSupport fontSize={'16px'}/>
+                        Support
                     </DropdownItem>
                 </DropdownItems>
             </BottomBar>
@@ -236,8 +223,13 @@ const DropdownItem = styled.button`
         color: rgba(255, 255, 255, 1);
         background-color: rgba(66, 88, 255, 0.8);
     }
+    
+    @media (max-width: 300px) {
+        font-size: 10px;
+    }
 `;
 
-const MemoizedLoggedInMobileNavItems = React.memo(LoggedInMobileNavItems);
 
-export default MemoizedLoggedInMobileNavItems;
+const MemoizedLoggedOutMobileNavItems = React.memo(LoggedOutMobileNavItems);
+
+export default MemoizedLoggedOutMobileNavItems;

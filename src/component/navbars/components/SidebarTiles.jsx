@@ -29,13 +29,9 @@ import styled from "styled-components";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";
 
 const SidebarTiles = () => {
-
-    const PROFILE_PATH = '/profile/';
-    const ACTIVITY_PATH = '/activity/';
-    const SECURITY_PATH = '/security';
-    const SETTING_PATH = '/setting';
 
     const {userId} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
@@ -56,7 +52,7 @@ const SidebarTiles = () => {
             </Tile>
 
             <Tile
-                active={window.location.pathname.includes(PROFILE_PATH)}
+                active={window.location.pathname.includes(PROFILE_PATH_MATCHER)}
                 onClick={() => navigate('/profile/' + userId)}
             >
                 <FaUserAlt/>
@@ -85,7 +81,7 @@ const SidebarTiles = () => {
             }}/>
 
             <Tile
-                active={window.location.pathname.includes(ACTIVITY_PATH)}
+                active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
                 onClick={() => navigate('/activity/' + userId)}
             >
                 <FaHistory/>
@@ -93,7 +89,7 @@ const SidebarTiles = () => {
             </Tile>
 
             <Tile
-                active={window.location.pathname === SECURITY_PATH}
+                active={window.location.pathname === SECURITY_PAGE}
                 onClick={() => navigate(SECURITY_PAGE)}
             >
                 <MdOutlineSecurity/>
@@ -101,7 +97,7 @@ const SidebarTiles = () => {
             </Tile>
 
             <Tile
-                active={window.location.pathname === SETTING_PATH}
+                active={window.location.pathname === SETTING_PAGE}
                 onClick={() => navigate(SETTING_PAGE)}
             >
                 <IoIosSettings/>

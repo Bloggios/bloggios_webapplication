@@ -23,7 +23,6 @@ import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import {clearSnackbar} from "../../state/snackbarSlice";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";

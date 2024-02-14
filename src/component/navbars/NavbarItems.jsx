@@ -24,6 +24,7 @@ import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants"
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {FaCode} from "react-icons/fa";
 
 const NavbarItems = () => {
 
@@ -44,16 +45,27 @@ const NavbarItems = () => {
                     </TooltipWrapper>
                 ))
             ) : (
-                loggedOutNavItems.map((item) => (
-                    <TooltipWrapper key={item.page} tooltip={item.tooltip}>
+                <>
+                    {
+                        loggedOutNavItems.map((item) => (
+                            <TooltipWrapper key={item.page} tooltip={item.tooltip}>
+                                <NavItem
+                                    onClick={() => navigate(item.page)}
+                                    active={window.location.pathname === item.page}
+                                >
+                                    {item.icon}
+                                </NavItem>
+                            </TooltipWrapper>
+                        ))
+                    }
+                    <TooltipWrapper tooltip={'Bloggios Tech'}>
                         <NavItem
-                            onClick={() => navigate(item.page)}
-                            active={window.location.pathname === item.page}
+                            onClick={() => window.open('https://tech.bloggios.com', 'blank')}
                         >
-                            {item.icon}
+                            <FaCode />
                         </NavItem>
                     </TooltipWrapper>
-                ))
+                </>
             )
         )
     }, [isAuthenticated, navigate])

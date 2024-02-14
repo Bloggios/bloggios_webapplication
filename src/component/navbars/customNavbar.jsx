@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
@@ -85,6 +85,30 @@ const CustomNavbar = () => {
         }
     }, [isFollowed]);
 
+    const getTopLeftSection = useCallback(()=> {
+        if (width > 700) {
+            return (
+                <IconLabelDropdown
+                    maxWidth={'170px'}
+                    height={'60%'}
+                    source={profileImage ? profileImage : bloggios_logo}
+                    text={name ? name : 'Bloggios'}
+                    itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
+                />
+            )
+        } else if (width <=700 && isAuthenticated) {
+            return (
+                <SearchIconWrapper onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
+                    <IoIosSearch />
+                </SearchIconWrapper>
+            )
+        } else {
+            return (
+                <></>
+            )
+        }
+    }, [width, isAuthenticated, profileImage, name])
+
     return (
         <>
             <NavbarWrapper>
@@ -106,21 +130,17 @@ const CustomNavbar = () => {
                 </LogoSearchBarWrapper>
                 {width > 700 && <MemoizedNavbarItems/>}
 
-                <IconLabelDropdown
-                    maxWidth={'170px'}
-                    height={'60%'}
-                    source={profileImage ? profileImage : bloggios_logo}
-                    text={name ? name : 'Bloggios'}
-                    itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
-                />
+                {getTopLeftSection()}
             </NavbarWrapper>
             {width <= 700 && <MemoizedNavbarItemsMobile />}
 
             <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
-                <MemoizedWebSearchBar
-                    isOpen={isSearchBarOpen}
-                    onClose={() => setIsSearchBarOpen(false)}
-                />
+                {isAuthenticated && (
+                    <MemoizedWebSearchBar
+                        isOpen={isSearchBarOpen}
+                        onClose={() => setIsSearchBarOpen(false)}
+                    />
+                )}
             </Suspense>
         </>
     );
@@ -185,6 +205,31 @@ const SearchButton = styled.div`
     align-items: center;
     justify-content: center;
     margin-left: auto;
+`;
+
+const SearchIconWrapper = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #4258ff;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    touch-action: manipulation;
+    
+    &:active {
+        color: rgba(255, 255, 255, 1);
+    }
+    
+    @media (max-width: 380px) {
+        height: 30px;
+        width: 30px;
+        font-size: 18px;
+    }
 `;
 
 const MemoizedCustomNavbar = React.memo(CustomNavbar);

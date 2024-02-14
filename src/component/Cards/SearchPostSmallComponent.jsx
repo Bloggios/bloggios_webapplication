@@ -98,7 +98,7 @@ const PostBodySpan = styled.span`
     font-weight: 300;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.8);
-    width: 100%;
+    width: 70%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

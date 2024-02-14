@@ -20,6 +20,7 @@
 
 import {
     CHATS_PAGE,
+    CREATE_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
@@ -43,6 +44,8 @@ import {CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
+import {GrServices} from "react-icons/gr";
+import {GoPlusCircle} from "react-icons/go";
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
@@ -53,9 +56,8 @@ export const loggedInNavItems = [
 
 export const loggedOutNavItems = [
     {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
-    {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
-    {page: NOTIFICATIONS_PAGE, tooltip: 'Notifications', icon: <IoNotificationsOutline/>},
-    {page: SERVICES_PAGE, tooltip: 'Services', icon: <VscSettingsGear/>},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <GrServices />},
+    {page: CREATE_PAGE, tooltip: 'Create', icon: <GoPlusCircle />},
 ];
 
 export const navbarProfileNotLoggedInList = [

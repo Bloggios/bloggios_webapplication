@@ -63,7 +63,8 @@ const FadeModal = ({
                        padding,
                        borderRadius,
                        bgColor,
-                       border
+                       border,
+                       ref
                    }) => {
     const handleClose = () => {
         onClose();
@@ -87,7 +88,7 @@ const FadeModal = ({
 
     return (
         <ModalWrapper isOpen={isOpen} onClick={handleClose}>
-            <ModalContent style={{
+            <ModalContent ref={ref} style={{
                 height: height,
                 width: width,
                 margin: margin,

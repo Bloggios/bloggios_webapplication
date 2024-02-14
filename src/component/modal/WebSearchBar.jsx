@@ -62,12 +62,6 @@ const WebSearchBar = ({
         }
     };
 
-    useEffect(()=> {
-        if (width < 500) {
-            onClose();
-        }
-    }, [width])
-
     useEffect(() => {
         if (inputValue.length > 0) {
             setIsShown(false);
@@ -206,41 +200,75 @@ const WebSearchBar = ({
                     padding={'0 0 10px 0'}
                     border={'1px solid rgba(255, 255, 255, 0.1)'}
                 >
-                    <ModelHeader>
-                        <IoIosSearch/>
-                        <SearchBar
-                            autoFocus={true}
-                            type={"text"}
-                            ref={inputRef}
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                        />
-                        <ValueDropdownWrapper ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
-                            <DropdownWrapper>
-                                <span>{value ? value : globalSearchList[0].label}</span>
-                                <div style={{
-                                    transform: isShown && 'rotate(180deg)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    transition: 'all 150ms ease-in-out'
-                                }}>
-                                    <BsChevronDown/>
-                                </div>
-                            </DropdownWrapper>
+                    <ModelHeader >
+                            <IoIosSearch style={{flexShrink: 0}}/>
+                            <SearchBar
+                                autoFocus={true}
+                                type={"text"}
+                                ref={inputRef}
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                            />
+                        {width > 350 && (
+                            <ValueDropdownWrapper ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                                <DropdownWrapper>
+                                    <span>{value ? value : globalSearchList[0].label}</span>
+                                    <div style={{
+                                        transform: isShown && 'rotate(180deg)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        transition: 'all 150ms ease-in-out'
+                                    }}>
+                                        <BsChevronDown/>
+                                    </div>
+                                </DropdownWrapper>
 
-                            <DropdownItems style={{
-                                visibility: isShown ? 'visible' : 'hidden',
-                                opacity: isShown ? 1 : 0
-                            }}>
-                                {globalSearchList.map((item) => (
-                                    <DropdownItem onClick={() => handleSearchTypeDropdownClick(item.label)}
-                                                  key={item.id}>
-                                        <span>{item.label}</span>
-                                    </DropdownItem>
-                                ))}
-                            </DropdownItems>
-                        </ValueDropdownWrapper>
+                                <DropdownItems style={{
+                                    visibility: isShown ? 'visible' : 'hidden',
+                                    opacity: isShown ? 1 : 0
+                                }}>
+                                    {globalSearchList.map((item) => (
+                                        <DropdownItem onClick={() => handleSearchTypeDropdownClick(item.label)}
+                                                      key={item.id}>
+                                            <span>{item.label}</span>
+                                        </DropdownItem>
+                                    ))}
+                                </DropdownItems>
+                            </ValueDropdownWrapper>
+                        )}
                     </ModelHeader>
+
+                    {width <=350 && (
+                        <div style={{
+                            padding: '20px 20px 0 20px'
+                        }}>
+                            <ValueDropdownWrapper ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                                <DropdownWrapper>
+                                    <span>{value ? value : globalSearchList[0].label}</span>
+                                    <div style={{
+                                        transform: isShown && 'rotate(180deg)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        transition: 'all 150ms ease-in-out'
+                                    }}>
+                                        <BsChevronDown/>
+                                    </div>
+                                </DropdownWrapper>
+
+                                <DropdownItems style={{
+                                    visibility: isShown ? 'visible' : 'hidden',
+                                    opacity: isShown ? 1 : 0
+                                }}>
+                                    {globalSearchList.map((item) => (
+                                        <DropdownItem onClick={() => handleSearchTypeDropdownClick(item.label)}
+                                                      key={item.id}>
+                                            <span>{item.label}</span>
+                                        </DropdownItem>
+                                    ))}
+                                </DropdownItems>
+                            </ValueDropdownWrapper>
+                        </div>
+                    )}
 
                     {searchLoading === true ? (
                         <ModelContentWrapper>
@@ -406,6 +434,7 @@ const SearchBar = styled.input`
     letter-spacing: 1px;
     outline: none;
     border: none;
+    min-width: 160px;
     background-color: transparent;
     color: rgba(255, 255, 255, 0.8);
 `;
@@ -432,6 +461,10 @@ const BloggiosWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 350px) {
+        display: none;
+    }
 `;
 
 const TextSpan = styled.span`
@@ -479,6 +512,11 @@ const ListTextSpan = styled.span`
     font-size: 14px;
     font-weight: 300;
     letter-spacing: 1px;
+    text-align: left;
+    
+    @media (max-width: 550px) {
+        font-size: 12px;
+    }
 `;
 
 const ValueDropdownWrapper = styled.div`
@@ -487,6 +525,7 @@ const ValueDropdownWrapper = styled.div`
     outline: none;
     position: relative;
     min-width: 100px;
+    z-index: 2;
 `;
 
 const DropdownWrapper = styled.button`
@@ -572,7 +611,14 @@ const NotFoundMessage = styled.span`
     text-align: center;
     letter-spacing: 1px;
     font-weight: 400;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: rgba(255, 255, 255, 0.6);
+    
+    @media (max-width: 350px) {
+        font-size: 16px;
+    }
 `;
 
 const ListWrapper = styled.div`

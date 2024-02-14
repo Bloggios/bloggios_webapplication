@@ -36,6 +36,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #121212;
   color: antiquewhite;
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
 }
 
 code {

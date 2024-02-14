@@ -33,3 +33,4 @@ export const PROFILE_ADDITION_INITIAL = '/profile-add-initial';
 export const SETTING_PAGE = '/setting';
 export const ACTIVITY_PAGE = '/activity/:userId';
 export const SECURITY_PAGE = '/security';
+export const CREATE_PAGE = '/create'

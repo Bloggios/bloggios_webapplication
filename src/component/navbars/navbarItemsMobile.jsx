@@ -21,10 +21,9 @@
 import React, {useCallback} from 'react';
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import styled from "styled-components";
-import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants";
 import {useSelector} from "react-redux";
 import MemoizedLoggedInMobileNavItems from "./components/LoggedInMobileNavItems";
+import MemoizedLoggedOutMobileNavItems from "./components/LoggedOutMobileNavItems";
 
 const NavbarItemsMobile = () => {
 
@@ -37,66 +36,15 @@ const NavbarItemsMobile = () => {
             isAuthenticated ? (
                 <MemoizedLoggedInMobileNavItems />
             ) : (
-                <ItemsWrapper>
-                    {loggedOutNavItems.map((item)=> (
-                        <NavItems
-                            key={item.page}
-                            onClick={() => navigate(item.page)}
-                            active={window.location.pathname === item.page}
-                        >
-                            {item.icon}
-                        </NavItems>
-                    ))}
-                </ItemsWrapper>
+                <MemoizedLoggedOutMobileNavItems />
             )
         )
-    }, [isAuthenticated, navigate])
+    }, [isAuthenticated])
 
     return (
-        <Wrapper style={{width: width}}>
-                {getNavbarItems()}
-        </Wrapper>
+                getNavbarItems()
     );
 };
-
-const Wrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  height: 60px;
-  background-color: #1e1e1e;
-  display: flex;
-  align-items: center;
-  z-index: 18;
-`;
-
-const ItemsWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
-`;
-
-const NavItems = styled.div`
-  font-size: 25px;
-  color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
-  position: relative;
-  &::before {
-    content: '';
-    height: 2px;
-    width: 200%;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-    background-color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
-    box-shadow: ${(props) => props.active ? '1px 0 20px 4px rgba(66, 88, 255, 0.43)' : 'none'};
-    visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
-    opacity: ${(props) => (props.active ? 1 : 0)};
-    transition: all 250ms ease;
-  }
-`;
 
 const MemoizedNavbarItemsMobile = React.memo(NavbarItemsMobile);
 

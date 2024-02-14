@@ -164,8 +164,7 @@ const NameSpan = styled.span`
     font-weight: 300;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.8);
-    width: 50%;
-    white-space: nowrap;
+    width: 80%;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -175,8 +174,7 @@ const EmailSpan = styled.span`
     font-weight: 200;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.6);
-    width: 50%;
-    white-space: nowrap;
+    width: 80%;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -210,6 +208,10 @@ const FollowButton = styled.button`
         background-color: #4258ff;
         color: rgba(255, 255, 255, 0.6);
     }
+
+    @media (max-width: 380px) {
+        display: none;
+    }
 `;
 
 const ViewProfileButton = styled.button`
@@ -234,6 +236,10 @@ const ViewProfileButton = styled.button`
     &:active {
         background-color: #272727;
         color: rgba(255, 255, 255, 0.6);
+    }
+    
+    @media (max-width: 500px) {
+        display: none;
     }
 `;
 
