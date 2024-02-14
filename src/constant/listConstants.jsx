@@ -36,16 +36,24 @@ import {BsChatDots} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
-import {FaCode, FaInfoCircle, FaQuestion, FaRegUser, FaShoppingCart} from "react-icons/fa";
+import {FaCode, FaInfoCircle, FaLongArrowAltRight, FaQuestion, FaRegUser, FaShoppingCart} from "react-icons/fa";
 import {IoMdLogOut} from "react-icons/io";
 import bloggios_logo from '../asset/svg/bg-accent_rounded.svg'
-import {MdContactSupport, MdMiscellaneousServices, MdOutlineNotifications} from "react-icons/md";
+import {
+    MdContactSupport,
+    MdMiscellaneousServices,
+    MdOutlineContactSupport,
+    MdOutlineNotifications
+} from "react-icons/md";
 import {CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
 import {GrServices} from "react-icons/gr";
-import {GoPlusCircle} from "react-icons/go";
+import {GoHome, GoPlusCircle} from "react-icons/go";
+import React from "react";
+import {useNavigate} from "react-router-dom";
+import {BLOGGIOS_TECH_LINK} from "./ServiceConstants";
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
@@ -223,3 +231,30 @@ export const globalSearchList = [
         label: 'Posts'
     }
 ];
+
+export const notFoundPageList = [
+    {
+        id: 1,
+        label: 'Home',
+        text: 'Redirect me to the Bloggios Home Page',
+        button: 'Take Me',
+        icon: <GoHome />,
+        clickAction: HOME_PAGE
+    },
+    {
+        id: 2,
+        label: 'Bloggios Tech',
+        text: 'Take me to the Bloggios Tech Home Page',
+        button: 'Redirect Me',
+        icon: <img src={bloggios_logo} height={'25px'}  alt={'Bloggios'}/>,
+        clickAction: BLOGGIOS_TECH_LINK
+    },
+    {
+        id: 3,
+        label: 'Support',
+        text: 'Need help, please contact support',
+        button: 'Learn more',
+        icon: <MdOutlineContactSupport />,
+        clickAction: SUPPORT_PAGE
+    }
+]

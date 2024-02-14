@@ -18,18 +18,28 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+
+const NotFound = lazy(()=> import('../../component/NotFound/NotFound'))
 
 const PageNotFound = () => {
     return (
-        <div>
-
-        </div>
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'} />}>
+                <NotFound />
+            </Suspense>
+        </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export default PageNotFound;

@@ -24,7 +24,7 @@ import {
     ACTIVITY_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
-    LOGIN_PAGE,
+    LOGIN_PAGE, NOT_FOUND_PAGE, OAUTH_REDIRECT,
     OTP_PAGE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
@@ -47,6 +47,7 @@ const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'
 const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
 const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
 const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
+const PageNotFound = lazy(()=> import('../container/NotFoundPage/PageNotFound'));
 
 const Router = () => {
 
@@ -59,9 +60,9 @@ const Router = () => {
                     <Route path={LOGIN_PAGE} element={<LoginPage/>}/>
                     <Route path={SIGNUP_PAGE} element={<SignupPage/>}/>
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
-                    <Route path="/oauth2/redirect" Component={OAuthRedirectHandler}/>
+                    <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={PROFILE_PAGE} element={<ProfilePage />}/>
-
+                    <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>

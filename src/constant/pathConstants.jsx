@@ -34,3 +34,5 @@ export const SETTING_PAGE = '/setting';
 export const ACTIVITY_PAGE = '/activity/:userId';
 export const SECURITY_PAGE = '/security';
 export const CREATE_PAGE = '/create'
+export const NOT_FOUND_PAGE = '*';
+export const OAUTH_REDIRECT = '/oauth2/redirect';
