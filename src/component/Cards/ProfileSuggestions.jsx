@@ -27,7 +27,9 @@ import FallbackLoader from "../loaders/fallbackLoader";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 
-const ProfileSuggestions = () => {
+const ProfileSuggestions = ({
+    backgroundColor = '#272727'
+                            }) => {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -73,7 +75,9 @@ const ProfileSuggestions = () => {
     };
 
     return (
-        <Wrapper>
+        <Wrapper style={{
+            backgroundColor: backgroundColor
+        }}>
             <RowWrapper>
                 <TitleSpan>
                     New Accounts
@@ -113,7 +117,6 @@ const Wrapper = styled.div`
     display: flex;
     height: auto;
     width: clamp(200px, 95%, 300px);
-    background-color: #272727;
     border-radius: 20px;
     overflow: hidden;
     user-select: none;

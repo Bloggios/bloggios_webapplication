@@ -99,6 +99,7 @@ const Wrapper = styled.div`
     width: auto;
     background-color: transparent;
     padding: 20px 10px;
+    position: fixed;
 `;
 
 const SideBarRoundedWrapper = styled.div`

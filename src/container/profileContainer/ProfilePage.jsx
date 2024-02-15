@@ -28,12 +28,14 @@ import { uuidValidator } from "../../util/ComponentValidators";
 import ProfileSuggestions from '../../component/Cards/ProfileSuggestions';
 import FallbackLoader from '../../component/loaders/fallbackLoader';
 import ProfileHeader from '../../component/Cards/ProfileHeader';
+import useComponentSize from "../../hooks/useComponentSize";
 
 const ProfilePage = () => {
 
     const { userId } = useParams();
     const dispatch = useDispatch();
     const [validUuid, setValidUuid] = useState(true);
+    const [rightSectionRef, rightSectionSize] = useComponentSize();
 
     useLayoutEffect(() => {
         dispatch(initiateLoading(true));
@@ -53,8 +55,10 @@ const ProfilePage = () => {
                     <ProfileHeader />
                 </LeftSection>
 
-                <RightSection>
-                    Rohit
+                <RightSection ref={rightSectionRef}>
+                    <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
+                        <ProfileSuggestions backgroundColor={'#0c0c0c'} />
+                    </Suspense>
                 </RightSection>
             </Wrapper>
         </BloggiosSidebarBase>
@@ -67,21 +71,24 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     padding: 20px 20px 20px 10px;
-    overflow-y: auto;
     gap: 20px;
 `;
 
 const LeftSection = styled.div`
     flex: 3;
-    height: 100%;
     display: flex;
     flex-direction: column;
 `;
 
 const RightSection = styled.div`
     flex: 1;
-    height: 100%;
-    background-color: cyan;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    @media (max-width: 1600px) {
+        flex: 0;
+    }
 `;
 
 export default ProfilePage;

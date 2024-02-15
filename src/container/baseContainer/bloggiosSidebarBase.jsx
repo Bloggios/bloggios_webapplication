@@ -30,6 +30,7 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedSidebarCompressed from "../../component/navbars/SidebarCompressed";
 import LoggedInMobileNavItems from "../../component/navbars/components/LoggedInMobileNavItems";
 import MemoizedMobileNavTopItems from "../../component/navbars/components/MobileNavTopItems";
+import useComponentSize from "../../hooks/useComponentSize";
 
 const BloggiosSidebarBase = ({children}) => {
 
@@ -37,6 +38,7 @@ const BloggiosSidebarBase = ({children}) => {
     const {snackbarType, message, isSnackbar} = useSelector((state) => state.snackbar);
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();
+    const [sidebarSizeRef, sidebarSize] = useComponentSize();
 
     const handleSnackbar = useCallback(() => {
         if (isSnackbar) {
@@ -50,13 +52,13 @@ const BloggiosSidebarBase = ({children}) => {
         handleSnackbar();
     }, [handleSnackbar]);
 
-    const getSidebar = useCallback(()=> {
+    const getSidebar = useCallback(() => {
         if (width > 1200) {
-            return <MemoizedSidebar />
+            return <MemoizedSidebar/>
         } else if (width > 700) {
-            return <MemoizedSidebarCompressed />
+            return <MemoizedSidebarCompressed/>
         } else if (width <= 700) {
-            return <MemoizedMobileNavTopItems />
+            return <MemoizedMobileNavTopItems/>
         }
     }, [width])
 
@@ -82,7 +84,7 @@ const BloggiosSidebarBase = ({children}) => {
                     marginBottom: width < 500 && '40px'
                 }}
             />
-            {width <= 700 && <LoggedInMobileNavItems />}
+            {width <= 700 && <LoggedInMobileNavItems/>}
         </AppContainer>
     );
 };
@@ -91,12 +93,12 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: #1e1e1e;
-    
+
     @media (max-width: 700px) {
         flex-direction: column;
     }
@@ -108,7 +110,20 @@ BloggiosSidebarBase.propTypes = {
 
 export default BloggiosSidebarBase;
 
-const ChildrenComponent = ({children}) => <>{children}</>;
+const ChildrenComponent = ({children}) => <ChildrenContainer>{children}</ChildrenContainer>;
+
+const ChildrenContainer = styled.main`
+    width: 100%;
+    margin-left: 300px;
+    
+    @media (max-width: 1200px) {
+        margin-left: 80px;
+    }
+    
+    @media (max-width: 700px) {
+        margin-left: 0;
+    }
+`;
 
 ChildrenComponent.propTypes = {
     children: PropTypes.node.isRequired,

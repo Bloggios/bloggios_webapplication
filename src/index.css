@@ -38,6 +38,7 @@ body {
   color: antiquewhite;
   touch-action: manipulation;
   -ms-touch-action: manipulation;
+  overflow-x: hidden;
 }
 
 code {
@@ -51,11 +52,12 @@ code {
   margin: 0;
   scroll-behavior: smooth;
   font-family: 'Inter', sans-serif;
+
 }
 
 ::-webkit-scrollbar {
-  width: 15px;
-  display: none;
+  width: 11px;
+  position: fixed;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -28,14 +28,22 @@ const UnauthenticatedHomePage = () => {
         <BloggiosBase>
             <Wrapper>
                 <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
+                <HomeHeader />
             </Wrapper>
         </BloggiosBase>
     );
 };
 
 const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 `;
 
 export default UnauthenticatedHomePage;
