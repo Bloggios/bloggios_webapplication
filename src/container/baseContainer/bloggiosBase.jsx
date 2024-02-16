@@ -95,6 +95,7 @@ const AppContainer = styled.main`
     width: 100vw;
     min-height: 100vh;
     min-width: 250px;
+    max-width: 100vw;
     height: auto;
     overflow-x: hidden;
     background-color: #121212;

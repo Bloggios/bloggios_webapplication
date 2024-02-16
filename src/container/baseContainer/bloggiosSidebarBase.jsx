@@ -93,8 +93,8 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100vw;
+    max-width: 100vw;
     min-height: 100vh;
-    overflow-x: hidden;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -114,7 +114,7 @@ export default BloggiosSidebarBase;
 const ChildrenComponent = ({children}) => <ChildrenContainer>{children}</ChildrenContainer>;
 
 const ChildrenContainer = styled.main`
-    width: 100%;
+    max-width: 100%;
     margin-left: 300px;
     overflow-x: hidden;
     

@@ -41,7 +41,7 @@ body {
   color: antiquewhite;
   touch-action: manipulation;
   -ms-touch-action: manipulation;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 
 code {
@@ -59,7 +59,6 @@ code {
 
 ::-webkit-scrollbar {
   width: 11px;
-  position: fixed;
 }
 
 ::-webkit-scrollbar-thumb {
