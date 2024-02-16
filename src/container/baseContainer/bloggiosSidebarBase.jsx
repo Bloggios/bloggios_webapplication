@@ -65,7 +65,7 @@ const BloggiosSidebarBase = ({children}) => {
     return (
         <AppContainer>
             {getSidebar()}
-            {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
+            {isLoading ? <MemoizedLoaderPage height={'100vh'}/> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
                 limit={width > 600 ? 7 : 2}
                 position={width > 600 ? 'bottom-right' : 'bottom-center'}

@@ -37,6 +37,8 @@ const LoaderWrapper = styled.div`
     display: grid;
     place-items: center;
     background-color: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    backdrop-filter: blur(10px);
 `;
 
 const MemoizedLoaderPage = React.memo(LoaderPage);

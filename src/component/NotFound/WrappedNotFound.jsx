@@ -11,28 +11,36 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/home';
-export const LANDING_PAGE = '/'
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/support';
-export const REPORT_BUG_PAGE = '/report-bug';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/profile/:id';
-export const PROFILE_ADDITION_INITIAL = '/profile-add-initial';
-export const SETTING_PAGE = '/setting';
-export const ACTIVITY_PAGE = '/activity/:userId';
-export const SECURITY_PAGE = '/security';
-export const CREATE_PAGE = '/create'
-export const NOT_FOUND_PAGE = '*';
-export const OAUTH_REDIRECT = '/oauth2/redirect';
+import React from 'react';
+import NotFound from "./NotFound";
+import styled from "styled-components";
+
+const WrappedNotFound = ({
+    height,
+    width
+                         }) => {
+    return (
+        <Wrapper style={{
+            width: width,
+            height: height
+        }}>
+            <NotFound />
+        </Wrapper>
+    );
+};
+
+const Wrapper = styled.div`
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export default WrappedNotFound;

@@ -19,7 +19,14 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {COUNT_FOLLOW, GET_PROFILE, GET_USER_PROFILE, PROFILE_LIST, PROFILE_SUGGESTIONS} from "../constant/apiConstants";
+import {
+    COUNT_FOLLOW,
+    DETAILED_PROFILE,
+    GET_PROFILE,
+    GET_USER_PROFILE,
+    PROFILE_LIST,
+    PROFILE_SUGGESTIONS
+} from "../constant/apiConstants";
 
 export const getProfile = () => {
     return authenticatedAxios.get(GET_PROFILE)
@@ -43,5 +50,10 @@ export const profileSuggestions = (payload) => {
 
 export const searchProfileList = (payload) => {
     return authenticatedAxios.post(PROFILE_LIST, payload)
+        .then((response)=> response);
+}
+
+export const detailedProfile = (userId) => {
+    return authenticatedAxios.get(DETAILED_PROFILE + '/' + userId)
         .then((response)=> response);
 }

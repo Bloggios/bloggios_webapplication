@@ -21,7 +21,7 @@
 import React, {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
-    ACTIVITY_PAGE,
+    ACTIVITY_PAGE, CHATS_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE, NOT_FOUND_PAGE, OAUTH_REDIRECT,
