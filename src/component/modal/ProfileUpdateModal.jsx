@@ -21,12 +21,76 @@
 import React from 'react';
 import FadeModal from "./FadeModal";
 import styled from "styled-components";
+import AnimatedField from '../fields/AnimatedField';
+import { BiUser } from 'react-icons/bi';
+
+const FormGroup = styled.div`
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 100%;
+`;
+
+const FormField = styled.input`
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #616161;
+  outline: 0;
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+
+  &::placeholder {
+    color: transparent;
+  }
+
+  &:placeholder-shown ~ label {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+  }
+
+  &:focus {
+    ~ label {
+      position: absolute;
+      top: 0;
+      display: block;
+      transition: 0.2s;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+    }
+    padding-bottom: 6px;
+    font-weight: 400;
+    border-width: 3px;
+    border-image: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.8));
+    border-image-slice: 1;
+  }
+
+  /* Reset input */
+  &:required, &:invalid {
+    box-shadow: none;
+  }
+`;
+
+const FormLabel = styled.label`
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #616161;
+`;
+
 
 const ProfileUpdateModal = ({
-                                isModelOpen,
-                                onClose,
-                                name
-                            }) => {
+    isModelOpen,
+    onClose,
+    name
+}) => {
     return (
         <FadeModal
             isOpen={isModelOpen}
@@ -42,8 +106,14 @@ const ProfileUpdateModal = ({
                 <TitleSpan>
                     Hey, {name.split(' ')[0]}
                 </TitleSpan>
-                
+
                 <FormWrapper>
+                    <InputWrapper>
+                        <AnimatedField
+                            label='Name'
+                            icon={<BiUser />}
+                        />
+                    </InputWrapper>
                 </FormWrapper>
             </Wrapper>
         </FadeModal>
@@ -55,6 +125,7 @@ const Wrapper = styled.div`
     height: auto;
     display: flex;
     flex-direction: column;
+    gap: 20px;
 `;
 
 const TitleSpan = styled.span`
@@ -75,6 +146,13 @@ const FormWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
+`;
+
+const InputWrapper = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
+    gap: 10px;
 `;
 
 export default ProfileUpdateModal;

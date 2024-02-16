@@ -100,6 +100,7 @@ const Wrapper = styled.div`
     background-color: transparent;
     padding: 20px 10px;
     position: fixed;
+    z-index: 4;
 `;
 
 const SideBarRoundedWrapper = styled.div`
@@ -168,7 +169,6 @@ const TooltipContent = styled.span`
     border-radius: 6px;
     padding: 6px 12px;
     position: absolute;
-    z-index: 1;
     left: 80px;
     opacity: 0;
     visibility: hidden;

@@ -1,13 +1,19 @@
-import React, {Suspense, useState} from 'react'
+import React, { Suspense, useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import styled from 'styled-components'
 import header_image from '../../asset/svg/home-header_bg.svg'
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import ImageUploadModal from "../modal/ImageUploadModal";
-import {SlOptionsVertical} from "react-icons/sl";
+import { SlOptionsVertical } from "react-icons/sl";
 import FallbackLoader from "../loaders/fallbackLoader";
 import ProfileUpdateModal from "../modal/ProfileUpdateModal";
-import {useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { checkFollowing, followUser, unfollowUser } from "../../restservices/followApi";
+import LoaderButton from "../buttons/loaderButton";
+import FetchLoaderButton from "../buttons/FetchLoaderButton";
+import SingleColorLoader from "../loaders/SingleColorLoader";
+import { setSnackbar } from '../../state/snackbarSlice';
+import {setIsCreated} from '../../state/isCreatedSlice'
 
 const ProfileHeader = ({
     name,
@@ -16,11 +22,16 @@ const ProfileHeader = ({
     profileImage,
     coverImage,
     id
-                       }) => {
+}) => {
 
+    const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const {userId} = useSelector((state)=> state.auth);
+    const { userId } = useSelector((state) => state.auth);
+    const [fetchFollowing, setFetchFollowing] = useState({
+        isFollowing: false,
+        isChecking: true
+    });
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -29,6 +40,62 @@ const ProfileHeader = ({
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    useEffect(() => {
+        checkFollowing(id)
+            .then((response)=> {
+                setFetchFollowing({
+                    isFollowing: response.data.isFollowing,
+                    isChecking: false
+                })
+            }).catch((error)=> {
+                setFetchFollowing({
+                    isFollowing: false,
+                    isChecking: false
+                })
+            })
+    }, [id]);
+
+    const handleFollowing = useCallback(
+        (event) => {
+            event.preventDefault();
+
+            setFetchFollowing({
+                isFollowing: !fetchFollowing.isFollowing,
+                isChecking: true
+            });
+
+            const followAction = fetchFollowing.isFollowing ? unfollowUser : followUser;
+
+            followAction(id)
+                .then((response) => {
+                    setFetchFollowing({
+                        isFollowing: !fetchFollowing.isFollowing,
+                        isChecking: false
+                    });
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: response.data?.message,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                    const payload = {
+                        isFollowed: true
+                    }
+                    dispatch(setIsCreated(payload));
+                })
+                .catch((error) => {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                });
+        },
+        [dispatch, fetchFollowing, id]
+    );
 
     return (
         <>
@@ -46,26 +113,50 @@ const ProfileHeader = ({
                 </CoverImage>
 
                 <UserDetails>
-                    <RowWrapper>
-                        {id === userId && (
-                            <EditButton onClick={()=> setIsEditMode(true)}>
+                    {id === userId ? (
+                        <EditProfileWrapper>
+                            <AccentButton onClick={() => setIsEditMode(true)}>
                                 Edit Profile
-                            </EditButton>
-                        )}
+                            </AccentButton>
 
-                        <FloatingButton onClick={openModal}>
-                            <SlOptionsVertical/>
-                        </FloatingButton>
-                    </RowWrapper>
+                            <FloatingButton onClick={openModal}>
+                                <SlOptionsVertical />
+                            </FloatingButton>
+                        </EditProfileWrapper>
+                    ) : (
+                        <FollowWrapper>
+
+                            <FetchLoaderButton
+                                isLoading={fetchFollowing.isChecking}
+                                text={fetchFollowing.isFollowing ? 'Unfollow' : 'Follow'}
+                                onClick={handleFollowing}
+                                loaderSize={'2px'}
+                                loaderDotsSize={'2px'}
+                                bgColor={'#4258ff'}
+                                hBgColor={'rgba(66, 88, 255, 0.9)'}
+                                aBgColor={'#4258ff'}
+                                color={'rgba(255, 255, 255, 0.8)'}
+                                hColor={'rgba(255, 255, 255, 1)'}
+                                borderRadius={'10px'}
+                                padding={'0 16px'}
+                                style={{
+                                    height: '28px',
+                                    width: '80px',
+                                    border: 'none',
+                                    outline: 'none'
+                                }}
+                            />
+                        </FollowWrapper>
+                    )}
 
                     <ColumnWrapper>
                         <NameSpan>
                             {name ? name : 'Not Loaded'}
                         </NameSpan>
 
-                        <EmailSpan href={`mailto:${email}`}>
+                        <EmailAnchor href={`mailto:${email}`}>
                             {email}
-                        </EmailSpan>
+                        </EmailAnchor>
 
                         <BioSpan>
                             {bio}
@@ -81,15 +172,13 @@ const ProfileHeader = ({
                 />
             </Suspense>
 
-            {id === userId && (
-                <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'} />}>
-                    <ProfileUpdateModal
-                        isModelOpen={isEditMode}
-                        onClose={()=> setIsEditMode(false)}
-                        name={name}
-                    />
-                </Suspense>
-            )}
+            <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'} />}>
+                <ProfileUpdateModal
+                    isModelOpen={isEditMode}
+                    onClose={() => setIsEditMode(false)}
+                    name={name}
+                />
+            </Suspense>
         </>
     )
 }
@@ -125,7 +214,7 @@ const UserDetails = styled.div`
     flex-direction: column;
 `;
 
-const RowWrapper = styled.div`
+const EditProfileWrapper = styled.div`
     width: 100%;
     display: flex;
     height: 70px;
@@ -161,7 +250,7 @@ const FloatingButton = styled.button`
     }
 `;
 
-const EditButton = styled.button`
+const AccentButton = styled.button`
     height: 30px;
     padding: 0 10px;
     border-radius: 7px;
@@ -203,7 +292,8 @@ const NameSpan = styled.span`
     font-family: 'Dosis', sans-serif;
 `;
 
-const EmailSpan = styled.a`
+const EmailAnchor = styled.a`
+    width: fit-content;
     font-size: clamp(12px, 2vw, 16px);
     letter-spacing: 1px;
     text-decoration: none;
@@ -231,6 +321,16 @@ const BioSpan = styled.span`
     font-family: 'Dosis', sans-serif;
     white-space: pre-line;
     margin: 5px 0;
+`;
+
+const FollowWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    height: 70px;
+    align-items: center;
+    padding: 0 20px;
+    justify-content: flex-end;
+    gap: 20px;
 `;
 
 export default ProfileHeader

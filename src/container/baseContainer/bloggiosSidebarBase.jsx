@@ -94,6 +94,7 @@ const AppContainer = styled.div`
     flex-direction: row;
     width: 100vw;
     min-height: 100vh;
+    overflow-x: hidden;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -115,6 +116,7 @@ const ChildrenComponent = ({children}) => <ChildrenContainer>{children}</Childre
 const ChildrenContainer = styled.main`
     width: 100%;
     margin-left: 300px;
+    overflow-x: hidden;
     
     @media (max-width: 1200px) {
         margin-left: 80px;
