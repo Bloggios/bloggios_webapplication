@@ -35,6 +35,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {FaRegUser} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
+import ImageUploadModal from "../modal/ImageUploadModal";
 
 const ProfileCard = ({
                          name,
@@ -58,61 +59,6 @@ const ProfileCard = ({
 
     const closeModal = () => {
         setIsModalOpen(false);
-    };
-
-    const handleImageChange = (e, uploadFor) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('uploadFor', uploadFor);
-
-                authenticatedAxios.post(ADD_IMAGE_TO_PROFILE, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                })
-                    .then((response) => {
-                        const snackbarData = {
-                            isSnackbar: true,
-                            message: `${uploadFor === 'profile' ? 'Profile' : 'Cover'} Image Added Successfully. It may take time to Reflect on Profile`,
-                            snackbarType: 'Success',
-                        };
-                        dispatch(setSnackbar(snackbarData));
-                        setTimeout(() => {
-                            getProfile().then((response) => {
-                                const { data } = response;
-                                const profileData = {
-                                    name: data.name,
-                                    isAdded: true,
-                                    profileImageUrl: null,
-                                    bio: data.bio,
-                                    email: data.email,
-                                    profileImage: data.profileImage,
-                                    coverImage: data.coverImage,
-                                    followers: data.followers,
-                                    following: data.following
-                                };
-                                dispatch(setProfile(profileData));
-                            });
-                        }, 1600);
-                    })
-                    .catch((error) => {
-                        const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                        const snackBarData = {
-                            isSnackbar: true,
-                            message: message,
-                            snackbarType: 'Error',
-                        };
-                        dispatch(setSnackbar(snackBarData));
-                    });
-            };
-
-            reader.readAsDataURL(file);
-        }
-        closeModal();
     };
 
     return (
@@ -168,44 +114,10 @@ const ProfileCard = ({
                 <SlOptionsVertical/>
             </FloatingButton>
 
-            <FadeModal
-                height={'fit-content'}
-                width={'300px'}
-                padding={'20px'}
-                borderRadius={'16px'}
-                margin={'40px 0 0 0'}
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                bgColor={'#272727'}
-            >
-                <ModalLogoWrapper>
-                    <img src={bloggios_logo} alt="Bloggios" height={'60px'}/>
-                </ModalLogoWrapper>
-
-                <AddImageButtonWrapper htmlFor="image-input">
-                    <span>Upload Profile Image</span>
-                    <FaRegUser fontSize={'25px'} color='#28c916'/>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="image-input"
-                        style={{display: 'none'}}
-                        onChange={(e)=> handleImageChange(e, 'profile')}
-                    />
-                </AddImageButtonWrapper>
-
-                <AddImageButtonWrapper htmlFor="cover-input">
-                    <span>Upload Cover Image</span>
-                    <BiImageAdd fontSize={'25px'} color='#28c916'/>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="cover-input"
-                        style={{display: 'none'}}
-                        onChange={(e)=> handleImageChange(e, 'cover')}
-                    />
-                </AddImageButtonWrapper>
-            </FadeModal>
+            <ImageUploadModal
+                isModalOpen={isModalOpen}
+                closeModal={closeModal}
+            />
         </Wrapper>
     );
 };
@@ -297,51 +209,6 @@ const FloatingButton = styled.button`
     background-color: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.4);
     color: rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const ModalLogoWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-`;
-
-const AddImageButtonWrapper = styled.label`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  text-decoration: none;
-  margin: 20px 0;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 1);
-  opacity: 0.6;
-  transition: all 0.3s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.6);
-    bottom: -7px;
-    left: 0;
-    transform-origin: right;
-    transform: scaleX(0);
-    transition: transform .3s ease-in-out;
-  }
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:hover::before {
-    transform-origin: left;
-    transform: scaleX(1);
   }
 `;
 

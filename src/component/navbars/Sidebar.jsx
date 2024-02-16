@@ -32,7 +32,7 @@ const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarPr
 const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
-const Sidebar = () => {
+const Sidebar = ({ref}) => {
 
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
@@ -60,7 +60,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper ref={ref}>
                 <SideBarRoundedWrapper>
                     <div style={{
                         width: '100%'
@@ -116,8 +116,10 @@ const Sidebar = () => {
 
 const Wrapper = styled.div`
     height: 100%;
+    width: 300px;
     background-color: transparent;
     padding: 20px;
+    position: fixed;
 `;
 
 const SideBarRoundedWrapper = styled.div`

@@ -32,6 +32,7 @@ import {useNavigate} from "react-router-dom";
 import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
 import {checkIsProfileAdded} from "./service/functions";
 import './styles/GlobalStyles.css'
+import styled from "styled-components";
 
 const App = () => {
 
