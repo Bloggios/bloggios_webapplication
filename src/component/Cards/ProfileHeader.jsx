@@ -1,19 +1,19 @@
-import React, { Suspense, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, {Suspense, useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import header_image from '../../asset/svg/home-header_bg.svg'
-import Avatar from "../avatars/avatar";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import ImageUploadModal from "../modal/ImageUploadModal";
-import { SlOptionsVertical } from "react-icons/sl";
 import FallbackLoader from "../loaders/fallbackLoader";
 import ProfileUpdateModal from "../modal/ProfileUpdateModal";
-import { useDispatch, useSelector } from "react-redux";
-import { checkFollowing, followUser, unfollowUser } from "../../restservices/followApi";
-import LoaderButton from "../buttons/loaderButton";
-import FetchLoaderButton from "../buttons/FetchLoaderButton";
-import SingleColorLoader from "../loaders/SingleColorLoader";
-import { setSnackbar } from '../../state/snackbarSlice';
+import {useDispatch, useSelector} from "react-redux";
+import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
+import {setSnackbar} from '../../state/snackbarSlice';
 import {setIsCreated} from '../../state/isCreatedSlice'
+import {MdOutlinePhotoCameraFront} from "react-icons/md";
+import {CgClose} from "react-icons/cg";
+import {handleImageChange} from "../../service/functions";
+import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
+import Avatar from "../avatars/avatar";
+import FetchLoaderButton from "../buttons/FetchLoaderButton";
 
 const ProfileHeader = ({
     name,
@@ -21,13 +21,15 @@ const ProfileHeader = ({
     bio,
     profileImage,
     coverImage,
-    id
+    id,
+    follower
 }) => {
 
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const { userId } = useSelector((state) => state.auth);
+    const [isCoverImage, setIsCoverImage] = useState(false);
     const [fetchFollowing, setFetchFollowing] = useState({
         isFollowing: false,
         isChecking: true
@@ -55,6 +57,17 @@ const ProfileHeader = ({
                 })
             })
     }, [id]);
+
+    const handleImageUpload = (e, type) => {
+        const isCompleted = handleImageChange(e, type, dispatch);
+        if (isCompleted) {
+            setIsCoverImage(false);
+        }
+    }
+
+    useEffect(()=> {
+        console.log(coverImage)
+    }, [coverImage])
 
     const handleFollowing = useCallback(
         (event) => {
@@ -85,6 +98,10 @@ const ProfileHeader = ({
                     dispatch(setIsCreated(payload));
                 })
                 .catch((error) => {
+                    setFetchFollowing({
+                        isFollowing: false,
+                        isChecking: false
+                    });
                     const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
                     const snackBarData = {
                         isSnackbar: true,
@@ -94,38 +111,87 @@ const ProfileHeader = ({
                     dispatch(setSnackbar(snackBarData));
                 });
         },
-        [dispatch, fetchFollowing, id]
+        [dispatch, id, fetchFollowing.isFollowing]
     );
 
     return (
         <>
             <Wrapper>
                 <CoverImage>
-                    <CoverImageTag src={coverImage ? coverImage : header_image} alt="Bloggios" />
-                    <Avatar
-                        position={'absolute'}
-                        size={'140px'}
-                        borderRadius={'50%'}
-                        image={profileImage ? profileImage : bloggios_logo}
-                        top={'100%'}
-                        translate={'translate(20px, -50%)'}
+                    <CoverImageTag
+                        src={coverImage ? coverImage : header_image}
+                        style={{
+                            filter: isCoverImage ? 'blur(4px)' : 'blur(0)'
+                        }}
+                        alt="Bloggios"
                     />
+                    {id === userId && (
+                        isCoverImage ? (
+                                <ButtonGroupWrapper>
+                                    <EditImage>
+                                        Edit Image
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            id="image-input"
+                                            style={{display: 'none'}}
+                                            onChange={(e) => handleImageUpload(e, 'cover')}
+                                        />
+                                    </EditImage>
+
+                                    <RemoveImage>
+                                        Remove Image
+                                    </RemoveImage>
+
+                                    <CancelButton onClick={() => setIsCoverImage(false)}>
+                                        <CgClose />
+                                    </CancelButton>
+                                </ButtonGroupWrapper>
+                            ) : (
+                                <ChangeCoverImageButton onClick={()=> setIsCoverImage(true)}>
+                                    <MdOutlinePhotoCameraFront fontSize={'16px'} />
+                                    Edit Cover Image
+                                </ChangeCoverImageButton>
+                            )
+                    )}
+
+                        <Avatar
+                            image={profileImage ? profileImage : bloggios_logo}
+                            alt={name}
+                            size={'140px'}
+                            position={'absolute'}
+                            top={'100%'}
+                            translate={'translate(20px, -50%)'}
+                            borderRadius={'50%'}
+                            border={'4px solid #0c0c0c'}
+                        />
+
+                    {id === userId && (
+                        <ProfileImageChangeButton>
+                            <MdOutlinePhotoCameraFront/>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                id="image-input"
+                                style={{display: 'none'}}
+                                onChange={(e) => handleImageUpload(e, 'profile')}
+                            />
+                        </ProfileImageChangeButton>
+                    )}
                 </CoverImage>
 
                 <UserDetails>
-                    {id === userId ? (
-                        <EditProfileWrapper>
-                            <AccentButton onClick={() => setIsEditMode(true)}>
-                                Edit Profile
-                            </AccentButton>
+                    <PrimaryDetails>
+                        <ColumnWrapper>
+                            <NameSpan>
+                                {name}
+                            </NameSpan>
+                            <FollowerSpan>
+                                {follower} Followers
+                            </FollowerSpan>
+                        </ColumnWrapper>
 
-                            <FloatingButton onClick={openModal}>
-                                <SlOptionsVertical />
-                            </FloatingButton>
-                        </EditProfileWrapper>
-                    ) : (
-                        <FollowWrapper>
-
+                        {id !== userId && (
                             <FetchLoaderButton
                                 isLoading={fetchFollowing.isChecking}
                                 text={fetchFollowing.isFollowing ? 'Unfollow' : 'Follow'}
@@ -146,22 +212,8 @@ const ProfileHeader = ({
                                     outline: 'none'
                                 }}
                             />
-                        </FollowWrapper>
-                    )}
-
-                    <ColumnWrapper>
-                        <NameSpan>
-                            {name ? name : 'Not Loaded'}
-                        </NameSpan>
-
-                        <EmailAnchor href={`mailto:${email}`}>
-                            {email}
-                        </EmailAnchor>
-
-                        <BioSpan>
-                            {bio}
-                        </BioSpan>
-                    </ColumnWrapper>
+                        )}
+                    </PrimaryDetails>
                 </UserDetails>
             </Wrapper>
 
@@ -209,128 +261,166 @@ const CoverImageTag = styled.img`
 const UserDetails = styled.div`
     width: 100%;
     height: auto;
-    background: #0c0c0c;
     display: flex;
     flex-direction: column;
+    align-items: center;
 `;
 
-const EditProfileWrapper = styled.div`
+const PrimaryDetails = styled.div`
     width: 100%;
-    display: flex;
     height: 70px;
-    align-items: center;
-    padding: 0 20px;
-    justify-content: flex-end;
-    gap: 20px;
-`;
-
-const FloatingButton = styled.button`
-    height: 30px;
-    width: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    outline: none;
+    background-color: #0c0c0c;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    background-color: rgba(0, 0, 0, 0.4);
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-
-    &:hover {
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        color: rgba(255, 255, 255, 1);
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    &:active {
-        background-color: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        color: rgba(255, 255, 255, 0.8);
-    }
-`;
-
-const AccentButton = styled.button`
-    height: 30px;
-    padding: 0 10px;
-    border-radius: 7px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    outline: none;
-    background-color: #4258ff;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 150ms ease-in-out;
-
-    &:hover {
-        background-color: rgba(66, 88, 255, 0.9);
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    &:active {
-        background-color: #4258ff;
-        color: rgba(255, 255, 255, 0.6);
-    }
+    justify-content: space-between;
+    padding: 0 20px 0 170px;
 `;
 
 const ColumnWrapper = styled.div`
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    padding: 16px 25px;
 `;
 
 const NameSpan = styled.span`
-    font-size: clamp(20px, 4vw, 30px);
-    letter-spacing: 1px;
-    font-weight: 600;
-    color: #f5f5f5;
     font-family: 'Dosis', sans-serif;
+    font-size: clamp(20px, 2vw, 34px);
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
 `;
 
-const EmailAnchor = styled.a`
-    width: fit-content;
-    font-size: clamp(12px, 2vw, 16px);
-    letter-spacing: 1px;
-    text-decoration: none;
-    color: rgb(85, 116, 193);
-    font-weight: 400;
-    font-family: 'Dosis', sans-serif;
-    cursor: pointer;
-    transition: all 150ms ease-in-out;
+const FollowerSpan = styled.span`
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1vw, 15px);
+    color: rgba(255, 255, 255, 0.6);
+`;
 
+const ChangeCoverImageButton = styled.button`
+    position: relative;
+    bottom: 40px;
+    float: right;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: rgba(0, 0, 0, 0.8);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
+    0 2px 2px hsl(0deg 0% 0% / 0.075),
+    0 4px 4px hsl(0deg 0% 0% / 0.075),
+    0 8px 8px hsl(0deg 0% 0% / 0.075),
+    0 16px 16px hsl(0deg 0% 0% / 0.075);
+    
     &:hover {
-        color: rgb(47, 85, 176);
+        background-color: rgba(255, 255, 255, 1);
+        color: rgba(0, 0, 0, 1);
     }
 
     &:active {
-        color: rgb(79, 113, 200);
+        background-color: rgba(255, 255, 255, 0.8);
+        color: rgba(0, 0, 0, 0.9);
     }
 `;
 
-const BioSpan = styled.span`
-    font-size: clamp(12px, 2vw, 20px);
-    letter-spacing: 1px;
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 400;
-    font-family: 'Dosis', sans-serif;
-    white-space: pre-line;
-    margin: 5px 0;
+const ButtonGroupWrapper = styled.div`
+    position: relative;
+    bottom: 40px;
+    float: right;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 `;
 
-const FollowWrapper = styled.div`
-    width: 100%;
+const EditImage = styled.label`
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    background-color: rgba(25, 188, 19, 0.8);
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(25, 188, 19, 1);
+        color: rgba(255, 255, 255, 1);
+    }
+
+    &:active {
+        background-color: rgba(25, 188, 19, 0.9);
+        color: rgba(255, 255, 255, 0.9);
+    }
+`;
+
+const RemoveImage = styled.label`
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    background-color: rgb(208, 90, 46);
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(213, 85, 37, 1);
+        color: rgba(255, 255, 255, 1);
+    }
+
+    &:active {
+        background-color: rgba(213, 85, 37, 1);
+        color: rgba(255, 255, 255, 0.9);
+    }
+`;
+
+const CancelButton = styled.button`
+    border: none;
+    outline: none;
+    height: 22px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
     display: flex;
-    height: 70px;
     align-items: center;
-    padding: 0 20px;
-    justify-content: flex-end;
-    gap: 20px;
+    justify-content: center;
+`;
+
+const ProfileImageChangeButton = styled.label`
+    position: absolute;
+    height: 34px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: #4258ff;
+    left: 120px;
+    bottom: -65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 20px;
+    box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
+    0 2px 2px hsl(0deg 0% 0% / 0.075),
+    0 4px 4px hsl(0deg 0% 0% / 0.075),
+    0 8px 8px hsl(0deg 0% 0% / 0.075),
+    0 16px 16px hsl(0deg 0% 0% / 0.075);
+    cursor: pointer;
+
+    &:hover {
+        background-color: #4659f3;
+        color: rgba(255, 255, 255, 1);
+    }
+
+    &:active {
+        background-color: #4f62f4;
+        color: rgba(255, 255, 255, 0.9);
+    }
 `;
 
 export default ProfileHeader

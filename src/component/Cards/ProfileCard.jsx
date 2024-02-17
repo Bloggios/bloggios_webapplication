@@ -44,7 +44,6 @@ const ProfileCard = ({
                          profileImage,
                          followers,
                          following,
-                         path,
                          email
                      }) => {
 
@@ -110,14 +109,6 @@ const ProfileCard = ({
                     borderRadius={'0 0 16px 16px'}
                 />
             </div>
-            <FloatingButton onClick={openModal}>
-                <SlOptionsVertical/>
-            </FloatingButton>
-
-            <ImageUploadModal
-                isModalOpen={isModalOpen}
-                closeModal={closeModal}
-            />
         </Wrapper>
     );
 };
@@ -182,34 +173,6 @@ const TextSpan = styled.div`
   text-overflow: ellipsis;
   font-weight: 200;
   white-space: pre-line;
-`;
-
-const FloatingButton = styled.button`
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  border: 1px solid transparent;
-  outline: none;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.7);
-
-  &:hover {
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    color: rgba(255, 255, 255, 1);
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  &:active {
-    background-color: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: rgba(255, 255, 255, 0.8);
-  }
 `;
 
 export default ProfileCard;

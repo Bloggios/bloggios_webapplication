@@ -30,6 +30,7 @@ import useComponentSize from "../../hooks/useComponentSize";
 import {detailedProfile} from "../../restservices/profileApi";
 import LoaderPage from "../../component/loaders/loaderPage";
 import PageNotFound from "../NotFoundPage/PageNotFound";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const WrappedNotFound = lazy(() => import("../../component/NotFound/WrappedNotFound"));
 const ProfileHeader = lazy(() => import("../../component/Cards/ProfileHeader"));
@@ -45,6 +46,7 @@ const ProfilePage = () => {
     const profileSelector = useSelector((state) => state.profile);
     const [profileLoading, setProfileLoading] = useState(true);
     const [leftSectionRef, leftSectionSize] = useComponentSize();
+    const {width} = useWindowDimensions();
     const [profileData, setProfileData] = useState({
         name: '',
         email: '',
@@ -76,9 +78,9 @@ const ProfilePage = () => {
                 })
             }
         }
-    }, [id])
+    }, [id, profileSelector])
 
-    const getPageContent = useCallback(()=> {
+    const getPageContent = useCallback(() => {
         if (validUuid) {
             return (
                 <BloggiosSidebarBase>
@@ -86,7 +88,7 @@ const ProfilePage = () => {
                         <LeftSection ref={leftSectionRef}>
                             {
                                 profileLoading ? (
-                                    <FallbackLoader height={'500px'} width={'100%'} />
+                                    <FallbackLoader height={'500px'} width={'100%'}/>
                                 ) : (
                                     <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
                                         <ProfileHeader
@@ -96,24 +98,22 @@ const ProfilePage = () => {
                                             coverImage={profileData.coverImage}
                                             bio={profileData.bio}
                                             id={id}
+                                            follower={profileData.followers}
                                         />
                                     </Suspense>
                                 )
                             }
                         </LeftSection>
-
                         <RightSection ref={rightSectionRef}>
-                            <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width}/>}>
-                                <ProfileSuggestions backgroundColor={'#0c0c0c'}/>
-                            </Suspense>
+                            {width > 1050 && <ProfileSuggestions profileData={profileData} />}
                         </RightSection>
                     </Wrapper>
                 </BloggiosSidebarBase>
             )
         } else {
-            return <PageNotFound />
+            return <PageNotFound/>
         }
-    }, [validUuid, leftSectionRef, profileLoading, id, rightSectionRef, rightSectionSize.width, profileData.name, profileData.email, profileData.profileImage, profileData.coverImage, profileData.bio])
+    }, [validUuid, leftSectionRef, profileLoading, id, rightSectionRef, profileData.email, profileData.profileImage, profileData.coverImage, profileData.bio, width, profileData, profileData.followers])
 
     return (
         getPageContent()

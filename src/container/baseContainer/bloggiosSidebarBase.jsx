@@ -53,7 +53,7 @@ const BloggiosSidebarBase = ({children}) => {
     }, [handleSnackbar]);
 
     const getSidebar = useCallback(() => {
-        if (width > 1200) {
+        if (width > 1400) {
             return <MemoizedSidebar/>
         } else if (width > 700) {
             return <MemoizedSidebarCompressed/>
@@ -117,7 +117,7 @@ const ChildrenContainer = styled.main`
     margin-left: 300px;
     overflow-x: hidden;
     
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
         margin-left: 80px;
     }
     

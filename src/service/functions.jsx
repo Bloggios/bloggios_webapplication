@@ -19,8 +19,8 @@
  */
 
 import {setSnackbar} from "../state/snackbarSlice";
-import {gatewayAxios} from "../restservices/baseAxios";
-import {PROFILE_ADDED} from "../constant/apiConstants";
+import {authenticatedAxios, gatewayAxios} from "../restservices/baseAxios";
+import {ADD_IMAGE_TO_PROFILE, PROFILE_ADDED} from "../constant/apiConstants";
 import {setProfile} from "../state/profileSlice";
 import {HOME_PAGE, LANDING_PAGE, PROFILE_ADDITION_INITIAL} from "../constant/pathConstants";
 import {getFollow, getProfile} from "../restservices/profileApi";
@@ -119,4 +119,58 @@ export const initLogout = (navigate, dispatch) => {
         }
         dispatch(setSnackbar(snackBarData))
     })
-}
+};
+
+export const handleImageChange = (e, uploadFor, dispatch) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('uploadFor', uploadFor);
+
+            authenticatedAxios.post(ADD_IMAGE_TO_PROFILE, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+                .then((response) => {
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: `${uploadFor === 'profile' ? 'Profile' : 'Cover'} Image Added Successfully. It may take time to Reflect on Profile`,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                    setTimeout(() => {
+                        getProfile().then((response) => {
+                            const { data } = response;
+                            const profileData = {
+                                name: data.name,
+                                isAdded: true,
+                                profileImageUrl: null,
+                                bio: data.bio,
+                                email: data.email,
+                                profileImage: data.profileImage,
+                                coverImage: data.coverImage,
+                                followers: data.followers,
+                                following: data.following
+                            };
+                            dispatch(setProfile(profileData));
+                        });
+                    }, 1600);
+                })
+                .catch((error) => {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                });
+        };
+        reader.readAsDataURL(file);
+    }
+    return true;
+};
