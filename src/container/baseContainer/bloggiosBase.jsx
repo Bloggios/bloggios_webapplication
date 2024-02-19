@@ -54,7 +54,7 @@ const BloggiosBase = ({
             <MemoizedCustomNavbar />
             {isLoading ? <MemoizedLoaderPage/> : <ChildrenComponent>{children}</ChildrenComponent>}
             <ToastContainer
-                limit={width > 600 ? 7 : 2}
+                limit={width > 600 ? 4 : 2}
                 position={width > 600 ? 'bottom-right' : 'bottom-center'}
                 newestOnTop={true}
                 draggableDirection={width > 600 ? 'x' : 'y'}

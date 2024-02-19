@@ -95,33 +95,6 @@ export const navbarProfileNotLoggedInList = [
     }
 ]
 
-export const navbarProfileLoggedInList = [
-    {
-        id: 1,
-        icon: <FaRegUser fontSize={'18px'}/>,
-        label: 'Profile',
-        path: PROFILE_PAGE
-    },
-    {
-        id: 2,
-        icon: <BiHelpCircle fontSize={'18px'}/>,
-        label: 'Help',
-        path: SUPPORT_PAGE
-    },
-    {
-        id: 3,
-        icon: <AiOutlineBug fontSize={'18px'}/>,
-        label: 'Report Bug',
-        path: REPORT_BUG_PAGE
-    },
-    {
-        id: 4,
-        icon: <IoMdLogOut fontSize={'18px'}/>,
-        label: 'Logout',
-        path: HOME_PAGE
-    },
-]
-
 export const navItemsList = [
     {
         icon: <BiHomeAlt2/>,

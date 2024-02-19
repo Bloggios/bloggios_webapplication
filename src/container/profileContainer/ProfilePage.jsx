@@ -127,6 +127,10 @@ const Wrapper = styled.div`
     flex-direction: row;
     padding: 20px 20px 20px 10px;
     gap: 20px;
+    
+    @media (max-width: 700px) {
+        padding: 10px;
+    }
 `;
 
 const LeftSection = styled.div`
@@ -144,6 +148,10 @@ const RightSection = styled.div`
 
     @media (max-width: 1600px) {
         flex: 0;
+    }
+    
+    @media (max-width: 1050px) {
+        display: none;
     }
 `;
 

@@ -36,6 +36,7 @@ const SidebarTiles = () => {
     const {userId} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
+    const profilePath = `/profile/${userId}`;
 
     return (
         <Tiles style={{
@@ -52,8 +53,8 @@ const SidebarTiles = () => {
             </Tile>
 
             <Tile
-                active={window.location.pathname.includes(PROFILE_PATH_MATCHER)}
-                onClick={() => navigate('/profile/' + userId)}
+                active={window.location.pathname === profilePath}
+                onClick={() => navigate(profilePath)}
             >
                 <FaUserAlt/>
                 <TileSpan>Profile</TileSpan>

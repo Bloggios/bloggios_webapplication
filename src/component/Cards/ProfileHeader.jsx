@@ -14,6 +14,7 @@ import {handleImageChange} from "../../service/functions";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import Avatar from "../avatars/avatar";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const ProfileHeader = ({
     name,
@@ -26,22 +27,13 @@ const ProfileHeader = ({
 }) => {
 
     const dispatch = useDispatch();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
+    const {width} = useWindowDimensions();
     const { userId } = useSelector((state) => state.auth);
     const [isCoverImage, setIsCoverImage] = useState(false);
     const [fetchFollowing, setFetchFollowing] = useState({
         isFollowing: false,
         isChecking: true
     });
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
 
     useEffect(() => {
         checkFollowing(id)
@@ -115,7 +107,6 @@ const ProfileHeader = ({
     );
 
     return (
-        <>
             <Wrapper>
                 <CoverImage>
                     <CoverImageTag
@@ -149,7 +140,7 @@ const ProfileHeader = ({
                                 </ButtonGroupWrapper>
                             ) : (
                                 <ChangeCoverImageButton onClick={()=> setIsCoverImage(true)}>
-                                    <MdOutlinePhotoCameraFront fontSize={'16px'} />
+                                    <MdOutlinePhotoCameraFront fontSize={width > 400 ? '16px' : '12px'} />
                                     Edit Cover Image
                                 </ChangeCoverImageButton>
                             )
@@ -158,12 +149,12 @@ const ProfileHeader = ({
                         <Avatar
                             image={profileImage ? profileImage : bloggios_logo}
                             alt={name}
-                            size={'140px'}
+                            size={width > 700 ? '140px' : width > 500 ? '120px' : '80px'}
                             position={'absolute'}
                             top={'100%'}
-                            translate={'translate(20px, -50%)'}
+                            translate={width > 500 ? 'translate(20px, -50%)' : 'translate(6px, -45%)'}
                             borderRadius={'50%'}
-                            border={'4px solid #0c0c0c'}
+                            border={width > 500 ? '4px solid #0c0c0c' : '2px solid #0c0c0c'}
                         />
 
                     {id === userId && (
@@ -186,9 +177,9 @@ const ProfileHeader = ({
                             <NameSpan>
                                 {name}
                             </NameSpan>
-                            <FollowerSpan>
-                                {follower} Followers
-                            </FollowerSpan>
+                            <ProfileTagSpan>
+                                Unique Tag
+                            </ProfileTagSpan>
                         </ColumnWrapper>
 
                         {id !== userId && (
@@ -204,34 +195,25 @@ const ProfileHeader = ({
                                 color={'rgba(255, 255, 255, 0.8)'}
                                 hColor={'rgba(255, 255, 255, 1)'}
                                 borderRadius={'10px'}
-                                padding={'0 16px'}
+                                padding={width > 500 ? '0 16px' : '0 8px'}
                                 style={{
-                                    height: '28px',
-                                    width: '80px',
+                                    height: width > 500 ? '28px' : '22px',
+                                    width: width > 500 ? '80px' : '60px',
                                     border: 'none',
-                                    outline: 'none'
+                                    outline: 'none',
+                                    fontSize: width > 500 ? '14px' : '10px'
                                 }}
                             />
                         )}
                     </PrimaryDetails>
+
+                    {bio && (
+                        <BioWrapper>
+                            {bio}
+                        </BioWrapper>
+                    )}
                 </UserDetails>
             </Wrapper>
-
-            <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'} />}>
-                <ImageUploadModal
-                    isModalOpen={isModalOpen}
-                    closeModal={closeModal}
-                />
-            </Suspense>
-
-            <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'} />}>
-                <ProfileUpdateModal
-                    isModelOpen={isEditMode}
-                    onClose={() => setIsEditMode(false)}
-                    name={name}
-                />
-            </Suspense>
-        </>
     )
 }
 
@@ -249,6 +231,18 @@ const CoverImage = styled.div`
     width: 100%;
     height: 220px;
     position: relative;
+    
+    @media (max-width: 700px) {
+        height: 180px;
+    }
+
+    @media (max-width: 500px) {
+        height: 140px;
+    }
+
+    @media (max-width: 320px) {
+        height: 120px;
+    }
 `;
 
 const CoverImageTag = styled.img`
@@ -256,6 +250,18 @@ const CoverImageTag = styled.img`
     height: 220px;
     object-fit: cover;
     object-position: center center;
+
+    @media (max-width: 700px) {
+        height: 180px;
+    }
+
+    @media (max-width: 500px) {
+        height: 140px;
+    }
+
+    @media (max-width: 320px) {
+        height: 120px;
+    }
 `;
 
 const UserDetails = styled.div`
@@ -264,6 +270,8 @@ const UserDetails = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0 0 20px 0;
+    background-color: #0c0c0c;
 `;
 
 const PrimaryDetails = styled.div`
@@ -274,6 +282,16 @@ const PrimaryDetails = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0 20px 0 170px;
+    
+    @media (max-width: 700px) {
+        padding: 0 20px 0 150px;
+        height: 58px;
+    }
+
+    @media (max-width: 500px) {
+        padding: 0 10px 0 90px;
+        height: 40px;
+    }
 `;
 
 const ColumnWrapper = styled.div`
@@ -283,16 +301,42 @@ const ColumnWrapper = styled.div`
 
 const NameSpan = styled.span`
     font-family: 'Dosis', sans-serif;
-    font-size: clamp(20px, 2vw, 34px);
+    font-size: clamp(25px, 4vw, 34px);
     font-weight: 600;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.8);
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+    @media (max-width: 500px) {
+        font-size: clamp(16px, 5vw, 20px);
+        width: 140px;
+    }
+
+    @media (max-width: 350px) {
+        font-size: clamp(16px, 5vw, 20px);
+        width: 100px;
+    }
 `;
 
-const FollowerSpan = styled.span`
+const ProfileTagSpan = styled.span`
     font-family: 'Inter', sans-serif;
     font-size: clamp(12px, 1vw, 15px);
     color: rgba(255, 255, 255, 0.6);
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    @media (max-width: 500px) {
+        font-size: clamp(10px, 2.5vw, 14px);
+        width: 140px;
+    }
+
+    @media (max-width: 350px) {
+        width: 100px;
+    }
 `;
 
 const ChangeCoverImageButton = styled.button`
@@ -326,6 +370,11 @@ const ChangeCoverImageButton = styled.button`
         background-color: rgba(255, 255, 255, 0.8);
         color: rgba(0, 0, 0, 0.9);
     }
+    
+    @media (max-width: 400px) {
+        font-size: 10px;
+        bottom: 95%;
+    }
 `;
 
 const ButtonGroupWrapper = styled.div`
@@ -337,6 +386,13 @@ const ButtonGroupWrapper = styled.div`
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    font-size: 14px;
+
+    @media (max-width: 400px) {
+        gap: 5px;
+        font-size: 10px;
+        bottom: 95%;
+    }
 `;
 
 const EditImage = styled.label`
@@ -346,7 +402,6 @@ const EditImage = styled.label`
     background-color: rgba(25, 188, 19, 0.8);
     color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
-    font-size: 14px;
     cursor: pointer;
 
     &:hover {
@@ -367,7 +422,6 @@ const RemoveImage = styled.label`
     background-color: rgb(208, 90, 46);
     color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
-    font-size: 14px;
     cursor: pointer;
 
     &:hover {
@@ -420,6 +474,36 @@ const ProfileImageChangeButton = styled.label`
     &:active {
         background-color: #4f62f4;
         color: rgba(255, 255, 255, 0.9);
+    }
+    
+    @media (max-width: 700px) {
+        font-size: 16px;
+        height: 28px;
+        left: 105px;
+        bottom: -55px;
+    }
+
+    @media (max-width: 500px) {
+        font-size: 14px;
+        height: 22px;
+        left: 65px;
+        bottom: -42px;
+    }
+`;
+
+const BioWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    padding: 22px 28px 0 28px;
+    font-size: clamp(16px, 2vw, 18px);
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 1px;
+    font-family: 'Inter', sans-serif;
+    white-space: pre-line;
+    
+    @media (max-width: 500px) {
+        font-size: clamp(10px, 1vw, 14px);
+        padding: 18px 10px 0 10px;
     }
 `;
 

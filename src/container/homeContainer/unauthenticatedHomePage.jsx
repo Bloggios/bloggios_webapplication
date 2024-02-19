@@ -28,13 +28,6 @@ const UnauthenticatedHomePage = () => {
         <BloggiosBase>
             <Wrapper>
                 <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
-                <HomeHeader />
             </Wrapper>
         </BloggiosBase>
     );

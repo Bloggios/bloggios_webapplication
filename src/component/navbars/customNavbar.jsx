@@ -27,15 +27,18 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
 import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../constant/listConstants";
 import IconLabelDropdown from "../dropdowns/IconLabelDropdown";
-import {HOME_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, PROFILE_PAGE, REPORT_BUG_PAGE, SUPPORT_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
 import {getFollow} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
-import {IoIosSearch} from "react-icons/io";
+import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import {clearIsCreated} from "../../state/isCreatedSlice";
 import {RxSlash} from "react-icons/rx";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {FaRegUser} from "react-icons/fa";
+import {BiHelpCircle} from "react-icons/bi";
+import {AiOutlineBug} from "react-icons/ai";
 
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
@@ -43,11 +46,38 @@ const CustomNavbar = () => {
 
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
-    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {isAuthenticated, userId} = useSelector((state)=> state.auth);
     const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isFollowed} = useSelector((state)=> state.isCreated);
     const dispatch = useDispatch();
+
+    const navbarProfileLoggedInList = [
+        {
+            id: 1,
+            icon: <FaRegUser fontSize={'18px'}/>,
+            label: 'Profile',
+            path: isAuthenticated && `/profile/${userId}`
+        },
+        {
+            id: 2,
+            icon: <BiHelpCircle fontSize={'18px'}/>,
+            label: 'Help',
+            path: SUPPORT_PAGE
+        },
+        {
+            id: 3,
+            icon: <AiOutlineBug fontSize={'18px'}/>,
+            label: 'Report Bug',
+            path: REPORT_BUG_PAGE
+        },
+        {
+            id: 4,
+            icon: <IoMdLogOut fontSize={'18px'}/>,
+            label: 'Logout',
+            path: HOME_PAGE
+        },
+    ]
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
