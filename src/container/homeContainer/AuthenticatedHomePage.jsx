@@ -34,10 +34,9 @@ import BloggiosBase from "../baseContainer/bloggiosBase";
 import header_image from '../../asset/svg/home-header_bg.svg'
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
-const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
-const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPostMobile'));
-const PostList = lazy(()=> import('../../component/List/PostList'));
-const ProfileSuggestions = lazy(()=> import('../../component/Cards/ProfileSuggestions'));
+const CreatePost = lazy(() => import('../../component/CreatePost/createPost'));
+const PostList = lazy(() => import('../../component/List/PostList'));
+const ProfileSuggestions = lazy(() => import('../../component/Cards/ProfileSuggestions'));
 
 const AuthenticatedHomePage = () => {
 
@@ -48,63 +47,6 @@ const AuthenticatedHomePage = () => {
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
     const [rightSectionRef, rightSectionSize] = useComponentSize();
-    const [postListLoading, setPostListLoading] = useState(true);
-    const [postListData, setPostListData] = useState([]);
-    const {isCreated} = useSelector((state) => state.postCreate);
-    const dispatch = useDispatch();
-    const [page, setPage] = useState(0);
-    const [endPage, setEndPage] = useState(false);
-
-    const fetchPostList = useCallback(async () => {
-        if (!endPage) {
-            setPostListLoading(true);
-            try {
-                const response = await postList(page);
-                if (response.data?.object.length === 0) {
-                    setEndPage(true);
-                }
-                setPostListData((prevData) => [...prevData, ...response.data?.object]);
-            } catch (error) {
-                dispatchError(dispatch, error)
-            } finally {
-                setPostListLoading(false);
-            }
-        }
-    }, [setPostListData, setPostListLoading, page, dispatch, endPage]);
-
-    useEffect(() => {
-        fetchPostList();
-    }, [fetchPostList]);
-
-    useEffect(() => {
-        if (isCreated) {
-            setPostListLoading(true);
-            setPostListData([]);
-            setPage(0);
-            setEndPage(false);
-            const debouncedFetch = debounce(fetchPostList, 1000);
-            debouncedFetch();
-            return () => {
-                dispatch(clearPostCreated());
-                debouncedFetch.cancel();
-            };
-        }
-    }, [isCreated]);
-
-    useEffect(() => {
-        const handleScroll = debounce(() => {
-            const { scrollY, innerHeight } = window;
-            const { offsetHeight } = document.body;
-
-            if (scrollY + innerHeight >= offsetHeight - 250) {
-                setPage((prevPage) => prevPage + 1);
-            }
-        }, 200);
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
 
     return (
         <BloggiosBase>
@@ -126,21 +68,18 @@ const AuthenticatedHomePage = () => {
                 )}
                 {width > 1200 && (
                     <RightBar ref={rightSectionRef}>
-                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
-                            <ProfileSuggestions />
+                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width}/>}>
+                            <ProfileSuggestions/>
                         </Suspense>
                     </RightBar>
                 )}
                 <MiddleBar ref={middleSectionRef}>
                     <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
-                        {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
-                            <CreatePostMobile/>}
+                        <CreatePost image={profileImage ? profileImage : bloggios_logo}/>
                     </Suspense>
-                    {postListData && (
-                        <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                            <PostList postList={postListData} postListLoading={postListLoading}/>
-                        </Suspense>
-                    )}
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
+                        <PostList/>
+                    </Suspense>
                 </MiddleBar>
             </Wrapper>
         </BloggiosBase>

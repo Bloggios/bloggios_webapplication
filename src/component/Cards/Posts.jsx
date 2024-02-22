@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -31,46 +31,48 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {FaHeart, FaRegCommentDots, FaRegHeart} from "react-icons/fa";
 import {IoShareSocialOutline} from "react-icons/io5";
 import {getUserProfile} from "../../restservices/profileApi";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {RiDeleteBin5Line} from "react-icons/ri";
+import {postDeleteApi} from "../../restservices/postApi";
+import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
+import {setPostCreated} from "../../state/postCreateSlice";
+import { useQuery } from '@tanstack/react-query';
+import FallbackLoader from '../loaders/fallbackLoader'
 
-const Posts = ({
-                   userId,
-                   location,
-                   imagesList,
-                   postBody,
-                   date
-               }) => {
+const Posts = React.forwardRef(({userId,
+                                    location,
+                                    imagesList,
+                                    postBody,
+                                    date,
+                                    postId}, ref) => {
 
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const {width} = useWindowDimensions();
-    const [formattedDate, setFormattedDate] = useState('');
-    const [userData, setUserData] = useState({
-        name: '',
-        profileImageLink: ''
-    });
-
+    const id = useSelector((state) => state.auth.userId);
+    const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+    const dispatch = useDispatch();
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
     };
 
-
-    const handleClick = () => {
-        if (isShown) {
-            setIsShown(false)
-        }
+    const fetchPostUser = async () => {
+        const response = await getUserProfile(userId);
+        return response.data;
     }
 
-    useEffect(() => {
-        getUserProfile(userId)
-            .then((response) => {
-                setUserData(prevData => ({
-                    ...prevData,
-                    name: response.data?.name,
-                    profileImageLink: response.data?.profileImageLink
-                }));
-            })
-    }, [userId])
+    const {
+        isLoading,
+        error,
+        data: userData
+    } = useQuery({
+        queryKey: ['userProfilePost', userId],
+        queryFn: fetchPostUser,
+        staleTime: 10000
+    })
 
     const getReadMoreValue = () => {
         const split = postBody.split('\n');
@@ -101,8 +103,43 @@ const Posts = ({
         }
     }
 
-    return (
-        <Wrapper onClick={handleClick}>
+    const handleClickOutside = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setIsShown(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    const handlePostDelete = () => {
+        postDeleteApi(postId)
+            .then((response)=> {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
+                dispatchSuccessMessage(dispatch, "Post Deleted");
+                dispatch(setPostCreated());
+            }).catch((error)=> {
+                dispatchError(dispatch, error);
+        })
+    }
+
+    if (isLoading) {
+        return <FallbackLoader width={'100%'} height={'400px'}/>
+    }
+
+    if (error) {
+        return <h3>Error: {error.message}</h3>;
+    }
+
+    const postJsxBody = (
+        <>
             <PostHeader>
                 <LogoNameWrapper>
                     <Avatar
@@ -120,7 +157,7 @@ const Posts = ({
                     </ColumnWrapper>
                 </LogoNameWrapper>
 
-                <OptionsMenu onClick={() => setIsShown(!isShown)}>
+                <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
                     <SlOptionsVertical/>
 
                     <DropdownWrapper style={{
@@ -128,15 +165,22 @@ const Posts = ({
                         visibility: isShown ? 'visible' : 'hidden',
                         transform: isShown ? 'translateX(0)' : 'translateX(100%)'
                     }}>
-                        <DropDownItemWrapper>
+                        <DropDownItemWrapper onClick={() => navigate(`/profile/${userId}`)}>
                             <Typography text={'View Profile'} type={'custom'} size={'14px'}/>
                             <CgProfile fontSize={'18px'}/>
                         </DropDownItemWrapper>
 
                         <DropDownItemWrapper>
                             <Typography text={'Report Post'} type={'custom'} size={'14px'}/>
-                            <MdOutlineReport fontSize={'18px'}/>
+                            <MdOutlineReport fontSize={'20px'}/>
                         </DropDownItemWrapper>
+
+                        {id === userId && (
+                            <DropDownItemWrapper onClick={handlePostDelete}>
+                                <Typography text={'Delete'} type={'custom'} size={'14px'}/>
+                                <RiDeleteBin5Line fontSize={'18px'} color={'rgb(223,56,56)'}/>
+                            </DropDownItemWrapper>
+                        )}
                     </DropdownWrapper>
                 </OptionsMenu>
             </PostHeader>
@@ -179,9 +223,13 @@ const Posts = ({
                     </IconButton>
                 </LikeCommentShareWrapper>
             </PostFooter>
-        </Wrapper>
+        </>
     );
-};
+
+    return ref
+        ? <Wrapper ref={ref}>{postJsxBody}</Wrapper>
+        : <Wrapper>{postJsxBody}</Wrapper>;
+});
 
 const Wrapper = styled.div`
     min-width: 100%;

@@ -18,26 +18,73 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {Suspense, useCallback, useRef, useState} from 'react';
 import styled from "styled-components";
-import Posts from "../Cards/Posts";
 import FallbackLoader from "../loaders/fallbackLoader";
+import useBloggiosPost from "../../hooks/useBloggiosPost";
+import Posts from "../Cards/Posts";
+import {dispatchError} from "../../service/functions";
+import {useDispatch} from "react-redux";
+import DataNotFound from "../NotFound/DataNotFound";
 
-const PostList = ({postList, postListLoading}) => {
+const PostList = () => {
 
-    return (
-        <Wrapper>
-            {postList.map((post) => (
+    const [pageNum, setPageNum] = useState(0);
+    const {isLoading, isError, error, data, hasNextPage} = useBloggiosPost(pageNum);
+
+    const intObserver = useRef();
+
+    const lastPostRef = useCallback(post => {
+        if (isLoading) return;
+        if (intObserver.current) intObserver.current.disconnect();
+
+        intObserver.current = new IntersectionObserver(posts => {
+            if (posts[0].isIntersecting && hasNextPage) {
+                setPageNum(prevState => prevState + 1);
+            }
+        });
+
+        if (post) intObserver.current.observe(post);
+    }, [isLoading, hasNextPage])
+
+    if (isError) {
+        return <DataNotFound />
+    }
+
+    const postData = data.map((post, i)=> {
+        if (data.length === i + 1) {
+            return (
                 <Posts
+                    ref={lastPostRef}
                     key={post.postId}
+                    postId={post.postId}
                     imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
                     postBody={post.body}
                     location={post.location}
                     userId={post.userId}
                     date={post.dateCreated}
                 />
-            ))}
-            {postListLoading && <FallbackLoader width={'100%'} height={'100px'} />}
+            )
+        }
+        return (
+            <Posts
+                key={post.postId}
+                postId={post.postId}
+                imagesList={post.imagesLink.length > 0 && post.imagesLink ? post.imagesLink : null}
+                postBody={post.body}
+                location={post.location}
+                userId={post.userId}
+                date={post.dateCreated}
+            />
+        )
+    })
+
+    return (
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'280px'} />}>
+                {postData}
+            </Suspense>
+            {isLoading && <FallbackLoader width={'100%'} height={'100px'} />}
         </Wrapper>
     );
 };

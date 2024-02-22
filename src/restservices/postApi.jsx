@@ -19,7 +19,7 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_POST, FETCH_POST_TAGS, POST_LIST} from "../constant/apiConstants";
+import {ADD_POST, DELETE_POST, FETCH_POST_TAGS, POST_LIST} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {
@@ -38,16 +38,24 @@ export const addPost = (payload) => {
         .then((response)=> response);
 }
 
-export const postList = (page) => {
+export const getPostList = async (pageParam = 0, options = {}) => {
     const payload = {
-        page: page,
+        page: pageParam,
         size: 10
     }
-    return authenticatedAxios.post(POST_LIST, payload)
-        .then((response)=> response);
+    const response = await authenticatedAxios.post(POST_LIST, payload, options);
+    return response.data;
 }
 
 export const searchPostList = (payload) => {
     return authenticatedAxios.post(POST_LIST, payload)
         .then((response)=> response);
+}
+
+export const postDeleteApi = (postId) => {
+    return authenticatedAxios.delete(DELETE_POST, {
+        params: {
+            "postId": postId
+        }
+    }).then((response)=> response);
 }

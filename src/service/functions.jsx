@@ -174,3 +174,12 @@ export const handleImageChange = (e, uploadFor, dispatch) => {
     }
     return true;
 };
+
+export const dispatchSuccessMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Success',
+    };
+    dispatch(setSnackbar(snackBarData));
+}
