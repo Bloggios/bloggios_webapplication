@@ -18,22 +18,34 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import React, {Suspense, useCallback, useEffect, useState} from 'react';
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import AuthPostList from "../../../component/List/AuthPostList";
+import {clearIsCreated} from "../../../state/isCreatedSlice";
+import {useDispatch, useSelector} from "react-redux";
 
-const postCreateSlice = createSlice({
-    name: 'postCreate',
-    initialState: {
-        isCreated: false
-    },
-    reducers: {
-        setPostCreated: (state, action) => {
-            state.isCreated = true;
-        },
-        clearPostCreated: (state, action) => {
-            state.isCreated = false;
+const ProfilePostOutlet = () => {
+
+    const {isPost} = useSelector((state)=> state.isCreated);
+    const [postList, setPostList] = useState(true);
+    const dispatch = useDispatch();
+
+    const dispatchClearIsCreated = useCallback(() => dispatch(clearIsCreated()), [dispatch]);
+
+    useEffect(() => {
+        if (isPost) {
+            setPostList(false);
+            setTimeout(() => {
+                dispatchClearIsCreated();
+                setPostList(true);
+            }, 100);
         }
-    }
-});
+    }, [isPost, dispatchClearIsCreated]);
+    return (
+        <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
+            {postList ? <AuthPostList /> : <FallbackLoader width={'100%'} height={'400px'} />}
+        </Suspense>
+    );
+};
 
-export {postCreateSlice};
-export const { setPostCreated, clearPostCreated } = postCreateSlice.actions;
+export default ProfilePostOutlet;

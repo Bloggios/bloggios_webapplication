@@ -18,27 +18,34 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
-
-const isCreatedSlice = createSlice({
-    name: 'isCreated',
-    initialState: {
-        isFollowed: false,
-        isPost: false
-    },
-    reducers: {
-        setIsCreated: (state, action) => {
-            const { isFollowed, isPost } = action.payload;
-            state.isFollowed = isFollowed;
-            state.isPost = isPost;
-        },
-        clearIsCreated: (state, action) => {
-            state.isFollowed = false;
-            state.isPost = false;
-        }
+export const getFormattedDate = (date) => {
+    const originalDate = new Date(date);
+    const currentDate = new Date();
+    const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
+    if (timeDiffInSeconds < 60) {
+        return `${timeDiffInSeconds}s ago`;
+    } else if (timeDiffInSeconds < 3600) {
+        return `${Math.floor(timeDiffInSeconds / 60)}m ago`;
+    } else if (timeDiffInSeconds < 86400) {
+        return `${Math.floor(timeDiffInSeconds / 3600)}h ago`;
+    } else if (timeDiffInSeconds < 604800) {
+        return `${Math.floor(timeDiffInSeconds / 86400)}d ago`;
+    } else if (timeDiffInSeconds < 2592000) {
+        return `${Math.floor(timeDiffInSeconds / 604800)}w ago`;
+    } else if (timeDiffInSeconds < 31536000) {
+        return `${Math.floor(timeDiffInSeconds / 2592000)}mo ago`;
+    } else {
+        return `${Math.floor(timeDiffInSeconds / 31536000)}yr ago`;
     }
-});
+}
 
-export { isCreatedSlice }
+export const handleDivScroll = (direction) => {
+    const scrollContainer = document.getElementById('suggestionWrapper');
+    const scrollAmount = 150;
 
-export const { setIsCreated, clearIsCreated } = isCreatedSlice.actions;
+    if (direction === 'left') {
+        scrollContainer.scrollLeft -= scrollAmount;
+    } else if (direction === 'right') {
+        scrollContainer.scrollLeft += scrollAmount;
+    }
+};

@@ -58,4 +58,12 @@ export const postDeleteApi = (postId) => {
             "postId": postId
         }
     }).then((response)=> response);
+};
+
+export const getAuthPost = (page) => {
+    return authenticatedAxios.get('/post-provider/v1.0/post/post-list/auth', {
+        params: {
+            "page": page
+        }
+    }).then((response)=> response.data);
 }

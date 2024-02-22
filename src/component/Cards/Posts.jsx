@@ -36,9 +36,11 @@ import {useNavigate} from "react-router-dom";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {postDeleteApi} from "../../restservices/postApi";
 import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
-import {setPostCreated} from "../../state/postCreateSlice";
-import { useQuery } from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import FallbackLoader from '../loaders/fallbackLoader'
+import {getFormattedDate} from "../../service/commonFunctions";
+import {setIsCreated} from "../../state/isCreatedSlice";
+import {handlePostDelete} from "../../service/postApiFunctions";
 
 const Posts = React.forwardRef(({userId,
                                     location,
@@ -71,7 +73,7 @@ const Posts = React.forwardRef(({userId,
     } = useQuery({
         queryKey: ['userProfilePost', userId],
         queryFn: fetchPostUser,
-        staleTime: 10000
+        staleTime: 70000
     })
 
     const getReadMoreValue = () => {
@@ -80,27 +82,6 @@ const Posts = React.forwardRef(({userId,
             return true;
         }
         return false;
-    }
-
-    const getFormattedDate = (date) => {
-        const originalDate = new Date(date);
-        const currentDate = new Date();
-        const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
-        if (timeDiffInSeconds < 60) {
-            return `${timeDiffInSeconds}s ago`;
-        } else if (timeDiffInSeconds < 3600) {
-            return `${Math.floor(timeDiffInSeconds / 60)}m ago`;
-        } else if (timeDiffInSeconds < 86400) {
-            return `${Math.floor(timeDiffInSeconds / 3600)}h ago`;
-        } else if (timeDiffInSeconds < 604800) {
-            return `${Math.floor(timeDiffInSeconds / 86400)}d ago`;
-        } else if (timeDiffInSeconds < 2592000) {
-            return `${Math.floor(timeDiffInSeconds / 604800)}w ago`;
-        } else if (timeDiffInSeconds < 31536000) {
-            return `${Math.floor(timeDiffInSeconds / 2592000)}mo ago`;
-        } else {
-            return `${Math.floor(timeDiffInSeconds / 31536000)}yr ago`;
-        }
     }
 
     const handleClickOutside = (e) => {
@@ -115,20 +96,6 @@ const Posts = React.forwardRef(({userId,
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
-
-    const handlePostDelete = () => {
-        postDeleteApi(postId)
-            .then((response)=> {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                });
-                dispatchSuccessMessage(dispatch, "Post Deleted");
-                dispatch(setPostCreated());
-            }).catch((error)=> {
-                dispatchError(dispatch, error);
-        })
-    }
 
     if (isLoading) {
         return <FallbackLoader width={'100%'} height={'400px'}/>
@@ -159,7 +126,6 @@ const Posts = React.forwardRef(({userId,
 
                 <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
                     <SlOptionsVertical/>
-
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
                         visibility: isShown ? 'visible' : 'hidden',
@@ -176,7 +142,7 @@ const Posts = React.forwardRef(({userId,
                         </DropDownItemWrapper>
 
                         {id === userId && (
-                            <DropDownItemWrapper onClick={handlePostDelete}>
+                            <DropDownItemWrapper onClick={()=> handlePostDelete(postId, dispatch)}>
                                 <Typography text={'Delete'} type={'custom'} size={'14px'}/>
                                 <RiDeleteBin5Line fontSize={'18px'} color={'rgb(223,56,56)'}/>
                             </DropDownItemWrapper>
@@ -189,10 +155,11 @@ const Posts = React.forwardRef(({userId,
                 <PostBodyWrapper style={{
                     margin: imagesList ? '20px 0' : '20px 0 0 0'
                 }}>
-                    <TextContainer style={{
+                    <TextContainer dangerouslySetInnerHTML={{
+                        __html: postBody
+                    }} style={{
                         height: isExpanded ? 'auto' : '65px'
                     }}>
-                        {postBody}
                     </TextContainer>
                     {getReadMoreValue() && (
                         <ReadMoreButton onClick={toggleReadMore}>

@@ -230,4 +230,37 @@ export const notFoundPageList = [
         icon: <MdOutlineContactSupport />,
         clickAction: SUPPORT_PAGE
     }
-]
+];
+
+export const profileTabsList = [
+    {
+        id: 1,
+        label: 'About',
+        path: ""
+    },
+    {
+        id: 2,
+        label: 'Posts',
+        path: 'posts'
+    },
+    {
+        id: 3,
+        label: 'Questions',
+        path: 'questions'
+    },
+    {
+        id: 4,
+        label: 'Likes',
+        path: 'like'
+    },
+    {
+        id: 5,
+        label: 'Saved',
+        path: 'saved'
+    },
+    {
+        id: 6,
+        label: 'Reports',
+        path: 'reports'
+    }
+];

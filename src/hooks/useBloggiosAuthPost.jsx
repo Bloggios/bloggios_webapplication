@@ -18,27 +18,41 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from "react-redux";
+import {getAuthPost, getPostList} from "../restservices/postApi";
+import {dispatchError} from "../service/functions";
 
-const isCreatedSlice = createSlice({
-    name: 'isCreated',
-    initialState: {
-        isFollowed: false,
-        isPost: false
-    },
-    reducers: {
-        setIsCreated: (state, action) => {
-            const { isFollowed, isPost } = action.payload;
-            state.isFollowed = isFollowed;
-            state.isPost = isPost;
-        },
-        clearIsCreated: (state, action) => {
-            state.isFollowed = false;
-            state.isPost = false;
-        }
-    }
-});
+const useBloggiosAuthPost = (pageNum) => {
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState({});
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const dispatch = useDispatch();
 
-export { isCreatedSlice }
+    useEffect(()=> {
+        setIsLoading(true);
+        setIsError(false);
+        setError({});
 
-export const { setIsCreated, clearIsCreated } = isCreatedSlice.actions;
+        const controller = new AbortController();
+        const {signal} = controller;
+
+        getAuthPost(pageNum)
+            .then(data => {
+                setData(prev => [...prev, ...data.object]);
+                setHasNextPage(Boolean(data?.object.length));
+                setIsLoading(false);
+            }).catch(e => {
+            setIsLoading(false);
+            setIsError(true);
+            dispatchError(dispatch, e);
+            setError({message : e?.response?.data?.message})
+        })
+    }, [pageNum])
+
+    return {isLoading, isError, error, data, hasNextPage};
+};
+
+export default useBloggiosAuthPost;

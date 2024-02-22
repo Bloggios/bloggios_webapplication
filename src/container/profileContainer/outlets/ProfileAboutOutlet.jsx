@@ -18,30 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import useSeo from "../../globalseo/useSeo";
-import {useSelector} from "react-redux";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import React from 'react';
 
-const UnauthenticatedHomePage = lazy(()=> import('./unauthenticatedHomePage'));
-const AuthenticatedHomePage = lazy(()=> import('./AuthenticatedHomePage'));
-
-const HomePage = () => {
-
-    useSeo('homepage');
-
-    const {isAuthenticated} = useSelector((state)=> state.auth);
-
+const ProfileAboutOutlet = () => {
     return (
-        <BloggiosBase>
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'500px'} />}>
-                {
-                    isAuthenticated ? <AuthenticatedHomePage /> : <UnauthenticatedHomePage />
-                }
-            </Suspense>
-        </BloggiosBase>
+        <div>
+            About
+        </div>
     );
 };
 
-export default HomePage;
+export default ProfileAboutOutlet;

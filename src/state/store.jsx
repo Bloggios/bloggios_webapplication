@@ -23,7 +23,6 @@ import loadingSlice from "./loadingSlice";
 import snackbarSlice from "./snackbarSlice";
 import {authSlice} from "./authSlice";
 import {profileSlice} from "./profileSlice";
-import {postCreateSlice} from "./postCreateSlice";
 import {isCreatedSlice} from "./isCreatedSlice";
 
 const store = configureStore({
@@ -32,10 +31,9 @@ const store = configureStore({
         snackbar: snackbarSlice,
         auth: authSlice.reducer,
         profile: profileSlice.reducer,
-        postCreate: postCreateSlice.reducer,
         isCreated: isCreatedSlice.reducer
     },
-    devTools: true
+    devTools: !process.env.REACT_APP_IS_PRODUCTION
 })
 
 export default store;

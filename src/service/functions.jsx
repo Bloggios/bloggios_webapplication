@@ -82,9 +82,7 @@ export const checkIsProfileAdded = (accessToken, dispatch, navigate) => {
 export const fetchProfileAndDispatch = async (dispatch) => {
     try {
         const response = await getProfile();
-        const followResponse = await getFollow();
         const { data } = response;
-        const followData = followResponse.data;
         const profileData = {
             name: data.name,
             isAdded: true,
@@ -94,8 +92,8 @@ export const fetchProfileAndDispatch = async (dispatch) => {
             userId: data.userId,
             profileImage: data.profileImage,
             coverImage: data.coverImage,
-            followers: followData.followers,
-            following: followData.following
+            followers: data.followers,
+            following: data.following
         };
         dispatch(setProfile(profileData));
     } catch (error) {

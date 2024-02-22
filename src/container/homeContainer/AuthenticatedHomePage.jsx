@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useDispatch, useSelector} from "react-redux";
@@ -26,12 +26,9 @@ import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
-import {postList} from "../../restservices/postApi";
-import {debounce} from "lodash";
-import {dispatchError} from "../../service/functions";
-import {clearPostCreated} from "../../state/postCreateSlice";
 import BloggiosBase from "../baseContainer/bloggiosBase";
 import header_image from '../../asset/svg/home-header_bg.svg'
+import {clearIsCreated} from "../../state/isCreatedSlice";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
 const CreatePost = lazy(() => import('../../component/CreatePost/createPost'));
@@ -43,22 +40,45 @@ const AuthenticatedHomePage = () => {
     useSeo('authHomePage');
 
     const {width} = useWindowDimensions();
-    const {name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
+    const {
+        name,
+        bio,
+        email,
+        profileImage,
+        coverImage,
+        followers,
+        following,
+    } = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
     const [rightSectionRef, rightSectionSize] = useComponentSize();
+    const dispatch = useDispatch();
+    const {isPost} = useSelector((state)=> state.isCreated);
+    const [postList, setPostList] = useState(true);
+
+    const dispatchClearIsCreated = useCallback(() => dispatch(clearIsCreated()), [dispatch]);
+
+    useEffect(() => {
+        if (isPost) {
+            setPostList(false);
+            setTimeout(() => {
+                dispatchClearIsCreated();
+                setPostList(true);
+            }, 100);
+        }
+    }, [isPost, dispatchClearIsCreated]);
 
     return (
         <BloggiosBase>
             <Wrapper>
                 {width > 750 && (
                     <LeftBar ref={leftSectionRef}>
-                        <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width}/>}>
+                        <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width} />}>
                             <ProfileCard
                                 name={name}
                                 bio={bio}
-                                coverImage={coverImage ? coverImage : header_image}
-                                profileImage={profileImage ? profileImage : bloggios_logo}
+                                coverImage={coverImage || header_image}
+                                profileImage={profileImage || bloggios_logo}
                                 followers={followers}
                                 following={following}
                                 email={email}
@@ -68,17 +88,17 @@ const AuthenticatedHomePage = () => {
                 )}
                 {width > 1200 && (
                     <RightBar ref={rightSectionRef}>
-                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width}/>}>
-                            <ProfileSuggestions/>
+                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
+                            <ProfileSuggestions />
                         </Suspense>
                     </RightBar>
                 )}
                 <MiddleBar ref={middleSectionRef}>
-                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
-                        <CreatePost image={profileImage ? profileImage : bloggios_logo}/>
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
+                        <CreatePost image={profileImage || bloggios_logo} />
                     </Suspense>
-                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                        <PostList/>
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'} />}>
+                        {postList ? <PostList /> : <FallbackLoader width={middleSectionSize.width} height={'400px'} />}
                     </Suspense>
                 </MiddleBar>
             </Wrapper>
@@ -93,7 +113,7 @@ const Wrapper = styled.div`
     gap: 0 0;
     grid-auto-flow: row dense;
     grid-template-areas:
-    "Left-Bar Middle-Bar Right-Bar";
+        "Left-Bar Middle-Bar Right-Bar";
     box-sizing: border-box;
     margin-bottom: 20px;
 
@@ -104,7 +124,7 @@ const Wrapper = styled.div`
     @media (max-width: 750px) {
         grid-template-columns: 1fr;
         grid-template-areas:
-    "Middle-Bar";
+            "Middle-Bar";
     }
 `;
 

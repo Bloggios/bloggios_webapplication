@@ -1,7 +1,8 @@
 import axios from "axios";
-import {getTenTags} from "../restservices/postApi";
+import {getTenTags, postDeleteApi} from "../restservices/postApi";
 import {setSnackbar} from "../state/snackbarSlice";
-import {dispatchError} from "./functions";
+import {dispatchError, dispatchSuccessMessage} from "./functions";
+import {setIsCreated} from "../state/isCreatedSlice";
 
 export const fetchTags = (value, setSuggestions) => {
     getTenTags(value)
@@ -87,3 +88,20 @@ export const removeImage = (index, selectedImages, setSelectedImages) => {
     updatedImages.splice(index, 1);
     setSelectedImages(updatedImages);
 };
+
+export const handlePostDelete = (postId, dispatch) => {
+    postDeleteApi(postId)
+        .then((response)=> {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            });
+            dispatch(setIsCreated({
+                isFollowed: false,
+                isPost: true
+            }));
+            dispatchSuccessMessage(dispatch, "Post Deleted");
+        }).catch((error)=> {
+        dispatchError(dispatch, error);
+    })
+}
