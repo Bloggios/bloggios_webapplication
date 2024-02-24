@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {Suspense, useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -35,10 +35,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {getLikeCommentCount} from "../../restservices/postApi";
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {getFormattedDate} from "../../service/commonFunctions";
 import {handlePostDelete} from "../../service/postApiFunctions";
 import SingleColorLoader from "../loaders/SingleColorLoader";
+import {addPostLike, removePostLike} from "../../restservices/likeApi";
+import {dispatchError} from "../../service/functions";
+import FallbackLoader from "../loaders/fallbackLoader";
+import CommentModel from "../modal/CommentModel";
 
 const Posts = React.forwardRef(({userId,
                                     location,
@@ -54,6 +58,7 @@ const Posts = React.forwardRef(({userId,
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
+    const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
@@ -62,6 +67,34 @@ const Posts = React.forwardRef(({userId,
     const fetchPostUser = async () => {
         const response = await getUserProfile(userId);
         return response.data;
+    }
+
+    const addLikeMutation = useMutation({
+        mutationFn: () => addPostLike(postId),
+        onSuccess: async () => {
+            await refetchLikeComment();
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    })
+
+    const removeLikeMutation = useMutation({
+        mutationFn: () => removePostLike(postId),
+        onSuccess: async () => {
+            await refetchLikeComment();
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    });
+
+    const handleLike = () => {
+        if (likeCommentCount.isLike) {
+            removeLikeMutation.mutate();
+        } else {
+            addLikeMutation.mutate();
+        }
     }
 
     const getLikeCommentCountResponse = async () => {
@@ -85,7 +118,8 @@ const Posts = React.forwardRef(({userId,
         error: lcError,
         isSuccess: lcIsSuccess,
         data: likeCommentCount,
-        isError: lcIsError
+        isError: lcIsError,
+        refetch: refetchLikeComment
     } = useQuery({
         queryKey: ['lcCount', postId],
         queryFn: getLikeCommentCountResponse,
@@ -129,7 +163,10 @@ const Posts = React.forwardRef(({userId,
     const getPostFooter = useCallback(()=> {
         if (lcIsLoading) {
             return <PostFooter>
-                <LikeCommentShareWrapper>
+                <LikeCommentShareWrapper style={{
+                    height: '44px',
+                    width: '100px'
+                }}>
                     <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
                 </LikeCommentShareWrapper>
             </PostFooter>
@@ -137,10 +174,10 @@ const Posts = React.forwardRef(({userId,
             return (
                 <PostFooter>
                     <LikeCommentShareWrapper>
-                        <IconButton>
+                        <IconButton onClick={handleLike}>
                             {likeCommentCount.isLike ? <FaHeart color={'red'} /> : <FaRegHeart />}
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={()=> setIsCommentBoxOpen(!isCommentBoxOpen)}>
                             <FaRegCommentDots/>
                         </IconButton>
                         <IconButton>
@@ -166,7 +203,7 @@ const Posts = React.forwardRef(({userId,
                 </PostFooter>
             )
         }
-    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount])
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen])
 
     const getNameContent = useCallback(()=> {
         if (isLoading) {
@@ -288,6 +325,15 @@ const Posts = React.forwardRef(({userId,
             </PostEntriesWrapper>
 
             {getPostFooter()}
+
+            {isCommentBoxOpen && (
+                <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
+                    <CommentModel
+                        isModalOpen={isCommentBoxOpen}
+                        closeModal={() => setIsCommentBoxOpen(false)}
+                    />
+                </Suspense>
+            )}
         </>
     );
 

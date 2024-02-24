@@ -21,6 +21,15 @@ export const fetchTags = (value, setSuggestions) => {
 
 export const handleSuggestionClick = (suggestion, inputValue, setInputValue, setShowSuggestions) => {
     const words = inputValue.split(' ');
+    if (words[words.length - 1].endsWith('\n#')) {
+        const lastWord = words[words.length - 1];
+        const wordSplit = lastWord.split('\n');
+        words.pop();
+        words.push(wordSplit[0]);
+        words.push('\n')
+        const lastListFirstWord = wordSplit[wordSplit.length - 1];
+        words.push(lastListFirstWord);
+    }
     words[words.length - 1] = `${suggestion.tag}`;
     setInputValue(words.join(' '));
     setInputValue(prevState => prevState + " ");

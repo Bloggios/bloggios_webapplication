@@ -105,6 +105,7 @@ const CreatePost = ({
                 isImageAdded: selectedImages.length > 0,
                 body: inputValue
             }
+            console.log(inputValue);
             addPost(postPayload)
                 .then((response) => {
                     if (selectedImages.length > 0) {
@@ -135,7 +136,9 @@ const CreatePost = ({
 
     useEffect(() => {
         const handleInputChange = () => {
-            const words = inputValue.split(' ');
+            const lines = inputValue.split('\n');
+            const lastLine = lines[lines.length - 1];
+            const words = lastLine.split(' ');
             const lastWord = words[words.length - 1];
             if (lastWord.startsWith('#')) {
                 setTags(lastWord ? lastWord : '#');
