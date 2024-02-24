@@ -19,7 +19,15 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_POST, DELETE_POST, FETCH_POST_TAGS, POST_LIST} from "../constant/apiConstants";
+import {
+    ADD_POST,
+    AUTH_USER_POSTS,
+    DELETE_POST,
+    FETCH_POST_TAGS,
+    LIKE_COMMENT_COUNT,
+    POST_LIST,
+    USER_POSTS
+} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {
@@ -61,9 +69,26 @@ export const postDeleteApi = (postId) => {
 };
 
 export const getAuthPost = (page) => {
-    return authenticatedAxios.get('/post-provider/v1.0/post/post-list/auth', {
+    return authenticatedAxios.get(AUTH_USER_POSTS, {
         params: {
             "page": page
+        }
+    }).then((response)=> response.data);
+}
+
+export const getUserAuthPost = (userId, page) => {
+    return authenticatedAxios.get(USER_POSTS, {
+        params: {
+            "userId": userId,
+            "page": page
+        }
+    }).then((response)=> response.data);
+}
+
+export const getLikeCommentCount = (postId) => {
+    return authenticatedAxios.get(LIKE_COMMENT_COUNT, {
+        params: {
+            "postId": postId
         }
     }).then((response)=> response.data);
 }

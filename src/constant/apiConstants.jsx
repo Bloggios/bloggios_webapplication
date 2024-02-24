@@ -43,3 +43,6 @@ export const PROFILE_LIST = '/user-provider/v1.0/profile/profile-list';
 export const REFRESH_TOKEN_SOCIAL = '/auth-provider/v1.0/authentication/refresh-token-social';
 export const DETAILED_PROFILE = '/user-provider/v1.0/profile/detailed';
 export const DELETE_POST = '/post-provider/v1.0/post'
+export const AUTH_USER_POSTS = '/post-provider/v1.0/post/post-list/auth';
+export const USER_POSTS = '/post-provider/v1.0/post/post-list/auth/user';
+export const LIKE_COMMENT_COUNT = '/post-provider/v1.0/post/count';

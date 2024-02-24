@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -34,13 +34,11 @@ import {getUserProfile} from "../../restservices/profileApi";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {RiDeleteBin5Line} from "react-icons/ri";
-import {postDeleteApi} from "../../restservices/postApi";
-import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
+import {getLikeCommentCount} from "../../restservices/postApi";
 import {useQuery} from '@tanstack/react-query';
-import FallbackLoader from '../loaders/fallbackLoader'
 import {getFormattedDate} from "../../service/commonFunctions";
-import {setIsCreated} from "../../state/isCreatedSlice";
 import {handlePostDelete} from "../../service/postApiFunctions";
+import SingleColorLoader from "../loaders/SingleColorLoader";
 
 const Posts = React.forwardRef(({userId,
                                     location,
@@ -51,12 +49,12 @@ const Posts = React.forwardRef(({userId,
 
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
     const {width} = useWindowDimensions();
     const id = useSelector((state) => state.auth.userId);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
+
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
     };
@@ -66,15 +64,46 @@ const Posts = React.forwardRef(({userId,
         return response.data;
     }
 
+    const getLikeCommentCountResponse = async () => {
+        return await getLikeCommentCount(postId);
+    }
+
     const {
         isLoading,
         error,
-        data: userData
+        data: userData,
+        isSuccess,
+        isError
     } = useQuery({
         queryKey: ['userProfilePost', userId],
         queryFn: fetchPostUser,
         staleTime: 70000
     })
+
+    const {
+        isLoading: lcIsLoading,
+        error: lcError,
+        isSuccess: lcIsSuccess,
+        data: likeCommentCount,
+        isError: lcIsError
+    } = useQuery({
+        queryKey: ['lcCount', postId],
+        queryFn: getLikeCommentCountResponse,
+        staleTime: 70000,
+        retry: 2
+    })
+
+    const getPostEntries = useCallback(()=> {
+        if (lcIsLoading) {
+            return <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
+        } else if (lcIsSuccess && likeCommentCount) {
+            return `${likeCommentCount.like} Likes ● ${likeCommentCount.comment} Comments`
+        } else if (lcError || lcIsError) {
+            return 'Error Occurred'
+        } else {
+            return 'Error Occurred'
+        }
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount])
 
     const getReadMoreValue = () => {
         const split = postBody.split('\n');
@@ -97,18 +126,65 @@ const Posts = React.forwardRef(({userId,
         };
     }, []);
 
-    if (isLoading) {
-        return <FallbackLoader width={'100%'} height={'400px'}/>
-    }
+    const getPostFooter = useCallback(()=> {
+        if (lcIsLoading) {
+            return <PostFooter>
+                <LikeCommentShareWrapper>
+                    <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
+                </LikeCommentShareWrapper>
+            </PostFooter>
+        } else if (lcIsSuccess && likeCommentCount) {
+            return (
+                <PostFooter>
+                    <LikeCommentShareWrapper>
+                        <IconButton>
+                            {likeCommentCount.isLike ? <FaHeart color={'red'} /> : <FaRegHeart />}
+                        </IconButton>
+                        <IconButton>
+                            <FaRegCommentDots/>
+                        </IconButton>
+                        <IconButton>
+                            <IoShareSocialOutline/>
+                        </IconButton>
+                    </LikeCommentShareWrapper>
+                </PostFooter>
+            )
+        } else if (lcError || lcIsError) {
+            return (
+                <PostFooter>
+                    <LikeCommentShareWrapper>
+                        <IconButton>
+                            <FaRegHeart />
+                        </IconButton>
+                        <IconButton>
+                            <FaRegCommentDots/>
+                        </IconButton>
+                        <IconButton>
+                            <IoShareSocialOutline/>
+                        </IconButton>
+                    </LikeCommentShareWrapper>
+                </PostFooter>
+            )
+        }
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount])
 
-    if (error) {
-        return <h3>Error: {error.message}</h3>;
-    }
-
-    const postJsxBody = (
-        <>
-            <PostHeader>
-                <LogoNameWrapper>
+    const getNameContent = useCallback(()=> {
+        if (isLoading) {
+            return (
+                <>
+                    <Avatar
+                        size={width > 500 ? '50px' : '40px'}
+                        position={'relative'}
+                        image={bloggios_logo}
+                    />
+                    <ColumnWrapper>
+                        <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} margin={'0 10px'} />
+                    </ColumnWrapper>
+                </>
+            )
+        } else if (isSuccess && userData) {
+            return (
+                <>
                     <Avatar
                         size={width > 500 ? '50px' : '40px'}
                         position={'relative'}
@@ -122,6 +198,34 @@ const Posts = React.forwardRef(({userId,
                             {getFormattedDate(date)}
                         </TimeSpan>
                     </ColumnWrapper>
+                </>
+            )
+        } else if (isError || error) {
+            return (
+                <>
+                    <Avatar
+                        size={width > 500 ? '50px' : '40px'}
+                        position={'relative'}
+                        image={bloggios_logo}
+                    />
+                    <ColumnWrapper>
+                        <NameSpan>
+                            Error Occurred
+                        </NameSpan>
+                        <TimeSpan>
+                            {getFormattedDate(date)}
+                        </TimeSpan>
+                    </ColumnWrapper>
+                </>
+            )
+        }
+    }, [userData, isLoading, isSuccess, width, date, isError, error])
+
+    const postJsxBody = (
+        <>
+            <PostHeader>
+                <LogoNameWrapper>
+                    {getNameContent()}
                 </LogoNameWrapper>
 
                 <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
@@ -177,19 +281,13 @@ const Posts = React.forwardRef(({userId,
                 </ImageSwiperWrapper>
             )}
 
-            <PostFooter>
-                <LikeCommentShareWrapper>
-                    <IconButton onClick={() => setIsLiked(!isLiked)}>
-                        {isLiked ? <FaHeart color={'red'}/> : <FaRegHeart/>}
-                    </IconButton>
-                    <IconButton>
-                        <FaRegCommentDots/>
-                    </IconButton>
-                    <IconButton>
-                        <IoShareSocialOutline/>
-                    </IconButton>
-                </LikeCommentShareWrapper>
-            </PostFooter>
+            <PostEntriesWrapper style={{
+                marginTop: imagesList && '10px'
+            }}>
+                {getPostEntries()}
+            </PostEntriesWrapper>
+
+            {getPostFooter()}
         </>
     );
 
@@ -370,9 +468,8 @@ const ImageSwiperWrapper = styled.div`
 const PostFooter = styled.div`
     width: 100%;
     height: auto;
-    padding: 10px;
+    padding: 10px 0;
     display: flex;
-
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -433,6 +530,15 @@ const TimingWrapper = styled.div`
     display: flex;
     align-items: center;
     font-weight: 200;
+`;
+
+const PostEntriesWrapper = styled.span`
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    display: flex;
 `;
 
 export default Posts;

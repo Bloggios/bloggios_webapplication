@@ -29,7 +29,7 @@ import styled from "styled-components";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";
+import {ACTIVITY_PATH_MATCHER} from "../../../constant/ServiceConstants";
 
 const SidebarTiles = () => {
 

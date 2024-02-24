@@ -25,9 +25,9 @@ import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import MemoizedNavbarItems from "./NavbarItems";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
-import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../constant/listConstants";
+import {navbarProfileNotLoggedInList} from "../../constant/listConstants";
 import IconLabelDropdown from "../dropdowns/IconLabelDropdown";
-import {HOME_PAGE, PROFILE_PAGE, REPORT_BUG_PAGE, SUPPORT_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, REPORT_BUG_PAGE, SUPPORT_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
 import {getFollow} from "../../restservices/profileApi";

@@ -22,7 +22,7 @@ import React from 'react';
 import FadeModal from "./FadeModal";
 import styled from "styled-components";
 import AnimatedField from '../fields/AnimatedField';
-import { BiUser } from 'react-icons/bi';
+import {BiUser} from 'react-icons/bi';
 
 const FormGroup = styled.div`
   position: relative;

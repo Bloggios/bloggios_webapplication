@@ -23,7 +23,7 @@ import {authenticatedAxios, gatewayAxios} from "../restservices/baseAxios";
 import {ADD_IMAGE_TO_PROFILE, PROFILE_ADDED} from "../constant/apiConstants";
 import {setProfile} from "../state/profileSlice";
 import {HOME_PAGE, LANDING_PAGE, PROFILE_ADDITION_INITIAL} from "../constant/pathConstants";
-import {getFollow, getProfile} from "../restservices/profileApi";
+import {getProfile} from "../restservices/profileApi";
 import {logoutUser} from "../restservices/authApi";
 
 export const dispatchError = (dispatch, error) => {

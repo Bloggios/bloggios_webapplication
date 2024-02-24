@@ -23,9 +23,13 @@ import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import AuthPostList from "../../../component/List/AuthPostList";
 import {clearIsCreated} from "../../../state/isCreatedSlice";
 import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import UserPostList from "../../../component/List/UserPostList";
 
 const ProfilePostOutlet = () => {
 
+    const {id} = useParams();
+    const {userId} = useSelector((state)=> state.auth);
     const {isPost} = useSelector((state)=> state.isCreated);
     const [postList, setPostList] = useState(true);
     const dispatch = useDispatch();
@@ -41,9 +45,18 @@ const ProfilePostOutlet = () => {
             }, 100);
         }
     }, [isPost, dispatchClearIsCreated]);
+
+    const getPostListContent = useCallback(()=> {
+        if (id === userId) {
+            return <AuthPostList />
+        } else {
+            return <UserPostList userId={id} />
+        }
+    }, [id, userId]);
+
     return (
         <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
-            {postList ? <AuthPostList /> : <FallbackLoader width={'100%'} height={'400px'} />}
+            {postList ? getPostListContent() : <FallbackLoader width={'100%'} height={'400px'} />}
         </Suspense>
     );
 };

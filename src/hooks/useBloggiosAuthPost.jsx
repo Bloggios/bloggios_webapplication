@@ -18,12 +18,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {getAuthPost, getPostList} from "../restservices/postApi";
+import {getAuthPost, getUserAuthPost} from "../restservices/postApi";
 import {dispatchError} from "../service/functions";
 
-const useBloggiosAuthPost = (pageNum) => {
+const useBloggiosAuthPost = (pageNum, userId) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -39,17 +39,31 @@ const useBloggiosAuthPost = (pageNum) => {
         const controller = new AbortController();
         const {signal} = controller;
 
-        getAuthPost(pageNum)
-            .then(data => {
-                setData(prev => [...prev, ...data.object]);
-                setHasNextPage(Boolean(data?.object.length));
+        if (userId) {
+            getUserAuthPost(userId, pageNum)
+                .then(data => {
+                    setData(prev => [...prev, ...data.object]);
+                    setHasNextPage(Boolean(data?.object.length));
+                    setIsLoading(false);
+                }).catch(e => {
                 setIsLoading(false);
-            }).catch(e => {
-            setIsLoading(false);
-            setIsError(true);
-            dispatchError(dispatch, e);
-            setError({message : e?.response?.data?.message})
-        })
+                setIsError(true);
+                dispatchError(dispatch, e);
+                setError({message : e?.response?.data?.message})
+            })
+        } else {
+            getAuthPost(pageNum)
+                .then(data => {
+                    setData(prev => [...prev, ...data.object]);
+                    setHasNextPage(Boolean(data?.object.length));
+                    setIsLoading(false);
+                }).catch(e => {
+                setIsLoading(false);
+                setIsError(true);
+                dispatchError(dispatch, e);
+                setError({message : e?.response?.data?.message})
+            })
+        }
     }, [pageNum])
 
     return {isLoading, isError, error, data, hasNextPage};

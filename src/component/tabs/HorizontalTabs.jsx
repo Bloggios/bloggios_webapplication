@@ -19,20 +19,21 @@
  */
 
 import styled from "styled-components";
-import {FaAngleLeft, FaAngleRight, FaChevronLeft, FaChevronRight} from "react-icons/fa";
+import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {handleSuggestionClick} from "../../service/postApiFunctions";
-import Typography from "../typography/typography";
 import {handleDivScroll} from "../../service/commonFunctions";
+import {useSelector} from "react-redux";
+import {authProfileTabsList, userProfileTabsList} from "../../constant/listConstants";
 
-const HorizontalTabs = ({tabsList}) => {
+const HorizontalTabs = ({id}) => {
 
     const navigate = useNavigate();
     const tabsRef = useRef(null);
     const {width} = useWindowDimensions();
     const [isScrollButton, setIsScrollButton] = useState(false);
+    const {userId} = useSelector((state)=> state.auth);
 
     useEffect(() => {
         const tabsContainer = tabsRef.current;
@@ -40,13 +41,13 @@ const HorizontalTabs = ({tabsList}) => {
             const hasOverflow = tabsContainer.scrollWidth > tabsContainer.clientWidth;
             setIsScrollButton(hasOverflow);
         }
-    }, [tabsList, width]);
+    }, [width]);
 
-    return (
-        <Wrapper>
-            <TabsWrapper>
+    const getTabsData = useCallback(()=> {
+        if (id === userId) {
+            return (
                 <Tabs id="suggestionWrapper" ref={tabsRef}>
-                    {tabsList.map((item) => (
+                    {authProfileTabsList.map((item) => (
                         <Tab key={item.id}
                              onClick={() => navigate(item.path)}
                         >
@@ -54,6 +55,26 @@ const HorizontalTabs = ({tabsList}) => {
                         </Tab>
                     ))}
                 </Tabs>
+            )
+        } else {
+            return (
+                <Tabs id="suggestionWrapper" ref={tabsRef}>
+                    {userProfileTabsList.map((item) => (
+                        <Tab key={item.id}
+                             onClick={() => navigate(item.path)}
+                        >
+                            {item.label}
+                        </Tab>
+                    ))}
+                </Tabs>
+            )
+        }
+    }, [id])
+
+    return (
+        <Wrapper>
+            <TabsWrapper>
+                {getTabsData()}
                 {isScrollButton && (
                     <>
                         <ScrollButton onClick={() => handleDivScroll('left')}>

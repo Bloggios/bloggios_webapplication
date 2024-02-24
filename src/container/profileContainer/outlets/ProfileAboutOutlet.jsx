@@ -19,11 +19,15 @@
  */
 
 import React from 'react';
+import {useParams} from "react-router-dom";
 
 const ProfileAboutOutlet = () => {
+
+    const {id} = useParams();
+
     return (
         <div>
-            About
+            {id}
         </div>
     );
 };

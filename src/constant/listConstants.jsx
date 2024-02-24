@@ -36,8 +36,7 @@ import {BsChatDots} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
-import {FaCode, FaInfoCircle, FaLongArrowAltRight, FaQuestion, FaRegUser, FaShoppingCart} from "react-icons/fa";
-import {IoMdLogOut} from "react-icons/io";
+import {FaCode, FaInfoCircle, FaQuestion, FaShoppingCart} from "react-icons/fa";
 import bloggios_logo from '../asset/svg/bg-accent_rounded.svg'
 import {
     MdContactSupport,
@@ -52,7 +51,6 @@ import {GiChatBubble} from "react-icons/gi";
 import {GrServices} from "react-icons/gr";
 import {GoHome, GoPlusCircle} from "react-icons/go";
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import {BLOGGIOS_TECH_LINK} from "./ServiceConstants";
 
 export const loggedInNavItems = [
@@ -232,7 +230,7 @@ export const notFoundPageList = [
     }
 ];
 
-export const profileTabsList = [
+export const authProfileTabsList = [
     {
         id: 1,
         label: 'About',
@@ -262,5 +260,28 @@ export const profileTabsList = [
         id: 6,
         label: 'Reports',
         path: 'reports'
+    }
+];
+
+export const userProfileTabsList = [
+    {
+        id: 1,
+        label: 'About',
+        path: ""
+    },
+    {
+        id: 2,
+        label: 'Featured',
+        path: 'featured'
+    },
+    {
+        id: 3,
+        label: 'Posts',
+        path: 'posts'
+    },
+    {
+        id: 4,
+        label: 'Questions',
+        path: 'questions'
     }
 ];

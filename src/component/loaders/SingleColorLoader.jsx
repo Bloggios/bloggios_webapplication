@@ -60,7 +60,8 @@ const SingleColorLoader = ({
     width = '1em',
     height = '1em',
     size = '4px',
-    color = '#f5f5f5'
+    color = '#f5f5f5',
+    margin
                            }) => {
 
     return (
@@ -69,7 +70,8 @@ const SingleColorLoader = ({
                 width: width,
                 height: height,
                 color: color,
-                fontSize: size
+                fontSize: size,
+                margin: margin
             }}
         />
     );

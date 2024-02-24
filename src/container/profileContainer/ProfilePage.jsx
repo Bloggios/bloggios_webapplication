@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect} from 'react';
+import React, {lazy, Suspense, useCallback} from 'react';
 import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
 import {Outlet, useParams} from "react-router-dom";
 import styled from "styled-components";
@@ -30,8 +30,6 @@ import {detailedProfile} from "../../restservices/profileApi";
 import PageNotFound from "../NotFoundPage/PageNotFound";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
-import DataNotFound from "../../component/NotFound/DataNotFound";
-import {profileTabsList} from "../../constant/listConstants";
 
 const HorizontalTabs = lazy(()=> import("../../component/tabs/HorizontalTabs"));
 const WrappedNotFound = lazy(() => import("../../component/NotFound/WrappedNotFound"));
@@ -90,7 +88,7 @@ const ProfilePage = () => {
 
                     <ProfileContent>
                         <Suspense>
-                            <HorizontalTabs tabsList={profileTabsList} />
+                            <HorizontalTabs id={id} />
                         </Suspense>
 
                         <Suspense>

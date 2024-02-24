@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {dispatchError} from "../service/functions";
 import {useDispatch} from "react-redux";
 import {getPostList} from "../restservices/postApi";

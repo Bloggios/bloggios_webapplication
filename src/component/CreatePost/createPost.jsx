@@ -45,7 +45,7 @@ import {
 } from "../../service/postApiFunctions";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import bloggios_logo from "../../asset/svg/bg_logo_black.svg";
-import {clearIsCreated, setIsCreated} from "../../state/isCreatedSlice";
+import {setIsCreated} from "../../state/isCreatedSlice";
 import {handleDivScroll} from "../../service/commonFunctions";
 
 const CreatePost = ({

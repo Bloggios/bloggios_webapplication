@@ -20,7 +20,6 @@
 
 import React from 'react';
 import styled from "styled-components";
-import SimpleLoader from "../loaders/simpleLoader";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 
 const FetchLoaderButton = ({

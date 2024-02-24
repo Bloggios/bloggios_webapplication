@@ -1,9 +1,6 @@
-import React, {Suspense, useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import styled from 'styled-components'
 import header_image from '../../asset/svg/home-header_bg.svg'
-import ImageUploadModal from "../modal/ImageUploadModal";
-import FallbackLoader from "../loaders/fallbackLoader";
-import ProfileUpdateModal from "../modal/ProfileUpdateModal";
 import {useDispatch, useSelector} from "react-redux";
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from '../../state/snackbarSlice';
@@ -56,10 +53,6 @@ const ProfileHeader = ({
             setIsCoverImage(false);
         }
     }
-
-    useEffect(()=> {
-        console.log(coverImage)
-    }, [coverImage])
 
     const handleFollowing = useCallback(
         (event) => {

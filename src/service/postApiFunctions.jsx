@@ -1,4 +1,3 @@
-import axios from "axios";
 import {getTenTags, postDeleteApi} from "../restservices/postApi";
 import {setSnackbar} from "../state/snackbarSlice";
 import {dispatchError, dispatchSuccessMessage} from "./functions";
