@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {Suspense, useCallback, useEffect, useRef, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -42,7 +42,8 @@ import SingleColorLoader from "../loaders/SingleColorLoader";
 import {addPostLike, removePostLike} from "../../restservices/likeApi";
 import {dispatchError} from "../../service/functions";
 import FallbackLoader from "../loaders/fallbackLoader";
-import CommentModel from "../modal/CommentModel";
+
+const CommentModel = lazy(()=> import("../modal/CommentModel"));
 
 const Posts = React.forwardRef(({userId,
                                     location,
@@ -327,8 +328,12 @@ const Posts = React.forwardRef(({userId,
             {getPostFooter()}
 
             {isCommentBoxOpen && (
-                <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
+                <Suspense fallback={<FallbackLoader height={'200px'} width={'100%'} />}>
                     <CommentModel
+                        name={userData.name}
+                        postId={postId}
+                        refetch={refetchLikeComment}
+                        postUserId={userId}
                         isModalOpen={isCommentBoxOpen}
                         closeModal={() => setIsCommentBoxOpen(false)}
                     />

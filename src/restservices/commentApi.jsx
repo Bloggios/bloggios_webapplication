@@ -18,30 +18,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import {authenticatedAxios} from "./baseAxios";
+import {ADD_COMMENT, POST_COMMENT_LIST} from "../constant/apiConstants";
 
-const isCreatedSlice = createSlice({
-    name: 'isCreated',
-    initialState: {
-        isFollowed: false,
-        isPost: false,
-        isComment: false
-    },
-    reducers: {
-        setIsCreated: (state, action) => {
-            const { isFollowed, isPost, isComment } = action.payload;
-            state.isFollowed = isFollowed;
-            state.isPost = isPost;
-            state.isComment = isComment;
-        },
-        clearIsCreated: (state, action) => {
-            state.isFollowed = false;
-            state.isPost = false;
-            state.isComment = false;
+export const addPostComment = (payload) => {
+    return authenticatedAxios.post(ADD_COMMENT, payload)
+        .then(response => response.data);
+}
+
+export const postCommentList = (page, postId) => {
+    return authenticatedAxios.get(POST_COMMENT_LIST, {
+        params: {
+            "postId": postId,
+            "page": page
         }
-    }
-});
+    }).then(response => response.data);
+}
 
-export { isCreatedSlice }
-
-export const { setIsCreated, clearIsCreated } = isCreatedSlice.actions;
+export const deleteComment = (commentId) => {
+    return authenticatedAxios.delete(ADD_COMMENT, {
+        params: {
+            "commentId": commentId
+        }
+    }).then(response => response.data);
+}

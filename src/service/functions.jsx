@@ -181,3 +181,12 @@ export const dispatchSuccessMessage = (dispatch, message) => {
     };
     dispatch(setSnackbar(snackBarData));
 }
+
+export const dispatchErrorMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Error',
+    };
+    dispatch(setSnackbar(snackBarData));
+}
