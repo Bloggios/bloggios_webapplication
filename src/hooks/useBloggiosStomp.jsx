@@ -29,9 +29,8 @@ import {addError} from "../state/errorSlice";
 let stompClient = null;
 const useBloggiosStomp = () => {
 
-    const {isAuthenticated, userId, accessToken} = useSelector(state=> state.auth);
+    const {isAuthenticated, userId, accessToken, remoteAddress} = useSelector(state=> state.auth);
     const dispatch = useDispatch();
-    const {userStatusId, isWebsocket} = useSelector(state=> state.userStatus);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -45,7 +44,8 @@ const useBloggiosStomp = () => {
             stompClient = over(socket);
             stompClient.connect({
                 accessToken: accessToken,
-                userId: userId
+                userId: userId,
+                remoteAddress: remoteAddress
             }, onConnected, onError);
         }
     }

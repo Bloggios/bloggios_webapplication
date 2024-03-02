@@ -52,15 +52,11 @@ const App = () => {
         refreshToken()
             .then((response) => {
                 if (isMounted) {
-                    clearTimeout(timeoutId); // Clear the timeout if the response is received
-                    const credentials = {
-                        accessToken: response.data.accessToken,
-                        userId: response.data.userId,
-                        isAuthenticated: true
-                    };
-                    dispatch(setCredentials(credentials));
+                    clearTimeout(timeoutId);
+                    const authData = { ...response.data, isAuthenticated: true };
+                    dispatch(setCredentials(authData));
                     checkIsProfileAdded(
-                        credentials.accessToken,
+                        authData.accessToken,
                         dispatch,
                         navigate
                     )
