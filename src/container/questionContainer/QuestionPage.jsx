@@ -20,13 +20,29 @@
 
 import React from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import styled from "styled-components";
 
-const ActivityPage = () => {
+const QuestionPage = () => {
     return (
         <BloggiosSidebarBase>
+            <Wrapper>
 
+            </Wrapper>
         </BloggiosSidebarBase>
     );
 };
 
-export default ActivityPage;
+const Wrapper = styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 10px;
+    gap: 20px;
+
+    @media (max-width: 700px) {
+        padding: 10px;
+    }
+`;
+
+export default QuestionPage;

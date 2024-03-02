@@ -36,3 +36,4 @@ export const SECURITY_PAGE = '/security';
 export const CREATE_PAGE = '/create'
 export const NOT_FOUND_PAGE = '*';
 export const OAUTH_REDIRECT = '/oauth2/redirect';
+export const QUESTION_PAGE = '/question'

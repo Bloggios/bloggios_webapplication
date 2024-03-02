@@ -30,6 +30,7 @@ import {
     OTP_PAGE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
+    QUESTION_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
     SIGNUP_PAGE
@@ -51,7 +52,8 @@ const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'
 const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
 const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
 const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
-const PageNotFound = lazy(()=> import('../container/NotFoundPage/PageNotFound'));
+const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
+const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
 
 const Router = () => {
 
@@ -65,10 +67,6 @@ const Router = () => {
                     <Route path={SIGNUP_PAGE} element={<SignupPage/>}/>
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
-                    <Route path={PROFILE_PAGE} element={<ProfilePage />}>
-                        <Route index element={<ProfileAboutOutlet />} />
-                        <Route path={'posts'} element={<ProfilePostOutlet />} />
-                    </Route>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
@@ -77,6 +75,11 @@ const Router = () => {
                         <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
                         <Route path={SECURITY_PAGE} element={<SecurityPage />} />
                         <Route path={SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={QUESTION_PAGE} element={<QuestionPage />} />
+                        <Route path={PROFILE_PAGE} element={<ProfilePage />}>
+                            <Route index element={<ProfileAboutOutlet />} />
+                            <Route path={'posts'} element={<ProfilePostOutlet />} />
+                        </Route>
                     </Route>
                 </Routes>
             </Suspense>

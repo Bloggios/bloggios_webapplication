@@ -33,7 +33,7 @@ import {HOME_PAGE} from "../../constant/pathConstants";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {authenticatedAxios} from "../../restservices/baseAxios";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 import {fetchProfileAndDispatch} from "../../service/functions";
 
 const ProfileAdditionInitial = () => {

@@ -18,15 +18,54 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import SockJS from "sockjs-client";
+import {over} from "stompjs";
+import {dispatchErrorMessage} from "../service/functions";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {stompSend} from "../service/stompSend";
+import {addError} from "../state/errorSlice";
 
-const ActivityPage = () => {
-    return (
-        <BloggiosSidebarBase>
+let stompClient = null;
+const useBloggiosStomp = () => {
 
-        </BloggiosSidebarBase>
-    );
+    const {isAuthenticated, userId, accessToken} = useSelector(state=> state.auth);
+    const dispatch = useDispatch();
+    const {userStatusId, isWebsocket} = useSelector(state=> state.userStatus);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            connect();
+        }
+    }, [isAuthenticated]);
+
+    const connect = () => {
+        if (isAuthenticated && userId) {
+            const socket = new SockJS(process.env.REACT_APP_WEBSOCKET_URI);
+            stompClient = over(socket);
+            stompClient.connect({
+                accessToken: accessToken,
+                userId: userId
+            }, onConnected, onError);
+        }
+    }
+
+    const stompSubscribe = () => {
+        console.log("Stomp Subscribe")
+    }
+
+    const onConnected = () => {
+        stompSend(stompClient, userId);
+        stompSubscribe();
+    }
+
+    const onError = (errorFrame) => {
+        dispatchErrorMessage(dispatch, "Error connecting with Server");
+        dispatch(addError({
+            isError: true,
+            errorMessage: errorFrame
+        }));
+    }
 };
 
-export default ActivityPage;
+export default useBloggiosStomp;

@@ -20,7 +20,7 @@
 
 import React, {useEffect, useState} from 'react';
 import Router from "./util/Router";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
 import {clearCredentials, setCredentials} from "./state/authSlice";
 import LoaderPage from "./component/loaders/loaderPage";
@@ -32,16 +32,14 @@ import {useNavigate} from "react-router-dom";
 import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
 import {checkIsProfileAdded} from "./service/functions";
 import './styles/GlobalStyles.css'
+import ErrorBase from "./container/boundries/ErrorBase";
 
 const App = () => {
 
     const dispatch = useDispatch();
     const [isChecking, setIsChecking] = useState(true);
-    const [isProfileFetching, setIsProfileFetching] = useState(true);
-    const {isAdded} = useSelector((state)=> state.profile);
     const navigate = useNavigate();
     const authenticatedAxios = AuthenticatedAxiosInterceptor();
-    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     useEffect(() => {
         let isMounted = true;
@@ -86,7 +84,9 @@ const App = () => {
     if (isChecking) return <LoaderPage/>
 
     return (
-        <Router/>
+        <ErrorBase>
+            <Router/>
+        </ErrorBase>
     );
 };
 

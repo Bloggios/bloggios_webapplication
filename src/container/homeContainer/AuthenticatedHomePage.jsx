@@ -26,7 +26,7 @@ import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 import header_image from '../../asset/svg/home-header_bg.svg'
 import {clearIsCreated} from "../../state/isCreatedSlice";
 

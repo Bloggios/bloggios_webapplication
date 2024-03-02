@@ -18,15 +18,36 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import React, {lazy, Suspense} from 'react';
+import styled from "styled-components";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import {errorPageList} from "../../constant/listConstants";
 
-const ActivityPage = () => {
+const NotFound = lazy(() => import('../../component/NotFound/NotFound'))
+
+const ErrorPage = () => {
     return (
-        <BloggiosSidebarBase>
-
-        </BloggiosSidebarBase>
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
+                <NotFound
+                    errorStatus={'50X Error'}
+                    title={'Oops.. Error Occurred'}
+                    message={"Uh oh, seems like something went wonky. Don't worry, we'll get it back on track soon!"}
+                    isRefresh={true}
+                    list={errorPageList}
+                    refreshTitle={'Refreshing the page might load it correctly'}
+                />
+            </Suspense>
+        </Wrapper>
     );
 };
 
-export default ActivityPage;
+const Wrapper = styled.div`
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+export default ErrorPage;

@@ -21,7 +21,7 @@
 import React from 'react';
 import styled from "styled-components";
 import HomeHeader from "./Components/HomeHeader";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 
 const UnauthenticatedHomePage = () => {
     return (

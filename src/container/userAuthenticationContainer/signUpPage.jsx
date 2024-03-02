@@ -37,7 +37,7 @@ import LoaderButton from "../../component/buttons/loaderButton";
 import Divider from "../../component/divider/divider";
 import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
 import {signupUser} from "../../restservices/authApi";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 
 const SignUpPage = () => {
 

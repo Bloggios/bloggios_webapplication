@@ -32,7 +32,7 @@ const authSlice = createSlice({
             const { userId, accessToken, isAuthenticated } = action.payload;
             state.userId = userId;
             state.accessToken = accessToken;
-            state.isAuthenticated=  isAuthenticated
+            state.isAuthenticated = isAuthenticated;
         },
         clearCredentials: (state, action) => {
             state.userId = null

@@ -35,7 +35,7 @@ import OtpInput from "../../component/fields/otpInput";
 import SimpleLoader from "../../component/loaders/simpleLoader";
 import {LOGIN_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import {resendOtp, verifyOtp} from "../../restservices/authApi";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 
 const OtpPage = () => {
 

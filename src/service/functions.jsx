@@ -190,3 +190,14 @@ export const dispatchErrorMessage = (dispatch, message) => {
     };
     dispatch(setSnackbar(snackBarData));
 }
+
+export const wrapHashtag = (data) => {
+    console.log(data)
+    const words = data.split(/\s+/);
+    console.log(words)
+    return words.map((word, index) => (
+        word.startsWith('#')
+            ? `<span key=${index} style="color:#4258ff">${word}</span>`
+            : word
+    )).join(' ')
+}

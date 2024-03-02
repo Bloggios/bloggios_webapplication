@@ -26,13 +26,14 @@ import {
     LOGIN_PAGE,
     NOTIFICATIONS_PAGE,
     PROFILE_PAGE,
+    QUESTION_PAGE,
     REPORT_BUG_PAGE,
     SERVICES_PAGE,
     SIGNUP_PAGE,
     SUPPORT_PAGE
 } from "./pathConstants";
 import {BiHelpCircle, BiHomeAlt2, BiLogInCircle, BiSupport} from "react-icons/bi";
-import {BsChatDots} from "react-icons/bs";
+import {BsChatDots, BsQuestionCircle} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
@@ -57,7 +58,7 @@ export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
     {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
     {page: NOTIFICATIONS_PAGE, tooltip: 'Notifications', icon: <IoNotificationsOutline/>},
-    {page: SERVICES_PAGE, tooltip: 'Services', icon: <VscSettingsGear/>},
+    {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />},
 ];
 
 export const loggedOutNavItems = [
@@ -219,6 +220,25 @@ export const notFoundPageList = [
         button: 'Redirect Me',
         icon: <img src={bloggios_logo} height={'25px'}  alt={'Bloggios'}/>,
         clickAction: BLOGGIOS_TECH_LINK
+    },
+    {
+        id: 3,
+        label: 'Support',
+        text: 'Need help, please contact support',
+        button: 'Learn more',
+        icon: <MdOutlineContactSupport />,
+        clickAction: SUPPORT_PAGE
+    }
+];
+
+export const errorPageList = [
+    {
+        id: 1,
+        label: 'Home',
+        text: 'Redirect me to the Bloggios Home Page',
+        button: 'Take Me',
+        icon: <GoHome />,
+        clickAction: HOME_PAGE
     },
     {
         id: 3,

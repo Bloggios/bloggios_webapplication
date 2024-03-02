@@ -41,7 +41,7 @@ import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {GOOGLE_AUTH_URL} from "../../restservices/baseAxios";
-import BloggiosBase from "../baseContainer/bloggiosBase";
+import BloggiosBase from "../boundries/bloggiosBase";
 
 const LoginPage = () => {
 

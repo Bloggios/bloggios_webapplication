@@ -18,15 +18,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import {createSlice} from "@reduxjs/toolkit";
 
-const ActivityPage = () => {
-    return (
-        <BloggiosSidebarBase>
+const errorSlice = createSlice({
+    name: 'error-state',
+    initialState: {
+        isError: false,
+        errorMessage: null
+    },
+    reducers: {
+        addError: (state, action) => {
+            const { isError, errorMessage } = action.payload;
+            state.isError = isError;
+            state.errorMessage = errorMessage;
+        },
+        clearError: (state, action) => {
+            state.isError = false;
+            state.errorMessage = null;
+        }
+    }
+});
 
-        </BloggiosSidebarBase>
-    );
-};
+export default errorSlice.reducer;
 
-export default ActivityPage;
+export const { addError, clearError } = errorSlice.actions;

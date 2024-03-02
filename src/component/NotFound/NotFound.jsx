@@ -18,15 +18,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from "styled-components";
 import {FaLongArrowAltRight} from "react-icons/fa";
 import {notFoundPageList} from "../../constant/listConstants";
 import {useNavigate} from "react-router-dom";
+import {HiRefresh} from "react-icons/hi";
+import {CiLogout} from "react-icons/ci";
+import {initLogout} from "../../service/functions";
+import {useDispatch} from "react-redux";
 
-const NotFound = () => {
+const NotFound = ({
+    errorStatus = '404 Not Found',
+    title = 'Page Not Found',
+    message = 'Sorry, the page you are looking for could not be found or has been removed',
+    isRefresh = false,
+    list = notFoundPageList,
+    refreshTitle
+                  }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleClick = (path) => {
         if (path.startsWith('https://')) {
@@ -34,7 +46,33 @@ const NotFound = () => {
         } else {
             navigate(path);
         }
-    }
+    };
+
+    const getRefreshContent = useCallback(()=> {
+        if (isRefresh) {
+            return (
+                <RefreshWrapper>
+                    <RefreshTitle>
+                        {refreshTitle}
+                    </RefreshTitle>
+
+                    <IconButtonGroup>
+                        <IconWrapper onClick={()=> window.location.reload()} style={{
+                            cursor: 'pointer'
+                        }}>
+                            <HiRefresh />
+                        </IconWrapper>
+
+                        <IconWrapper onClick={()=> initLogout(navigate, dispatch)} style={{
+                            cursor: 'pointer'
+                        }}>
+                            <CiLogout />
+                        </IconWrapper>
+                    </IconButtonGroup>
+                </RefreshWrapper>
+            )
+        }
+    }, [isRefresh, refreshTitle, navigate, dispatch])
 
     return (
         <Wrapper>
@@ -45,21 +83,22 @@ const NotFound = () => {
                 gap: '10px'
             }}>
                 <NotFoundSpan>
-                    <strong>404</strong>
-                    &nbsp;Not Found
+                    {errorStatus}
                 </NotFoundSpan>
 
                 <TitleSpan>
-                    Page Not Found
+                    {title}
                 </TitleSpan>
 
                 <MessageSpan>
-                    Sorry, the page you are looking for could not be found or has been removed
+                    {message}
                 </MessageSpan>
             </div>
 
+            {getRefreshContent()}
+
             <ItemsWrapper>
-                {notFoundPageList.map((item)=> (
+                {list.map((item)=> (
                     <Item
                         key={item.id}
                         style={{
@@ -129,7 +168,6 @@ const ItemsWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-top: 40px;
 `;
 
 const Item = styled.div`
@@ -199,6 +237,32 @@ const RedirectButton = styled.button`
     &:active {
         color: rgba(141, 155, 255, 0.8);
     }
+`;
+
+const RefreshWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+`;
+
+const RefreshTitle = styled.span`
+    font-size: clamp(12px, 1vw, 16px);
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.7);
+`;
+
+const IconButtonGroup = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 `;
 
 export default NotFound;

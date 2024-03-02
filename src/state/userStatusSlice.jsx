@@ -18,15 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import {createSlice} from "@reduxjs/toolkit";
 
-const ActivityPage = () => {
-    return (
-        <BloggiosSidebarBase>
+const userStatusSlice = createSlice({
+    name: 'userStatus',
+    initialState: {
+        userId: null,
+        userStatusId: null,
+        isWebsocket: false
+    },
+    reducers: {
+        setUserStatus: (state, action) => {
+            const { userId, userStatusId, isWebsocket } = action.payload;
+            state.userId = userId;
+            state.userStatusId = userStatusId;
+            state.isWebsocket = isWebsocket;
+        },
+        clearUserStatus: (state, action) => {
+            state.userId = null
+            state.userStatusId = null
+            state.isWebsocket = false
+        }
+    }
+});
 
-        </BloggiosSidebarBase>
-    );
-};
+export { userStatusSlice }
 
-export default ActivityPage;
+export const { setUserStatus, clearUserStatus } = userStatusSlice.actions;

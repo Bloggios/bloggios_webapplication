@@ -24,6 +24,8 @@ import snackbarSlice from "./snackbarSlice";
 import {authSlice} from "./authSlice";
 import {profileSlice} from "./profileSlice";
 import {isCreatedSlice} from "./isCreatedSlice";
+import errorSlice from "./errorSlice";
+import {userStatusSlice} from "./userStatusSlice";
 
 const store = configureStore({
     reducer: {
@@ -31,9 +33,11 @@ const store = configureStore({
         snackbar: snackbarSlice,
         auth: authSlice.reducer,
         profile: profileSlice.reducer,
-        isCreated: isCreatedSlice.reducer
+        isCreated: isCreatedSlice.reducer,
+        error: errorSlice,
+        userStatus: userStatusSlice.reducer
     },
-    devTools: !process.env.REACT_APP_IS_PRODUCTION
+    devTools: true
 })
 
 export default store;

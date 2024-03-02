@@ -19,7 +19,7 @@
  */
 
 import React from 'react';
-import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
+import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 
 const SecurityPage = () => {
     return (

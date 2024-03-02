@@ -18,15 +18,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import React, {Component} from "react";
+import ErrorPage from "../catchPages/ErrorPage";
 
-const ActivityPage = () => {
-    return (
-        <BloggiosSidebarBase>
+class ErrorBase extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false};
+    }
 
-        </BloggiosSidebarBase>
-    );
-};
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
 
-export default ActivityPage;
+    componentDidCatch(error, errorInfo) {
+        console.error("Error caught by Base : " + error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <ErrorPage />
+            )
+        }
+        return this.props.children;
+    }
+}
+
+export default ErrorBase;

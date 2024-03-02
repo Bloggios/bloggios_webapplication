@@ -43,18 +43,20 @@ import {addPostLike, removePostLike} from "../../restservices/likeApi";
 import {dispatchError} from "../../service/functions";
 import FallbackLoader from "../loaders/fallbackLoader";
 
-const CommentModel = lazy(()=> import("../modal/CommentModel"));
+const CommentModel = lazy(() => import("../modal/CommentModel"));
 
-const Posts = React.forwardRef(({userId,
-                                    location,
-                                    imagesList,
-                                    postBody,
-                                    date,
-                                    postId}, ref) => {
+const Posts = React.forwardRef(({
+    userId,
+    location,
+    imagesList,
+    postBody,
+    date,
+    postId
+}, ref) => {
 
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const {width} = useWindowDimensions();
+    const { width } = useWindowDimensions();
     const id = useSelector((state) => state.auth.userId);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
@@ -128,7 +130,7 @@ const Posts = React.forwardRef(({userId,
         retry: 2
     })
 
-    const getPostEntries = useCallback(()=> {
+    const getPostEntries = useCallback(() => {
         if (lcIsLoading) {
             return <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
         } else if (lcIsSuccess && likeCommentCount) {
@@ -161,7 +163,7 @@ const Posts = React.forwardRef(({userId,
         };
     }, []);
 
-    const getPostFooter = useCallback(()=> {
+    const getPostFooter = useCallback(() => {
         if (lcIsLoading) {
             return <PostFooter>
                 <LikeCommentShareWrapper style={{
@@ -178,11 +180,11 @@ const Posts = React.forwardRef(({userId,
                         <IconButton onClick={handleLike}>
                             {likeCommentCount.isLike ? <FaHeart color={'red'} /> : <FaRegHeart />}
                         </IconButton>
-                        <IconButton onClick={()=> setIsCommentBoxOpen(!isCommentBoxOpen)}>
-                            <FaRegCommentDots/>
+                        <IconButton onClick={() => setIsCommentBoxOpen(!isCommentBoxOpen)}>
+                            <FaRegCommentDots />
                         </IconButton>
                         <IconButton>
-                            <IoShareSocialOutline/>
+                            <IoShareSocialOutline />
                         </IconButton>
                     </LikeCommentShareWrapper>
                 </PostFooter>
@@ -195,10 +197,10 @@ const Posts = React.forwardRef(({userId,
                             <FaRegHeart />
                         </IconButton>
                         <IconButton>
-                            <FaRegCommentDots/>
+                            <FaRegCommentDots />
                         </IconButton>
                         <IconButton>
-                            <IoShareSocialOutline/>
+                            <IoShareSocialOutline />
                         </IconButton>
                     </LikeCommentShareWrapper>
                 </PostFooter>
@@ -206,7 +208,7 @@ const Posts = React.forwardRef(({userId,
         }
     }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen])
 
-    const getNameContent = useCallback(()=> {
+    const getNameContent = useCallback(() => {
         if (isLoading) {
             return (
                 <>
@@ -267,26 +269,26 @@ const Posts = React.forwardRef(({userId,
                 </LogoNameWrapper>
 
                 <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
-                    <SlOptionsVertical/>
+                    <SlOptionsVertical />
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
                         visibility: isShown ? 'visible' : 'hidden',
                         transform: isShown ? 'translateX(0)' : 'translateX(100%)'
                     }}>
                         <DropDownItemWrapper onClick={() => navigate(`/profile/${userId}`)}>
-                            <Typography text={'View Profile'} type={'custom'} size={'14px'}/>
-                            <CgProfile fontSize={'18px'}/>
+                            <Typography text={'View Profile'} type={'custom'} size={'14px'} />
+                            <CgProfile fontSize={'18px'} />
                         </DropDownItemWrapper>
 
                         <DropDownItemWrapper>
-                            <Typography text={'Report Post'} type={'custom'} size={'14px'}/>
-                            <MdOutlineReport fontSize={'20px'}/>
+                            <Typography text={'Report Post'} type={'custom'} size={'14px'} />
+                            <MdOutlineReport fontSize={'20px'} />
                         </DropDownItemWrapper>
 
                         {id === userId && (
-                            <DropDownItemWrapper onClick={()=> handlePostDelete(postId, dispatch)}>
-                                <Typography text={'Delete'} type={'custom'} size={'14px'}/>
-                                <RiDeleteBin5Line fontSize={'18px'} color={'rgb(223,56,56)'}/>
+                            <DropDownItemWrapper onClick={() => handlePostDelete(postId, dispatch)}>
+                                <Typography text={'Delete'} type={'custom'} size={'14px'} />
+                                <RiDeleteBin5Line fontSize={'18px'} color={'rgb(223,56,56)'} />
                             </DropDownItemWrapper>
                         )}
                     </DropdownWrapper>
@@ -315,7 +317,7 @@ const Posts = React.forwardRef(({userId,
                 <ImageSwiperWrapper style={{
                     marginTop: !postBody && '20px'
                 }}>
-                    <ImagesSwiper swiperItems={imagesList}/>
+                    <ImagesSwiper swiperItems={imagesList} />
                 </ImageSwiperWrapper>
             )}
 

@@ -19,7 +19,7 @@
  */
 
 import React, {lazy, Suspense, useCallback} from 'react';
-import BloggiosSidebarBase from "../baseContainer/bloggiosSidebarBase";
+import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import {Outlet, useParams} from "react-router-dom";
 import styled from "styled-components";
 import {useSelector} from "react-redux";
@@ -27,7 +27,7 @@ import {uuidValidator} from "../../util/ComponentValidators";
 import FallbackLoader from '../../component/loaders/fallbackLoader';
 import useComponentSize from "../../hooks/useComponentSize";
 import {detailedProfile} from "../../restservices/profileApi";
-import PageNotFound from "../NotFoundPage/PageNotFound";
+import PageNotFound from "../catchPages/PageNotFound";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
 
