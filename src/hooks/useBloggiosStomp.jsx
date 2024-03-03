@@ -50,8 +50,12 @@ const useBloggiosStomp = () => {
         }
     }
 
+    const onPrivateNotification = (payload) => {
+        console.log(payload)
+    }
+
     const stompSubscribe = () => {
-        console.log("Stomp Subscribe")
+        stompClient.subscribe(`/user/${userId}/private/notify`, onPrivateNotification)
     }
 
     const onConnected = () => {
