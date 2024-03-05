@@ -27,6 +27,7 @@ import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {setIsCreated} from "../../state/isCreatedSlice";
 import {useNavigate} from "react-router-dom";
+import {dispatchErrorMessage} from "../../service/functions";
 
 const SmallProfileCard = ({ bio, name, email, image, userId }) => {
     const [isFollowing, setIsFollowing] = useState(false);
@@ -67,12 +68,7 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
                 })
                 .catch((error) => {
                     const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                    const snackBarData = {
-                        isSnackbar: true,
-                        message: message,
-                        snackbarType: 'Error',
-                    };
-                    dispatch(setSnackbar(snackBarData));
+                    dispatchErrorMessage(message);
                 });
         },
         [dispatch, isFollowing, userId]

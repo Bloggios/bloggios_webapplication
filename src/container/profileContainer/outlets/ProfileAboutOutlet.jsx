@@ -18,105 +18,49 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
-import {FaUserEdit} from "react-icons/fa";
-import {MdModeEdit} from "react-icons/md";
 import {Tooltip} from "react-tooltip";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
+import PersonalDetailsWrapper from "../../../component/wrappers/PersonalDetailsWrapper";
+import {useQuery} from "@tanstack/react-query";
+import {detailedProfile} from "../../../restservices/profileApi";
 
 const ProfileAboutOutlet = () => {
 
     const {id} = useParams();
     const {width} = useWindowDimensions();
-    const [isEditMode, setIsEditMode] = useState(false);
+
+    const fetchProfileData = async () => {
+        const response = await detailedProfile(id);
+        return response.data;
+    };
+
+    const {
+        isLoading,
+        error,
+        data: profileData,
+        isSuccess,
+        isError
+    } = useQuery({
+        queryKey: ['userProfile', id],
+        queryFn: fetchProfileData,
+        staleTime: 120000
+    })
 
     useEffect(() => {
-        console.log(isEditMode)
-    }, [isEditMode])
-
-    const handleUpdate = () => {
-        setIsEditMode(false);
-    }
+        console.log(profileData)
+    }, []);
 
     return (
         <Wrapper>
-            {/*
 
-        Personal Details
-        Name, Email, Gender, DOB
-
-        Other Details
-        Bio, Link, Tag,
-
-           */}
             {/* Personal Details */}
-            <DetailsWrapper>
-                <RowWrapper>
-                    <TitleWrapper>
-                        Personal Details
-                    </TitleWrapper>
-
-                    <IconButton
-                        onClick={()=> setIsEditMode(!isEditMode)}
-                        data-tooltip-id="edit-button"
-                        data-tooltip-content="Edit"
-                        data-tooltip-variant="light"
-                        data-tooltip-delay-show={500}
-                        style={{
-                            visibility: isEditMode ? 'hidden' : 'visible'
-                        }}
-                    >
-                        <MdModeEdit fontSize={'22px'}/>
-                    </IconButton>
-                </RowWrapper>
-
-                <Items>
-                    <Item>Rohit</Item>
-                    <Item>Rohit</Item>
-                    <Item>Rohit</Item>
-                    <Item>Rohit</Item>
-                </Items>
-
-                {isEditMode && (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <FetchLoaderButton
-                            isLoading={false}
-                            text={'Update'}
-                            onClick={handleUpdate}
-                            loaderSize={'2px'}
-                            loaderDotsSize={'2px'}
-                            bgColor={'#4258ff'}
-                            hBgColor={'rgba(66, 88, 255, 0.9)'}
-                            aBgColor={'#4258ff'}
-                            color={'rgba(255, 255, 255, 0.8)'}
-                            hColor={'rgba(255, 255, 255, 1)'}
-                            borderRadius={'10px'}
-                            padding={width > 500 ? '10px 20px' : '4px 10px'}
-                            style={{
-                                width: 'fit-content',
-                                border: 'none',
-                                outline: 'none',
-                                fontSize: width > 500 ? '14px' : '10px',
-                                float: 'right'
-                            }}
-                        />
-                    </div>
-                )}
-            </DetailsWrapper>
-
-            {/* Other Details */}
-            <DetailsWrapper>
-                <TitleWrapper>
-                    Other Details
-                </TitleWrapper>
-            </DetailsWrapper>
+            <PersonalDetailsWrapper
+                name={profileData.name}
+                email={profileData.email}
+            />
 
             {width > 600 && <Tooltip id="edit-button"/>}
         </Wrapper>
@@ -128,63 +72,6 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 25px;
-`;
-
-const DetailsWrapper = styled.div`
-    width: 100%;
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-`;
-
-const TitleWrapper = styled.h5`
-    font-size: clamp(16px, 4vw, 22px);
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-`;
-
-const Items = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, minmax(160px, 1fr));
-    gap: 10px;
-`;
-
-const Item = styled.div`
-
-`;
-
-const RowWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-`;
-
-const IconButton = styled.button`
-    height: 40px;
-    width: 40px;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: none;
-    outline: none;
-    color: rgba(255, 255, 255, 0.8);
-
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    &:active {
-        background-color: rgba(255, 255, 255, 0.07);
-        color: rgba(255, 255, 255, 1);
-    }
 `;
 
 export default ProfileAboutOutlet;

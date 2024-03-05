@@ -163,6 +163,20 @@ const Posts = React.forwardRef(({
         };
     }, []);
 
+    const getLikeIcon = useCallback(()=> {
+        if (lcIsLoading || removeLikeMutation.isPending || addLikeMutation.isPending) {
+            return <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />;
+        } else if (lcIsSuccess && likeCommentCount) {
+            if (likeCommentCount.isLike) {
+                return <FaHeart color={'red'} />
+            } else {
+                return <FaRegHeart />
+            }
+        } else {
+            return <FaRegHeart />
+        }
+    }, [lcIsLoading, removeLikeMutation.isPending, addLikeMutation.isPending, lcIsSuccess, likeCommentCount])
+
     const getPostFooter = useCallback(() => {
         if (lcIsLoading) {
             return <PostFooter>
@@ -178,7 +192,7 @@ const Posts = React.forwardRef(({
                 <PostFooter>
                     <LikeCommentShareWrapper>
                         <IconButton onClick={handleLike}>
-                            {likeCommentCount.isLike ? <FaHeart color={'red'} /> : <FaRegHeart />}
+                            {getLikeIcon()}
                         </IconButton>
                         <IconButton onClick={() => setIsCommentBoxOpen(!isCommentBoxOpen)}>
                             <FaRegCommentDots />
@@ -206,7 +220,7 @@ const Posts = React.forwardRef(({
                 </PostFooter>
             )
         }
-    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen])
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen, getLikeIcon])
 
     const getNameContent = useCallback(() => {
         if (isLoading) {

@@ -73,6 +73,7 @@ const ToastIcon = styled.div`
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    flex-shrink: 0;
 `;
 
 export default useBloggiosSnackbar;

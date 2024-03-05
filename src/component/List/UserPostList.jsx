@@ -84,7 +84,9 @@ const UserPostList = ({userId}) => {
     return (
         <Wrapper>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'280px'} />}>
-                {postData}
+                {postData.length > 0 ? postData : <NotPresentSpan>
+                    No Post(s) Present 🙅‍♂️
+                </NotPresentSpan>}
             </Suspense>
             {isLoading && <FallbackLoader width={'100%'} height={'100px'} />}
         </Wrapper>
@@ -98,4 +100,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 25px;
 `;
+
+const NotPresentSpan = styled.span`
+    font-size: clamp(16px, 2vw, 20px);
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: #a1afff;
+    text-align: center;
+    margin-top: 10px;
+`;
+
 export default UserPostList;

@@ -83,19 +83,7 @@ export const fetchProfileAndDispatch = async (dispatch) => {
     try {
         const response = await getProfile();
         const { data } = response;
-        const profileData = {
-            name: data.name,
-            isAdded: true,
-            profileImageUrl: null,
-            bio: data.bio,
-            email: data.email,
-            userId: data.userId,
-            profileImage: data.profileImage,
-            coverImage: data.coverImage,
-            followers: data.followers,
-            following: data.following
-        };
-        dispatch(setProfile(profileData));
+        dispatch(setProfile({...data, isAdded: true}));
     } catch (error) {
         setTimeout(fetchProfileAndDispatch, 2000);
     }
@@ -143,18 +131,7 @@ export const handleImageChange = (e, uploadFor, dispatch) => {
                     setTimeout(() => {
                         getProfile().then((response) => {
                             const { data } = response;
-                            const profileData = {
-                                name: data.name,
-                                isAdded: true,
-                                profileImageUrl: null,
-                                bio: data.bio,
-                                email: data.email,
-                                profileImage: data.profileImage,
-                                coverImage: data.coverImage,
-                                followers: data.followers,
-                                following: data.following
-                            };
-                            dispatch(setProfile(profileData));
+                            dispatch(setProfile({...data, isAdded: true}));
                         });
                     }, 1600);
                 })
@@ -191,13 +168,11 @@ export const dispatchErrorMessage = (dispatch, message) => {
     dispatch(setSnackbar(snackBarData));
 }
 
-export const wrapHashtag = (data) => {
-    console.log(data)
-    const words = data.split(/\s+/);
-    console.log(words)
-    return words.map((word, index) => (
-        word.startsWith('#')
-            ? `<span key=${index} style="color:#4258ff">${word}</span>`
-            : word
-    )).join(' ')
+export const dispatchWarningMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Warning'
+    }
+    dispatch(setSnackbar(snackBarData))
 }

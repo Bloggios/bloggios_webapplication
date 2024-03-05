@@ -31,7 +31,7 @@ import PageNotFound from "../catchPages/PageNotFound";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
 
-const HorizontalTabs = lazy(()=> import("../../component/tabs/HorizontalTabs"));
+const HorizontalTabs = lazy(() => import("../../component/tabs/HorizontalTabs"));
 const WrappedNotFound = lazy(() => import("../../component/NotFound/WrappedNotFound"));
 const ProfileHeader = lazy(() => import("../../component/Cards/ProfileHeader"));
 const ProfileSuggestions = lazy(() => import("../../component/Cards/ProfileSuggestions"));
@@ -46,14 +46,8 @@ const ProfilePage = () => {
     const {width} = useWindowDimensions();
 
     const fetchProfileData = async () => {
-        const isValidUuid = uuidValidator(id);
-
-        if (id === authUserId) {
-            return profileSelector;
-        } else {
-            const response = await detailedProfile(id);
-            return response.data;
-        }
+        const response = await detailedProfile(id);
+        return response.data;
     };
 
     const {
@@ -68,7 +62,7 @@ const ProfilePage = () => {
         staleTime: 120000
     })
 
-    const getMainContent = useCallback(()=> {
+    const getMainContent = useCallback(() => {
         if (isLoading) {
             return <FallbackLoader width={'100%'} height={'400px'}/>
         } else if (isSuccess && profileData) {
@@ -88,11 +82,11 @@ const ProfilePage = () => {
 
                     <ProfileContent>
                         <Suspense>
-                            <HorizontalTabs id={id} />
+                            <HorizontalTabs id={id}/>
                         </Suspense>
 
                         <Suspense>
-                            <Outlet />
+                            <Outlet/>
                         </Suspense>
                     </ProfileContent>
                 </>
@@ -121,7 +115,7 @@ const ProfilePage = () => {
 
     return (
         isError || error ?
-            <PageNotFound />
+            <PageNotFound/>
             :
             getPageContent()
     );
@@ -154,10 +148,6 @@ const RightSection = styled.div`
     flex-direction: column;
     align-items: center;
 
-    @media (max-width: 1600px) {
-        flex: 0;
-    }
-
     @media (max-width: 1050px) {
         display: none;
     }
@@ -171,7 +161,7 @@ const ProfileContent = styled.div`
     padding: 20px;
     background-color: #0c0c0c;
     border-radius: 20px;
-    
+
     @media (max-width: 500px) {
         padding: 10px;
     }

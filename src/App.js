@@ -27,7 +27,6 @@ import LoaderPage from "./component/loaders/loaderPage";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from "react-router-dom";
 import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
 import {checkIsProfileAdded} from "./service/functions";

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import SmallProfileCard from "./SmallProfileCard";
 import {LuRefreshCcw} from "react-icons/lu";
@@ -26,6 +26,7 @@ import {profileSuggestions} from "../../restservices/profileApi";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
+import {useQuery} from "@tanstack/react-query";
 
 const ProfileSuggestions = ({
     backgroundColor = '#272727'
@@ -33,33 +34,35 @@ const ProfileSuggestions = ({
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
-    const [profileList, setProfileList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [dataMessage, setResponseDataMessage] = useState('');
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        fetchProfileSuggestions(currentPage);
-    }, [currentPage]);
-
-    const fetchProfileSuggestions = (page) => {
-        if (!isLoading) {
-            setIsLoading(true);
-            const payload = {
-                page: page,
-                size: 10
-            };
-            profileSuggestions(payload)
-                .then((response) => {
-                    const data = response.data;
-                    setIsLoading(false);
-                    setTotalRecords(data.totalRecordsCount);
-                    setProfileList(data.object);
-                }).catch((error)=> {
-                    console.log(error);
-            })
-        }
+    const fetchProfileSuggestionData = async (page) => {
+        const payload = {
+            page: page,
+            size: 10
+        };
+        const response = await profileSuggestions(payload);
+        return response.data;
     }
+
+    const {
+        isLoading,
+        error,
+        data: profileData,
+        isSuccess,
+        isError,
+        refetch
+    } = useQuery({
+        queryKey: ['profileSuggestion', currentPage],
+        queryFn: () => fetchProfileSuggestionData(currentPage),
+        staleTime: 120000,
+    })
+
+    useEffect(()=> {
+        if (isSuccess && profileData) {
+            setTotalRecords(profileData.totalRecordsCount);
+        }
+    }, [isSuccess])
 
     const handleNextPage = () => {
         const nextPage = (currentPage + 1) % Math.ceil(totalRecords / 10);
@@ -71,8 +74,41 @@ const ProfileSuggestions = ({
             };
             dispatch(setSnackbar(snackbarData))
         }
-        setCurrentPage(nextPage);
+        setCurrentPage(nextPage ? nextPage : 0);
     };
+
+    const getProfileCardContent = useCallback(()=> {
+        if (isLoading) {
+            return <FallbackLoader width={'100%'} height={'200px'}/>
+        } else if (isError) {
+            return (
+                <div>
+                    Error Occurred
+                </div>
+            )
+        } else if (isSuccess && profileData) {
+            if (profileData.object.length > 0) {
+                return (
+                    profileData.object.map((item)=> (
+                        <SmallProfileCard
+                            key={item.profileId}
+                            userId={item.userId}
+                            name={item.name}
+                            bio={item.bio}
+                            image={item.profileImage}
+                            email={item.email}
+                        />
+                    ))
+                )
+            } else {
+                return (
+                    <ErrorText>
+                        No Profile's Found
+                    </ErrorText>
+                )
+            }
+        }
+    }, [isLoading, isError, isSuccess, profileData])
 
     return (
         <Wrapper style={{
@@ -88,26 +124,7 @@ const ProfileSuggestions = ({
             </RowWrapper>
 
             <ProfileCardWrapper>
-                {isLoading ? (
-                    <FallbackLoader width={'100%'} height={'200px'}/>
-                ) : (
-                    profileList.length > 0 ? (
-                        profileList.map((item)=> (
-                            <SmallProfileCard
-                                key={item.profileId}
-                                userId={item.userId}
-                                name={item.name}
-                                bio={item.bio}
-                                image={item.profileImage}
-                                email={item.email}
-                            />
-                        ))
-                    ) : (
-                        <ErrorText>
-                            No Profile's Found
-                        </ErrorText>
-                    )
-                )}
+                {getProfileCardContent()}
             </ProfileCardWrapper>
         </Wrapper>
     );
