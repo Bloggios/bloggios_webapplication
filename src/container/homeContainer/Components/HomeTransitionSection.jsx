@@ -20,32 +20,33 @@
 
 import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
+const DualHomePageMarqueeSection = lazy(()=> import('../../../component/animations/DualHomePageMarqueeSection'));
+const HomeTransitionHeroSection = lazy(()=> import('./HomeTransitionHeroSection'));
 
-const UnauthenticatedHomePage = () => {
+const HomePageMarqueeSection = () => {
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
+                <HomeTransitionHeroSection />
+            </Suspense>
 
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                <DualHomePageMarqueeSection />
+            </Suspense>
+        </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
+    min-height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
 `;
 
-export default UnauthenticatedHomePage;
+const MemoizedHomePageMarqueeSection = React.memo(HomePageMarqueeSection);
+
+export default MemoizedHomePageMarqueeSection;

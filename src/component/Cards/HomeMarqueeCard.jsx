@@ -18,34 +18,45 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
+import React from "react";
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
-
-const UnauthenticatedHomePage = () => {
+const HomeMarqueeCard = ({
+    image,
+    label,
+    key
+                         }) => {
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
-
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
+        <Wrapper key={key}>
+            <ImageWrapper src={image} alt={'Bloggios'} />
+        </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    width: 100%;
+    height: 100px;
+    aspect-ratio: 16/9;
+    margin-right: 20px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 16px;
+    border: 1px solid transparent;
+    transition: all 250ms ease-in-out;
+    
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
 `;
 
-export default UnauthenticatedHomePage;
+const ImageWrapper = styled.img`
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+`;
+
+const MemoizedHomeMarqueeCard = React.memo(HomeMarqueeCard);
+export default MemoizedHomeMarqueeCard;

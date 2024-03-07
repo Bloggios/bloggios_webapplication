@@ -18,34 +18,28 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
+import ecommerce from './ecommerce.svg';
+import flutter from './flutter.svg';
+import forms from './forms.svg';
+import javaOutlined from './java-outlined.svg';
+import learn from './learn.svg';
+import messaging from './messaging.svg';
+import qAndA from './q-a-a.svg';
+import reactOutlined from './react-outlined.svg';
+import socialMedia from './social-media.svg';
+import polls from './polls.svg';
+import testing from './testing.svg';
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
-
-const UnauthenticatedHomePage = () => {
-    return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
-
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
-    );
+export {
+    ecommerce,
+    flutter,
+    forms,
+    javaOutlined,
+    learn,
+    messaging,
+    qAndA,
+    reactOutlined,
+    socialMedia,
+    polls,
+    testing
 };
-
-const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`;
-
-export default UnauthenticatedHomePage;

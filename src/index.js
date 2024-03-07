@@ -27,14 +27,13 @@ import store from "./state/store";
 import {BrowserRouter} from "react-router-dom";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import ParentBase from "./container/boundries/ParentBase";
-import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
 export const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
+            {/*<ReactQueryDevtools initialIsOpen={false} />*/}
             <BrowserRouter>
                 <ParentBase>
                     <App/>

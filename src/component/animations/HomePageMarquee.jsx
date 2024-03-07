@@ -18,34 +18,37 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
+import React from 'react';
+import Marquee from "react-fast-marquee";
+import MemoizedHomeMarqueeCard from "../Cards/HomeMarqueeCard";
+import PropTypes from "prop-types";
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
+const HomePageMarquee = ({
+    direction,
+    marqueeList
+                         }) => {
 
-const UnauthenticatedHomePage = () => {
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
-
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
+        <Marquee
+            autoFill={true}
+            direction={direction === 'left' ? 'left' : 'right'}
+        >
+            {marqueeList.map((marquee)=> (
+                <MemoizedHomeMarqueeCard
+                    key={marquee.id}
+                    label={marquee.label}
+                    image={marquee.icon}
+                />
+            ))}
+        </Marquee>
     );
 };
 
-const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`;
+HomePageMarquee.propTypes = {
+    direction: PropTypes.oneOf(["right", "left"]).isRequired,
+    marqueeList: PropTypes.arrayOf(PropTypes.object).isRequired
+}
 
-export default UnauthenticatedHomePage;
+const MemoizedHomePageMarquee = React.memo(HomePageMarquee);
+
+export default MemoizedHomePageMarquee;

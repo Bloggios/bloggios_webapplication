@@ -53,6 +53,20 @@ import {GrServices} from "react-icons/gr";
 import {GoHome, GoPlusCircle} from "react-icons/go";
 import React from "react";
 import {BLOGGIOS_TECH_LINK} from "./ServiceConstants";
+import {
+    ecommerce,
+    flutter,
+    forms,
+    javaOutlined,
+    learn,
+    messaging,
+    polls,
+    qAndA,
+    reactOutlined,
+    socialMedia,
+    testing
+} from "../asset/marquee";
+import {bgAccentRounded} from "../asset/svg";
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
@@ -303,5 +317,68 @@ export const userProfileTabsList = [
         id: 4,
         label: 'Questions',
         path: 'questions'
+    }
+];
+
+export const homeMarqueeList = [
+    {
+        id: 1,
+        label: "E-Commerce\nDevelopment",
+        icon: ecommerce
+    },
+    {
+        id: 2,
+        label: "Mobile App\nDevelopment",
+        icon: flutter
+    },
+    {
+        id: 3,
+        label: "Forms",
+        icon: forms
+    },
+    {
+        id: 4,
+        label: "Backend Development",
+        icon: javaOutlined
+    },
+    {
+        id: 5,
+        label: 'Courses',
+        icon: learn
+    },
+    {
+        id: 6,
+        label: "Messaging",
+        icon: messaging
+    },
+    {
+        id: 7,
+        label: "Q&A",
+        icon: qAndA
+    },
+    {
+        id: 8,
+        label: "Web Application\nDevelopment",
+        icon: reactOutlined
+    },
+    {
+        id: 9,
+        label: "Social Media",
+        icon: socialMedia
+    },
+    {
+        id: 10,
+        label: "Polls",
+        icon: polls
+    },
+    {
+        id: 11,
+        label: "IT Support",
+        icon: testing
+    },
+    {
+        id: 12,
+        label: "Bloggios Tech",
+        icon: bgAccentRounded
     }
 ];

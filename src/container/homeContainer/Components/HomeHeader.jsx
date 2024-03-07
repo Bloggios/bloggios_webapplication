@@ -22,56 +22,69 @@ import React from 'react';
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {SIGNUP_PAGE} from "../../../constant/pathConstants";
+import MemoizedScrollDownAnimatedButton from "../../../component/animations/ScrollDownAnimatedButton";
+import BgTransition from "../../../component/animations/BgTransition";
 
 const HomeHeader = () => {
 
     const navigate = useNavigate();
 
+    const handleScroll = () => {
+        window.scrollBy({
+            top: window.innerHeight,
+            behavior: 'smooth'
+        })
+    }
+
     return (
-        <Wrapper>
-            <SubText>
-                Concatenate Perceptions
-            </SubText>
-            <HeadingText>
-                BLOGGIOS
-            </HeadingText>
-            <MottoText>
-                Where Software Meets Social, Learning, and More.
-            </MottoText>
-            <StreamlinedText>
-                Your digital partner for software mastery, social influence, immersive learning, and seamless forms. We transcend boundaries, fostering innovation and crafting a dynamic digital experience. Elevate your journey with Bloggios—where code meets community, and possibilities unfold effortlessly.
-            </StreamlinedText>
-            <GetStartedButton onClick={()=> navigate(SIGNUP_PAGE)} className="full-rounded">
-                <span>Get Started</span>
-                <div className="border full-rounded"></div>
-            </GetStartedButton>
-        </Wrapper>
+        <BgTransition component={'main'} delay={0.2}>
+            <Wrapper>
+                <SubText>
+                    Concatenate Perceptions
+                </SubText>
+                <HeadingText>
+                    BLOGGIOS
+                </HeadingText>
+                <MottoText>
+                    Where Software Meets Social, Learning, and More.
+                </MottoText>
+                <StreamlinedText>
+                    Your digital partner for software mastery, social influence, immersive learning, and seamless forms. We transcend boundaries, fostering innovation and crafting a dynamic digital experience. Elevate your journey with Bloggios—where code meets community, and possibilities unfold effortlessly.
+                </StreamlinedText>
+                <GetStartedButton onClick={()=> navigate(SIGNUP_PAGE)} className="full-rounded">
+                    <span>Get Started</span>
+                    <div className="border full-rounded"></div>
+                </GetStartedButton>
+                <MemoizedScrollDownAnimatedButton
+                    margin={'10px 0 0 0'}
+                    onClick={handleScroll}
+                />
+            </Wrapper>
+        </BgTransition>
     );
 };
 
 const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 72px);
-  align-items: center;
-  padding-top: 100px;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  
-  @media(max-width: 650px) {
-    padding-top: 70px;
-  }
-  
-  @media(max-height: 700px) {
-    padding-top: 40px;
-  }
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 72px);
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    gap: 10px;
+    
+    @media (max-width: 400px) {
+        padding: 10px;
+    }
 
-  @media(max-width: 400px) {
-    padding-top: 100px;
-  }
+    @media(max-height: 700px) {
+        padding-top: 20px;
+    }
 `;
 
 const SubText = styled.h4`
@@ -79,6 +92,10 @@ const SubText = styled.h4`
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.6);
+
+    @media (orientation: landscape) and (max-height: 670px) {
+        font-size: clamp(1.4rem, 3vw, 1.8rem);
+    }
 `;
 
 const HeadingText = styled.h1`
@@ -88,45 +105,65 @@ const HeadingText = styled.h1`
   -webkit-text-fill-color: transparent;
   font-family: 'Inter', sans-serif;
   font-size: clamp(2.8rem, 17vw, 8rem);
+
+    @media (orientation: landscape) and (max-height: 670px) {
+        font-size: clamp(2.8rem, 17vw, 6rem);
+    }
 `;
 
 const MottoText = styled.span`
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  font-weight: 300;
-  padding-top: 40px;
-  text-align: center;
-  width: 70%;
-  
-  @media(max-width: 700px) {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: 300;
     padding-top: 20px;
-  }
-  
-  @media(max-width: 400px) {
-    padding-top: 10px;
-  }
+    text-align: center;
+    width: 70%;
+
+    @media (max-width: 700px) {
+        padding-top: 10px;
+    }
+
+    @media (max-height: 740px) {
+        padding-top: 10px;
+    }
+
+    @media (orientation: portrait) {
+        width: 85%;
+    }
+    
+    @media (orientation: landscape) and (max-height: 670px) {
+        padding-top: 10px;
+        font-size: clamp(1.2rem, 3vw, 1.7rem);
+    }
 `;
 
 const StreamlinedText = styled.p`
-  margin-top: 40px;
-  font-size: clamp(0.8rem, 3vw, 1.4rem);
-  width: 70%;
-  text-align: center;
-  font-weight: 200;
-  
-  @media(max-width: 400px) {
-    width: 90%;
-  }
+    margin-top: 40px;
+    font-size: clamp(0.8rem, 3vw, 1.4rem);
+    width: 70%;
+    text-align: center;
+    font-weight: 200;
 
-  @media(max-height: 700px) {
-    width: 90%;
-  }
+    @media (orientation: portrait) {
+        width: 90%;
+    }
+
+    @media (max-height: 740px) {
+        width: 90%;
+        margin-top: 20px;
+    }
+
+    @media (orientation: landscape) and (max-height: 670px) {
+        width: 90%;
+        margin-top: 20px;
+        font-size: clamp(0.8rem, 3vw, 1.2rem);
+    }
 `;
 
 const GetStartedButton = styled.button`
   font-size: 16px;
   position: relative;
-  margin-top: 50px;
-  padding: 1em 2.5em 1em 2.5em;
+  margin-top: 30px;
+  padding: 1em 2.5em;
   border: none;
   background: #fff;
   transition: all 0.1s linear;
@@ -164,24 +201,5 @@ const GetStartedButton = styled.button`
   }
 `;
 
-// const LeftColumn = styled.div`
-//   flex: 0 0 calc(50%);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   @media(max-width: 600px) {
-//     flex: 1 0 100%;
-//   }
-// `;
-//
-// const RightColumn = styled.div`
-//   flex: 0 0 calc(50%);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   @media(max-width: 600px) {
-//     flex: 1 0 100%;
-//   }
-// `;
-
-export default HomeHeader;
+const MemoizedHomeHeader = React.memo(HomeHeader);
+export default MemoizedHomeHeader;

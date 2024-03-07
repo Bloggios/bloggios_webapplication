@@ -18,34 +18,40 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {Suspense} from 'react';
+import FallbackLoader from "../loaders/fallbackLoader";
+import HomePageMarquee from "./HomePageMarquee";
+import {homeMarqueeList} from "../../constant/listConstants";
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
-
-const UnauthenticatedHomePage = () => {
+const DualHomePageMarqueeSection = () => {
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} />}>
+                <HomePageMarquee
+                    direction={'right'}
+                    marqueeList={homeMarqueeList}
+                />
+            </Suspense>
 
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} />}>
+                <HomePageMarquee
+                    direction={'left'}
+                    marqueeList={homeMarqueeList.reverse()}
+                />
+            </Suspense>
+        </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
     width: 100%;
     display: flex;
+    gap: 40px;
     flex-direction: column;
+    justify-content: center;
 `;
 
-export default UnauthenticatedHomePage;
+const MemoizedDualHomePageMarqueeSection = React.memo(DualHomePageMarqueeSection);
+
+export default MemoizedDualHomePageMarqueeSection;

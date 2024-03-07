@@ -18,34 +18,49 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React from 'react';
+import {ColumnWrapper} from "../../../styles/StyledComponent";
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
 
-const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
-const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
-
-const UnauthenticatedHomePage = () => {
+const HomeTransitionHeroSection = () => {
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
-                    <MemoizedHomeHeader />
-                </Suspense>
+        <ColumnWrapper>
+            <HeadingSpan>
+                The power of connection<br/>powered by <Strong>software</Strong>
+            </HeadingSpan>
 
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <MemoizedHomeTransitionSection />
-                </Suspense>
-            </Wrapper>
-        </BloggiosBase>
+            <SubTitle>
+                Beyond the blog. Engage your audience, spark conversations, and build thriving online communities with our powerful social media features, messaging tools, and custom software solutions
+            </SubTitle>
+        </ColumnWrapper>
     );
 };
 
-const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+const HeadingSpan = styled.h1`
+    font-size: clamp(1rem, 0.516rem + 2.9787vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
 `;
 
-export default UnauthenticatedHomePage;
+const Strong = styled.strong`
+    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+`;
+
+const SubTitle = styled.h5`
+    font-size: clamp(0.75rem, 0.6117rem + 0.8511vw, 1.25rem);
+    text-align: center;
+    width: 60%;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    margin: 0 auto;
+`;
+
+const MemoizedHomeTransitionHeroSection = React.memo(HomeTransitionHeroSection);
+
+export default MemoizedHomeTransitionHeroSection;
