@@ -50,6 +50,18 @@ const Wrapper = styled.div`
     &:hover {
         border: 1px solid rgba(255, 255, 255, 0.4);
     }
+    
+    @media (max-width: 1000px) {
+        height: 70px;
+        border-radius: 16px;
+        padding: 14px;
+    }
+
+    @media (max-width: 500px) {
+        height: 50px;
+        border-radius: 12px;
+        padding: 7px;
+    }
 `;
 
 const ImageWrapper = styled.img`

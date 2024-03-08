@@ -22,7 +22,6 @@ import React, {Suspense} from 'react';
 import FallbackLoader from "../loaders/fallbackLoader";
 import HomePageMarquee from "./HomePageMarquee";
 import {homeMarqueeList} from "../../constant/listConstants";
-import styled from "styled-components";
 import BgTransition from "./BgTransition";
 
 const DualHomePageMarqueeSection = () => {
@@ -36,7 +35,7 @@ const DualHomePageMarqueeSection = () => {
     };
 
     return (
-        <BgTransition component={'div'} style={wrapperStyle}>
+        <BgTransition component={'div'} style={wrapperStyle} delay={0.01}>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} />}>
                 <HomePageMarquee
                     direction={'right'}
@@ -53,14 +52,6 @@ const DualHomePageMarqueeSection = () => {
         </BgTransition>
     );
 };
-
-const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    gap: 40px;
-    flex-direction: column;
-    justify-content: center;
-`;
 
 const MemoizedDualHomePageMarqueeSection = React.memo(DualHomePageMarqueeSection);
 

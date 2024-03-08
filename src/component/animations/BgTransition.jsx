@@ -27,7 +27,8 @@ const BgTransition = ({
     delay = 0,
     style,
     component: Node,
-    duration = 1
+    duration = 1,
+    isOnce = true
                       }) => {
 
     const targetElement = useRef(null);
