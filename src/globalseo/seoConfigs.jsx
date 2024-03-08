@@ -45,8 +45,8 @@ const seoConfigs = {
         ogImage: bloggios_logo,
         ogUrl: 'https://bloggios.com/login'
     },
-    homepage: {
-        title: 'Bloggios Home',
+    homePage: {
+        title: 'Bloggios - Empowering Connections, Inspiring Solutions',
         description: "Join Bloggios' vibrant social community. Share, engage, and build meaningful connections with like-minded individuals.",
         keywords: `${RESERVED_KEYWORDS}, Bloggios Home, Bloggios Social Login, Continue Concatenating Perceptions`,
         author: 'Rohit Parihar',

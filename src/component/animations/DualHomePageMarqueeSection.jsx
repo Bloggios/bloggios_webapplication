@@ -23,10 +23,20 @@ import FallbackLoader from "../loaders/fallbackLoader";
 import HomePageMarquee from "./HomePageMarquee";
 import {homeMarqueeList} from "../../constant/listConstants";
 import styled from "styled-components";
+import BgTransition from "./BgTransition";
 
 const DualHomePageMarqueeSection = () => {
+
+    const wrapperStyle = {
+        width: '100%',
+        display: 'flex',
+        gap: '40px',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    };
+
     return (
-        <Wrapper>
+        <BgTransition component={'div'} style={wrapperStyle}>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} />}>
                 <HomePageMarquee
                     direction={'right'}
@@ -40,7 +50,7 @@ const DualHomePageMarqueeSection = () => {
                     marqueeList={homeMarqueeList.reverse()}
                 />
             </Suspense>
-        </Wrapper>
+        </BgTransition>
     );
 };
 

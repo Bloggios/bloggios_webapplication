@@ -127,6 +127,36 @@ const BgTransition = ({
                     {children}
                 </Node>
             )
+        } else if (type === 'bg__ud') {
+            const bgRlStyle = {
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+                transition: `opacity ${duration}s ease-in-out ${delay}s, transform ${duration}s ease-in-out ${delay}s`,
+            }
+            const finalStyle = {...bgRlStyle, ...style};
+            return (
+                <Node
+                    style={finalStyle}
+                    ref={targetElement}
+                >
+                    {children}
+                </Node>
+            )
+        } else if (type === 'bg__du') {
+            const bgRlStyle = {
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(100%)',
+                transition: `opacity ${duration}s ease-in-out ${delay}s, transform ${duration}s ease-in-out ${delay}s`,
+            }
+            const finalStyle = {...bgRlStyle, ...style};
+            return (
+                <Node
+                    style={finalStyle}
+                    ref={targetElement}
+                >
+                    {children}
+                </Node>
+            )
         } else {
             const bgFiStyle = {
                 opacity: isVisible ? 1 : 0,
@@ -153,7 +183,8 @@ BgTransition.propTypes = {
         'bg__fi',
         'bg__lr',
         'bg__rl',
-        'bg__zi'
+        'bg__zi',
+        'bg__ud'
     ]),
 }
 

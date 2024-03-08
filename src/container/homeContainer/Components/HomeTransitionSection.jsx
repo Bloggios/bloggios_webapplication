@@ -45,6 +45,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    user-select: none;
 `;
 
 const MemoizedHomePageMarqueeSection = React.memo(HomePageMarqueeSection);
