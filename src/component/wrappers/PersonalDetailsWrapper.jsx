@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {MdModeEdit} from "react-icons/md";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import styled from "styled-components";
@@ -33,10 +33,6 @@ const PersonalDetailsWrapper = ({
     dob,
     gender
                                 }) => {
-
-    useEffect(() => {
-        console.log(dob)
-    }, [dob]);
 
     const {width} = useWindowDimensions();
     const [isEditMode, setIsEditMode] = useState(false);

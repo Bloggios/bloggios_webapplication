@@ -22,12 +22,14 @@ import React, {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
+    ASK_QUESTION_OUTLET_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
+    POST_OUTLET_PAGE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
     QUESTION_PAGE,
@@ -39,8 +41,6 @@ import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
-import ProfileAboutOutlet from "../container/profileContainer/outlets/ProfileAboutOutlet";
-import ProfilePostOutlet from "../container/profileContainer/outlets/ProfilePostOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -54,6 +54,10 @@ const SecurityPage = lazy(()=> import('../container/securityContainer/securityPa
 const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
 const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
 const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
+const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfileAboutOutlet'));
+const ProfilePostOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfilePostOutlet'));
+const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionOutlet'));
+const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
 
 const Router = () => {
 
@@ -75,10 +79,13 @@ const Router = () => {
                         <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
                         <Route path={SECURITY_PAGE} element={<SecurityPage />} />
                         <Route path={SETTING_PAGE} element={<SettingPage />} />
-                        <Route path={QUESTION_PAGE} element={<QuestionPage />} />
+                        <Route path={QUESTION_PAGE} element={<QuestionPage />} >
+                            <Route index element={<QuestionOutlet />} />
+                            <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
+                        </Route>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />
-                            <Route path={'posts'} element={<ProfilePostOutlet />} />
+                            <Route path={POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
                         </Route>
                     </Route>
                 </Routes>

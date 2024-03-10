@@ -32,7 +32,6 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
 
 const HorizontalTabs = lazy(() => import("../../component/tabs/HorizontalTabs"));
-const WrappedNotFound = lazy(() => import("../../component/NotFound/WrappedNotFound"));
 const ProfileHeader = lazy(() => import("../../component/Cards/ProfileHeader"));
 const ProfileSuggestions = lazy(() => import("../../component/Cards/ProfileSuggestions"));
 

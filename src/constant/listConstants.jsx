@@ -323,62 +323,78 @@ export const userProfileTabsList = [
 export const homeMarqueeList = [
     {
         id: 1,
-        label: "E-Commerce\nDevelopment",
         icon: ecommerce
     },
     {
         id: 2,
-        label: "Mobile App\nDevelopment",
         icon: flutter
     },
     {
         id: 3,
-        label: "Forms",
         icon: forms
     },
     {
         id: 4,
-        label: "Backend Development",
         icon: javaOutlined
     },
     {
         id: 5,
-        label: 'Courses',
         icon: learn
     },
     {
         id: 6,
-        label: "Messaging",
         icon: messaging
     },
     {
         id: 7,
-        label: "Q&A",
         icon: qAndA
     },
     {
         id: 8,
-        label: "Web Application\nDevelopment",
         icon: reactOutlined
     },
     {
         id: 9,
-        label: "Social Media",
         icon: socialMedia
     },
     {
         id: 10,
-        label: "Polls",
         icon: polls
     },
     {
         id: 11,
-        label: "IT Support",
         icon: testing
     },
     {
         id: 12,
-        label: "Bloggios Tech",
         icon: bgAccentRounded
     }
 ];
+
+export const askQuestionDescription = [
+    {
+        id: 1,
+        title: "Title - The Spark of Inquiry",
+        description: "Ignite curiosity with a title that encapsulates the essence of your question. Make it crisp, clear, and irresistible – a spark that draws readers in."
+    },
+    {
+        id: 2,
+        title: "Details - Unraveling the Tapestry",
+        description: "Dive into the heart of your inquiry in the details section. Unravel the layers of your question, share the story behind it, and paint a vivid picture for your readers. Let them feel the pulse of your curiosity."
+    },
+    {
+        id: 3,
+        title: "Tags - Navigational Signposts",
+        description: "Sprinkle your question with tags like topics, guiding users to the realms of knowledge they seek. Whether it's tech, science, life musings, or anything in between, let the tags be signposts leading to your question."
+    },
+    {
+        id: 4,
+        title: "Review Question - Polishing the Gem",
+        description: "Before unveiling your question to the Bloggios community, take a moment to polish it. Ensure clarity, check for any hidden gems you might have missed, and make certain it's a shining beacon of curiosity."
+    },
+    {
+        id: 5,
+        title: "Post to Bloggios - Unleashing Curiosity",
+        description: "With your question finely crafted, release it into the wilds of Bloggios. Invite readers and thinkers alike to join the journey of exploration, adding their unique perspectives to the tapestry of knowledge."
+    },
+]

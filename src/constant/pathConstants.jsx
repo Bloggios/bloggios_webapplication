@@ -37,3 +37,6 @@ export const CREATE_PAGE = '/create'
 export const NOT_FOUND_PAGE = '*';
 export const OAUTH_REDIRECT = '/oauth2/redirect';
 export const QUESTION_PAGE = '/question'
+export const ASK_QUESTION_OUTLET_PAGE = 'ask-question';
+export const POST_OUTLET_PAGE = 'posts';
+export const ASK_QUESTION_PAGE = '/question/ask-question';

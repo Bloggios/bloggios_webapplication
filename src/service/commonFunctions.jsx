@@ -39,8 +39,8 @@ export const getFormattedDate = (date) => {
     }
 }
 
-export const handleDivScroll = (direction) => {
-    const scrollContainer = document.getElementById('suggestionWrapper');
+export const handleDivScroll = (direction, id) => {
+    const scrollContainer = document.getElementById(id ? id : 'suggestionWrapper');
     const scrollAmount = 150;
 
     if (direction === 'left') {

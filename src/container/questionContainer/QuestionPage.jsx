@@ -18,15 +18,44 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import styled from "styled-components";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import useComponentSize from "../../hooks/useComponentSize";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import {Outlet} from "react-router-dom";
+
+const ProfileSuggestions = lazy(()=> import('../../component/Cards/ProfileSuggestions'));
+const QuestionsTabBar = lazy(()=> import('../../component/navbars/QuestionsTabBar'));
+const BloggiosQuestionsHeader = lazy(()=> import('./components/BloggiosQuestionsHeader'));
 
 const QuestionPage = () => {
+
+    const {width} = useWindowDimensions();
+    const [suggestionRef, suggestionSize] = useComponentSize();
+
     return (
         <BloggiosSidebarBase>
             <Wrapper>
+                <QuestionSection>
+                    <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} />}>
+                        <QuestionsTabBar />
+                    </Suspense>
 
+                    <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                        <BloggiosQuestionsHeader />
+                    </Suspense>
+
+                    <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                        <Outlet />
+                    </Suspense>
+                </QuestionSection>
+                <SuggestionSection ref={suggestionRef}>
+                    <Suspense fallback={<FallbackLoader width={suggestionSize.width}/>}>
+                        {width > 1050 && <ProfileSuggestions/>}
+                    </Suspense>
+                </SuggestionSection>
             </Wrapper>
         </BloggiosSidebarBase>
     );
@@ -36,7 +65,7 @@ const Wrapper = styled.div`
     width: 100%;
     height: auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     padding: 20px 20px 20px 10px;
     gap: 20px;
 
@@ -45,4 +74,36 @@ const Wrapper = styled.div`
     }
 `;
 
-export default QuestionPage;
+const QuestionSection = styled.div`
+    max-width: 75%;
+    min-width: auto;
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 25px;
+    background: #0c0c0c;
+    border-radius: 20px;
+    padding: 20px 16px;
+    
+    @media (max-width: 1050px) {
+        max-width: 100%;
+    }
+`;
+
+const SuggestionSection = styled.div`
+    flex: 1;
+    max-width: 25%;
+    min-width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media (max-width: 1050px) {
+        display: none;
+    }
+`;
+
+const MemoizedQuestionPage = React.memo(QuestionPage);
+
+export default MemoizedQuestionPage;

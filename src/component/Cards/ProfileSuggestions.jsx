@@ -193,4 +193,6 @@ const ErrorText = styled.span`
     color: rgba(255, 255, 255, 0.6);
 `;
 
-export default ProfileSuggestions;
+const MemoizedProfileSuggestions = React.memo(ProfileSuggestions);
+
+export default MemoizedProfileSuggestions;

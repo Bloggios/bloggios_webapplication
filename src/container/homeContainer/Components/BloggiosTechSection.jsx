@@ -18,36 +18,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import Marquee from "react-fast-marquee";
-import MemoizedHomeMarqueeCard from "../Cards/HomeMarqueeCard";
-import PropTypes from "prop-types";
+import React, {lazy, Suspense} from 'react';
+import styled from "styled-components";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
 
-const HomePageMarquee = ({
-    direction,
-    marqueeList
-                         }) => {
+const BgTechIntroduction = lazy(()=> import('./BloggiosTech/BgTechIntroduction'));
 
+const BloggiosTechSection = () => {
     return (
-        <Marquee
-            autoFill={true}
-            direction={direction === 'left' ? 'left' : 'right'}
-        >
-            {marqueeList.map((marquee)=> (
-                <MemoizedHomeMarqueeCard
-                    key={marquee.id}
-                    image={marquee.icon}
-                />
-            ))}
-        </Marquee>
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
+                <BgTechIntroduction />
+            </Suspense>
+        </Wrapper>
     );
 };
 
-HomePageMarquee.propTypes = {
-    direction: PropTypes.oneOf(["right", "left"]).isRequired,
-    marqueeList: PropTypes.arrayOf(PropTypes.object).isRequired
-}
+const Wrapper = styled.div`
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    user-select: none;
+`;
 
-const MemoizedHomePageMarquee = React.memo(HomePageMarquee);
+const MemoizedBloggiosTechSection = React.memo(BloggiosTechSection);
 
-export default MemoizedHomePageMarquee;
+export default MemoizedBloggiosTechSection;

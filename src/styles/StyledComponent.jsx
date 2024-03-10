@@ -26,3 +26,10 @@ export const ColumnWrapper = styled.div`
     flex-direction: column;
     gap: 10px;
 `;
+
+export const RowSpaceBetweenWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;

@@ -26,6 +26,7 @@ import useSeo from "../../globalseo/useSeo";
 
 const MemoizedHomeHeader = lazy(()=> import('./Components/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('./Components/HomeTransitionSection'));
+const MemoizedBloggiosTechSection = lazy(()=> import('./Components/BloggiosTechSection'));
 
 const UnauthenticatedHomePage = () => {
 
@@ -39,6 +40,10 @@ const UnauthenticatedHomePage = () => {
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
                     <MemoizedHomeTransitionSection />
+                </Suspense>
+
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'}/>}>
+                    <MemoizedBloggiosTechSection />
                 </Suspense>
             </Wrapper>
         </BloggiosBase>

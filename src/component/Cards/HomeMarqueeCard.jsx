@@ -23,7 +23,6 @@ import React from "react";
 
 const HomeMarqueeCard = ({
     image,
-    label,
     key
                          }) => {
     return (

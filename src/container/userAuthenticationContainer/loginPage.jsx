@@ -24,13 +24,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
-import {FcGoogle} from "react-icons/fc";
-import {FaFacebookF, FaGithub} from "react-icons/fa";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {setSnackbar} from "../../state/snackbarSlice";
 import useSeo from "../../globalseo/useSeo";
-import IconButton from "../../component/buttons/iconButton";
 import Typography from "../../component/typography/typography";
 import TextField from "../../component/fields/textField";
 import LoaderButton from "../../component/buttons/loaderButton";
@@ -163,33 +160,33 @@ const LoginPage = () => {
                         />
                     </TextWrapper>
 
-                    <SocialLoginButtonWrapper>
-                        <IconButton
-                            icon={<FcGoogle fontSize={'20px'}/>}
-                            background={'#e5e5e5'}
-                            hoveredBackgroundColor={'#edf7ff'}
-                            activeBackgroundColor={'#e5e5e5'}
-                            isTooltipAllowed={true}
-                            tooltip={'Login with Google'}
-                            onClick={openGoogleAuth}
-                        />
-                        <IconButton
-                            icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}
-                            background={'#e5e5e5'}
-                            hoveredBackgroundColor={'#edf7ff'}
-                            activeBackgroundColor={'#e5e5e5'}
-                            isTooltipAllowed={true}
-                            tooltip={'Login with Facebook'}
-                        />
-                        <IconButton
-                            icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}
-                            background={'#e5e5e5'}
-                            hoveredBackgroundColor={'#edf7ff'}
-                            activeBackgroundColor={'#e5e5e5'}
-                            isTooltipAllowed={true}
-                            tooltip={'Login with Github'}
-                        />
-                    </SocialLoginButtonWrapper>
+                    {/*<SocialLoginButtonWrapper>*/}
+                    {/*    <IconButton*/}
+                    {/*        icon={<FcGoogle fontSize={'20px'}/>}*/}
+                    {/*        background={'#e5e5e5'}*/}
+                    {/*        hoveredBackgroundColor={'#edf7ff'}*/}
+                    {/*        activeBackgroundColor={'#e5e5e5'}*/}
+                    {/*        isTooltipAllowed={true}*/}
+                    {/*        tooltip={'Login with Google'}*/}
+                    {/*        onClick={openGoogleAuth}*/}
+                    {/*    />*/}
+                    {/*    <IconButton*/}
+                    {/*        icon={<FaFacebookF fontSize={'20px'} color={'#0666b2'}/>}*/}
+                    {/*        background={'#e5e5e5'}*/}
+                    {/*        hoveredBackgroundColor={'#edf7ff'}*/}
+                    {/*        activeBackgroundColor={'#e5e5e5'}*/}
+                    {/*        isTooltipAllowed={true}*/}
+                    {/*        tooltip={'Login with Facebook'}*/}
+                    {/*    />*/}
+                    {/*    <IconButton*/}
+                    {/*        icon={<FaGithub fontSize={'20px'} color={'#272727'}/>}*/}
+                    {/*        background={'#e5e5e5'}*/}
+                    {/*        hoveredBackgroundColor={'#edf7ff'}*/}
+                    {/*        activeBackgroundColor={'#e5e5e5'}*/}
+                    {/*        isTooltipAllowed={true}*/}
+                    {/*        tooltip={'Login with Github'}*/}
+                    {/*    />*/}
+                    {/*</SocialLoginButtonWrapper>*/}
 
                     <DividerWrapper>
                         <Line/>
