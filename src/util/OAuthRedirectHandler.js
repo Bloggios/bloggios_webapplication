@@ -32,7 +32,7 @@ const OAuthRedirectHandler = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const dispatch = useDispatch();
-    const navigate = useLocation();
+    // const navigate = useLocation();
 
     const getUrlParameter = (name) => {
         return searchParams.get(name)
@@ -40,7 +40,7 @@ const OAuthRedirectHandler = () => {
 
     const token = getUrlParameter(ACCESS_TOKEN);
     const refreshToken = getUrlParameter(REFRESH_TOKEN);
-    const userId = getUrlParameter('userId');
+    // const userId = getUrlParameter('userId');
     const error = getUrlParameter('error');
 
     if (token && refreshToken) {

@@ -18,29 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import {useEffect, useRef, useState} from 'react';
 
-const snackbarSlice = createSlice({
-    name: 'snackbar-state',
-    initialState: {
-        snackbarType: null,
-        message: null,
-        isSnackbar: false
-    },
-    reducers: {
-        setSnackbar: (state, action) => {
-            const { snackbarType, message, isSnackbar } = action.payload;
-            state.snackbarType = snackbarType;
-            state.message = message;
-            state.isSnackbar = isSnackbar;
-        },
-        clearSnackbar: (state) => {
-            state.snackbarType = '';
-            state.message = '';
-            state.isSnackbar = false;
+const useIsInputFocused = () => {
+
+    const inputRef = useRef(null);
+    const [isFocused, setIsFocused] = useState(false);
+
+    useEffect(()=> {
+        const inputElement = inputRef.current;
+
+        if (inputElement) {
+            inputElement.addEventListener('focus', ()=> setIsFocused(true));
+            inputElement.addEventListener('blur', ()=> setIsFocused(false));
         }
-    }
-});
 
-export default snackbarSlice.reducer;
-export const { setSnackbar, clearSnackbar } = snackbarSlice.actions;
+        return () => {
+            if (inputElement) {
+                inputElement.removeEventListener('focus', ()=> setIsFocused(true));
+                inputElement.removeEventListener('blur', ()=> setIsFocused(false));
+            }
+        }
+    }, [])
+
+    return [inputRef, isFocused];
+};
+
+export default useIsInputFocused;

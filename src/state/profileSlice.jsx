@@ -44,7 +44,7 @@ const profileSlice = createSlice({
             state.gender = gender;
             state.link = link;
         },
-        clearProfile: (state, action) => {
+        clearProfile: (state) => {
             state.isAdded = false;
             state.name = null;
             state.profileImageUrl=  null;

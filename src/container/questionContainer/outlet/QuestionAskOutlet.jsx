@@ -20,16 +20,22 @@
 
 import React, {lazy, Suspense} from 'react';
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {ColumnWrapper} from "../../../styles/StyledComponent";
 
 const AskQuestionDescription = lazy(()=> import('../components/AskQuestionDescriptionSection'));
+const AskQuestionFields = lazy(()=> import('../components/AskQuestionFields'));
 
 const QuestionAskOutlet = () => {
     return (
-        <div>
+        <ColumnWrapper style={{gap: '20px'}}>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
                 <AskQuestionDescription />
             </Suspense>
-        </div>
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
+                <AskQuestionFields />
+            </Suspense>
+        </ColumnWrapper>
     );
 };
 

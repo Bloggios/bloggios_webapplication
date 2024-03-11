@@ -20,12 +20,17 @@
 
 import {Navigate, Outlet} from "react-router-dom";
 import {LOGIN_PAGE} from "../constant/pathConstants";
+import PropTypes from "prop-types";
 
 const ProtectedRoute = ({isAuthenticated}) => {
     if (!isAuthenticated) {
         return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
     }
     return <Outlet />
+}
+
+ProtectedRoute.propTypes = {
+    isAuthenticated: PropTypes.bool
 }
 
 export default ProtectedRoute;

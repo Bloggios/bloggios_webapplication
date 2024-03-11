@@ -62,6 +62,7 @@ const Typography = ({
                         spacing,
                         textAlign
                     }) => {
+
     const getFontFamily = (family) => {
         return family;
     };

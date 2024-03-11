@@ -153,7 +153,7 @@ const SubTitleSpan = styled.h5`
     font-weight: 300;
     width: 60%;
     
-    @media (max-width: 1400px) {
+    @media (max-width: 1600px) {
         width: 80%;
     }
 

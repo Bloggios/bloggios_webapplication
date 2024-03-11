@@ -18,29 +18,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
-
-const snackbarSlice = createSlice({
-    name: 'snackbar-state',
-    initialState: {
-        snackbarType: null,
-        message: null,
-        isSnackbar: false
-    },
-    reducers: {
-        setSnackbar: (state, action) => {
-            const { snackbarType, message, isSnackbar } = action.payload;
-            state.snackbarType = snackbarType;
-            state.message = message;
-            state.isSnackbar = isSnackbar;
-        },
-        clearSnackbar: (state) => {
-            state.snackbarType = '';
-            state.message = '';
-            state.isSnackbar = false;
-        }
-    }
-});
-
-export default snackbarSlice.reducer;
-export const { setSnackbar, clearSnackbar } = snackbarSlice.actions;
+export const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image'],
+    [{ 'align': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+    ['clean']                                         // remove formatting button
+];

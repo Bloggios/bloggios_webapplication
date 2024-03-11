@@ -34,7 +34,7 @@ const isCreatedSlice = createSlice({
             state.isPost = isPost;
             state.isComment = isComment;
         },
-        clearIsCreated: (state, action) => {
+        clearIsCreated: (state) => {
             state.isFollowed = false;
             state.isPost = false;
             state.isComment = false;

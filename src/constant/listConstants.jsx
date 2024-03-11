@@ -397,4 +397,17 @@ export const askQuestionDescription = [
         title: "Post to Bloggios - Unleashing Curiosity",
         description: "With your question finely crafted, release it into the wilds of Bloggios. Invite readers and thinkers alike to join the journey of exploration, adding their unique perspectives to the tapestry of knowledge."
     },
-]
+];
+
+export const joditButtons = [
+    'bold', 'italic', 'underline', '|',
+    'ul', 'ol', '|',
+    'outdent', 'indent', '|',
+    'align', '|',
+    // 'fontsize', '|',
+    // 'paragraph',
+    'link', 'table', 'image', '|',
+    'undo', 'redo', '|',
+    'hr',
+    'code'
+];

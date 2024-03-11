@@ -32,7 +32,7 @@ const errorSlice = createSlice({
             state.isError = isError;
             state.errorMessage = errorMessage;
         },
-        clearError: (state, action) => {
+        clearError: (state) => {
             state.isError = false;
             state.errorMessage = null;
         }

@@ -18,29 +18,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
 
-const snackbarSlice = createSlice({
-    name: 'snackbar-state',
-    initialState: {
-        snackbarType: null,
-        message: null,
-        isSnackbar: false
-    },
-    reducers: {
-        setSnackbar: (state, action) => {
-            const { snackbarType, message, isSnackbar } = action.payload;
-            state.snackbarType = snackbarType;
-            state.message = message;
-            state.isSnackbar = isSnackbar;
-        },
-        clearSnackbar: (state) => {
-            state.snackbarType = '';
-            state.message = '';
-            state.isSnackbar = false;
-        }
-    }
-});
+.ql-editor {
+    min-height: 250px;
+    cursor: text;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
 
-export default snackbarSlice.reducer;
-export const { setSnackbar, clearSnackbar } = snackbarSlice.actions;
+.ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.4) !important;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+
+.ql-container.ql-snow, .ql-toolbar.ql-snow {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.ql-container.ql-snow {
+    border-top: none !important;
+    border-bottom-right-radius: 16px !important;
+    border-bottom-left-radius: 16px !important;
+}
+
+.ql-toolbar.ql-snow {
+    border-top-right-radius: 16px !important;
+    border-top-left-radius: 16px !important;
+}
