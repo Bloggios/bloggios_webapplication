@@ -23,12 +23,12 @@ import styled from "styled-components";
 import BloggiosBase from "../boundries/bloggiosBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
-import BloggiosTechServicesTabsView from "../../component/sections/BloggiosTechServicesTabsView";
+import BloggiosTechDetailedView from "../../component/sections/BloggiosTechDetailedView";
 
 const MemoizedHomeHeader = lazy(()=> import('../../component/sections/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections/HomeTransitionSection'));
-const MemoizedBloggiosTechSection = lazy(()=> import('../../component/sections/BloggiosTechSection'));
-const BloggiosTechServices = lazy(()=> import('../../component/sections/BloggiosTechServices'));
+const BloggiosTechIntroductionSection = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSection'));
+const BloggiosTechIntroductionSectionSummary = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSectionSummary'));
 
 const UnauthenticatedHomePage = () => {
 
@@ -45,15 +45,15 @@ const UnauthenticatedHomePage = () => {
                 </Suspense>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'}/>}>
-                    <MemoizedBloggiosTechSection />
+                    <BloggiosTechIntroductionSection />
                 </Suspense>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'}/>}>
-                    <BloggiosTechServices />
+                    <BloggiosTechIntroductionSectionSummary />
                 </Suspense>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <BloggiosTechServicesTabsView />
+                    <BloggiosTechDetailedView />
                 </Suspense>
             </Wrapper>
         </BloggiosBase>

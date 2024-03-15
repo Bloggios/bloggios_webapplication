@@ -20,21 +20,29 @@
 
 import React, {useEffect} from "react";
 import styled from "styled-components";
-import {BLOGGIOS_TECH_TABS} from "../../constant/ElementIdConstants";
+import {BLOGGIOS_TECH_DETAILED_VIEW, BLOGGIOS_TECH_TABS} from "../../constant/ElementIdConstants";
 import {bloggiosTechTabsConstants} from '../../constant/listConstants';
+import {fixed} from "lodash/fp/_falseOptions";
 
 const BloggiosTechTabs = () => {
 
     useEffect(() => {
         const handleScroll = () => {
             const tabs = document.getElementById(BLOGGIOS_TECH_TABS);
-            const boundingClientRect = tabs.getBoundingClientRect();
-            if (boundingClientRect.top === 0) {
+            const detailedView = document.getElementById(BLOGGIOS_TECH_DETAILED_VIEW);
+            const detailedViewRect = detailedView.getBoundingClientRect();
+            console.log(detailedViewRect.top, detailedViewRect.bottom);
+
+            if (detailedViewRect.top <= 10 && detailedViewRect.bottom > 0) {
                 tabs.style.visibility = 'visible';
                 tabs.style.opacity = '1';
-            } else {
+                tabs.style.top = '0';
+                tabs.style.position = 'fixed';
+            } else if (detailedViewRect.bottom < 0 && detailedViewRect.top < 0 || detailedViewRect.top > 0 && detailedViewRect.bottom > 0) {
                 tabs.style.visibility = 'hidden';
                 tabs.style.opacity = '0';
+                tabs.style.top = '0';
+                tabs.style.position = 'absolute';
             }
         }
 
@@ -43,23 +51,23 @@ const BloggiosTechTabs = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-  return (
-      <Wrapper id={BLOGGIOS_TECH_TABS}>
-          <TabContainer>
-              {bloggiosTechTabsConstants.map((item)=> (
-                  <TabButton key={item.id}>
-                      {item.label}
-                  </TabButton>
-              ))}
-          </TabContainer>
-      </Wrapper>
-  )
+    return (
+        <Wrapper id={BLOGGIOS_TECH_TABS}>
+            <TabContainer>
+                {bloggiosTechTabsConstants.map((item) => (
+                    <TabButton key={item.id}>
+                        {item.label}
+                    </TabButton>
+                ))}
+            </TabContainer>
+        </Wrapper>
+    )
 };
 
 const Wrapper = styled.div`
     width: 100%;
     color: rgba(255, 255, 255, 0.8);
-    position: sticky;
+    z-index: 2;
     padding: 10px;
     background: transparent;
     visibility: hidden;
@@ -93,7 +101,7 @@ const TabContainer = styled.div`
     }
 `;
 
-const TabButton  = styled.button`
+const TabButton = styled.button`
     border: none;
     outline: none;
     display: flex;
@@ -119,7 +127,7 @@ const TabButton  = styled.button`
         transform: scale(0);
         border-radius: 20px;
         transition: all 300ms ease-in-out;
-        
+
         @media (max-width: 400px) {
             display: none;
         }
@@ -128,7 +136,7 @@ const TabButton  = styled.button`
     &:hover {
         color: rgba(245, 245, 245, 0.9);
     }
-    
+
     &:active {
         color: rgba(245, 245, 245, 1);
     }

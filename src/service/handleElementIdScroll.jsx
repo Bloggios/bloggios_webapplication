@@ -18,47 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import styled, {keyframes} from "styled-components";
-import GenericLoader from "./genericLoader";
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const rotation = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-`;
-
-const Loader = styled.span`
-    aspect-ratio: 1/1;
-    min-height: 20px;
-    max-height: 48px;
-    height: 100%;
-    border: 5px solid #f5f5f5;
-    border-bottom-color: #5567ef;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: ${rotation} 1s linear infinite;
-`;
-
-const FallbackLoader = ({height, width, isAuto}) => {
-    return (
-        <LoaderWrapper style={{
-            height: isAuto ? 'auto' : height,
-            width: isAuto ?  '100%' : width
-        }}>
-            <Loader />
-        </LoaderWrapper>
-    );
+const handleElementIdScroll = (id) => {
+    const element = document.getElementById(id);
+    window.scrollTo({
+        top: element.offsetTop,
+        behavior: 'smooth'
+    })
 };
 
-export default FallbackLoader;
+export {
+    handleElementIdScroll
+}

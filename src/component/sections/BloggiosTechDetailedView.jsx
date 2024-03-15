@@ -18,25 +18,35 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect} from 'react';
+import React, {Suspense, useEffect, useLayoutEffect} from 'react';
 import styled from "styled-components";
 import BloggiosTechTabs from "../tabs/BloggiosTechTabs";
+import {BLOGGIOS_TECH_DETAILED_VIEW} from "../../constant/ElementIdConstants";
+import useComponentSize from "../../hooks/useComponentSize";
+import FallbackLoader from "../loaders/fallbackLoader";
+import BloggiosTechWhyUsSection from "./BloggiosTechWhyUsSection";
 
-const BloggiosTechServicesTabsView = () => {
+const BloggiosTechDetailedView = () => {
 
     return (
-        <Wrapper className='home__black-lines--background'>
+        <Wrapper
+            className='home__black-lines--background'
+            id={BLOGGIOS_TECH_DETAILED_VIEW}
+        >
             <BloggiosTechTabs />
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'70vh'} />}>
+                <BloggiosTechWhyUsSection />
+            </Suspense>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     gap: 10px;
     position: relative;
 `;
 
-export default BloggiosTechServicesTabsView;
+export default BloggiosTechDetailedView;

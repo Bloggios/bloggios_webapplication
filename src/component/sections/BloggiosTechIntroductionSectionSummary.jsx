@@ -20,22 +20,43 @@
 
 import React, {lazy, memo, Suspense} from 'react';
 import styled from "styled-components";
-import {BLOGGIOS_TECH_SERVICES as sectionId} from "../../constant/ElementIdConstants";
+import {
+    BLOGGIOS_TECH_DETAILED_VIEW,
+    BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY as sectionId
+} from "../../constant/ElementIdConstants";
 import FallbackLoader from "../loaders/fallbackLoader";
+import ScrollDownAnimatedButton from "../animations/ScrollDownAnimatedButton";
+import {handleElementIdScroll} from "../../service/handleElementIdScroll";
+import BgTransition from "../animations/BgTransition";
 
 const BloggiosTechSectionHeader = lazy(() => import('../headers/BloggiosTechSectionHeader'));
 const BloggiosTechDataCard = lazy(() => import('../Cards/BloggiosTechDataCard'));
 
-const BloggiosTechServices = () => {
+const BloggiosTechIntroductionSectionSummary = () => {
     return (
         <Wrapper id={sectionId} className={'home__black-lines--background'}>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
                 <BloggiosTechSectionHeader />
             </Suspense>
 
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
-                <BloggiosTechDataCard />
-            </Suspense>
+            <BgTransition
+                component={'div'}
+                type={'bg__zi'}
+                delay={0.2}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                    <BloggiosTechDataCard />
+                </Suspense>
+
+                <ScrollDownAnimatedButton
+                    margin={'10px auto'}
+                    onClick={()=> handleElementIdScroll(BLOGGIOS_TECH_DETAILED_VIEW)}
+                />
+            </BgTransition>
         </Wrapper>
     );
 };
@@ -51,10 +72,14 @@ const Wrapper = styled.div`
     gap: 100px;
     
     @media (max-height: 700px) {
-        gap: 50px;
+        gap: 34px;
+    }
+
+    @media (max-height: 600px) {
+        gap: 20px;
     }
 `;
 
-const MemoBloggiosTechServices = memo(BloggiosTechServices);
+const MemoBloggiosTechIntroductionSection = memo(BloggiosTechIntroductionSectionSummary);
 
-export default MemoBloggiosTechServices;
+export default BloggiosTechIntroductionSectionSummary;

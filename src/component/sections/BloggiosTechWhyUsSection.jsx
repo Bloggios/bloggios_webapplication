@@ -20,35 +20,17 @@
 
 import React from 'react';
 import styled from "styled-components";
-import * as Bg from './styles/BloggiosTechStyledComponents'
-import {FaAngleDoubleDown} from "react-icons/fa";
 
-const BloggiosTechSection = ({id}) => {
+const BloggiosTechWhyUsSection = () => {
     return (
-        <Bg.Wrapper id={id} className={'home__black-lines--background'}>
-            <Bg.Introducing>
-                Introducing
-            </Bg.Introducing>
-            <Bg.Heading>
-                Bloggios <span className={"home__tech-span-underline"}>Tech</span>
-            </Bg.Heading>
-            <Bg.SubText>
-                Tech solutions, <span className={'span__yellow--gradient'}>reimagined</span>
-            </Bg.SubText>
+        <Wrapper>
 
-            <Bg.ButtonGroup>
-                <Bg.ExploreProjects>
-                    Explore our work
-                </Bg.ExploreProjects>
-
-                <Bg.NavigateButton className={'button__scroll--icon'}>
-                    Services <FaAngleDoubleDown className={'button__scroll-down--icon'} />
-                </Bg.NavigateButton>
-            </Bg.ButtonGroup>
-        </Bg.Wrapper>
+        </Wrapper>
     );
 };
 
-const MemoizedBloggiosTechSection = React.memo(BloggiosTechSection);
+const Wrapper = styled.div`
+    
+`;
 
-export default MemoizedBloggiosTechSection;
+export default BloggiosTechWhyUsSection;
