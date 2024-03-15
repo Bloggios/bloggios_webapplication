@@ -20,7 +20,7 @@
 
 import React, {lazy, memo, Suspense} from 'react';
 import styled from "styled-components";
-import {BloggiosTechServices as sectionId} from "../../constant/SectionIdConstants";
+import {BLOGGIOS_TECH_SERVICES as sectionId} from "../../constant/ElementIdConstants";
 import FallbackLoader from "../loaders/fallbackLoader";
 
 const BloggiosTechSectionHeader = lazy(() => import('../headers/BloggiosTechSectionHeader'));

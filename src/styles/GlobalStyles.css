@@ -124,6 +124,12 @@ button.button__scroll--icon:hover .button__scroll-down--icon {
   }
 }
 
+@media (max-width: 1000px) {
+  div.home__black-lines--background {
+    background-size: 250%, contain;
+  }
+}
+
 @media (max-width: 800px) {
   .home__tech-span-underline::after {
     bottom: -10px;
@@ -133,5 +139,9 @@ button.button__scroll--icon:hover .button__scroll-down--icon {
 @media (max-width: 500px) {
   .home__tech-span-underline::after {
     bottom: -14px;
+  }
+
+  div.home__black-lines--background {
+    background-size: 440%, contain;
   }
 }

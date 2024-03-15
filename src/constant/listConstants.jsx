@@ -67,6 +67,12 @@ import {
     testing
 } from "../asset/marquee";
 import {bgAccentRounded} from "../asset/svg";
+import {
+    BLOGGIOS_TECH_SERVICE_TAB,
+    BLOGGIOS_TECH_WHY_BLOGGIOS,
+    BLOGGIOS_TECH_TECH_STACK,
+    BLOGGIOS_TECH_CONTACT_US
+} from '../constant/ElementIdConstants';
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
@@ -399,15 +405,29 @@ export const askQuestionDescription = [
     },
 ];
 
-export const joditButtons = [
-    'bold', 'italic', 'underline', '|',
-    'ul', 'ol', '|',
-    'outdent', 'indent', '|',
-    'align', '|',
-    // 'fontsize', '|',
-    // 'paragraph',
-    'link', 'table', 'image', '|',
-    'undo', 'redo', '|',
-    'hr',
-    'code'
+const bloggiosTechTabsConstants = [
+    {
+        id: 1,
+        label: 'Why Bloggios',
+        elementId: BLOGGIOS_TECH_WHY_BLOGGIOS
+    },
+    {
+        id: 2,
+        label: 'Services',
+        elementId: BLOGGIOS_TECH_SERVICE_TAB
+    },
+    {
+        id: 3,
+        label: 'Tech Stack',
+        elementId: BLOGGIOS_TECH_TECH_STACK
+    },
+    {
+        id: 4,
+        label: 'Contact Us',
+        elementId: BLOGGIOS_TECH_CONTACT_US
+    }
 ];
+
+export {
+    bloggiosTechTabsConstants
+};

@@ -20,12 +20,14 @@
 
 import React, {useEffect} from "react";
 import styled from "styled-components";
+import {BLOGGIOS_TECH_TABS} from "../../constant/ElementIdConstants";
+import {bloggiosTechTabsConstants} from '../../constant/listConstants';
 
 const BloggiosTechTabs = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            const tabs = document.getElementById('bloggiosTechTabs');
+            const tabs = document.getElementById(BLOGGIOS_TECH_TABS);
             const boundingClientRect = tabs.getBoundingClientRect();
             if (boundingClientRect.top === 0) {
                 tabs.style.visibility = 'visible';
@@ -42,8 +44,14 @@ const BloggiosTechTabs = () => {
     }, []);
 
   return (
-      <Wrapper id={'bloggiosTechTabs'}>
-          Rohit
+      <Wrapper id={BLOGGIOS_TECH_TABS}>
+          <TabContainer>
+              {bloggiosTechTabsConstants.map((item)=> (
+                  <TabButton key={item.id}>
+                      {item.label}
+                  </TabButton>
+              ))}
+          </TabContainer>
       </Wrapper>
   )
 };
@@ -52,15 +60,82 @@ const Wrapper = styled.div`
     width: 100%;
     color: rgba(255, 255, 255, 0.8);
     position: sticky;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(99, 116, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.17);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    padding: 10px;
+    background: transparent;
     visibility: hidden;
     opacity: 0;
     transition: 500ms ease-in-out;
+
+    @media (max-width: 400px) {
+        padding: 0;
+    }
+`;
+
+const TabContainer = styled.div`
+    background: #4258ff;
+    padding: 16px 20px;
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 50px;
+    display: flex;
+    gap: 40px;
+
+    @media (max-width: 600px) {
+        padding: 10px;
+        gap: 16px;
+    }
+
+    @media (max-width: 400px) {
+        border-radius: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+    }
+`;
+
+const TabButton  = styled.button`
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: rgba(245, 245, 245, 0.85);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-size: clamp(0.625rem, 0.4493rem + 1.0811vw, 1.125rem);
+    font-weight: 300;
+    position: relative;
+    cursor: pointer;
+    transition: color .2s ease-in-out;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        height: 2px;
+        background-color: rgba(245, 245, 245, 0.9);
+        transform: scale(0);
+        border-radius: 20px;
+        transition: all 300ms ease-in-out;
+        
+        @media (max-width: 400px) {
+            display: none;
+        }
+    }
+
+    &:hover {
+        color: rgba(245, 245, 245, 0.9);
+    }
+    
+    &:active {
+        color: rgba(245, 245, 245, 1);
+    }
+
+    &:hover::before {
+        transform: scale(1);
+    }
 `;
 
 export default BloggiosTechTabs;

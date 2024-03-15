@@ -18,8 +18,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const BloggiosTechServices = 'BloggiosTechServices';
+const BLOGGIOS_TECH_SERVICES = 'BloggiosTechServices';
+const BLOGGIOS_TECH_TABS = 'bloggiosTechTabs';
+const BLOGGIOS_TECH_SERVICE_TAB = 'bloggiosTechServiceTab';
+const BLOGGIOS_TECH_WHY_BLOGGIOS = 'bloggiosTechWhyBloggios';
+const BLOGGIOS_TECH_TECH_STACK = 'bloggiosTechTechStack';
+const BLOGGIOS_TECH_CONTACT_US = 'bloggiosTechContactUs';
 
 export {
-    BloggiosTechServices
+    BLOGGIOS_TECH_SERVICES,
+    BLOGGIOS_TECH_TABS,
+    BLOGGIOS_TECH_SERVICE_TAB,
+    BLOGGIOS_TECH_WHY_BLOGGIOS,
+    BLOGGIOS_TECH_TECH_STACK,
+    BLOGGIOS_TECH_CONTACT_US
 }
