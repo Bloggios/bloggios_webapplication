@@ -21,8 +21,8 @@
 import React, {lazy, memo, Suspense} from 'react';
 import styled from "styled-components";
 import {
-    BLOGGIOS_TECH_DETAILED_VIEW,
-    BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY as sectionId
+    BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY as sectionId,
+    BLOGGIOS_TECH_WHY_BLOGGIOS
 } from "../../constant/ElementIdConstants";
 import FallbackLoader from "../loaders/fallbackLoader";
 import ScrollDownAnimatedButton from "../animations/ScrollDownAnimatedButton";
@@ -54,7 +54,7 @@ const BloggiosTechIntroductionSectionSummary = () => {
 
                 <ScrollDownAnimatedButton
                     margin={'10px auto'}
-                    onClick={()=> handleElementIdScroll(BLOGGIOS_TECH_DETAILED_VIEW)}
+                    onClick={()=> handleElementIdScroll(BLOGGIOS_TECH_WHY_BLOGGIOS)}
                 />
             </BgTransition>
         </Wrapper>

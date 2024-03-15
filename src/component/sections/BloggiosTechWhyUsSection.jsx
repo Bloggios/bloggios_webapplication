@@ -18,19 +18,35 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import * as Bg from './styles/BloggiosTechWhyUsSectionSc';
 import {whyUsCardListConstants} from "../../constant/listConstants";
+import {BLOGGIOS_TECH_WHY_BLOGGIOS} from "../../constant/ElementIdConstants";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const BloggiosTechWhyUsSection = () => {
+
+    const {width} = useWindowDimensions();
+
+    const getList = useCallback(()=> {
+        if (width > 800 || width < 500) {
+            return whyUsCardListConstants
+        } else if (width <= 800 && width >= 500) {
+            return whyUsCardListConstants.slice(0, -2);
+        }
+    }, [width]);
+
     return (
-        <Bg.Wrapper>
+        <Bg.Wrapper id={BLOGGIOS_TECH_WHY_BLOGGIOS}>
             <Bg.WhyUs>
                 <Bg.Title>
                     What makes <strong>Bloggios</strong><br/>Different
                 </Bg.Title>
+                <Bg.WhyUsButton>
+                    Explore More
+                </Bg.WhyUsButton>
                 <Bg.Cards>
-                    {whyUsCardListConstants.map((item)=> (
+                    {getList().map((item)=> (
                         <Bg.Card key={item.id}>
                             <Bg.Icon src={item.icon} alt={item.label} />
                             <Bg.Label>{item.label}</Bg.Label>
@@ -38,6 +54,19 @@ const BloggiosTechWhyUsSection = () => {
                     ))}
                 </Bg.Cards>
             </Bg.WhyUs>
+
+            <Bg.Divider />
+
+            <Bg.Thoughts>
+                <Bg.ThoughtTitle>
+                    <strong>Bloggios</strong><br/>Way
+                </Bg.ThoughtTitle>
+
+                <Bg.SummaryDiv>
+                    <p>At Bloggios, we craft technological marvels engineered for expansion. Our exclusive development methodologies ensure steadfast, user-centric innovations that propel effortless digital metamorphosis for Enterprises and burgeoning Scale-up ventures.</p>
+                    <h4>This, is the Bloggios brand of seamless technology.</h4>
+                </Bg.SummaryDiv>
+            </Bg.Thoughts>
         </Bg.Wrapper>
     );
 };

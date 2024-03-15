@@ -23,12 +23,12 @@ import styled from "styled-components";
 import BloggiosBase from "../boundries/bloggiosBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
-import BloggiosTechDetailedView from "../../component/sections/BloggiosTechDetailedView";
 
 const MemoizedHomeHeader = lazy(()=> import('../../component/sections/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections/HomeTransitionSection'));
 const BloggiosTechIntroductionSection = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSection'));
 const BloggiosTechIntroductionSectionSummary = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSectionSummary'));
+const BloggiosTechWhyUsSection = lazy(()=> import('../../component/sections/BloggiosTechWhyUsSection'));
 
 const UnauthenticatedHomePage = () => {
 
@@ -53,7 +53,7 @@ const UnauthenticatedHomePage = () => {
                 </Suspense>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <BloggiosTechDetailedView />
+                    <BloggiosTechWhyUsSection />
                 </Suspense>
             </Wrapper>
         </BloggiosBase>
