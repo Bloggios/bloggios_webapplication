@@ -18,20 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import bgAccentRounded from './bg-accent_rounded.svg';
-import bgBlack from './bg_logo_black.svg';
-import bgBlackRounded from './bg_logo_rounded_black.svg';
-import defaultCover from './home-header_bg.svg';
-import askQuestionYellow from './ask-question-yellow.svg';
-import askQuestionWhite from './ask-question-white.svg';
-import underline from './underline.svg';
+import scalability from './process-oriented.svg';
+import agile from './agile.svg';
+import coding from './coding_gradient.svg';
+import efficient from './efficienct.svg';
+import techSupport from './tech-support.svg';
+import transparency from './transparency.svg';
+import workWithBest from './work-with-best.svg'
+import partnership from './partnership.svg'
+import visionarySolutions from './visionary-solution.svg'
 
 export {
-    bgAccentRounded,
-    bgBlack,
-    bgBlackRounded,
-    defaultCover,
-    askQuestionYellow,
-    askQuestionWhite,
-    underline
-};
+    scalability,
+    agile,
+    coding,
+    efficient,
+    techSupport,
+    transparency,
+    workWithBest,
+    partnership,
+    visionarySolutions
+}

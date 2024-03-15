@@ -68,11 +68,15 @@ import {
 } from "../asset/marquee";
 import {bgAccentRounded} from "../asset/svg";
 import {
+    BLOGGIOS_TECH_CONTACT_US,
     BLOGGIOS_TECH_SERVICE_TAB,
-    BLOGGIOS_TECH_WHY_BLOGGIOS,
     BLOGGIOS_TECH_TECH_STACK,
-    BLOGGIOS_TECH_CONTACT_US
-} from '../constant/ElementIdConstants';
+    BLOGGIOS_TECH_WHY_BLOGGIOS
+} from './ElementIdConstants';
+import {
+    agile, coding, partnership,
+    scalability, techSupport, transparency, visionarySolutions, workWithBest
+} from '../asset/whyUs/index';
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
@@ -428,6 +432,50 @@ const bloggiosTechTabsConstants = [
     }
 ];
 
+const whyUsCardListConstants = [
+    {
+        id: 1,
+        icon: scalability,
+        label: 'Product Scalability'
+    },
+    {
+        id: 2,
+        icon: techSupport,
+        label: 'Best Tech Support'
+    },
+    {
+        id: 3,
+        icon: agile,
+        label: 'Agile Excellence'
+    },
+    {
+        id: 4,
+        icon: transparency,
+        label: 'Transparent Innovation'
+    },
+    {
+        id: 5,
+        icon: workWithBest,
+        label: 'Work with Best'
+    },
+    {
+        id: 6,
+        icon: visionarySolutions,
+        label: 'Visionary Solutions'
+    },
+    {
+        id: 7,
+        icon: partnership,
+        label: 'Future-Proof Partnerships'
+    },
+    {
+        id: 8,
+        icon: coding,
+        label: 'Precision Engineering'
+    },
+]
+
 export {
-    bloggiosTechTabsConstants
+    bloggiosTechTabsConstants,
+    whyUsCardListConstants
 };

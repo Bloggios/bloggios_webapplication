@@ -19,18 +19,27 @@
  */
 
 import React from 'react';
-import styled from "styled-components";
+import * as Bg from './styles/BloggiosTechWhyUsSectionSc';
+import {whyUsCardListConstants} from "../../constant/listConstants";
 
 const BloggiosTechWhyUsSection = () => {
     return (
-        <Wrapper>
-
-        </Wrapper>
+        <Bg.Wrapper>
+            <Bg.WhyUs>
+                <Bg.Title>
+                    What makes <strong>Bloggios</strong><br/>Different
+                </Bg.Title>
+                <Bg.Cards>
+                    {whyUsCardListConstants.map((item)=> (
+                        <Bg.Card key={item.id}>
+                            <Bg.Icon src={item.icon} alt={item.label} />
+                            <Bg.Label>{item.label}</Bg.Label>
+                        </Bg.Card>
+                    ))}
+                </Bg.Cards>
+            </Bg.WhyUs>
+        </Bg.Wrapper>
     );
 };
-
-const Wrapper = styled.div`
-    
-`;
 
 export default BloggiosTechWhyUsSection;

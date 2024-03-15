@@ -18,14 +18,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {Suspense, useEffect, useLayoutEffect} from 'react';
+import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
 import BloggiosTechTabs from "../tabs/BloggiosTechTabs";
 import {BLOGGIOS_TECH_DETAILED_VIEW} from "../../constant/ElementIdConstants";
-import useComponentSize from "../../hooks/useComponentSize";
 import FallbackLoader from "../loaders/fallbackLoader";
-import BloggiosTechWhyUsSection from "./BloggiosTechWhyUsSection";
 
+const BloggiosTechWhyUsSection = lazy(()=> import('./BloggiosTechWhyUsSection'));
 const BloggiosTechDetailedView = () => {
 
     return (
