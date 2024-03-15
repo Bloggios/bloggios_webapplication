@@ -21,17 +21,18 @@
 import React from 'react';
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {SIGNUP_PAGE} from "../../../constant/pathConstants";
-import MemoizedScrollDownAnimatedButton from "../../../component/animations/ScrollDownAnimatedButton";
-import BgTransition from "../../../component/animations/BgTransition";
+import {SIGNUP_PAGE} from "../../constant/pathConstants";
+import MemoizedScrollDownAnimatedButton from "../animations/ScrollDownAnimatedButton";
+import BgTransition from "../animations/BgTransition";
 
 const HomeHeader = () => {
 
     const navigate = useNavigate();
 
     const handleScroll = () => {
-        window.scrollBy({
-            top: window.innerHeight,
+        const element = document.getElementById('transitionSection');
+        window.scrollTo({
+            top: element.offsetTop,
             behavior: 'smooth'
         })
     }

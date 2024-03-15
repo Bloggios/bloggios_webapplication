@@ -18,28 +18,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import bgAccentRounded from './bg-accent_rounded.svg';
-import bgBlack from './bg_logo_black.svg';
-import bgBlackRounded from './bg_logo_rounded_black.svg';
-import defaultCover from './home-header_bg.svg';
-import askQuestionYellow from './ask-question-yellow.svg';
-import askQuestionWhite from './ask-question-white.svg';
-import underline from './underline.svg';
-import scalability from './scalability.svg';
-import agile from './agile.svg';
-import efficient from './efficienct.svg';
-import coding_gradient from './coding_gradient.svg';
+import React, {useEffect} from 'react';
+import styled from "styled-components";
+import BloggiosTechTabs from "../tabs/BloggiosTechTabs";
 
-export {
-    bgAccentRounded,
-    bgBlack,
-    bgBlackRounded,
-    defaultCover,
-    askQuestionYellow,
-    askQuestionWhite,
-    underline,
-    scalability,
-    agile,
-    efficient,
-    coding_gradient
+const BloggiosTechServicesTabsView = () => {
+
+    return (
+        <Wrapper className='home__black-lines--background'>
+            <BloggiosTechTabs />
+        </Wrapper>
+    );
 };
+
+const Wrapper = styled.div`
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+`;
+
+export default BloggiosTechServicesTabsView;

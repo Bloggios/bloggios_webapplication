@@ -18,31 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import FallbackLoader from "../../../component/loaders/fallbackLoader";
+const BloggiosTechServices = 'BloggiosTechServices';
 
-const BgTechIntroduction = lazy(()=> import('./BloggiosTech/BgTechIntroduction'));
-
-const BloggiosTechSection = () => {
-    return (
-        <Wrapper>
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
-                <BgTechIntroduction />
-            </Suspense>
-        </Wrapper>
-    );
-};
-
-const Wrapper = styled.div`
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    user-select: none;
-`;
-
-const MemoizedBloggiosTechSection = React.memo(BloggiosTechSection);
-
-export default MemoizedBloggiosTechSection;
+export {
+    BloggiosTechServices
+}

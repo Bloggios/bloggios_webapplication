@@ -18,22 +18,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, memo, Suspense} from 'react';
 import styled from "styled-components";
-import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {BloggiosTechServices as sectionId} from "../../constant/SectionIdConstants";
+import FallbackLoader from "../loaders/fallbackLoader";
 
-const DualHomePageMarqueeSection = lazy(()=> import('../../../component/animations/DualHomePageMarqueeSection'));
-const HomeTransitionHeroSection = lazy(()=> import('./HomeTransitionHeroSection'));
+const BloggiosTechSectionHeader = lazy(() => import('../headers/BloggiosTechSectionHeader'));
+const BloggiosTechDataCard = lazy(() => import('../Cards/BloggiosTechDataCard'));
 
-const HomePageMarqueeSection = () => {
+const BloggiosTechServices = () => {
     return (
-        <Wrapper>
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
-                <HomeTransitionHeroSection />
+        <Wrapper id={sectionId} className={'home__black-lines--background'}>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                <BloggiosTechSectionHeader />
             </Suspense>
 
             <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
-                <DualHomePageMarqueeSection />
+                <BloggiosTechDataCard />
             </Suspense>
         </Wrapper>
     );
@@ -44,10 +45,16 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
     user-select: none;
+    font-family: 'Poppins', sans-serif;
+    justify-content: center;
+    gap: 100px;
+    
+    @media (max-height: 700px) {
+        gap: 50px;
+    }
 `;
 
-const MemoizedHomePageMarqueeSection = React.memo(HomePageMarqueeSection);
+const MemoBloggiosTechServices = memo(BloggiosTechServices);
 
-export default MemoizedHomePageMarqueeSection;
+export default MemoBloggiosTechServices;

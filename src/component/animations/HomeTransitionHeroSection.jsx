@@ -19,10 +19,10 @@
  */
 
 import React from 'react';
-import {ColumnWrapper} from "../../../styles/StyledComponent";
+import {ColumnWrapper} from "../../styles/StyledComponent";
 import styled, {css} from "styled-components";
-import BgTransition from "../../../component/animations/BgTransition";
-import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import BgTransition from "./BgTransition";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const HomeTransitionHeroSection = () => {
 

@@ -18,28 +18,36 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import bgAccentRounded from './bg-accent_rounded.svg';
-import bgBlack from './bg_logo_black.svg';
-import bgBlackRounded from './bg_logo_rounded_black.svg';
-import defaultCover from './home-header_bg.svg';
-import askQuestionYellow from './ask-question-yellow.svg';
-import askQuestionWhite from './ask-question-white.svg';
-import underline from './underline.svg';
-import scalability from './scalability.svg';
-import agile from './agile.svg';
-import efficient from './efficienct.svg';
-import coding_gradient from './coding_gradient.svg';
+import React, {lazy, Suspense} from 'react';
+import styled from "styled-components";
+import FallbackLoader from "../loaders/fallbackLoader";
 
-export {
-    bgAccentRounded,
-    bgBlack,
-    bgBlackRounded,
-    defaultCover,
-    askQuestionYellow,
-    askQuestionWhite,
-    underline,
-    scalability,
-    agile,
-    efficient,
-    coding_gradient
+const DualHomePageMarqueeSection = lazy(()=> import('../animations/DualHomePageMarqueeSection'));
+const HomeTransitionHeroSection = lazy(()=> import('../animations/HomeTransitionHeroSection'));
+
+const HomePageMarqueeSection = ({id}) => {
+    return (
+        <Wrapper id={id}>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
+                <HomeTransitionHeroSection />
+            </Suspense>
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                <DualHomePageMarqueeSection />
+            </Suspense>
+        </Wrapper>
+    );
 };
+
+const Wrapper = styled.div`
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    user-select: none;
+`;
+
+const MemoizedHomePageMarqueeSection = React.memo(HomePageMarqueeSection);
+
+export default MemoizedHomePageMarqueeSection;

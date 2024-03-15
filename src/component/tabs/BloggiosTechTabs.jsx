@@ -18,28 +18,49 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import bgAccentRounded from './bg-accent_rounded.svg';
-import bgBlack from './bg_logo_black.svg';
-import bgBlackRounded from './bg_logo_rounded_black.svg';
-import defaultCover from './home-header_bg.svg';
-import askQuestionYellow from './ask-question-yellow.svg';
-import askQuestionWhite from './ask-question-white.svg';
-import underline from './underline.svg';
-import scalability from './scalability.svg';
-import agile from './agile.svg';
-import efficient from './efficienct.svg';
-import coding_gradient from './coding_gradient.svg';
+import React, {useEffect} from "react";
+import styled from "styled-components";
 
-export {
-    bgAccentRounded,
-    bgBlack,
-    bgBlackRounded,
-    defaultCover,
-    askQuestionYellow,
-    askQuestionWhite,
-    underline,
-    scalability,
-    agile,
-    efficient,
-    coding_gradient
+const BloggiosTechTabs = () => {
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const tabs = document.getElementById('bloggiosTechTabs');
+            const boundingClientRect = tabs.getBoundingClientRect();
+            if (boundingClientRect.top === 0) {
+                tabs.style.visibility = 'visible';
+                tabs.style.opacity = '1';
+            } else {
+                tabs.style.visibility = 'hidden';
+                tabs.style.opacity = '0';
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+  return (
+      <Wrapper id={'bloggiosTechTabs'}>
+          Rohit
+      </Wrapper>
+  )
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    color: rgba(255, 255, 255, 0.8);
+    position: sticky;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(99, 116, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.17);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    visibility: hidden;
+    opacity: 0;
+    transition: 500ms ease-in-out;
+`;
+
+export default BloggiosTechTabs;
