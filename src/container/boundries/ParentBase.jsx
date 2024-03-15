@@ -20,7 +20,6 @@
 
 import React, {useCallback} from 'react';
 import styled from "styled-components";
-import {Toaster} from "react-hot-toast";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
 import {useSelector} from "react-redux";
@@ -28,6 +27,7 @@ import PropTypes from "prop-types";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
 import ErrorPage from "../catchPages/ErrorPage";
+import {Toaster} from "sonner";
 
 const ParentBase = ({children}) => {
 
@@ -51,15 +51,9 @@ const ParentBase = ({children}) => {
                 <AppContainer>
                     {children}
                     <Toaster
-                        position={width > 600 ? "top-right" : "bottom-center"}
-                        gutter={7}
-                        toastOptions={{
-                            duration: 4000,
-                        }}
-                        reverseOrder={true}
-                        containerStyle={{
-                            userSelect: 'none',
-                        }}
+                        position={width > 600 ? "bottom-right" : "bottom-center"}
+                        richColors={true}
+                        closeButton={true}
                     />
                 </AppContainer>
             )

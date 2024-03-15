@@ -20,10 +20,10 @@
 
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect} from "react";
-import {toast} from "react-hot-toast";
 import styled from "styled-components";
 import {AiFillWarning, AiOutlineInfo} from "react-icons/ai";
 import {clearSnackbar} from "../state/snackbarSlice";
+import {toast} from "sonner";
 
 const useBloggiosSnackbar = () => {
     const dispatch = useDispatch();
@@ -38,23 +38,18 @@ const useBloggiosSnackbar = () => {
                 toast.error(message);
                 break;
             case "warning":
-                toast(message, {
-                    icon: <ToastIcon style={{
-                        background: '#ca9514',
-                        color: '#e5e5e5'
-                    }}><AiFillWarning/></ToastIcon>
-                });
+                toast.warning(message)
+                break;
+            case "Info":
+                toast.info(message);
                 break;
             default:
-                toast(message, {
-                    icon: <AiOutlineInfo/>
-                });
+                toast(message);
         }
     }, [snackbarType, message]);
 
     const handleSnackbar = useCallback(() => {
         if (isSnackbar) {
-            toast.dismiss();
             getToast();
             dispatch(clearSnackbar());
         }
