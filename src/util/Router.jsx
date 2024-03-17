@@ -44,7 +44,7 @@ import OAuthRedirectHandler from "./OAuthRedirectHandler";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
-const LoginPage = lazy(() => import('../container/userAuthenticationContainer/loginPage'));
+const LoginPage = lazy(() => import('../container/userAuthenticationContainer/FullLoginPage'));
 const SignupPage = lazy(() => import('../container/userAuthenticationContainer/signUpPage'));
 const OtpPage = lazy(() => import('../container/userAuthenticationContainer/otpPage'));
 const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/ProfileAdditionInitial'));

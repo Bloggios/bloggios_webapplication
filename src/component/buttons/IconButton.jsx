@@ -36,7 +36,8 @@ const IconButton = ({
                         aColor = 'rgba(255, 255, 255, 0.8)',
                         padding = '10px',
                         children,
-                        onClick
+                        onClick,
+                        style
                     }) => {
     return (
         <Button
@@ -54,6 +55,7 @@ const IconButton = ({
             aColor={aColor}
             padding={padding}
             onClick={onClick}
+            style={style}
         >
             {children}
         </Button>

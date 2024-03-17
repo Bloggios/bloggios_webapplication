@@ -63,7 +63,7 @@ export const checkIsProfileAdded = (accessToken, dispatch, navigate) => {
                     snackbarType: 'Warning'
                 }
                 dispatch(setSnackbar(snackBarData))
-                navigate(PROFILE_ADDITION_INITIAL);
+                navigate(PROFILE_ADDITION_INITIAL, {replace: true});
             }
         }).catch((error) => {
         const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';

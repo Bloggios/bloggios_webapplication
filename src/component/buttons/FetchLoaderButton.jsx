@@ -37,12 +37,14 @@ const FetchLoaderButton = ({
                                loaderColor,
                                loaderSize,
                                loaderDotsSize,
-                               onClick
+                               onClick,
+                               type
                            }) => {
 
     return (
         <ButtonWrapper
-        onClick={onClick}
+            type={type}
+            onClick={onClick}
             style={style}
             bgColor={bgColor}
             hBgColor={hBgColor}
@@ -69,14 +71,14 @@ const ButtonWrapper = styled.button`
     position: relative;
     background-color: ${(props) => props.bgColor};
     color: ${(props) => props.color};
-    padding: ${(props)=> props.padding};
-    border-radius: ${(props)=> props.borderRadius};
-    
+    padding: ${(props) => props.padding};
+    border-radius: ${(props) => props.borderRadius};
+
     &:hover {
         color: ${(props) => props.hColor};
         background-color: ${(props) => props.hBgColor};
     }
-    
+
     &:active {
         color: ${(props) => props.aColor};
         background-color: ${(props) => props.aBgColor};
