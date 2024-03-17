@@ -86,6 +86,10 @@ const Wrapper = styled.div`
     @media(max-height: 700px) {
         padding-top: 20px;
     }
+
+    @media (orientation: portrait) and (max-width: 700px) {
+        min-height: calc(100vh - 156px);
+    }
 `;
 
 const SubText = styled.h4`

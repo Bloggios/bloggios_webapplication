@@ -11,66 +11,66 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
-import styled, {css} from "styled-components";
-import {bgAccentRounded} from '../../asset/svg'
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
+import {bgAccentRounded} from "../../asset/svg";
 import IconButton from "../buttons/IconButton";
 import {MdVisibility, MdVisibilityOff} from "react-icons/md";
-import {Tooltip} from "react-tooltip";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebook} from "react-icons/fa";
-import {useDispatch, useSelector} from "react-redux";
-import {dispatchError, dispatchErrorMessage} from "../../service/functions";
-import {loginUser} from "../../restservices/authApi";
-import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
-import {authOtpUserId} from "../../service/authProviderApiService";
-import {setSnackbar} from "../../state/snackbarSlice";
-import {useNavigate} from "react-router-dom";
-import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {Tooltip} from "react-tooltip";
 import * as Bg from './StyledComponent';
+import {dispatchError, dispatchErrorMessage, dispatchSuccessMessage} from "../../service/functions";
+import {signupUser} from "../../restservices/authApi";
 
-const LoginComponent = () => {
+const SignUpComponent = () => {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const dispatch = useDispatch();
     const [buttonLoader, setButtonLoader] = useState(false);
-    const {isAuthenticated} = useSelector((state)=> state.auth);
-    const [loginData, setLoginData] = useState({
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const {isAuthenticated} = useSelector((state) => state.auth);
+    const [signupData, setSignupData] = useState({
         email: '',
         password: ''
     });
 
-    useLayoutEffect(()=> {
-        if (isAuthenticated) {
-            navigate(HOME_PAGE);
-        }
-    }, [])
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    const validatePassword = (password) =>
+        /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
     const handleInputChange = (event, property) => {
-        setLoginData(prevState => ({
+        setSignupData(prevState => ({
             ...prevState,
             [property]: event.target.value
         }));
     };
 
-    const validatePassword = (password) =>
-        /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-
     const validateForm = () => {
         const errors = {};
 
-        if (loginData.password === '') {
+        if (signupData.email === '') {
+            errors.email = 'Email cannot be Empty'
+        } else if (!validateEmail(signupData.email)) {
+            errors.email = 'Email is not correct or valid'
+        } else {
+            errors.email = ''
+        }
+
+        if (signupData.password === '') {
             errors.password = 'Password cannot be Empty'
-        } else if (!validatePassword(loginData.password)) {
+        } else if (!validatePassword(signupData.password)) {
             errors.password = 'Password is not of correct format'
         } else {
             errors.password = ''
@@ -79,40 +79,45 @@ const LoginComponent = () => {
         return errors;
     };
 
-    const handleLogin = (event) => {
-        event.preventDefault();
-        setButtonLoader(true);
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSignup(event);
+        }
+    };
+
+
+    const handleSignup = (e) => {
+        setButtonLoader(true)
+        e.preventDefault();
+
         const errors = validateForm();
 
         if (Object.values(errors).some((error) => error)) {
             setButtonLoader(false);
-            dispatchErrorMessage(dispatch, errors.password)
+            if (errors.email) {
+                dispatchErrorMessage(dispatch, errors.email);
+            }
+            if (errors.password) {
+                dispatchErrorMessage(dispatch, errors.password);
+            }
             return;
         }
 
-        const payload = {
-            email: loginData.email,
-            password: loginData.password
-        };
-
-        loginUser(payload)
+        signupUser(signupData)
             .then((response) => {
-                window.location.reload();
+                setButtonLoader(false)
+                dispatchSuccessMessage(dispatch, 'OTP sent to your Email. Please verify to continue');
+                navigate(OTP_PAGE, {
+                    replace: true,
+                    state: {
+                        userId: response.userId
+                    }
+                })
             }).catch((error) => {
-            if (error?.response?.data?.uniqueErrorCode === ACCOUNT_INACTIVE) {
-                authOtpUserId(payload, navigate, dispatch)
-            } else {
-                dispatchError(dispatch, error);
-            }
+            dispatchError(dispatch, error);
             setButtonLoader(false)
         })
-    }
-
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            handleLogin(event);
-        }
     };
 
     return (
@@ -120,11 +125,11 @@ const LoginComponent = () => {
             <Bg.Logo src={bgAccentRounded} alt="Bloggios"/>
 
             <Bg.Header>
-                <h2>Welcome Back</h2>
-                <p>Enter your information below to log in</p>
+                <h2>Sign Up, It's Easy</h2>
+                <p>Bloggios where thoughts connect seamlessly</p>
             </Bg.Header>
 
-            <Bg.Form onSubmit={handleLogin}>
+            <Bg.Form onSubmit={handleSignup}>
                 <Bg.Field>
                     <Bg.Label>
                         Email
@@ -133,8 +138,8 @@ const LoginComponent = () => {
                         type={'email'}
                         maxLength={40}
                         required={true}
-                        placeholder={'user@bloggios.com *'}
-                        value={loginData.email}
+                        placeholder={'user@bloggios.com*'}
+                        value={signupData.email}
                         onChange={(event) => handleInputChange(event, 'email')}
                         onKeyDown={handleKeyDown}
                     />
@@ -149,12 +154,12 @@ const LoginComponent = () => {
                         maxLength={20}
                         required={true}
                         placeholder={'●●●●●●●●●'}
-                        value={loginData.password}
+                        value={signupData.password}
                         onChange={(event) => handleInputChange(event, 'password')}
                         onKeyDown={handleKeyDown}
                     />
                     <IconButton
-                        tooltipId={'password-shown-login-page'}
+                        tooltipId={'password-shown-signup-page'}
                         tooltipContent={isPasswordVisible ? 'Hide Password' : 'Show Password'}
                         tooltipDelay={500}
                         onClick={() => setIsPasswordVisible(!isPasswordVisible)}
@@ -167,14 +172,16 @@ const LoginComponent = () => {
                         {isPasswordVisible ? <MdVisibilityOff/> : <MdVisibility/>}
                     </IconButton>
                 </Bg.Field>
-                <Bg.ForgetPassword>
-                    Forget Password?
-                </Bg.ForgetPassword>
+
+                <Bg.TermsSpan>
+                    By Signing Up, your agree to our <strong>Terms of Service</strong> and <strong>Privacy
+                    Policy</strong>
+                </Bg.TermsSpan>
 
                 <FetchLoaderButton
                     isLoading={buttonLoader}
                     type={'submit'}
-                    text={'Login'}
+                    text={'Sign Up'}
                     loaderSize={'4px'}
                     loaderDotsSize={'4px'}
                     bgColor={'#4258ff'}
@@ -212,8 +219,8 @@ const LoginComponent = () => {
                 <IconButton
                     bgColor={'rgba(255, 255, 255, 0.1)'}
                     borderRadius={'4px'}
-                    tooltipId={'login-google-login-page'}
-                    tooltipContent={'Login with Google'}
+                    tooltipId={'signup-google-signup-page'}
+                    tooltipContent={'Sign Up with Google'}
                     tooltipDelay={0}
                 >
                     <FcGoogle/>
@@ -222,8 +229,8 @@ const LoginComponent = () => {
                 <IconButton
                     bgColor={'rgba(255, 255, 255, 0.1)'}
                     borderRadius={'4px'}
-                    tooltipId={'login-facebook-login-page'}
-                    tooltipContent={'Login with Facebook'}
+                    tooltipId={'signup-facebook-signup-page'}
+                    tooltipContent={'Sign Up with Facebook'}
                     tooltipDelay={0}
                 >
                     <FaFacebook color={'#187bf0'}/>
@@ -231,14 +238,13 @@ const LoginComponent = () => {
             </div>
 
             <Bg.AddAccount>
-                Don't have an Account?
-                <span onClick={()=> navigate(SIGNUP_PAGE)}>Create an Account</span>
+                Already have an Account?
+                <span onClick={()=> navigate(LOGIN_PAGE)}>Login</span>
             </Bg.AddAccount>
-            <Tooltip id={'password-shown-login-page'}/>
-            <Tooltip id={'login-google-login-page'}/>
-            <Tooltip id={'login-facebook-login-page'}/>
+            <Tooltip id={'password-shown-signup-page'}/>
+            <Tooltip id={'signup-google-signup-page'}/>
+            <Tooltip id={'signup-facebook-signup-page'}/>
         </Bg.Wrapper>
     );
 };
-
-export default LoginComponent;
+export default SignUpComponent;

@@ -64,6 +64,10 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+
+    @media (orientation: portrait) and (max-width: 700px) {
+        margin-bottom: 54px;
+    }
 `;
 
 export default UnauthenticatedHomePage;

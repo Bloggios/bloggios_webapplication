@@ -43,10 +43,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #121212 !important;
   color: antiquewhite;
-  touch-action: manipulation;
-  -ms-touch-action: manipulation;
   overflow-x: hidden !important;
   font-size: 1rem;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation !important;
+  -ms-touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
 code {

@@ -181,8 +181,9 @@ const NavItem = styled.button`
     border-radius: 50px;
     border: none;
     outline: none;
-    touch-action: manipulation;
-    -ms-touch-action: manipulation;
+    touch-action: manipulation !important;
+    -ms-touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
 
     &:active {
         background-color: rgba(66, 88, 255, 0.79);
@@ -229,8 +230,9 @@ const DropdownItem = styled.button`
     background-color: ${(props) => (props.active ? '#4258ff' : 'rgba(255, 255, 255, 0.06)')};
     color: ${(props) => (props.active ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.7)')};
     cursor: pointer;
-    touch-action: manipulation;
-    -ms-touch-action: manipulation;
+    touch-action: manipulation !important;
+    -ms-touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
 
     &:active {
         color: rgba(255, 255, 255, 1);

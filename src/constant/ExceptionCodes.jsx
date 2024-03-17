@@ -19,3 +19,4 @@
  */
 
 export const ACCOUNT_INACTIVE = 'BG-AUTH-DE-2004';
+export const OTP_NOT_PRESENT_FOR_USER = 'BG-AUTH-FE-4008';

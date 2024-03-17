@@ -30,10 +30,6 @@ const BloggiosBase = ({
                           children
                       }) => {
 
-    const dispatch = useDispatch();
-    const {isLoading} = useSelector((state) => state.loading);
-    const {isAuthenticated, userId, accessToken} = useSelector(state => state.auth);
-
     return (
         <>
             <MemoizedCustomNavbar/>
@@ -57,19 +53,3 @@ const ChildrenComponent = ({children}) => <>{children}</>;
 ChildrenComponent.propTypes = {
     children: PropTypes.node.isRequired,
 };
-
-const AppContainer = styled.main`
-    width: 100vw;
-    min-height: 100vh;
-    min-width: 250px;
-    max-width: 100vw;
-    height: auto;
-    overflow-x: hidden;
-    background-color: #121212;
-    color: antiquewhite;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-`;

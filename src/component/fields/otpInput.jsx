@@ -31,11 +31,14 @@ const OtpInput = ({
                       value,
                       onValueChange,
                       handleSubmit,
-                      autofocus
+                      autofocus,
+                      ref
                   }) => {
 
     const GROUP_ID = 'OTPGroup';
     const DATASET = 'autosubmit';
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     const handleKeyUp = (event) => {
         if (event.keyCode === 8 || event.keyCode === 37) {
@@ -62,7 +65,7 @@ const OtpInput = ({
         <DigitInput
             id={id}
             name={id}
-            type={'text'}
+            type={isMobile ? 'number' : 'text'}
             value={value}
             maxLength={1}
             autoComplete={false}
@@ -75,52 +78,54 @@ const OtpInput = ({
 };
 
 const DigitInput = styled.input`
-  outline: 0;
-  user-select: none;
-  width: 60px;
-  height: 60px;
-  background-color: transparent;
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
-  line-height: 50px;
-  text-align: center;
-  font-size: 28px;
-  color: #e5e5e5;
-  margin: 0;
-  -moz-appearance: textfield;
-  transition: all 150ms ease;
-
-  &:focus {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.8);
-  }
-
-  &:active {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.8);
-  }
-  
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+    border: none;
+    outline: none;
+    height: 48px;
+    aspect-ratio: 1/1;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.875rem, 0.778rem + 0.597vw, 1.375rem);
+    -moz-appearance: textfield;
+    transition: all 150ms ease;
+    user-select: none;
+    line-height: 50px;
+    text-align: center;
+    color: #e5e5e5;
     margin: 0;
-  }
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  @media (max-width: 550px) {
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
-  }
-  
-  @media (max-width: 440px) {
-    width: 28px;
-    height: 28px;
-    font-size: 18px;
-  }
+    &:focus {
+        border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    &:active {
+        border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    @media (max-width: 1200px) {
+        height: 40px;
+    }
+
+    @media (max-width: 800px) {
+        height: 48px;
+    }
+
+    @media (max-width: 400px) {
+        height: 34px;
+    }
+
+    @media (max-width: 260px) {
+        height: 28px;
+    }
 `;
 
 export default OtpInput;
