@@ -20,7 +20,6 @@
 
 import React from 'react';
 import styled, {keyframes} from "styled-components";
-import GenericLoader from "./genericLoader";
 
 const LoaderWrapper = styled.div`
   display: flex;

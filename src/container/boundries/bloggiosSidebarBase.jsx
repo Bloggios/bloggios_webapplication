@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useLayoutEffect} from 'react';
 import styled from "styled-components";
 import MemoizedSidebar from "../../component/navbars/Sidebar";
 import PropTypes from "prop-types";
@@ -26,10 +26,23 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import MemoizedSidebarCompressed from "../../component/navbars/SidebarCompressed";
 import LoggedInMobileNavItems from "../../component/navbars/components/LoggedInMobileNavItems";
 import MemoizedMobileNavTopItems from "../../component/navbars/components/MobileNavTopItems";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {PROFILE_ADDITION_INITIAL} from "../../constant/pathConstants";
 
 const BloggiosSidebarBase = ({children}) => {
 
     const {width} = useWindowDimensions();
+    const {isAuthenticated, authorities} = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
+
+    useLayoutEffect(() => {
+        if (isAuthenticated && authorities?.includes('ROLE_DUMMY')) {
+            navigate(PROFILE_ADDITION_INITIAL, {
+                replace: true
+            })
+        }
+    }, [authorities, window.location.pathname]);
 
     const getSidebar = useCallback(() => {
         if (width > 1400) {

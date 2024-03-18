@@ -21,21 +21,7 @@
  * limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from "styled-components";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {clearLoading, initiateLoading} from "../../state/loadingSlice";
-import useComponentSize from "../../hooks/useComponentSize";
-import {LuShieldCheck} from "react-icons/lu";
-import {setSnackbar} from "../../state/snackbarSlice";
-import Typography from "../../component/typography/typography";
-import OtpInput from "../../component/fields/otpInput";
-import SimpleLoader from "../../component/loaders/simpleLoader";
-import {LOGIN_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
-import {resendOtp, verifyOtp} from "../../restservices/authApi";
-import BloggiosBase from "../boundries/bloggiosBase";
+import React from 'react';
 import AuthBase from "../boundries/AuthBase";
 import OtpComponent from "../../component/authentication/OtpComponent";
 

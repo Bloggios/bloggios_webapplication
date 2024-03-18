@@ -20,12 +20,6 @@
 
 import React, {useState} from 'react';
 import styled from "styled-components";
-import bloggios_logo from "../../asset/svg/bg_logo_rounded_black.svg";
-import NameStepper from "./stepper/NameStepper";
-import LoaderButton from "../../component/buttons/loaderButton";
-import GenderAndDobStepper from "./stepper/GenderAndDobStepper";
-import BioStepper from "./stepper/BioStepper";
-import WebsiteStepper from "./stepper/WebsiteStepper";
 import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
 import {ADD_PROFILE} from "../../constant/apiConstants";
 import {useNavigate} from "react-router-dom";
@@ -33,8 +27,9 @@ import {HOME_PAGE} from "../../constant/pathConstants";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {authenticatedAxios} from "../../restservices/baseAxios";
-import BloggiosBase from "../boundries/bloggiosBase";
 import {fetchProfileAndDispatch} from "../../service/functions";
+import ProfileInitialAdditionStepper from "../../component/steppers/ProfileInitialAdditionStepper";
+import AuthBase from "../boundries/AuthBase";
 
 const ProfileAdditionInitial = () => {
 
@@ -114,154 +109,163 @@ const ProfileAdditionInitial = () => {
         setCurrentStep(currentStep - 1);
     };
 
+    // return (
+    //     <BloggiosBase>
+    //         <Wrapper>
+    //             <Main>
+    //                 <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
+    //                 <TextWrapper>
+    //                     <TitleText>
+    //                         Stepping Bloggios
+    //                     </TitleText>
+    //                 </TextWrapper>
+    //
+    //                 <StepperWrapper>
+    //                     {
+    //                         currentStep === 1 && (
+    //                             <NameStepper data={data} setData={setData} helperText={helperText}
+    //                                          setHelperText={setHelperText}/>
+    //                         )
+    //                     }
+    //                     {
+    //                         currentStep === 2 && (
+    //                             <GenderAndDobStepper data={data} setData={setData} helperText={helperText}
+    //                                                  setHelperText={setHelperText}/>
+    //                         )
+    //                     }
+    //                     {
+    //                         currentStep === 3 && (
+    //                             <BioStepper data={data} setData={setData}/>
+    //                         )
+    //                     }
+    //                     {
+    //                         currentStep === 4 && (
+    //                             <WebsiteStepper data={data} setData={setData}/>
+    //                         )
+    //                     }
+    //
+    //                     {
+    //                         currentStep === 1 && (
+    //                             <LoaderButton
+    //                                 width={'100%%'}
+    //                                 height={'40px'}
+    //                                 borderRadius={'10px'}
+    //                                 isLoading={false}
+    //                                 text={'Next'}
+    //                                 onClick={() => handleNext(1)}
+    //                                 fontSize={'16px'}
+    //                                 backgroundColor={'rgba(255, 255, 255, 0.1)'}
+    //                                 border={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                 color={'rgba(255, 255, 255, 0.8)'}
+    //                                 hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+    //                                 hoveredColor={'rgba(255, 255, 255, 1)'}
+    //                                 activeColor={'rgba(255, 255, 255, 0.8)'}
+    //                                 activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                             />
+    //                         )
+    //                     }
+    //
+    //                     {
+    //                         currentStep >= 2 && currentStep < 4 && (
+    //                             <div style={{
+    //                                 display: 'flex',
+    //                                 alignItems: 'center',
+    //                                 flexDirection: 'row',
+    //                                 gap: '10px'
+    //                             }}>
+    //                                 <LoaderButton
+    //                                     width={'95%'}
+    //                                     height={'40px'}
+    //                                     borderRadius={'10px'}
+    //                                     isLoading={false}
+    //                                     text={'Prev'}
+    //                                     onClick={() => handlePrev()}
+    //                                     fontSize={'16px'}
+    //                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
+    //                                     border={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                     color={'rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredColor={'rgba(255, 255, 255, 1)'}
+    //                                     activeColor={'rgba(255, 255, 255, 0.8)'}
+    //                                     activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                 />
+    //                                 <LoaderButton
+    //                                     width={'95%'}
+    //                                     height={'40px'}
+    //                                     borderRadius={'10px'}
+    //                                     isLoading={false}
+    //                                     text={'Next'}
+    //                                     onClick={() => handleNext(2)}
+    //                                     fontSize={'16px'}
+    //                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
+    //                                     border={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                     color={'rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredColor={'rgba(255, 255, 255, 1)'}
+    //                                     activeColor={'rgba(255, 255, 255, 0.8)'}
+    //                                     activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                 />
+    //                             </div>
+    //                         )
+    //                     }
+    //
+    //                     {
+    //                         currentStep === 4 && (
+    //                             <div style={{
+    //                                 display: 'flex',
+    //                                 alignItems: 'center',
+    //                                 flexDirection: 'row',
+    //                                 gap: '10px'
+    //                             }}>
+    //                                 <LoaderButton
+    //                                     width={'95%'}
+    //                                     height={'40px'}
+    //                                     borderRadius={'10px'}
+    //                                     isLoading={false}
+    //                                     text={'Prev'}
+    //                                     onClick={() => handlePrev()}
+    //                                     fontSize={'16px'}
+    //                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
+    //                                     border={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                     color={'rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredColor={'rgba(255, 255, 255, 1)'}
+    //                                     activeColor={'rgba(255, 255, 255, 0.8)'}
+    //                                     activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                 />
+    //                                 <LoaderButton
+    //                                     width={'95%'}
+    //                                     height={'40px'}
+    //                                     borderRadius={'10px'}
+    //                                     isLoading={buttonLoader}
+    //                                     text={'Submit'}
+    //                                     onClick={() => handleProfileSubmit()}
+    //                                     fontSize={'16px'}
+    //                                     backgroundColor={'rgba(255, 255, 255, 0.1)'}
+    //                                     border={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                     color={'rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
+    //                                     hoveredColor={'rgba(255, 255, 255, 1)'}
+    //                                     activeColor={'rgba(255, 255, 255, 0.8)'}
+    //                                     activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
+    //                                 />
+    //                             </div>
+    //                         )
+    //                     }
+    //                 </StepperWrapper>
+    //             </Main>
+    //         </Wrapper>
+    //     </BloggiosBase>
+    // );
+
     return (
-        <BloggiosBase>
-            <Wrapper>
-                <Main>
-                    <BloggiosImage src={bloggios_logo} alt="Bloggios"/>
-                    <TextWrapper>
-                        <TitleText>
-                            Stepping Bloggios
-                        </TitleText>
-                    </TextWrapper>
-
-                    <StepperWrapper>
-                        {
-                            currentStep === 1 && (
-                                <NameStepper data={data} setData={setData} helperText={helperText}
-                                             setHelperText={setHelperText}/>
-                            )
-                        }
-                        {
-                            currentStep === 2 && (
-                                <GenderAndDobStepper data={data} setData={setData} helperText={helperText}
-                                                     setHelperText={setHelperText}/>
-                            )
-                        }
-                        {
-                            currentStep === 3 && (
-                                <BioStepper data={data} setData={setData}/>
-                            )
-                        }
-                        {
-                            currentStep === 4 && (
-                                <WebsiteStepper data={data} setData={setData}/>
-                            )
-                        }
-
-                        {
-                            currentStep === 1 && (
-                                <LoaderButton
-                                    width={'100%%'}
-                                    height={'40px'}
-                                    borderRadius={'10px'}
-                                    isLoading={false}
-                                    text={'Next'}
-                                    onClick={() => handleNext(1)}
-                                    fontSize={'16px'}
-                                    backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                                    border={'1px solid rgba(255, 255, 255, 0.4)'}
-                                    color={'rgba(255, 255, 255, 0.8)'}
-                                    hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                                    hoveredColor={'rgba(255, 255, 255, 1)'}
-                                    activeColor={'rgba(255, 255, 255, 0.8)'}
-                                    activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                                />
-                            )
-                        }
-
-                        {
-                            currentStep >= 2 && currentStep < 4 && (
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    gap: '10px'
-                                }}>
-                                    <LoaderButton
-                                        width={'95%'}
-                                        height={'40px'}
-                                        borderRadius={'10px'}
-                                        isLoading={false}
-                                        text={'Prev'}
-                                        onClick={() => handlePrev()}
-                                        fontSize={'16px'}
-                                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                                        border={'1px solid rgba(255, 255, 255, 0.4)'}
-                                        color={'rgba(255, 255, 255, 0.8)'}
-                                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                                        hoveredColor={'rgba(255, 255, 255, 1)'}
-                                        activeColor={'rgba(255, 255, 255, 0.8)'}
-                                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                                    />
-                                    <LoaderButton
-                                        width={'95%'}
-                                        height={'40px'}
-                                        borderRadius={'10px'}
-                                        isLoading={false}
-                                        text={'Next'}
-                                        onClick={() => handleNext(2)}
-                                        fontSize={'16px'}
-                                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                                        border={'1px solid rgba(255, 255, 255, 0.4)'}
-                                        color={'rgba(255, 255, 255, 0.8)'}
-                                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                                        hoveredColor={'rgba(255, 255, 255, 1)'}
-                                        activeColor={'rgba(255, 255, 255, 0.8)'}
-                                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                                    />
-                                </div>
-                            )
-                        }
-
-                        {
-                            currentStep === 4 && (
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    flexDirection: 'row',
-                                    gap: '10px'
-                                }}>
-                                    <LoaderButton
-                                        width={'95%'}
-                                        height={'40px'}
-                                        borderRadius={'10px'}
-                                        isLoading={false}
-                                        text={'Prev'}
-                                        onClick={() => handlePrev()}
-                                        fontSize={'16px'}
-                                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                                        border={'1px solid rgba(255, 255, 255, 0.4)'}
-                                        color={'rgba(255, 255, 255, 0.8)'}
-                                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                                        hoveredColor={'rgba(255, 255, 255, 1)'}
-                                        activeColor={'rgba(255, 255, 255, 0.8)'}
-                                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                                    />
-                                    <LoaderButton
-                                        width={'95%'}
-                                        height={'40px'}
-                                        borderRadius={'10px'}
-                                        isLoading={buttonLoader}
-                                        text={'Submit'}
-                                        onClick={() => handleProfileSubmit()}
-                                        fontSize={'16px'}
-                                        backgroundColor={'rgba(255, 255, 255, 0.1)'}
-                                        border={'1px solid rgba(255, 255, 255, 0.4)'}
-                                        color={'rgba(255, 255, 255, 0.8)'}
-                                        hoveredBorder={'1px solid rgba(255, 255, 255, 0.8)'}
-                                        hoveredColor={'rgba(255, 255, 255, 1)'}
-                                        activeColor={'rgba(255, 255, 255, 0.8)'}
-                                        activeBorder={'1px solid rgba(255, 255, 255, 0.4)'}
-                                    />
-                                </div>
-                            )
-                        }
-                    </StepperWrapper>
-                </Main>
-            </Wrapper>
-        </BloggiosBase>
-    );
+        <AuthBase
+            flexDirection={'row-reverse'}
+            title={'Profile Data'}
+        >
+            <ProfileInitialAdditionStepper />
+        </AuthBase>
+    )
 };
 
 const Wrapper = styled.div`

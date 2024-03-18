@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import styled, {css} from "styled-components";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
     width: 100%;

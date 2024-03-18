@@ -37,12 +37,14 @@ const IconButton = ({
                         padding = '10px',
                         children,
                         onClick,
-                        style
+                        style,
+                        isHtmlTooltip = false
                     }) => {
     return (
         <Button
             data-tooltip-id={tooltipId}
-            data-tooltip-content={tooltipContent}
+            data-tooltip-content={!isHtmlTooltip ? tooltipContent : ''}
+            data-tooltip-html={isHtmlTooltip ? tooltipContent : ''}
             data-tooltip-variant={tooltipVariant}
             data-tooltip-delay-show={tooltipDelay}
             bgColor={bgColor}

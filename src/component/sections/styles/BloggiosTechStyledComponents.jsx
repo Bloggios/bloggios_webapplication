@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import styled, {css, keyframes} from "styled-components";
+import styled, {css} from "styled-components";
 
 const Wrapper = styled.div`
     min-height: 100vh;

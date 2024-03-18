@@ -19,8 +19,6 @@
  */
 
 import React, {useCallback} from 'react';
-import {useNavigate} from "react-router-dom";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useSelector} from "react-redux";
 import MemoizedLoggedInMobileNavItems from "./components/LoggedInMobileNavItems";
 import MemoizedLoggedOutMobileNavItems from "./components/LoggedOutMobileNavItems";

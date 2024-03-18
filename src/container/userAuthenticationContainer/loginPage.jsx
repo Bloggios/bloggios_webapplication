@@ -21,24 +21,8 @@
  * limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from "styled-components";
-import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
-import {useLocation, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {setSnackbar} from "../../state/snackbarSlice";
+import React from 'react';
 import useSeo from "../../globalseo/useSeo";
-import Typography from "../../component/typography/typography";
-import TextField from "../../component/fields/textField";
-import LoaderButton from "../../component/buttons/loaderButton";
-import Divider from "../../component/divider/divider";
-import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
-import {loginUser} from "../../restservices/authApi";
-import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
-import {authOtpUserId} from "../../service/authProviderApiService";
-import AuthenticatedAxiosInterceptor from "../../restservices/AuthenticatedAxiosInterceptor";
-import {GOOGLE_AUTH_URL} from "../../restservices/baseAxios";
-import BloggiosBase from "../boundries/bloggiosBase";
 import AuthBase from "../boundries/AuthBase";
 import LoginComponent from "../../component/authentication/LoginComponent";
 

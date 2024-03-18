@@ -19,7 +19,6 @@
  */
 
 import React, {useLayoutEffect, useState} from 'react';
-import styled, {css} from "styled-components";
 import {bgAccentRounded} from '../../asset/svg'
 import IconButton from "../buttons/IconButton";
 import {MdVisibility, MdVisibilityOff} from "react-icons/md";
@@ -32,7 +31,6 @@ import {dispatchError, dispatchErrorMessage} from "../../service/functions";
 import {loginUser} from "../../restservices/authApi";
 import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
-import {setSnackbar} from "../../state/snackbarSlice";
 import {useNavigate} from "react-router-dom";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import * as Bg from './StyledComponent';

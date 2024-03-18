@@ -18,17 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import styled from "styled-components";
-import {useDispatch, useSelector} from "react-redux";
+import React, {useLayoutEffect} from 'react';
+import {useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import MemoizedCustomNavbar from "../../component/navbars/customNavbar";
+import {useNavigate} from "react-router-dom";
+import {PROFILE_ADDITION_INITIAL} from "../../constant/pathConstants";
 
 let stompClient = null;
 
 const BloggiosBase = ({
                           children
                       }) => {
+
+    const {isAuthenticated, authorities} = useSelector((state)=> state.auth);
+
+    const navigate = useNavigate();
+
+    useLayoutEffect(() => {
+        if (isAuthenticated && authorities?.includes('ROLE_DUMMY')) {
+            navigate(PROFILE_ADDITION_INITIAL, {
+                replace: true
+            })
+        }
+    }, [authorities, window.location.pathname]);
 
     return (
         <>

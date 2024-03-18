@@ -21,7 +21,7 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
+import {LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
 import {bgAccentRounded} from "../../asset/svg";
 import IconButton from "../buttons/IconButton";
 import {MdVisibility, MdVisibilityOff} from "react-icons/md";

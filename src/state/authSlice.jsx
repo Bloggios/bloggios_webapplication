@@ -26,21 +26,27 @@ const authSlice = createSlice({
         userId: null,
         accessToken: null,
         isAuthenticated: false,
-        remoteAddress: null
+        remoteAddress: null,
+        authorities: null,
+        email: null
     },
     reducers: {
         setCredentials: (state, action) => {
-            const { userId, accessToken, isAuthenticated, remoteAddress } = action.payload;
+            const { userId, accessToken, isAuthenticated, remoteAddress, authorities, email } = action.payload;
             state.userId = userId;
             state.accessToken = accessToken;
             state.isAuthenticated = isAuthenticated;
             state.remoteAddress = remoteAddress;
+            state.authorities = authorities;
+            state.email = email;
         },
         clearCredentials: (state, action) => {
             state.userId = null;
             state.accessToken = null;
             state.isAuthenticated = false;
             state.remoteAddress = null;
+            state.authorities = null;
+            state.email = null;
         }
     }
 });

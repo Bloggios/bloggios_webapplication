@@ -21,24 +21,10 @@
  * limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from "styled-components";
-import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
-import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {setSnackbar} from "../../state/snackbarSlice";
+import React from 'react';
 import useSeo from "../../globalseo/useSeo";
-import Typography from "../../component/typography/typography";
-import TextField from "../../component/fields/textField";
-import LoaderButton from "../../component/buttons/loaderButton";
-import Divider from "../../component/divider/divider";
-import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE} from "../../constant/pathConstants";
-import {signupUser} from "../../restservices/authApi";
-import BloggiosBase from "../boundries/bloggiosBase";
-import LoginComponent from "../../component/authentication/LoginComponent";
 import AuthBase from "../boundries/AuthBase";
 import SignUpComponent from "../../component/authentication/SignUpComponent";
-import OtpComponent from "../../component/authentication/OtpComponent";
 
 const SignUpPage = () => {
 

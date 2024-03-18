@@ -61,7 +61,7 @@ const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outle
 
 const Router = () => {
 
-    const {isAuthenticated} = useSelector((state) => state.auth);
+    const {isAuthenticated, authorities} = useSelector((state) => state.auth);
 
     return (
             <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
@@ -72,7 +72,7 @@ const Router = () => {
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
-                    <Route element={<ProtectedRoute isAuthenticated={isAuthenticated}/>}>
+                    <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />} />

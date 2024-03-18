@@ -21,19 +21,20 @@
 import React from 'react';
 import styled from "styled-components";
 import BloggiosBase from "./bloggiosBase";
-import LoginComponent from "../../component/authentication/LoginComponent";
 import AuthCarouselSection from "../../component/sections/AuthCarouselSection";
 
 const AuthBase = ({
                       title,
                       smallSubTitle,
                       longSubTitle,
-                      children
+                      children,
+                      flexDirection = 'row',
+                      style
                   }) => {
     return (
         <BloggiosBase>
-            <Wrapper>
-                <FormSection>
+            <Wrapper style={{flexDirection: flexDirection}}>
+                <FormSection style={style}>
                     {children}
                 </FormSection>
 
@@ -53,11 +54,10 @@ const Wrapper = styled.div`
     width: 100%;
     max-width: 100%;
     display: flex;
-    flex-direction: row;
-    height: calc(100vh - 72px);
+    min-height: calc(100vh - 72px);
     box-sizing: border-box;
     transition: all 400ms ease-in-out;
-    
+
     @media (max-width: 700px) {
         margin-bottom: 74px;
     }
@@ -84,7 +84,7 @@ const FormSection = styled.div`
     @media (max-width: 800px) {
         width: 100%;
     }
-    
+
     @media (orientation: portrait) and (max-width: 700px) {
         align-items: flex-start;
         margin-top: 20px;
@@ -103,7 +103,7 @@ const InformationSection = styled.div`
     @media (max-width: 1000px) {
         width: 60%;
     }
-    
+
     @media (max-width: 800px) {
         display: none;
     }

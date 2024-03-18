@@ -48,4 +48,5 @@ export const USER_POSTS = '/post-provider/v1.0/post/post-list/auth/user';
 export const LIKE_COMMENT_COUNT = '/post-provider/v1.0/post/count';
 export const ADD_LIKE = '/post-provider/v1.0/like';
 export const ADD_COMMENT = '/post-provider/v1.0/comment';
-export const POST_COMMENT_LIST = '/post-provider/v1.0/comment/post-comment'
+export const POST_COMMENT_LIST = '/post-provider/v1.0/comment/post-comment';
+export const PROFILE_TAGS_LIST = '/user-provider/v1.0/profile/tags-list';

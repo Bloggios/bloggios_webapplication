@@ -74,8 +74,14 @@ import {
     BLOGGIOS_TECH_WHY_BLOGGIOS
 } from './ElementIdConstants';
 import {
-    agile, coding, partnership,
-    scalability, techSupport, transparency, visionarySolutions, workWithBest
+    agile,
+    coding,
+    partnership,
+    scalability,
+    techSupport,
+    transparency,
+    visionarySolutions,
+    workWithBest
 } from '../asset/whyUs/index';
 
 export const loggedInNavItems = [

@@ -21,7 +21,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect} from "react";
 import styled from "styled-components";
-import {AiFillWarning, AiOutlineInfo} from "react-icons/ai";
 import {clearSnackbar} from "../state/snackbarSlice";
 import {toast} from "sonner";
 

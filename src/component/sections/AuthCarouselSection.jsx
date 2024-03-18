@@ -21,14 +21,9 @@
 import React from 'react';
 import styled from "styled-components";
 import {Swiper, SwiperSlide} from "swiper/react";
-import {Pagination, Autoplay} from 'swiper/modules';
+import {Autoplay, Pagination} from 'swiper/modules';
 import '../../styles/AuthSwiperStyles.css';
-import {
-    applicationSearching,
-    createQuestion,
-    marqueeImage,
-    userProfile
-} from '../../asset/AuthCarousel';
+import {applicationSearching, createQuestion, marqueeImage, userProfile} from '../../asset/AuthCarousel';
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const AuthCarouselSection = ({

@@ -19,7 +19,6 @@
  */
 
 import React from 'react';
-import styled from "styled-components";
 import * as Bg from './styles/BloggiosTechStyledComponents'
 import {FaAngleDoubleDown} from "react-icons/fa";
 import {
