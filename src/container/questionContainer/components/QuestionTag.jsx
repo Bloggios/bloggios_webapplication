@@ -19,47 +19,57 @@
  */
 
 import React from 'react';
-import styled, {keyframes} from "styled-components";
+import styled from "styled-components";
 
-const LoaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const rotation = keyframes`
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-`;
-
-const Loader = styled.span`
-    aspect-ratio: 1/1;
-    min-height: 20px;
-    max-height: 48px;
-    height: 100%;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    border-bottom-color: #5567ef !important;
-    animation: ${rotation} 1s linear infinite;
-`;
-
-const FallbackLoader = ({height, width, isAuto, thickness = 5}) => {
+const QuestionTag = React.forwardRef(({
+                                          tag,
+                                          category,
+                                          onClick
+                                      }, ref) => {
     return (
-        <LoaderWrapper style={{
-            height: isAuto ? 'auto' : height,
-            width: isAuto ?  '100%' : width
-        }}>
-            <Loader style={{
-                border: `${thickness}px solid #f5f5f5`,
-                borderBottomColor: '#5567ef'
-            }} />
-        </LoaderWrapper>
-    );
-};
+        ref ? (
+            <Wrapper ref={ref} onClick={onClick}>
+                <h5 title={'Tag'}>{tag}</h5>
+                <span title={'Tag Category'}>{category}</span>
+            </Wrapper>
+        ) : (
+            <Wrapper onClick={onClick}>
+                <h5 title={'Tag'}>{tag}</h5>
+                <span title={'Tag Category'}>{category}</span>
+            </Wrapper>
+        )
+    )
+});
 
-export default FallbackLoader;
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: rgba(245, 245, 245, 0.8);
+    letter-spacing: 1px;
+    user-select: none;
+
+    & h5 {
+        font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+        font-weight: 400;
+    }
+
+    & span {
+        font-size: clamp(0.75rem, 0.7154rem + 0.2128vw, 0.875rem);
+        font-weight: 300;
+    }
+
+    &:hover, &:active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(245, 245, 245, 1);
+    }
+`;
+
+export default QuestionTag;

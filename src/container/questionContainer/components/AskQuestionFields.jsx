@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ColumnWrapper} from "../../../styles/StyledComponent";
 import styled from "styled-components";
 import Typography from "../../../component/typography/typography";
@@ -29,8 +29,14 @@ import ReactQuill, {Quill} from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from 'quill-image-resize-module-react';
 import '../../../styles/QuillEditorStyles.css'
-import {dispatchErrorMessage} from "../../../service/functions";
+import {dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
+import QuestionTag from "./QuestionTag";
+import useQuestionTagList from "../../../hooks/useQuestionTagList";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {VscSearchStop} from "react-icons/vsc";
+import IconButton from "../../../component/buttons/IconButton";
+import {CgClose} from "react-icons/cg";
 
 Quill.register('modules/imageResize', ImageResize);
 const AskQuestionFields = () => {
@@ -38,42 +44,66 @@ const AskQuestionFields = () => {
     const [titleRef, isTitleFocused] = useIsInputFocused();
     const editorRef = useRef(null);
     const [tagRef, isTagFocused] = useIsInputFocused();
-    const [inputValue, setInputValue] = useState('');
+    const [tagInputValue, setTagInputValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [selectedChips, setSelectedChips] = useState([]);
     const [editorContent, setEditorContent] = useState({});
     const dispatch = useDispatch();
+    const [isSuggestion, setIsSuggestion] = useState(false);
+    const [pageNum, setPageNum] = useState(0);
+    const {
+        isLoading: tagIsLoading,
+        isError: tagIsError,
+        error : fetchedTagError,
+        data : fetchedTagData,
+        hasNextPage: tagHasNextPage
+    } = useQuestionTagList(pageNum, tagInputValue);
+    const intObserver = useRef();
+
+    const lastTagRef = useCallback(post => {
+        if (tagIsLoading) return;
+        if (intObserver.current) intObserver.current.disconnect();
+
+        intObserver.current = new IntersectionObserver(tags => {
+            if (tags[0].isIntersecting && tagHasNextPage) {
+                setPageNum(prevState => prevState + 1);
+            }
+        });
+
+        if (post) intObserver.current.observe(post);
+    }, [tagIsLoading, tagHasNextPage])
 
     useEffect(() => {
-        const fetchSuggestions = async () => {
-            const apiUrl = `https://your-backend-api.com/suggestions?query=${inputValue}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                setSuggestions(data.suggestions);
-            } catch (error) {
-                console.error('Error fetching suggestions:', error);
-            }
-        };
-
-        if (inputValue.trim() !== '') {
-            // fetchSuggestions();
-            setSuggestions(['Rohit', 'Rakesh', 'Atharva', 'Priya', 'Sweety'])
+        if (tagInputValue.length > 0) {
+            setIsSuggestion(true)
         } else {
-            setSuggestions([]);
+            setIsSuggestion(false);
+            setPageNum(0)
         }
-    }, [inputValue]);
-
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
+    }, [tagInputValue]);
 
     const handleChipClick = (chip) => {
-        setSelectedChips([...selectedChips, chip]);
-        setInputValue('');
-        setSuggestions([]);
+        if (selectedChips.includes(chip)) {
+            dispatchWarningMessage(dispatch, `You have already selected ${chip} Tag`)
+        } else {
+            setSelectedChips([...selectedChips, chip]);
+        }
+        setTagInputValue('');
     };
+
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            if (event.key === 'Escape') {
+                setIsSuggestion(false);
+                setTagInputValue('');
+                setPageNum(0);
+            }
+        };
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
     const handleChipRemove = (removedChip) => {
         const updatedChips = selectedChips.filter(chip => chip !== removedChip);
@@ -81,8 +111,8 @@ const AskQuestionFields = () => {
     };
 
     const handleInputKeyDown = (event) => {
-        if (event.key === 'Enter' && inputValue.trim() !== '') {
-            handleChipClick(inputValue.trim());
+        if (event.key === 'Enter' && tagInputValue.trim() !== '') {
+            handleChipClick(tagInputValue.trim());
         }
     };
 
@@ -108,6 +138,14 @@ const AskQuestionFields = () => {
             deltaStatic: delta,
             htmlData: html
         })
+    }
+
+    const handleSuggestionClose = () => {
+        if (isSuggestion) {
+            setIsSuggestion(false);
+            setTagInputValue('');
+            setPageNum(0);
+        }
     }
 
     const handleSubmit = () => {
@@ -137,6 +175,52 @@ const AskQuestionFields = () => {
             dispatchErrorMessage(dispatch, 'Please add data in Details');
         }
     }
+
+    const tagListData = useCallback(()=> {
+        if (fetchedTagData.length > 0) {
+            return fetchedTagData.map((tag, i)=> {
+                if (!tagIsError && fetchedTagData.length === i + 1) {
+                    return (
+                        <QuestionTag
+                            ref={lastTagRef}
+                            tag={tag.tag}
+                            category={tag.category}
+                            key={i + tag.category}
+                            onClick={()=> handleChipClick(tag.tag)}
+                        />
+                    )
+                }
+                return (
+                    <QuestionTag
+                        tag={tag.tag}
+                        category={tag.category}
+                        key={i + tag.category}
+                        onClick={()=> handleChipClick(tag.tag)}
+                    />
+                )
+            })
+        } else if (!tagIsLoading && fetchedTagData.length === 0) {
+            return (
+                <NotResultFoundWrapper>
+                    <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '50px',
+                        color: 'rgba(255,255,255,0.6)'
+                    }}>
+                        <VscSearchStop/>
+                    </div>
+                    <NotFoundMessage>
+                        {tagInputValue.length <= 3
+                        ? 'Minimum 3 Characters Required'
+                        : 'Not Data Found'}
+                    </NotFoundMessage>
+                </NotResultFoundWrapper>
+            )
+        }
+    }, [tagIsLoading, fetchedTagData, lastTagRef, tagIsError, tagInputValue.length])
 
     return (
         <ColumnWrapper style={{
@@ -198,22 +282,26 @@ const AskQuestionFields = () => {
                     ))}
                     <TagFieldInput
                         type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
+                        value={tagInputValue}
+                        onChange={(event)=> setTagInputValue(event.target.value)}
                         onKeyDown={handleInputKeyDown}
-                        placeholder="Type to search tags"
+                        placeholder={selectedChips.length === 0 && "Type to search tags"}
+                        maxLength={5}
                         ref={tagRef}
+                        readOnly={selectedChips.length > 4}
                     />
-                    <SuggestionsContainer>
-                        {suggestions.map((suggestion, index) => (
-                            <Suggestion
-                                key={index}
-                                onClick={() => handleChipClick(suggestion)}
-                            >
-                                {suggestion}
-                            </Suggestion>
-                        ))}
-                    </SuggestionsContainer>
+                    {isSuggestion && (
+                        <SuggestionsContainer>
+                            <SuggestionHeader>
+                                Fetched Tags
+                                <IconButton onClick={handleSuggestionClose}>
+                                    <CgClose />
+                                </IconButton>
+                            </SuggestionHeader>
+                            {tagListData()}
+                            {tagIsLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={2} />}
+                        </SuggestionsContainer>
+                    )}
                 </TagInput>
             </Fields>
 
@@ -263,13 +351,16 @@ const TagInput = styled.div`
 `;
 
 const Tag = styled.div`
-    background-color: #4258ff;
+    background-color: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.8);
     padding: 5px;
     border-radius: 7px;
     display: flex;
     align-items: center;
     cursor: pointer;
+    margin-right: 4px;
+    gap: 5px;
+    font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
 
     &:hover {
         color: rgba(255, 255, 255, 1);
@@ -284,6 +375,7 @@ const TagFieldInput = styled.input`
     border: none;
     outline: none;
     background: transparent;
+    min-width: 28px;
     font-size: clamp(0.75rem, 0.6296rem + 0.7407vw, 1rem);
     
     &::placeholder {
@@ -292,21 +384,91 @@ const TagFieldInput = styled.input`
 `;
 
 const SuggestionsContainer = styled.div`
+    width: 100%;
     display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
     position: absolute;
-    top: 100%;
+    bottom: 110%;
+    max-height: 250px;
+    height: auto;
+    overflow: auto;
     background-color: #272727;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 10px;
+
+    &::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: #555555;
+    }
+
+    &::-webkit-scrollbar-track:hover {
+        background-color: #555555;
+    }
+
+    &::-webkit-scrollbar-track:active {
+        background-color: #555555;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: #121212;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #0C0C0C;
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+        background-color: #0C0C0C;
+    }
 `;
 
-const Suggestion = styled.div`
-    background-color: #4258ff;
-    padding: 8px;
-    margin: 4px;
-    border-radius: 8px;
-    cursor: pointer;
+const NotResultFoundWrapper = styled.div`
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 70px 0;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+`;
 
-    &:hover {
-        background-color: #ddd;
+const NotFoundMessage = styled.span`
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 400;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(255, 255, 255, 0.6);
+    
+    @media (max-width: 350px) {
+        font-size: 16px;
+    }
+`;
+
+const SuggestionHeader = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    
+    & span {
+        font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 1px;
+        font-weight: 200;
     }
 `;
 
