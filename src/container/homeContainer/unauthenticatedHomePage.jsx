@@ -23,6 +23,8 @@ import styled from "styled-components";
 import BloggiosBase from "../boundries/bloggiosBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
+import BloggiosTechServicesSection from "../../component/sections/BloggiosTechServicesSection";
+import Sizedbox from "../../component/spacers/sizedbox";
 
 const MemoizedHomeHeader = lazy(()=> import('../../component/sections/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections/HomeTransitionSection'));
@@ -30,6 +32,7 @@ const BloggiosTechIntroductionSection = lazy(()=> import('../../component/sectio
 const BloggiosTechIntroductionSectionSummary = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSectionSummary'));
 const BloggiosTechWhyUsSection = lazy(()=> import('../../component/sections/BloggiosTechWhyUsSection'));
 const BloggiosTechEnquiry = lazy(()=> import('../../component/sections/BloggiosTechEnquiry'));
+const MemoizedBloggiosTechServicesSection = lazy(()=> import('../../component/sections/BloggiosTechServicesSection'));
 
 const UnauthenticatedHomePage = () => {
 
@@ -57,6 +60,12 @@ const UnauthenticatedHomePage = () => {
                     <BloggiosTechWhyUsSection />
                 </Suspense>
 
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
+                    <BloggiosTechServicesSection />
+                </Suspense>
+
+                <Sizedbox spacing={'100px'} direction={'vertical'} />
+
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
                     <BloggiosTechEnquiry />
                 </Suspense>
@@ -69,6 +78,7 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    user-select: none;
 
     @media (orientation: portrait) and (max-width: 700px) {
         margin-bottom: 54px;

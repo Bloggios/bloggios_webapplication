@@ -415,7 +415,7 @@ export const askQuestionDescription = [
     },
 ];
 
-const bloggiosTechTabsConstants = [
+export const bloggiosTechTabsConstants = [
     {
         id: 1,
         label: 'Why Bloggios',
@@ -438,7 +438,7 @@ const bloggiosTechTabsConstants = [
     }
 ];
 
-const whyUsCardListConstants = [
+export const whyUsCardListConstants = [
     {
         id: 1,
         icon: scalability,
@@ -479,9 +479,35 @@ const whyUsCardListConstants = [
         icon: coding,
         label: 'Precision Engineering'
     },
-]
+];
 
-export {
-    bloggiosTechTabsConstants,
-    whyUsCardListConstants
-};
+export const mainStreamServiceBloggiosTech = [
+    {
+        id: 1,
+        icon: coding,
+        label: 'Product Development',
+        path: '/services/product-development',
+        text: 'Envisioning a solution to delivering delight – full-cycle development bridges the product gap.'
+    },
+    {
+        id: 2,
+        icon: scalability,
+        label: 'Concept Development',
+        path: '/services/tech-experts',
+        text: 'Leverage research to inform a comprehensive product development roadmap.'
+    },
+    {
+        id: 3,
+        icon: visionarySolutions,
+        label: 'Support and Training',
+        path: '/services/support-training',
+        text: 'Provide ongoing technical support or deliver software development training.'
+    },
+    {
+        id: 4,
+        icon: workWithBest,
+        label: 'Tech Experts',
+        path: '/services/tech-experts',
+        text: 'Uncover the perfect candidate by combining technical challenges.'
+    },
+]
