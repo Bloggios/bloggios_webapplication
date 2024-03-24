@@ -35,7 +35,7 @@ const AuthCarouselSection = ({
     const {width} = useWindowDimensions();
 
     return (
-        <Wrapper className={'auth-page__accent--background'}>
+        <Wrapper className={'wrapper-bg__accent--background'}>
             <div>
                 <Title>
                     {title ? title : 'Welcome Back'}

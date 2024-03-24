@@ -31,7 +31,6 @@ import {useNavigate} from "react-router-dom";
 import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
 import {checkIsProfileAdded} from "./service/functions";
 import './styles/GlobalStyles.css'
-import ErrorBase from "./container/boundries/ErrorBase";
 
 const App = () => {
 
@@ -52,7 +51,7 @@ const App = () => {
             .then((response) => {
                 if (isMounted) {
                     clearTimeout(timeoutId);
-                    const authData = { ...response.data, isAuthenticated: true };
+                    const authData = {...response.data, isAuthenticated: true};
                     dispatch(setCredentials(authData));
                     checkIsProfileAdded(
                         authData.accessToken,
@@ -79,9 +78,7 @@ const App = () => {
     if (isChecking) return <LoaderPage/>
 
     return (
-        <ErrorBase>
-            <Router/>
-        </ErrorBase>
+        <Router/>
     );
 };
 

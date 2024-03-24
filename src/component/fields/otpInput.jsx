@@ -106,11 +106,6 @@ const DigitInput = styled.input`
         margin: 0;
     }
 
-    &::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
     @media (max-width: 1200px) {
         height: 40px;
     }

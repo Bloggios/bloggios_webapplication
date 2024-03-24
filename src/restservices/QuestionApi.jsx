@@ -19,7 +19,7 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {FETCH_QUESTION_TAGS} from "../constant/apiConstants";
+import {ADD_QUESTION, FETCH_QUESTION_TAGS} from "../constant/apiConstants";
 
 export const fetchQuestionTags = (page, tag, category, signal) => {
     return authenticatedAxios.get(FETCH_QUESTION_TAGS, {
@@ -29,5 +29,14 @@ export const fetchQuestionTags = (page, tag, category, signal) => {
             category: category,
         },
         signal: signal
+    }).then((response)=> response.data);
+}
+
+export const addQuestion = (formData) => {
+    console.log(formData);
+    return authenticatedAxios.post(ADD_QUESTION, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
     }).then((response)=> response.data);
 }

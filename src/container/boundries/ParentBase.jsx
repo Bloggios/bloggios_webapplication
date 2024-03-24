@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
@@ -28,12 +28,14 @@ import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
 import ErrorPage from "../catchPages/ErrorPage";
 import {Toaster} from "sonner";
+import ParentInfoModal from "../../component/modal/ParentInfoModal";
 
 const ParentBase = ({children}) => {
 
     const { width } = useWindowDimensions();
     const {isLoading} = useSelector(state=> state.loading);
     const {isError, errorMessage} = useSelector(state=> state.error);
+    const [isModalOpen, setIsModalOpen] = useState(true);
     useBloggiosSnackbar();
     useBloggiosStomp();
 
@@ -55,10 +57,15 @@ const ParentBase = ({children}) => {
                         richColors={true}
                         closeButton={true}
                     />
+
+                    <ParentInfoModal
+                        isModelOpen={isModalOpen}
+                        onClose={()=> setIsModalOpen(false)}
+                    />
                 </AppContainer>
             )
         }
-    }, [isLoading, children, width, isError, errorMessage])
+    }, [isLoading, children, width, isError, errorMessage, isModalOpen])
 
     return getBaseContent();
 };
@@ -73,12 +80,15 @@ const AppContainer = styled.main`
     width: auto;
     height: auto;
     overflow-x: hidden;
-    background-color: #121212 !important;
     color: antiquewhite;
     -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
         display: none;
+    }
+    
+    @media (max-width: 700px) {
+        margin-bottom: 60px;
     }
 `;
 

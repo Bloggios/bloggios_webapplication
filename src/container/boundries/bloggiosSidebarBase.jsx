@@ -67,11 +67,10 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100vw;
-    min-height: 100vh;
+    min-height: 95vh;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;
-    background-color: #1e1e1e;
 
     @media (max-width: 700px) {
         flex-direction: column;

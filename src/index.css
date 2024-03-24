@@ -41,10 +41,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #121212 !important;
+  background-color: #1e1e1e !important;
   color: antiquewhite;
   overflow-x: hidden !important;
   font-size: 1rem;
+  color-scheme: dark;
   -webkit-overflow-scrolling: touch;
   touch-action: manipulation !important;
   -ms-touch-action: manipulation !important;

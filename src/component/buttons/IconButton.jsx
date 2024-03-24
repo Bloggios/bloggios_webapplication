@@ -75,6 +75,7 @@ const Button = styled.div`
     -ms-touch-action: manipulation;
     font-size: ${(props) => props.fontSize};
     padding: ${(props) => props.padding};
+    cursor: pointer;
 
     &:hover {
         background-color: ${(props) => props.hBgColor};

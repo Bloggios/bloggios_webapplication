@@ -18,13 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import Typography from "../typography/typography";
 import FilledButton from "../buttons/FilledButton";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {colors} from '../../styles/Theme';
 
 const ProfileCard = ({
                          name,
@@ -36,18 +37,8 @@ const ProfileCard = ({
                          email
                      }) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const {userId} = useSelector((state)=> state.auth);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
 
     return (
         <Wrapper>
@@ -95,7 +86,13 @@ const ProfileCard = ({
             }}>
                 <FilledButton
                     onClick={()=> navigate('/profile/' + userId)}
-                    borderRadius={'0 0 16px 16px'}
+                    borderRadius={'16px'}
+                    bgColor={colors.accent80}
+                    hoveredBgColor={colors.accent100}
+                    color={colors.white80}
+                    hoveredColor={colors.white100}
+                    activeBgColor={colors.accent100}
+                    activeColor={colors.white100}
                 />
             </div>
         </Wrapper>
@@ -107,7 +104,7 @@ const Wrapper = styled.div`
   min-height: 250px;
   height: auto;
   width: clamp(200px, 95%, 300px);
-  background-color: #272727;
+  background-color: ${colors.black200};
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid transparent;

@@ -29,7 +29,7 @@ import {useDispatch} from "react-redux";
 import {useQuery} from "@tanstack/react-query";
 
 const ProfileSuggestions = ({
-    backgroundColor = '#272727'
+    backgroundColor = '#0c0c0c'
                             }) => {
 
     const [currentPage, setCurrentPage] = useState(0);

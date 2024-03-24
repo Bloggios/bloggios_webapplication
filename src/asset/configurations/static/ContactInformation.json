@@ -1,0 +1,33 @@
+{
+  "id": "contact__information",
+  "name": "Contact Information",
+  "version": "1.0",
+  "date": "23-03-2024T14:52",
+  "data": {
+    "email": "support@bloggios.com",
+    "contact": "+91-9571406506",
+    "website": "https://www.bloggios.com",
+    "links": [
+      {
+        "type": "linkedin",
+        "link": "https://www.linkedin.com/company/bloggios",
+        "hBgColor": "#1c6baf"
+      },
+      {
+        "type": "twitter",
+        "link": "https://twitter.com/bloggios",
+        "hBgColor": "#0c0c0c"
+      },
+      {
+        "type": "instagram",
+        "link": "https://www.instagram.com/blog.gios/",
+        "hBgColor": "#DD2C4A"
+      },
+      {
+        "type": "threads",
+        "link": "https://threads.net/@blog.gios",
+        "hBgColor": "#0c0c0c"
+      }
+    ]
+  }
+}

@@ -37,25 +37,57 @@ import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {VscSearchStop} from "react-icons/vsc";
 import IconButton from "../../../component/buttons/IconButton";
 import {CgClose} from "react-icons/cg";
+import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
 
+window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
+
+const Base64URItoMultipartFile = (base64URI, fileName) => {
+    const base64Content = base64URI.split(';base64,').pop();
+    const byteCharacters = atob(base64Content);
+    const arrayBuffer = new ArrayBuffer(byteCharacters.length);
+    const byteArray = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: Base64URItoMultipartFile.extractContentType(base64URI) });
+    return new File([blob], fileName, {type: blob.type});
+};
+
+Base64URItoMultipartFile.extractContentType = (base64URI) => {
+    const contentTypeRegex = /^data:(.+);base64,/; // Regex to extract content type
+    const matches = base64URI.match(contentTypeRegex);
+
+    if (matches && matches.length > 1) {
+        console.log(matches[1]);
+        return matches[1];
+    } else {
+        return '';
+    }
+};
+
 const AskQuestionFields = () => {
 
     const [titleRef, isTitleFocused] = useIsInputFocused();
     const editorRef = useRef(null);
     const [tagRef, isTagFocused] = useIsInputFocused();
     const [tagInputValue, setTagInputValue] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
     const [selectedChips, setSelectedChips] = useState([]);
     const [editorContent, setEditorContent] = useState({});
     const dispatch = useDispatch();
     const [isSuggestion, setIsSuggestion] = useState(false);
     const [pageNum, setPageNum] = useState(0);
+    const [titleData, setTitleData] = useState('');
+    const [buttonLoader, setButtonLoader] = useState(false);
+    const [submitModal, setSubmitModal] = useState(false);
+    const [timeoutId, setTimeoutId] = useState(null);
+    const timeoutRef = useRef(null);
+    const [addQuestionData, setAddQuestionData] = useState(null);
     const {
         isLoading: tagIsLoading,
         isError: tagIsError,
-        error : fetchedTagError,
-        data : fetchedTagData,
+        error: fetchedTagError,
+        data: fetchedTagData,
         hasNextPage: tagHasNextPage
     } = useQuestionTagList(pageNum, tagInputValue);
     const intObserver = useRef();
@@ -131,13 +163,17 @@ const AskQuestionFields = () => {
         })
     }
 
-    const handleEditorBlur = (previousSelection, source, editor) => {
-        const delta = editor.getContents();
-        const html = editor.getHTML();
-        setEditorContent({
-            deltaStatic: delta,
-            htmlData: html
-        })
+    const handleEditorBlur = (value, editorDelta, source, editor) => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            const delta = editor.getContents();
+            const html = editor.getHTML();
+            setEditorContent({
+                deltaStatic: delta,
+                htmlData: html,
+                text: editor.getText()
+            })
+        }, 500)
     }
 
     const handleSuggestionClose = () => {
@@ -148,7 +184,101 @@ const AskQuestionFields = () => {
         }
     }
 
-    const handleSubmit = () => {
+    const validatePreQuestionSubmit = (preData) => {
+        if (!preData.title) {
+            dispatchErrorMessage(dispatch, 'Title is mandatory to Post a Question');
+            return false;
+        }
+        if (preData.title) {
+            const titleString = preData.title;
+            if (titleString.length > 200) {
+                dispatchErrorMessage(dispatch, 'Title length should not exceed 200 Characters');
+                return false;
+            }
+            const split = titleString.split(/\s+/);
+            if (split.length > 25) {
+                dispatchErrorMessage(dispatch, 'Title should not contain more than 25 words');
+                return false;
+            }
+        }
+        if (preData.tags && preData.tags.length > 5) {
+            dispatchErrorMessage(dispatch, 'More than 5 tags are not allowed in a single question');
+            return false;
+        }
+        return true;
+    }
+
+    const validateHtmlContent = (htmlContent) => {
+        if (htmlContent.text) {
+            const text = htmlContent.text;
+            const words = text.split(/\s+|\\n/);
+            const filteredWords = words.filter(word => word.trim() !== '');
+            if (filteredWords.length > 400) {
+                dispatchErrorMessage(dispatch, 'Question details cannot contains more than 400 Words');
+                return false;
+            }
+        }
+        if (htmlContent.blobs) {
+            const imageBlobs = htmlContent.blobs;
+            if (htmlContent.blobs.length > 4) {
+                dispatchErrorMessage(dispatch, 'You can only add upto 5 Images in Question Details');
+                return false;
+            }
+            for (let i = 0; i < imageBlobs.length; i++) {
+                const blob = imageBlobs[i];
+                if (blob.size > 800 * 1024) { // Convert KB to bytes
+                    dispatchErrorMessage(dispatch, 'Image size should be less than 800 KB');
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    const handleValidate = () => {
+        setButtonLoader(true);
+        if (editorRef.current) {
+            editorRef.current.blur();
+        }
+        const isValid = validatePreQuestionSubmit({
+            title: titleData,
+            tags: selectedChips
+        });
+        if (!isValid) {
+            setButtonLoader(false);
+            return;
+        } else {
+            const htmlContent = getHtmlContent();
+            let isValid = true
+            if (htmlContent) {
+                isValid = validateHtmlContent(htmlContent);
+            }
+            setButtonLoader(false);
+            if (isValid) {
+                setAddQuestionData({
+                    title: titleData,
+                    tags: selectedChips,
+                    images: htmlContent?.blobs,
+                    detailsHtml: htmlContent?.finalHtml,
+                    detailsText: htmlContent?.text
+                });
+                setSubmitModal(true);
+            } else {
+                editorRef.current.focus();
+                return;
+            }
+        }
+    }
+
+    useEffect(() => {
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+        };
+    }, [timeoutId]);
+
+    const getHtmlContent = () => {
         if (editorContent.htmlData) {
             const delta = editorContent.deltaStatic;
             const html = editorContent.htmlData;
@@ -159,26 +289,31 @@ const AskQuestionFields = () => {
                     if (op.insert && op.insert.image) {
                         const imageTag = op.insert.image;
                         const [, contentType, base64Data] = imageTag.match(/^data:(.*?);base64,(.*)$/);
-                        const blob = base64ToBlob(imageTag, contentType);
-                        blobs.push(blob);
+                        const splitElement = contentType.split('/')[1];
+                        if (!splitElement) {
+                            dispatchErrorMessage('One of the Uploaded Image not Corrupted or not Valid');
+                            return;
+                        }
+                        blobs.push(Base64URItoMultipartFile(imageTag, `random.${splitElement}`));
                         imageTags.push(imageTag);
                     }
                 });
             }
             let finalHtml = html;
-            imageTags.map((tag, index)=> {
+            imageTags.map((tag, index) => {
                 finalHtml = finalHtml.replaceAll(tag, `bloggios-question-image-index${index}`);
             });
-            console.log(finalHtml);
-            console.log(blobs);
-        } else {
-            dispatchErrorMessage(dispatch, 'Please add data in Details');
+            return {
+                finalHtml: finalHtml,
+                blobs: blobs,
+                text: editorContent.text
+            }
         }
     }
 
-    const tagListData = useCallback(()=> {
+    const tagListData = useCallback(() => {
         if (fetchedTagData.length > 0) {
-            return fetchedTagData.map((tag, i)=> {
+            return fetchedTagData.map((tag, i) => {
                 if (!tagIsError && fetchedTagData.length === i + 1) {
                     return (
                         <QuestionTag
@@ -186,7 +321,7 @@ const AskQuestionFields = () => {
                             tag={tag.tag}
                             category={tag.category}
                             key={i + tag.category}
-                            onClick={()=> handleChipClick(tag.tag)}
+                            onClick={() => handleChipClick(tag.tag)}
                         />
                     )
                 }
@@ -195,7 +330,7 @@ const AskQuestionFields = () => {
                         tag={tag.tag}
                         category={tag.category}
                         key={i + tag.category}
-                        onClick={()=> handleChipClick(tag.tag)}
+                        onClick={() => handleChipClick(tag.tag)}
                     />
                 )
             })
@@ -214,8 +349,8 @@ const AskQuestionFields = () => {
                     </div>
                     <NotFoundMessage>
                         {tagInputValue.length <= 3
-                        ? 'Minimum 3 Characters Required'
-                        : 'Not Data Found'}
+                            ? 'Minimum 3 Characters Required'
+                            : 'Not Data Found'}
                     </NotFoundMessage>
                 </NotResultFoundWrapper>
             )
@@ -223,90 +358,104 @@ const AskQuestionFields = () => {
     }, [tagIsLoading, fetchedTagData, lastTagRef, tagIsError, tagInputValue.length])
 
     return (
-        <ColumnWrapper style={{
-            gap: '20px'
-        }}>
-            <Fields
-                style={{border: isTitleFocused ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)'}}
-                onClick={() => titleRef.current.focus()}
-            >
-                <Typography
-                    text={'Title'}
-                    type={'custom'}
-                    size={'18px'}
-                    color={'rgba(255, 255, 255, 0.7)'}
-                    spacing={'1px'}
-                    weight={500}
-                />
-                <TitleInput
-                    ref={titleRef}
-                    type={'text'}
-                    placeholder={'Eg: How to use two databases in Spring Boot'}
-                />
-            </Fields>
-
-            <Fields>
-                <Typography
-                    text={'Question Details'}
-                    type={'custom'}
-                    size={'18px'}
-                    color={'rgba(255, 255, 255, 0.7)'}
-                    spacing={'1px'}
-                    weight={500}
-                />
-                <ReactQuill
-                    ref={editorRef}
-                    theme="snow"
-                    modules={modules}
-                    placeholder={'Please add some details for your question'}
-                    onBlur={handleEditorBlur}
-                />
-            </Fields>
-
-            <Fields>
-                <Typography
-                    text={'Tags'}
-                    type={'custom'}
-                    size={'18px'}
-                    color={'rgba(255, 255, 255, 0.7)'}
-                    spacing={'1px'}
-                    weight={500}
-                />
-
-                <TagInput>
-                    {selectedChips.map((selectedTag, index) => (
-                        <Tag key={index}>
-                            {selectedTag}
-                            <IoClose onClick={() => handleChipRemove(selectedTag)}/>
-                        </Tag>
-                    ))}
-                    <TagFieldInput
-                        type="text"
-                        value={tagInputValue}
-                        onChange={(event)=> setTagInputValue(event.target.value)}
-                        onKeyDown={handleInputKeyDown}
-                        placeholder={selectedChips.length === 0 && "Type to search tags"}
-                        maxLength={5}
-                        ref={tagRef}
-                        readOnly={selectedChips.length > 4}
+        <>
+            <ColumnWrapper style={{
+                gap: '20px'
+            }}>
+                <Fields
+                    style={{border: isTitleFocused ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)'}}
+                    onClick={() => titleRef.current.focus()}
+                >
+                    <Typography
+                        text={'Title'}
+                        type={'custom'}
+                        size={'18px'}
+                        color={'rgba(255, 255, 255, 0.7)'}
+                        spacing={'1px'}
+                        weight={500}
                     />
-                    {isSuggestion && (
-                        <SuggestionsContainer>
-                            <SuggestionHeader>
-                                Fetched Tags
-                                <IconButton onClick={handleSuggestionClose}>
-                                    <CgClose />
-                                </IconButton>
-                            </SuggestionHeader>
-                            {tagListData()}
-                            {tagIsLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={2} />}
-                        </SuggestionsContainer>
-                    )}
-                </TagInput>
-            </Fields>
+                    <TitleInput
+                        ref={titleRef}
+                        type={'text'}
+                        placeholder={'Eg: How to use two databases in Spring Boot'}
+                        value={titleData}
+                        onChange={(e) => setTitleData(e.target.value)}
+                    />
+                </Fields>
 
-            <button onClick={handleSubmit}>Submit</button>
-        </ColumnWrapper>
+                <Fields
+                    style={{
+                        height: 'auto'
+                    }}
+                >
+                    <Typography
+                        text={'Question Details'}
+                        type={'custom'}
+                        size={'18px'}
+                        color={'rgba(255, 255, 255, 0.7)'}
+                        spacing={'1px'}
+                        weight={500}
+                    />
+                    <ReactQuill
+                        ref={editorRef}
+                        theme="snow"
+                        modules={modules}
+                        placeholder={'Please add some details for your question'}
+                        onChange={handleEditorBlur}
+                    />
+                </Fields>
+
+                <Fields>
+                    <Typography
+                        text={'Tags'}
+                        type={'custom'}
+                        size={'18px'}
+                        color={'rgba(255, 255, 255, 0.7)'}
+                        spacing={'1px'}
+                        weight={500}
+                    />
+
+                    <TagInput>
+                        {selectedChips.map((selectedTag, index) => (
+                            <Tag key={index}>
+                                {selectedTag}
+                                <IoClose onClick={() => handleChipRemove(selectedTag)}/>
+                            </Tag>
+                        ))}
+                        <TagFieldInput
+                            type="text"
+                            value={tagInputValue}
+                            onChange={(event) => setTagInputValue(event.target.value)}
+                            onKeyDown={handleInputKeyDown}
+                            placeholder={selectedChips.length === 0 && "Type to search tags"}
+                            maxLength={5}
+                            ref={tagRef}
+                            readOnly={selectedChips.length > 4}
+                        />
+                        {isSuggestion && (
+                            <SuggestionsContainer>
+                                <SuggestionHeader>
+                                    Fetched Tags
+                                    <IconButton onClick={handleSuggestionClose}>
+                                        <CgClose/>
+                                    </IconButton>
+                                </SuggestionHeader>
+                                {tagListData()}
+                                {tagIsLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={2}/>}
+                            </SuggestionsContainer>
+                        )}
+                    </TagInput>
+                </Fields>
+
+                <button onClick={handleValidate}>Submit</button>
+            </ColumnWrapper>
+
+            <QuestionSubmitModal
+                isModelOpen={submitModal}
+                onClose={()=> setSubmitModal(false)}
+                data={addQuestionData}
+            />
+        </>
     );
 };
 
@@ -377,7 +526,7 @@ const TagFieldInput = styled.input`
     background: transparent;
     min-width: 28px;
     font-size: clamp(0.75rem, 0.6296rem + 0.7407vw, 1rem);
-    
+
     &::placeholder {
         color: rgba(255, 255, 255, 0.5);
     }
@@ -403,6 +552,7 @@ const SuggestionsContainer = styled.div`
         height: 5px;
         width: 5px;
     }
+
     &::-webkit-scrollbar-track {
         border-radius: 5px;
         background-color: #555555;
@@ -450,7 +600,7 @@ const NotFoundMessage = styled.span`
     overflow: hidden;
     text-overflow: ellipsis;
     color: rgba(255, 255, 255, 0.6);
-    
+
     @media (max-width: 350px) {
         font-size: 16px;
     }
@@ -463,7 +613,7 @@ const SuggestionHeader = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
-    
+
     & span {
         font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
         font-family: 'Poppins', sans-serif;

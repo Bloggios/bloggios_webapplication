@@ -24,7 +24,7 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {getUserProfile} from "../../restservices/profileApi";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
-import {getFormattedDate} from "../../service/commonFunctions";
+import {getFormattedDate} from "../../service/DateFunctions";
 import {useDispatch, useSelector} from "react-redux";
 import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
 import {deleteComment} from "../../restservices/commentApi";

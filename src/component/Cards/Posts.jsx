@@ -36,12 +36,13 @@ import {useNavigate} from "react-router-dom";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {getLikeCommentCount} from "../../restservices/postApi";
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {getFormattedDate} from "../../service/commonFunctions";
+import {getFormattedDate} from "../../service/DateFunctions";
 import {handlePostDelete} from "../../service/postApiFunctions";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 import {addPostLike, removePostLike} from "../../restservices/likeApi";
 import {dispatchError} from "../../service/functions";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {colors} from "../../styles/Theme";
 
 const CommentModel = lazy(() => import("../modal/CommentModel"));
 
@@ -368,7 +369,7 @@ const Wrapper = styled.div`
     max-width: 200px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
-    background-color: #272727;
+    background-color: ${colors.black200};
     border-radius: 20px;
     padding: 20px;
     overflow: hidden; /* Hide any potential overflow */
@@ -436,7 +437,7 @@ const TimeSpan = styled.span`
 const OptionsMenu = styled.button`
     height: 34px;
     width: 34px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: ${colors.black150};
     border-radius: 7px;
     display: flex;
     align-items: center;
@@ -448,14 +449,9 @@ const OptionsMenu = styled.button`
     position: relative;
     transition: background 150ms ease;
 
-    &:hover {
+    &:hover, &:active {
         color: rgba(255, 255, 255, 0.8);
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    &:active {
-        color: rgba(255, 255, 255, 0.6);
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: ${colors.black150};
     }
 `;
 

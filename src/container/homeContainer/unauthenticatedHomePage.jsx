@@ -29,6 +29,7 @@ const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections
 const BloggiosTechIntroductionSection = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSection'));
 const BloggiosTechIntroductionSectionSummary = lazy(()=> import('../../component/sections/BloggiosTechIntroductionSectionSummary'));
 const BloggiosTechWhyUsSection = lazy(()=> import('../../component/sections/BloggiosTechWhyUsSection'));
+const BloggiosTechEnquiry = lazy(()=> import('../../component/sections/BloggiosTechEnquiry'));
 
 const UnauthenticatedHomePage = () => {
 
@@ -54,6 +55,10 @@ const UnauthenticatedHomePage = () => {
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
                     <BloggiosTechWhyUsSection />
+                </Suspense>
+
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
+                    <BloggiosTechEnquiry />
                 </Suspense>
             </Wrapper>
         </BloggiosBase>

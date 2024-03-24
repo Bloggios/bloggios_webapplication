@@ -47,6 +47,7 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import bloggios_logo from "../../asset/svg/bg_logo_black.svg";
 import {setIsCreated} from "../../state/isCreatedSlice";
 import {handleDivScroll} from "../../service/commonFunctions";
+import {colors} from "../../styles/Theme";
 
 const CreatePost = ({
                         image
@@ -365,7 +366,7 @@ const Wrapper = styled.div`
     max-width: 400px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
-    background-color: #272727;
+    background-color: ${colors.black200};
     border-radius: 20px;
     padding: 20px;
     overflow: hidden; /* Hide any potential overflow */
@@ -425,8 +426,8 @@ const PostButtonWrapper = styled.div`
 const PostButton = styled.button`
     height: 34px;
     width: 140px;
-    background-color: #4258ff;
-    color: #e5e5e5;
+    background-color: ${colors.accent100};
+    color: ${colors.white100};
     font-family: 'Inter', sans-serif;
     display: flex;
     align-items: center;
@@ -439,8 +440,8 @@ const PostButton = styled.button`
     cursor: pointer;
 
     &:hover {
-        background-color: #f5f5f5;
-        color: #4258ff;
+        background-color: ${colors.white100};
+        color: ${colors.accent100};
     }
 
     &:active {
@@ -452,7 +453,7 @@ const SuggestionMainDiv = styled.div`
     height: 35px;
     max-width: 100%; /* Added max-width to prevent width increase */
     padding: 5px;
-    background-color: rgba(0, 0, 0, 1);
+    background-color: ${colors.black100};
     margin-top: 25px;
     border-radius: 20px;
     display: flex;
@@ -490,20 +491,17 @@ const SuggestionChipButton = styled.button`
     border-radius: 20px;
     border: none;
     outline: none;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
     flex-direction: row;
-    background-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.6);
+    background-color: ${colors.accent80};
+    color: ${colors.white80};
     cursor: pointer;
     display: inline-block;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.4);
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    &:active {
-        background-color: rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.7);
+    &:hover, &:active {
+        background-color: ${colors.accent100};
+        color: ${colors.white100};
     }
 `;
 
@@ -517,18 +515,13 @@ const ScrollButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.6);
+    background-color: ${colors.accent80};
+    color: ${colors.white80};
     cursor: pointer;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.4);
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    &:active {
-        background-color: rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.7);
+    &:hover, &:active {
+        background-color: ${colors.accent100};
+        color: ${colors.white100};
     }
 `;
 

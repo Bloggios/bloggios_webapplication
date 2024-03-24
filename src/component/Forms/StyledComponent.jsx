@@ -18,13 +18,40 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const handleDivScroll = (direction, id) => {
-    const scrollContainer = document.getElementById(id ? id : 'suggestionWrapper');
-    const scrollAmount = 150;
+import styled, {css} from "styled-components";
 
-    if (direction === 'left') {
-        scrollContainer.scrollLeft -= scrollAmount;
-    } else if (direction === 'right') {
-        scrollContainer.scrollLeft += scrollAmount;
+export const Field = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    margin-top: 20px;
+`;
+
+export const FieldStyle = css`
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 300;
+`;
+
+export const Label = styled.label`
+    ${FieldStyle};
+    color: rgba(245, 245, 245, 0.8);
+`;
+
+export const Input = styled.input`
+    ${FieldStyle};
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    color: rgba(245, 245, 245, 0.8);
+    border-radius: 4px;
+    box-shadow: inset rgba(245, 245, 245, 0.1) 0 0 16px -6px;
+
+    &:focus {
+        color: rgba(245, 245, 245, 1);
     }
-};
+`;

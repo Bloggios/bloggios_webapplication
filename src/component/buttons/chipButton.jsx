@@ -25,20 +25,21 @@ import React from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Typography from "../typography/typography";
+import {colors} from "../../styles/Theme";
 
 const ChipButton = ({
                         height,
                         width,
                         borderRadius = '25px',
-                        backgroundColor = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
-                        color = 'rgba(255, 255, 255, 0.5)',
+                        backgroundColor = colors.black70,
+                        color = colors.white80,
                         icon,
                         text,
                         onClick,
-                        hoveredBg = 'linear-gradient(225deg, #1a1a1a, #171515)',
-                        activeBg = 'linear-gradient(225deg, #0c0c0c, #0a0a0a)',
-                        hoveredColor = 'rgba(255, 255, 255, 0.8)',
-                        activeColor = 'rgba(255, 255, 255, 0.6)',
+                        hoveredBg = colors.black100,
+                        activeBg = colors.black100,
+                        hoveredColor = colors.white100,
+                        activeColor = colors.white100,
                         cursor = 'pointer',
                         children,
                         margin

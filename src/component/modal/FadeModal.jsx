@@ -64,7 +64,8 @@ const FadeModal = ({
                        borderRadius,
                        bgColor,
                        border,
-                       ref
+                       ref,
+                       gap
                    }) => {
     const handleClose = () => {
         onClose();
@@ -97,7 +98,8 @@ const FadeModal = ({
                 backgroundColor: bgColor,
                 border: border,
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                gap: gap
             }} isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
                 {children}
             </ModalContent>
