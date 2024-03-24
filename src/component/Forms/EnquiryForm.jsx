@@ -42,10 +42,6 @@ const EnquiryForm = () => {
         }));
     }
 
-    useEffect(()=> {
-        console.log(data);
-    }, [data])
-
     return (
         <Wrapper>
             <Field>

@@ -492,8 +492,8 @@ export const mainStreamServiceBloggiosTech = [
     {
         id: 2,
         icon: scalability,
-        label: 'Concept Development',
-        path: '/services/tech-experts',
+        label: 'Concept Creation',
+        path: '/services/concept-creation',
         text: 'Leverage research to inform a comprehensive product development roadmap.'
     },
     {

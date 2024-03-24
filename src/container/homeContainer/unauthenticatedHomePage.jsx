@@ -23,8 +23,8 @@ import styled from "styled-components";
 import BloggiosBase from "../boundries/bloggiosBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
-import BloggiosTechServicesSection from "../../component/sections/BloggiosTechServicesSection";
 import Sizedbox from "../../component/spacers/sizedbox";
+import UnAuthBloggiosBase from "../boundries/UnAuthBloggiosBase";
 
 const MemoizedHomeHeader = lazy(()=> import('../../component/sections/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections/HomeTransitionSection'));
@@ -38,7 +38,7 @@ const UnauthenticatedHomePage = () => {
 
     useSeo('homePage')
     return (
-        <BloggiosBase>
+        <UnAuthBloggiosBase>
             <Wrapper>
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'700px'} />}>
                     <MemoizedHomeHeader />
@@ -61,7 +61,7 @@ const UnauthenticatedHomePage = () => {
                 </Suspense>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'100vh'} />}>
-                    <BloggiosTechServicesSection />
+                    <MemoizedBloggiosTechServicesSection />
                 </Suspense>
 
                 <Sizedbox spacing={'100px'} direction={'vertical'} />
@@ -70,7 +70,7 @@ const UnauthenticatedHomePage = () => {
                     <BloggiosTechEnquiry />
                 </Suspense>
             </Wrapper>
-        </BloggiosBase>
+        </UnAuthBloggiosBase>
     );
 };
 
