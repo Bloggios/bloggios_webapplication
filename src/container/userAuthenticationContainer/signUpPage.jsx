@@ -21,14 +21,28 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 import useSeo from "../../globalseo/useSeo";
 import AuthBase from "../boundries/AuthBase";
 import SignUpComponent from "../../component/authentication/SignUpComponent";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {HOME_PAGE} from "../../constant/pathConstants";
 
 const SignUpPage = () => {
 
     useSeo('signup');
+
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
+
+    useLayoutEffect(()=> {
+        if (isAuthenticated) {
+            navigate(HOME_PAGE, {
+                replace: true
+            })
+        }
+    }, []);
 
     return (
         <AuthBase

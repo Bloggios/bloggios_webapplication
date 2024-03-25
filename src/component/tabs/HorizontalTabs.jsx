@@ -19,7 +19,7 @@
  */
 
 import styled from "styled-components";
-import {FaAngleLeft, FaAngleRight, FaChevronLeft, FaChevronRight} from "react-icons/fa";
+import {FaChevronLeft, FaChevronRight} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import useWindowDimensions from "../../hooks/useWindowDimensions";

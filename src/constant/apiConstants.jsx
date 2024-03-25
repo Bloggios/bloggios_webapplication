@@ -52,3 +52,4 @@ export const POST_COMMENT_LIST = '/post-provider/v1.0/comment/post-comment';
 export const PROFILE_TAGS_LIST = '/user-provider/v1.0/profile/tags-list';
 export const FETCH_QUESTION_TAGS = '/question-provider/v1.0/tags/tag-search';
 export const ADD_QUESTION = '/question-provider/v1.0/question';
+export const SEARCH_USER_PROFILE_LIST = '/user-provider/v1.0/profile/profile-search';

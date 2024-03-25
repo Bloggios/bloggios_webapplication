@@ -18,14 +18,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import styled, {css} from "styled-components";
 import {colors} from "../../styles/Theme";
 import contactInformation from '../../asset/configurations/static/ContactInformation.json';
 import {FaGlobe, FaPhoneAlt} from "react-icons/fa";
 import {IoMdMail} from "react-icons/io";
 import SocialLinks from "../animations/SocialLinks";
-import EnquiryForm from "../Forms/EnquiryForm";
+import FallbackLoader from "../loaders/fallbackLoader";
+
+const EnquiryForm = lazy(()=> import("../Forms/EnquiryForm"));
 
 const BloggiosTechEnquiry = () => {
 
@@ -68,11 +70,9 @@ const BloggiosTechEnquiry = () => {
             </Column>
 
             <Column className={'enquiry-form__section'}>
-                {/*<Suspense fallback={<FallbackLoader height={'100%'} width={'100%'}/>}>*/}
-                {/*    */}
-                {/*</Suspense>*/}
-
-                <EnquiryForm />
+                <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'}/>}>
+                    <EnquiryForm />
+                </Suspense>
             </Column>
         </Wrapper>
     );

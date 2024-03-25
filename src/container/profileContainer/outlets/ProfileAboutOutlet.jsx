@@ -21,9 +21,7 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
-import {Tooltip} from "react-tooltip";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import PersonalDetailsWrapper from "../../../component/wrappers/PersonalDetailsWrapper";
 import {useQuery} from "@tanstack/react-query";
 import {detailedProfile} from "../../../restservices/profileApi";
 

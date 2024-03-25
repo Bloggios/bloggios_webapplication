@@ -18,10 +18,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, { lazy, Suspense } from "react";
+import React, {lazy, Suspense} from "react";
 import styled from "styled-components";
 import FallbackLoader from "../loaders/fallbackLoader";
-import { colors } from "../../styles/Theme";
+import {colors} from "../../styles/Theme";
 
 const NewsletterSection = lazy(() =>
   import("../miscellaneous/NewsletterSection")

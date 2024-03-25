@@ -49,7 +49,9 @@ const LoginComponent = () => {
 
     useLayoutEffect(()=> {
         if (isAuthenticated) {
-            navigate(HOME_PAGE);
+            navigate(HOME_PAGE, {
+                replace: true
+            });
         }
     }, [])
 

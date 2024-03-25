@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { bgBlackRounded } from "../../asset/svg";
-import { colors } from "../../styles/Theme";
+import {bgBlackRounded} from "../../asset/svg";
+import {colors} from "../../styles/Theme";
 import FooterConfiguration from "../../asset/configurations/static/FooterConfiguration.json";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const FooterSections = () => {
   const navigate = useNavigate();

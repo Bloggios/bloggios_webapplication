@@ -22,7 +22,6 @@ import React from 'react';
 import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
 import {BiHomeAlt2} from "react-icons/bi";
 import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {CgProfile} from "react-icons/cg";
 import {MdOutlineSecurity} from "react-icons/md";
 import {IoIosSettings} from "react-icons/io";
 import styled from "styled-components";
@@ -30,6 +29,8 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {ACTIVITY_PATH_MATCHER} from "../../../constant/ServiceConstants";
+import {BsChatDots} from "react-icons/bs";
+import {IoNotificationsOutline} from "react-icons/io5";
 
 const SidebarTiles = () => {
 
@@ -64,7 +65,7 @@ const SidebarTiles = () => {
                 active={window.location.pathname.includes(CHATS_PAGE)}
                 onClick={() => navigate(CHATS_PAGE)}
             >
-                <CgProfile/>
+                <BsChatDots />
                 <TileSpan>Chats</TileSpan>
             </Tile>
 
@@ -72,7 +73,7 @@ const SidebarTiles = () => {
                 active={window.location.pathname === NOTIFICATIONS_PAGE}
                 onClick={() => navigate(NOTIFICATIONS_PAGE)}
             >
-                <FaUserAlt/>
+                <IoNotificationsOutline />
                 <TileSpan>Notifications</TileSpan>
             </Tile>
 

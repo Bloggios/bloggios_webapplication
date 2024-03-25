@@ -11,54 +11,25 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *      
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *      
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import {colors} from "../../styles/Theme";
-import FallbackLoader from "../loaders/fallbackLoader";
-import {Outlet} from "react-router-dom";
+import React from 'react';
+import {useParams} from "react-router-dom";
 
-const MessagingUserList = lazy(()=> import('./NestedComponents/MessagingUserList'));
+const ChatUserOutlet = () => {
 
-const MessagingComponent = () => {
+    const {userId} = useParams();
 
     return (
-        <Wrapper>
-
-            <Suspense fallback={<FallbackLoader width={'32%'} height={'100%'} />}>
-                <MessagingUserList />
-            </Suspense>
-
-            <MessageContainer>
-                <Outlet />
-            </MessageContainer>
-        </Wrapper>
+        <div>
+            {userId}
+        </div>
     );
 };
 
-const Wrapper = styled.div`
-    width: 100%;
-    
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-`;
-
-const MessageContainer = styled.div`
-    width: 68%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: ${colors.black150};
-    border-radius: 20px;
-    padding: 20px;
-`;
-
-export default MessagingComponent;
+export default ChatUserOutlet;

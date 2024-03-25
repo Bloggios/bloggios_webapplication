@@ -26,7 +26,8 @@ import {
     GET_USER_PROFILE,
     PROFILE_LIST,
     PROFILE_SUGGESTIONS,
-    PROFILE_TAGS_LIST
+    PROFILE_TAGS_LIST,
+    SEARCH_USER_PROFILE_LIST
 } from "../constant/apiConstants";
 
 export const getProfile = () => {
@@ -62,4 +63,13 @@ export const detailedProfile = (userId) => {
 export const profileTagsList = () => {
     return authenticatedAxios.get(PROFILE_TAGS_LIST)
         .then((response)=> response);
+}
+
+export const searchProfileData = (text) => {
+    return authenticatedAxios.get(SEARCH_USER_PROFILE_LIST, {
+        params: {
+            "text": text,
+            "size": 20
+        }
+    }).then((response)=> response);
 }

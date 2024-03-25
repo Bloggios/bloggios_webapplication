@@ -22,7 +22,8 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE, CHATS_PAGE,
+    ASK_QUESTION_OUTLET_PAGE,
+    CHATS_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
@@ -41,6 +42,7 @@ import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
+import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -59,6 +61,7 @@ const ProfilePostOutlet = lazy(()=> import('../container/profileContainer/outlet
 const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionOutlet'));
 const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
 const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
+const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/ChatDefaultOutlet'));
 
 const Router = () => {
 
@@ -73,7 +76,6 @@ const Router = () => {
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
-                    <Route path={CHATS_PAGE} element={<ChatPage />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
@@ -88,6 +90,10 @@ const Router = () => {
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />
                             <Route path={POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
+                        </Route>
+                        <Route path={CHATS_PAGE} element={<ChatPage />} >
+                            <Route index element={<ChatDefaultOutlet />} />
+                            <Route path={':userId'} element={<ChatUserOutlet />} />
                         </Route>
                     </Route>
                 </Routes>

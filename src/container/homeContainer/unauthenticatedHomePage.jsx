@@ -20,7 +20,6 @@
 
 import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import Sizedbox from "../../component/spacers/sizedbox";

@@ -25,7 +25,6 @@ import useComponentSize from "../../hooks/useComponentSize";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import ProfileSuggestions from "../../component/Cards/ProfileSuggestions";
 import {colors} from "../../styles/Theme";
-import BgTransition from "../../component/animations/BgTransition";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import MessagingComponent from "../../component/Messaging/MessagingComponent";
 
@@ -38,15 +37,9 @@ const ChatPage = () => {
         <BloggiosSidebarBase>
             <Wrapper>
                 <LeftSection ref={sectionRef}>
-                    <ChatWrapper>
-                        <BgTransition component={'h2'}>
-                            Bloggios Messaging
-                        </BgTransition>
-
-                        <Suspense fallback={<FallbackLoader width={sectionSize.width} height={'500px'} />}>
-                            <MessagingComponent />
-                        </Suspense>
-                    </ChatWrapper>
+                    <Suspense fallback={<FallbackLoader width={sectionSize.width} height={'400px'}/>}>
+                        <MessagingComponent/>
+                    </Suspense>
                 </LeftSection>
                 <RightSection>
                     {width > 1050 && <ProfileSuggestions/>}
@@ -58,7 +51,7 @@ const ChatPage = () => {
 
 const Wrapper = styled.div`
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
     flex-direction: row;
     padding: 20px 20px 20px 10px;
@@ -75,6 +68,12 @@ const LeftSection = styled.div`
     flex-direction: column;
     position: relative;
     gap: 25px;
+    height: calc(100vh - 40px);
+    border-radius: 20px;
+    overflow: hidden;
+    user-select: none;
+    background-color: ${colors.black400};
+    padding: 20px;
 `;
 
 const RightSection = styled.div`
@@ -88,24 +87,12 @@ const RightSection = styled.div`
     }
 `;
 
-const ChatWrapper = styled.div`
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    user-select: none;
-    background-color: ${colors.black400};
-    padding: 20px;
-    
-    & h2 {
-        font-size: clamp(1rem, 0.5851rem + 2.5532vw, 2.5rem);
-        font-family: 'Poppins', sans-serif;
-        letter-spacing: 1px;
-        font-weight: 500;
-        color: ${colors.white80};
-    }
+const Header = styled.h2`
+    font-size: clamp(1rem, 0.5851rem + 2.5532vw, 2.5rem);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: ${colors.white80};
 `;
 
 export default ChatPage;

@@ -155,14 +155,6 @@ const AskQuestionFields = () => {
         }
     }), [])
 
-    const base64ToBlob = (base64Data, contentType) => {
-        const parts = base64Data.split(',');
-        const byteString = atob(parts[1]);
-        return new Blob([byteString], {
-            type: contentType
-        })
-    }
-
     const handleEditorBlur = (value, editorDelta, source, editor) => {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
