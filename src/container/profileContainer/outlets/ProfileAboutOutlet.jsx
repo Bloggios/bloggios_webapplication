@@ -55,14 +55,6 @@ const ProfileAboutOutlet = () => {
 
     return (
         <Wrapper>
-
-            {/* Personal Details */}
-            <PersonalDetailsWrapper
-                name={profileData.name}
-                email={profileData.email}
-            />
-
-            {width > 600 && <Tooltip id="edit-button"/>}
         </Wrapper>
     );
 };

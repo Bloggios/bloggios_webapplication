@@ -59,18 +59,7 @@ const ImageUploadModal = ({isModalOpen, closeModal}) => {
                         setTimeout(() => {
                             getProfile().then((response) => {
                                 const { data } = response;
-                                const profileData = {
-                                    name: data.name,
-                                    isAdded: true,
-                                    profileImageUrl: null,
-                                    bio: data.bio,
-                                    email: data.email,
-                                    profileImage: data.profileImage,
-                                    coverImage: data.coverImage,
-                                    followers: data.followers,
-                                    following: data.following
-                                };
-                                dispatch(setProfile(profileData));
+                                dispatch(setProfile(data));
                             });
                         }, 1600);
                     })

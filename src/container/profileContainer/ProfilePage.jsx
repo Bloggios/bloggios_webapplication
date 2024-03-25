@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect} from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import {Outlet, useParams} from "react-router-dom";
 import styled from "styled-components";
@@ -45,9 +45,17 @@ const ProfilePage = () => {
     const {width} = useWindowDimensions();
 
     const fetchProfileData = async () => {
-        const response = await detailedProfile(id);
-        return response.data;
+        if (id === authUserId) {
+            return profileSelector;
+        } else {
+            const response = await detailedProfile(id);
+            return response.data;
+        }
     };
+
+    useEffect(() => {
+        console.log(profileSelector)
+    }, []);
 
     const {
         isLoading,
@@ -68,15 +76,37 @@ const ProfilePage = () => {
             return (
                 <>
                     <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
-                        <ProfileHeader
-                            name={profileData.name}
-                            email={profileData.email}
-                            profileImage={profileData.profileImage}
-                            coverImage={profileData.coverImage}
-                            bio={profileData.bio}
-                            id={id}
-                            follower={profileData.followers}
-                        />
+                        {id === authUserId ? (
+                            <ProfileHeader
+                                name={profileSelector.name}
+                                email={profileSelector.email}
+                                profileImage={profileSelector.profileImage}
+                                coverImage={profileSelector.coverImage}
+                                bio={profileSelector.bio}
+                                id={id}
+                                follower={profileSelector.followers}
+                                following={profileSelector.following}
+                                profileTag={profileSelector.profileTag}
+                                isBadge={profileSelector.isBadge}
+                                profileBadges={profileSelector.profileBadges}
+                                link={profileSelector.link}
+                            />
+                        ) : (
+                            <ProfileHeader
+                                name={profileData.name}
+                                email={profileData.email}
+                                profileImage={profileData.profileImage}
+                                coverImage={profileData.coverImage}
+                                bio={profileData.bio}
+                                id={id}
+                                follower={profileData.followers}
+                                following={profileData.following}
+                                profileTag={profileData.profileTag}
+                                isBadge={profileData.isBadge}
+                                profileBadges={profileData.profileBadges}
+                                link={profileData.link}
+                            />
+                        )}
                     </Suspense>
 
                     <ProfileContent>
@@ -91,7 +121,7 @@ const ProfilePage = () => {
                 </>
             )
         }
-    }, [isLoading, isSuccess, profileData, id])
+    }, [isLoading, isSuccess, profileData, id, profileSelector])
 
     const getPageContent = useCallback(() => {
         if (uuidValidator(id)) {

@@ -14,18 +14,23 @@ import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const ProfileHeader = ({
-    name,
-    email,
-    bio,
-    profileImage,
-    coverImage,
-    id,
-    follower
-}) => {
+                           name,
+                           email,
+                           bio,
+                           profileImage,
+                           coverImage,
+                           id,
+                           follower,
+                           following,
+                           profileTag,
+                           isBadge,
+                           profileBadges,
+                           link
+                       }) => {
 
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();
-    const { userId } = useSelector((state) => state.auth);
+    const {userId} = useSelector((state) => state.auth);
     const [isCoverImage, setIsCoverImage] = useState(false);
     const [fetchFollowing, setFetchFollowing] = useState({
         isFollowing: false,
@@ -34,17 +39,17 @@ const ProfileHeader = ({
 
     useEffect(() => {
         checkFollowing(id)
-            .then((response)=> {
+            .then((response) => {
                 setFetchFollowing({
                     isFollowing: response.data.isFollowing,
                     isChecking: false
                 })
-            }).catch((error)=> {
-                setFetchFollowing({
-                    isFollowing: false,
-                    isChecking: false
-                })
+            }).catch((error) => {
+            setFetchFollowing({
+                isFollowing: false,
+                isChecking: false
             })
+        })
     }, [id]);
 
     const handleImageUpload = (e, type) => {
@@ -100,113 +105,113 @@ const ProfileHeader = ({
     );
 
     return (
-            <Wrapper>
-                <CoverImage>
-                    <CoverImageTag
-                        src={coverImage ? coverImage : header_image}
-                        style={{
-                            filter: isCoverImage ? 'blur(4px)' : 'blur(0)'
-                        }}
-                        alt="Bloggios"
-                    />
-                    {id === userId && (
-                        isCoverImage ? (
-                                <ButtonGroupWrapper>
-                                    <EditImage>
-                                        Edit Image
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            id="image-input"
-                                            style={{display: 'none'}}
-                                            onChange={(e) => handleImageUpload(e, 'cover')}
-                                        />
-                                    </EditImage>
+        <Wrapper>
+            <CoverImage>
+                <CoverImageTag
+                    src={coverImage ? coverImage : header_image}
+                    style={{
+                        filter: isCoverImage ? 'blur(4px)' : 'blur(0)'
+                    }}
+                    alt="Bloggios"
+                />
+                {id === userId && (
+                    isCoverImage ? (
+                        <ButtonGroupWrapper>
+                            <EditImage>
+                                Edit Image
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="image-input"
+                                    style={{display: 'none'}}
+                                    onChange={(e) => handleImageUpload(e, 'cover')}
+                                />
+                            </EditImage>
 
-                                    <RemoveImage>
-                                        Remove Image
-                                    </RemoveImage>
+                            <RemoveImage>
+                                Remove Image
+                            </RemoveImage>
 
-                                    <CancelButton onClick={() => setIsCoverImage(false)}>
-                                        <CgClose />
-                                    </CancelButton>
-                                </ButtonGroupWrapper>
-                            ) : (
-                                <ChangeCoverImageButton onClick={()=> setIsCoverImage(true)}>
-                                    <MdOutlinePhotoCameraFront fontSize={width > 400 ? '16px' : '12px'} />
-                                    Edit Cover Image
-                                </ChangeCoverImageButton>
-                            )
-                    )}
+                            <CancelButton onClick={() => setIsCoverImage(false)}>
+                                <CgClose/>
+                            </CancelButton>
+                        </ButtonGroupWrapper>
+                    ) : (
+                        <ChangeCoverImageButton onClick={() => setIsCoverImage(true)}>
+                            <MdOutlinePhotoCameraFront fontSize={width > 400 ? '16px' : '12px'}/>
+                            Edit Cover Image
+                        </ChangeCoverImageButton>
+                    )
+                )}
 
-                        <Avatar
-                            image={profileImage ? profileImage : bloggios_logo}
-                            alt={name}
-                            size={width > 700 ? '140px' : width > 500 ? '120px' : '80px'}
-                            position={'absolute'}
-                            top={'100%'}
-                            translate={width > 500 ? 'translate(20px, -50%)' : 'translate(6px, -45%)'}
-                            borderRadius={'50%'}
-                            border={width > 500 ? '4px solid #0c0c0c' : '2px solid #0c0c0c'}
+                <Avatar
+                    image={profileImage ? profileImage : bloggios_logo}
+                    alt={name}
+                    size={width > 700 ? '140px' : width > 500 ? '120px' : '80px'}
+                    position={'absolute'}
+                    top={'100%'}
+                    translate={width > 500 ? 'translate(20px, -50%)' : 'translate(6px, -45%)'}
+                    borderRadius={'50%'}
+                    border={width > 500 ? '4px solid #0c0c0c' : '2px solid #0c0c0c'}
+                />
+
+                {id === userId && (
+                    <ProfileImageChangeButton>
+                        <MdOutlinePhotoCameraFront/>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="image-input"
+                            style={{display: 'none'}}
+                            onChange={(e) => handleImageUpload(e, 'profile')}
                         />
+                    </ProfileImageChangeButton>
+                )}
+            </CoverImage>
 
-                    {id === userId && (
-                        <ProfileImageChangeButton>
-                            <MdOutlinePhotoCameraFront/>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                id="image-input"
-                                style={{display: 'none'}}
-                                onChange={(e) => handleImageUpload(e, 'profile')}
-                            />
-                        </ProfileImageChangeButton>
+            <UserDetails>
+                <PrimaryDetails>
+                    <ColumnWrapper>
+                        <NameSpan>
+                            {name}
+                        </NameSpan>
+                        <ProfileTagSpan>
+                            {profileTag}
+                        </ProfileTagSpan>
+                    </ColumnWrapper>
+
+                    {id !== userId && (
+                        <FetchLoaderButton
+                            isLoading={fetchFollowing.isChecking}
+                            text={fetchFollowing.isFollowing ? 'Unfollow' : 'Follow'}
+                            onClick={handleFollowing}
+                            loaderSize={'2px'}
+                            loaderDotsSize={'2px'}
+                            bgColor={'#4258ff'}
+                            hBgColor={'rgba(66, 88, 255, 0.9)'}
+                            aBgColor={'#4258ff'}
+                            color={'rgba(255, 255, 255, 0.8)'}
+                            hColor={'rgba(255, 255, 255, 1)'}
+                            borderRadius={'10px'}
+                            padding={width > 500 ? '0 16px' : '0 8px'}
+                            style={{
+                                height: width > 500 ? '28px' : '22px',
+                                width: width > 500 ? '80px' : '60px',
+                                border: 'none',
+                                outline: 'none',
+                                fontSize: width > 500 ? '14px' : '10px'
+                            }}
+                        />
                     )}
-                </CoverImage>
+                </PrimaryDetails>
 
-                <UserDetails>
-                    <PrimaryDetails>
-                        <ColumnWrapper>
-                            <NameSpan>
-                                {name}
-                            </NameSpan>
-                            <ProfileTagSpan>
-                                Unique Tag
-                            </ProfileTagSpan>
-                        </ColumnWrapper>
-
-                        {id !== userId && (
-                            <FetchLoaderButton
-                                isLoading={fetchFollowing.isChecking}
-                                text={fetchFollowing.isFollowing ? 'Unfollow' : 'Follow'}
-                                onClick={handleFollowing}
-                                loaderSize={'2px'}
-                                loaderDotsSize={'2px'}
-                                bgColor={'#4258ff'}
-                                hBgColor={'rgba(66, 88, 255, 0.9)'}
-                                aBgColor={'#4258ff'}
-                                color={'rgba(255, 255, 255, 0.8)'}
-                                hColor={'rgba(255, 255, 255, 1)'}
-                                borderRadius={'10px'}
-                                padding={width > 500 ? '0 16px' : '0 8px'}
-                                style={{
-                                    height: width > 500 ? '28px' : '22px',
-                                    width: width > 500 ? '80px' : '60px',
-                                    border: 'none',
-                                    outline: 'none',
-                                    fontSize: width > 500 ? '14px' : '10px'
-                                }}
-                            />
-                        )}
-                    </PrimaryDetails>
-
-                    {bio && (
-                        <BioWrapper>
-                            {bio}
-                        </BioWrapper>
-                    )}
-                </UserDetails>
-            </Wrapper>
+                {bio && (
+                    <BioWrapper>
+                        {bio}
+                    </BioWrapper>
+                )}
+            </UserDetails>
+        </Wrapper>
     )
 }
 
@@ -224,7 +229,7 @@ const CoverImage = styled.div`
     width: 100%;
     height: 220px;
     position: relative;
-    
+
     @media (max-width: 700px) {
         height: 180px;
     }
@@ -275,7 +280,7 @@ const PrimaryDetails = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 0 20px 0 170px;
-    
+
     @media (max-width: 700px) {
         padding: 0 20px 0 150px;
         height: 58px;
@@ -293,16 +298,16 @@ const ColumnWrapper = styled.div`
 `;
 
 const NameSpan = styled.span`
-    font-family: 'Dosis', sans-serif;
-    font-size: clamp(25px, 4vw, 34px);
-    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.25rem, 1.1117rem + 0.8511vw, 1.75rem);
+    font-weight: 500;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.8);
     width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    
+
     @media (max-width: 500px) {
         font-size: clamp(16px, 5vw, 20px);
         width: 140px;
@@ -315,15 +320,14 @@ const NameSpan = styled.span`
 `;
 
 const ProfileTagSpan = styled.span`
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(12px, 1vw, 15px);
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.75rem, 0.7154rem + 0.2128vw, 0.875rem);
     color: rgba(255, 255, 255, 0.6);
     width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     @media (max-width: 500px) {
-        font-size: clamp(10px, 2.5vw, 14px);
         width: 140px;
     }
 
@@ -353,7 +357,7 @@ const ChangeCoverImageButton = styled.button`
     0 4px 4px hsl(0deg 0% 0% / 0.075),
     0 8px 8px hsl(0deg 0% 0% / 0.075),
     0 16px 16px hsl(0deg 0% 0% / 0.075);
-    
+
     &:hover {
         background-color: rgba(255, 255, 255, 1);
         color: rgba(0, 0, 0, 1);
@@ -363,7 +367,7 @@ const ChangeCoverImageButton = styled.button`
         background-color: rgba(255, 255, 255, 0.8);
         color: rgba(0, 0, 0, 0.9);
     }
-    
+
     @media (max-width: 400px) {
         font-size: 10px;
         bottom: 95%;
@@ -468,7 +472,7 @@ const ProfileImageChangeButton = styled.label`
         background-color: #4f62f4;
         color: rgba(255, 255, 255, 0.9);
     }
-    
+
     @media (max-width: 700px) {
         font-size: 16px;
         height: 28px;
@@ -488,14 +492,14 @@ const BioWrapper = styled.div`
     width: 100%;
     display: flex;
     padding: 22px 28px 0 28px;
-    font-size: clamp(16px, 2vw, 18px);
+    font-size: clamp(0.875rem, 0.8059rem + 0.4255vw, 1.125rem);
     color: rgba(255, 255, 255, 0.7);
     letter-spacing: 1px;
-    font-family: 'Inter', sans-serif;
-    white-space: pre-line;
-    
+    font-family: 'Poppins', sans-serif;
+    word-wrap: normal;
+    white-space: break-spaces;
+
     @media (max-width: 500px) {
-        font-size: clamp(10px, 1vw, 14px);
         padding: 18px 10px 0 10px;
     }
 `;

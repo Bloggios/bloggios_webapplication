@@ -19,7 +19,7 @@
  */
 
 import styled from "styled-components";
-import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
+import {FaAngleLeft, FaAngleRight, FaChevronLeft, FaChevronRight} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
@@ -76,14 +76,19 @@ const HorizontalTabs = ({id}) => {
             <TabsWrapper>
                 {getTabsData()}
                 {isScrollButton && (
-                    <>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 'fit-content',
+                        alignSelf: 'flex-end'
+                    }}>
                         <ScrollButton onClick={() => handleDivScroll('left')}>
-                            <FaAngleLeft/>
+                            <FaChevronLeft />
                         </ScrollButton>
                         <ScrollButton onClick={() => handleDivScroll('right')}>
-                            <FaAngleRight/>
+                            <FaChevronRight />
                         </ScrollButton>
-                    </>
+                    </div>
                 )}
             </TabsWrapper>
         </Wrapper>
@@ -92,7 +97,7 @@ const HorizontalTabs = ({id}) => {
 
 const Wrapper = styled.div`
     min-width: 100%;
-    max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
+    max-width: 220px; /* Set a maximum width to prevent it from growing indefinitely */
     height: auto;
     overflow: hidden; /* Hide any potential overflow */
     box-sizing: border-box; /* Include padding in the width calculation */
@@ -106,6 +111,11 @@ const TabsWrapper = styled.div`
     gap: 10px;
     align-items: center;
     justify-content: center;
+    
+    @media (max-width: 500px) {
+        flex-direction: column;
+        align-self: flex-end;
+    }
 `;
 
 const Tabs = styled.div`
@@ -189,6 +199,12 @@ const ScrollButton = styled.button`
     &:active {
         background-color: rgba(255, 255, 255, 0.07);
         color: rgba(255, 255, 255, 0.9);
+    }
+    
+    @media (max-width: 500px) {
+        font-size: 16px;
+        height: 28px;
+        width: 28px;
     }
 `;
 

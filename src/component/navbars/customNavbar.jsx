@@ -47,7 +47,8 @@ const CustomNavbar = () => {
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
     const {isAuthenticated, userId} = useSelector((state)=> state.auth);
-    const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
+    const profileSelector = useSelector((state) => state.profile);
+    const { isAdded, name, bio, email, profileImage, coverImage, followers, following, link, isBadge, profileBadges } = useSelector((state) => state.profile);
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
     const {isFollowed} = useSelector((state)=> state.isCreated);
     const dispatch = useDispatch();
@@ -99,13 +100,7 @@ const CustomNavbar = () => {
             getFollow()
                 .then((response)=> {
                     const profileData = {
-                        name: name,
-                        isAdded: true,
-                        profileImageUrl: null,
-                        bio: bio,
-                        email: email,
-                        profileImage: profileImage,
-                        coverImage: coverImage,
+                        ...profileSelector,
                         followers: response.data?.followers,
                         following: response.data?.following
                     };
@@ -137,7 +132,7 @@ const CustomNavbar = () => {
                 <></>
             )
         }
-    }, [width, isAuthenticated, profileImage, name])
+    }, [width, isAuthenticated, name, profileImage, isSearchBarOpen, dispatch])
 
     return (
         <>

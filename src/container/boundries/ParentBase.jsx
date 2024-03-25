@@ -29,6 +29,7 @@ import useBloggiosStomp from "../../hooks/useBloggiosStomp";
 import ErrorPage from "../catchPages/ErrorPage";
 import {Toaster} from "sonner";
 import ParentInfoModal from "../../component/modal/ParentInfoModal";
+import ComingSoonPage from "../../component/animations/ComingSoonPage";
 
 const ParentBase = ({children}) => {
 
@@ -40,30 +41,34 @@ const ParentBase = ({children}) => {
     useBloggiosStomp();
 
     const getBaseContent = useCallback(()=> {
-        if (isError && errorMessage) {
-            return <ErrorPage />
-        } else if (isLoading) {
-            return (
-                <AppContainer>
-                    <MemoizedLoaderPage />
-                </AppContainer>
-            )
+        if (false) {
+            return <ComingSoonPage />
         } else {
-            return (
-                <AppContainer>
-                    {children}
-                    <Toaster
-                        position={width > 600 ? "bottom-right" : "bottom-center"}
-                        richColors={true}
-                        closeButton={true}
-                    />
+            if (isError && errorMessage) {
+                return <ErrorPage />
+            } else if (isLoading) {
+                return (
+                    <AppContainer>
+                        <MemoizedLoaderPage />
+                    </AppContainer>
+                )
+            } else {
+                return (
+                    <AppContainer>
+                        {children}
+                        <Toaster
+                            position={width > 600 ? "bottom-right" : "bottom-center"}
+                            richColors={true}
+                            closeButton={true}
+                        />
 
-                    <ParentInfoModal
-                        isModelOpen={isModalOpen}
-                        onClose={()=> setIsModalOpen(false)}
-                    />
-                </AppContainer>
-            )
+                        <ParentInfoModal
+                            isModelOpen={isModalOpen}
+                            onClose={()=> setIsModalOpen(false)}
+                        />
+                    </AppContainer>
+                )
+            }
         }
     }, [isLoading, children, width, isError, errorMessage, isModalOpen])
 
