@@ -1,9 +1,10 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Bloggios",
+  "name": "Bloggios - Concatenating Perceptions",
+  "description": "Bloggios - The power of connection powered by software",
   "display": "standalone",
   "theme_color": "#4258ff",
-  "background_color": "#4258ff",
+  "background_color": "#1e1e1e",
   "icons": [
     {
       "src": "favicon.ico",
@@ -11,15 +12,23 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
+      "src": "bloggios_logo.svg",
+      "type": "image/svg+xml",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "bloggios_logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "."
+  "start_url": ".",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["social", "messaging", "Q&A", "software development", "IT Company", "Software Company", "IT Consultancy", "Social Media", "Stack Overflow", "Quora", "Facebook", "Instagram"],
+  "keywords": ["Bloggios", "Rohit Parihar", "Rohit Parihar Bloggios", "Rohit Bloggios", "Bloggios Spring Boot", "Bloggios Spring React Application", "Bloggios Microservices", "Concatenating Perceptions", "Bloggios", "Bloggios Social Media", "Social Media", "Bloggios Q & A", "Q & A", "Encrypted Chatting", "Bloggios Chatting", "Bloggios Messaging", "Bloggios Encrypted Chatting", "Bloggios IT Solutions", "IT Solutions", "Bloggios Software development", "Software development", "IT support", "Bloggios IT Support", "Bloggios SEO", "SEO", "Bloggios Marketing", "Bloggios Connection platform", "Connection Platform", "web developer", "technology", "innovation", "online community"],
+  "version": "1.0",
+  "author": "Rohit Parihar",
+  "contributors": ["Rohit Parihar"],
+  "thumbnail": "bloggios_logo.png"
 }

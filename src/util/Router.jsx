@@ -22,7 +22,7 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE,
+    ASK_QUESTION_OUTLET_PAGE, CHATS_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
@@ -58,6 +58,7 @@ const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outle
 const ProfilePostOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfilePostOutlet'));
 const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionOutlet'));
 const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
+const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
 
 const Router = () => {
 
@@ -72,6 +73,7 @@ const Router = () => {
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
+                    <Route path={CHATS_PAGE} element={<ChatPage />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>

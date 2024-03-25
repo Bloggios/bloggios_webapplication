@@ -28,7 +28,6 @@ const BgTransition = ({
     style,
     component: Node,
     duration = 1,
-    isOnce = true
                       }) => {
 
     const targetElement = useRef(null);
@@ -173,7 +172,7 @@ const BgTransition = ({
                 </Node>
             )
         }
-    }, [type, children, isVisible])
+    }, [type, children, isVisible, duration, delay, style])
 
     return getContent();
 };

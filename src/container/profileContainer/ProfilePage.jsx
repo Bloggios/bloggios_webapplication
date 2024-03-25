@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect} from 'react';
+import React, {lazy, Suspense, useCallback} from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import {Outlet, useParams} from "react-router-dom";
 import styled from "styled-components";
@@ -52,10 +52,6 @@ const ProfilePage = () => {
             return response.data;
         }
     };
-
-    useEffect(() => {
-        console.log(profileSelector)
-    }, []);
 
     const {
         isLoading,
@@ -132,7 +128,7 @@ const ProfilePage = () => {
                             {getMainContent()}
                         </LeftSection>
                         <RightSection ref={rightSectionRef}>
-                            {width > 1050 && <ProfileSuggestions profileData={profileData}/>}
+                            {width > 1050 && <ProfileSuggestions />}
                         </RightSection>
                     </Wrapper>
                 </BloggiosSidebarBase>

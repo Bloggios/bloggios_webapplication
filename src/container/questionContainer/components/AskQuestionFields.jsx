@@ -50,7 +50,7 @@ const Base64URItoMultipartFile = (base64URI, fileName) => {
     for (let i = 0; i < byteCharacters.length; i++) {
         byteArray[i] = byteCharacters.charCodeAt(i);
     }
-    const blob = new Blob([arrayBuffer], { type: Base64URItoMultipartFile.extractContentType(base64URI) });
+    const blob = new Blob([arrayBuffer], {type: Base64URItoMultipartFile.extractContentType(base64URI)});
     return new File([blob], fileName, {type: blob.type});
 };
 
@@ -383,11 +383,7 @@ const AskQuestionFields = () => {
                     />
                 </Fields>
 
-                <Fields
-                    style={{
-                        height: 'auto'
-                    }}
-                >
+                <QuillField >
                     <Typography
                         text={'Question Details'}
                         type={'custom'}
@@ -403,7 +399,7 @@ const AskQuestionFields = () => {
                         placeholder={'Please add some details for your question'}
                         onChange={handleEditorBlur}
                     />
-                </Fields>
+                </QuillField>
 
                 <Fields>
                     <Typography
@@ -452,7 +448,7 @@ const AskQuestionFields = () => {
 
             <QuestionSubmitModal
                 isModelOpen={submitModal}
-                onClose={()=> setSubmitModal(false)}
+                onClose={() => setSubmitModal(false)}
                 data={addQuestionData}
             />
         </>
@@ -619,6 +615,25 @@ const SuggestionHeader = styled.div`
         font-family: 'Poppins', sans-serif;
         letter-spacing: 1px;
         font-weight: 200;
+    }
+`;
+
+const QuillField = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    gap: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+    
+    
+    & > span {
+        padding: 16px;
+    }
+
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 `;
 
