@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {IoSearch} from "react-icons/io5";
 import {colors} from "../../../styles/Theme";
 import IconButton from "../../buttons/IconButton";
@@ -34,10 +34,9 @@ import {uuidValidator} from "../../../util/ComponentValidators";
 import {useNavigate} from "react-router-dom";
 
 const MessagingUserList = () => {
-
     const [userSearchRef, userSearchIsFocused] = useIsInputFocused();
-    const {userId} = useSelector((state)=> state.auth);
-    const [searchInput, setSearchInput] = useState("");
+    const { userId } = useSelector((state) => state.auth);
+    const [searchInput, setSearchInput] = useState('');
     const [fetchedUserList, setFetchedUserList] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchingCatch, setSearchingCatch] = useState(false);
@@ -52,45 +51,44 @@ const MessagingUserList = () => {
             if (searchInput.length >= 3) {
                 searchProfileData(searchInput)
                     .then((response) => {
-                        setFetchedUserList(response?.data?.object)
-                    }).catch((error) => {
-                    dispatchError(dispatch, error);
-                    setSearchingCatch(true);
-                }).finally(() => {
-                    setSearchLoader(false);
-                })
+                        setFetchedUserList(response?.data?.object);
+                    })
+                    .catch((error) => {
+                        dispatchError(dispatch, error);
+                        setSearchingCatch(true);
+                    })
+                    .finally(() => {
+                        setSearchLoader(false);
+                    });
             }
-        }, 500)
+        }, 500);
 
         return () => clearTimeout(debounce);
-    }, [searchInput])
+    }, [searchInput]);
 
     const handleUserCardClick = (id) => {
         if (id === userId) {
             dispatchWarningMessage(dispatch, 'Self Messaging is not allowed');
-        } else if (!id) {
+        } else if (!id || !uuidValidator(id)) {
             dispatchErrorMessage(dispatch, 'User not exists for given data');
         } else {
-            const isValid = uuidValidator(id);
-            if (isValid) {
-                navigate(`${id}`)
-            } else {
-                dispatchErrorMessage(dispatch, 'User not exists for given data');
-            }
+            navigate(`${id}`);
         }
-    }
+    };
 
-    const getUserListContent = () => {
+    const getUserListContent = useMemo(() => {
         if (searchLoader && searchInput.length >= 3) {
-            return <FallbackLoader width={'100%'} height={'100%'}/>
-        } else if (searchingCatch) {
-            return <SpanText>Error Occurred</SpanText>
-        } else if (!searchLoader && fetchedUserList.length > 0) {
+            return <FallbackLoader width={'100%'} height={'100%'} />;
+        }
+        if (searchingCatch) {
+            return <SpanText>Error Occurred</SpanText>;
+        }
+        if (!searchLoader && fetchedUserList.length > 0) {
             return (
                 <UserList>
                     {fetchedUserList.map((item) => (
-                        <UserCard key={item.userId} onClick={()=> handleUserCardClick(item.userId)}>
-                            <img src={item.profileImage ? item.profileImage : bgBlackRounded} alt={item.name}/>
+                        <UserCard key={item.userId} onClick={() => handleUserCardClick(item.userId)}>
+                            <img src={item.profileImage || bgBlackRounded} alt={item.name} />
                             <div>
                                 <h6>{item.name}</h6>
                                 <span>{item.email}</span>
@@ -98,29 +96,29 @@ const MessagingUserList = () => {
                         </UserCard>
                     ))}
                 </UserList>
-            )
-        } else if (searchInput.length === 0 && !searchLoader) {
-            return (
-                <SpanText>Search user</SpanText>
-            )
-        } else if (searchInput.length < 3) {
-            return <SpanText>Minimum 3 Characters Required</SpanText>
-        } else if (!searchLoader && fetchedUserList.length === 0 && searchInput.length >= 3) {
-            return <SpanText>No User(s) Found</SpanText>
+            );
         }
-    }
+        if (searchInput.length === 0 && !searchLoader) {
+            return <SpanText>Search user</SpanText>;
+        }
+        if (searchInput.length < 3) {
+            return <SpanText>Minimum 3 Characters Required</SpanText>;
+        }
+        if (!searchLoader && fetchedUserList.length === 0 && searchInput.length >= 3) {
+            return <SpanText>No User(s) Found</SpanText>;
+        }
+        return null;
+    }, [searchLoader, searchingCatch, searchInput, fetchedUserList, handleUserCardClick, navigate]);
 
     return (
         <UserInfo>
-            <h5>
-                Users
-            </h5>
+            <h5>Users</h5>
 
             <SearchBox>
-                <IoSearch color={userSearchIsFocused ? colors.white100 : colors.white80}/>
+                <IoSearch color={userSearchIsFocused ? colors.white100 : colors.white80} />
                 <input
                     type="search"
-                    inputMode={"search"}
+                    inputMode={'search'}
                     ref={userSearchRef}
                     maxLength={16}
                     placeholder={'Search User'}
@@ -131,15 +129,15 @@ const MessagingUserList = () => {
                     padding={'7px'}
                     style={{
                         visibility: searchInput.length > 0 ? 'visible' : 'hidden',
-                        opacity: searchInput.length > 0 ? 1 : 0
+                        opacity: searchInput.length > 0 ? 1 : 0,
                     }}
-                    onClick={()=> setSearchInput('')}
+                    onClick={() => setSearchInput('')}
                 >
-                    <AiOutlineClose/>
+                    <AiOutlineClose />
                 </IconButton>
             </SearchBox>
 
-            {getUserListContent()}
+            {getUserListContent}
         </UserInfo>
     );
 };

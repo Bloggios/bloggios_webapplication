@@ -18,13 +18,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import SockJS from "sockjs-client";
-import {over} from "stompjs";
-import {dispatchErrorMessage} from "../service/functions";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {stompSend} from "../service/stompSend";
+import {dispatchErrorMessage} from "../service/functions";
 import {addError} from "../state/errorSlice";
+import SockJS from "sockjs-client";
+import {over} from "stompjs";
 
 let stompClient = null;
 const useBloggiosStomp = () => {
@@ -42,6 +41,9 @@ const useBloggiosStomp = () => {
         if (isAuthenticated && userId) {
             const socket = new SockJS(process.env.REACT_APP_WEBSOCKET_URI);
             stompClient = over(socket);
+            if (stompClient) {
+                stompClient.debug = null;
+            }
             stompClient.connect({
                 accessToken: accessToken,
                 userId: userId,
@@ -59,8 +61,8 @@ const useBloggiosStomp = () => {
     }
 
     const onConnected = () => {
-        stompSend(stompClient, userId);
         stompSubscribe();
+        
     }
 
     const onError = (errorFrame) => {

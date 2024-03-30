@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
@@ -35,10 +35,11 @@ const ParentBase = ({children}) => {
 
     const { width } = useWindowDimensions();
     const {isLoading} = useSelector(state=> state.loading);
+    const {isAuthenticated, userId, accessToken, remoteAddress} = useSelector(state=> state.auth);
     const {isError, errorMessage} = useSelector(state=> state.error);
     const [isModalOpen, setIsModalOpen] = useState(true);
     useBloggiosSnackbar();
-    useBloggiosStomp();
+    useBloggiosStomp()
 
     const getBaseContent = useCallback(()=> {
         if (false) {

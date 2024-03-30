@@ -604,4 +604,8 @@ const PostEntriesWrapper = styled.span`
     display: flex;
 `;
 
+const Footer = styled.div`
+
+`;
+
 export default Posts;
