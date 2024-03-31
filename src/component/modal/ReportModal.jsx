@@ -18,27 +18,29 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
+import React from 'react';
+import FadeModal from "./FadeModal";
 
-const chatSlice = createSlice({
-    name: 'chat',
-    initialState: {
-        message: null,
-        receiverId: null
-    },
-    reducers: {
-        sendMessage: (state, action) => {
-            const { message, receiverId } = action.payload;
-            state.message = message;
-            state.receiverId = receiverId;
-        },
-        clearMessage: (state, action) => {
-            state.message = null;
-            state.receiverId = null;
-        }
-    }
-});
+const ReportModal = ({
+    isModelOpen,
+    onClose,
+    data
+                     }) => {
 
-export { chatSlice }
+    return (
+        <FadeModal
+            isOpen={isModelOpen}
+            onClose={onClose}
+            height={'fit-content'}
+            width={'clamp(250px, 95%, 550px)'}
+            bgColor={'#4258ff'}
+            padding={'20px'}
+            margin={'70px 0 0 0'}
+            borderRadius={'20px'}
+        >
+            <span>{data && JSON.stringify(data)}</span>
+        </FadeModal>
+    );
+};
 
-export const { sendMessage, clearMessage } = chatSlice.actions;
+export default ReportModal;

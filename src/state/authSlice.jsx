@@ -32,7 +32,7 @@ const authSlice = createSlice({
     },
     reducers: {
         setCredentials: (state, action) => {
-            const { userId, accessToken, isAuthenticated, remoteAddress, authorities, email } = action.payload;
+            const {userId, accessToken, isAuthenticated, remoteAddress, authorities, email} = action.payload;
             state.userId = userId;
             state.accessToken = accessToken;
             state.isAuthenticated = isAuthenticated;
@@ -51,6 +51,6 @@ const authSlice = createSlice({
     }
 });
 
-export { authSlice }
+export {authSlice}
 
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const {setCredentials, clearCredentials} = authSlice.actions;

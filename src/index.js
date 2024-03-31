@@ -35,7 +35,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
             <BrowserRouter>
                 <ErrorBase>
                     <ParentBase>

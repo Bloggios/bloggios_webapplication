@@ -49,6 +49,9 @@ const ComingSoonPage = () => {
                     <BgTransition style={headingStyle} component={'h1'} delay={0.1}>
                         The power of connection,<br/>powered by software
                     </BgTransition>
+                    <LaunchingInformation>
+                        Launching Softly on<br/>April 14, 2024
+                    </LaunchingInformation>
                 </TextWrapper>
 
                 <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
@@ -74,6 +77,7 @@ const InnerDiv = styled.div`
     align-items: center;
     justify-content: center;
     gap: 25px;
+    user-select: none;
 `;
 
 const TextWrapper = styled.div`
@@ -105,11 +109,17 @@ const ComingSoon = styled.h1`
     -webkit-text-fill-color: transparent;
 `;
 
-const Strong = styled.strong`
-    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+const LaunchingInformation = styled.div`
+    font-size: clamp(0.875rem, 0.8059rem + 0.4255vw, 1.125rem);
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    padding: 10px;
+    background: ${colors.accent100};
+    color: ${colors.white100};
+    border-radius: 16px;
+    text-align: center;
+    margin-top: 10px;
 `;
 
 export default ComingSoonPage;

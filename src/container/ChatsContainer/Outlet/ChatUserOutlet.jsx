@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import styled from "styled-components";
 import {uuidValidator} from "../../../util/ComponentValidators";
@@ -29,12 +29,18 @@ import {BiRefresh, BiSolidError} from "react-icons/bi";
 import IconButton from "../../../component/buttons/IconButton";
 import {colors} from "../../../styles/Theme";
 import {bgBlackRounded} from "../../../asset/svg";
+import {GrSend} from "react-icons/gr";
+import {useDispatch, useSelector} from "react-redux";
+import {clearMessage, sendMessage} from "../../../state/chatSlice";
 
 const ChatUserOutlet = () => {
 
     const {userId} = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [queryEnabled, setQueryEnabled] = useState(false);
+    const [message, setMessage] = useState("");
+    const {message: stateMessage, receiverId} = useSelector((state)=> state.chat);
     const {
         isLoading,
         error,
@@ -54,7 +60,20 @@ const ChatUserOutlet = () => {
         } else {
             setQueryEnabled(true);
         }
-    }, [userId])
+    }, [userId]);
+
+    const handleSend = () => {
+        if (stateMessage || receiverId) {
+            dispatch(clearMessage());
+        }
+        if (message.length > 0 && profileData) {
+            dispatch(sendMessage({
+                message: message,
+                receiverId: profileData.userId
+            }));
+            setMessage('');
+        }
+    }
 
     const getChatHeader = useCallback(()=> {
         if (profileData) {
@@ -90,13 +109,29 @@ const ChatUserOutlet = () => {
                     </MessageHeader>
 
                     <MessagesList>
-                        {[1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,22].reverse().map((i)=> (
+                        {[1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,22, 23, 24, 25].reverse().map((i)=> (
                             <span>Item {i}</span>
                         ))}
                     </MessagesList>
 
                     <InputField>
-
+                        <input
+                            type="text"
+                            inputMode={'search'}
+                            placeholder={`Send Message to ${profileData.name.split(' ')[0]}`}
+                            value={message}
+                            onChange={(event)=> setMessage(event.target.value)}
+                        />
+                        <IconButton
+                            color={'#7081ff'}
+                            hColor={'#7081ff'}
+                            aColor={'#7081ff'}
+                            fontSize={'25px'}
+                            padding={'7px'}
+                            onClick={handleSend}
+                        >
+                            <GrSend />
+                        </IconButton>
                     </InputField>
                 </>
             )
@@ -155,7 +190,25 @@ const MessagesList = styled.div`
 const InputField = styled.div`
     width: 100%;
     height: 10%;
-    background: #dfda7d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 5px;
+    
+    & input {
+        flex: 1;
+        min-width: 100px;
+        border: none;
+        outline: none;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 1px;
+        font-weight: normal;
+        
+    }
 `;
 
 const ErrorWrapper = styled.div`

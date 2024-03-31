@@ -25,6 +25,7 @@ import {authSlice} from "./authSlice";
 import {profileSlice} from "./profileSlice";
 import {isCreatedSlice} from "./isCreatedSlice";
 import errorSlice from "./errorSlice";
+import {chatSlice} from "./chatSlice";
 
 const store = configureStore({
     reducer: {
@@ -33,7 +34,8 @@ const store = configureStore({
         auth: authSlice.reducer,
         profile: profileSlice.reducer,
         isCreated: isCreatedSlice.reducer,
-        error: errorSlice
+        error: errorSlice,
+        chat: chatSlice.reducer,
     },
     devTools: true
 })

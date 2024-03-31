@@ -30,19 +30,66 @@ import ErrorPage from "../catchPages/ErrorPage";
 import {Toaster} from "sonner";
 import ParentInfoModal from "../../component/modal/ParentInfoModal";
 import ComingSoonPage from "../../component/animations/ComingSoonPage";
+import ReportModal from "../../component/modal/ReportModal";
 
 const ParentBase = ({children}) => {
 
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
     const {isLoading} = useSelector(state=> state.loading);
-    const {isAuthenticated, userId, accessToken, remoteAddress} = useSelector(state=> state.auth);
     const {isError, errorMessage} = useSelector(state=> state.error);
     const [isModalOpen, setIsModalOpen] = useState(true);
+    const [reportModal, setReportModal] = useState(false);
+    const [information, setInformation] = useState({});
     useBloggiosSnackbar();
-    useBloggiosStomp()
+    useBloggiosStomp();
+
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'E') {
+                if (!reportModal) {
+                    setReportModal(true);
+                }
+            }
+        };
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            setReportModal(false);
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
+
+    const handleReportModalClose = () => {
+        setReportModal(false);
+    };
+
+    const getSystemInformation = () => {
+        return {
+            userAgent: navigator.userAgent,
+            connectionStatus: navigator.onLine ? 'ONLINE' : 'OFFLINE',
+            cookiesEnabled: navigator.cookieEnabled,
+            appVersion: navigator.appVersion,
+            path: window.location.pathname,
+            dimensions: {
+                width: window.screen.width,
+                height: window.screen.height,
+                windowWidth: width,
+                windowHeight: height
+            },
+            position: {
+                scrollY: window.scrollY,
+                scrollX: window.scrollX
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (reportModal) {
+            setInformation(getSystemInformation)
+        }
+    }, [reportModal]);
 
     const getBaseContent = useCallback(()=> {
-        if (false) {
+        if (true) {
             return <ComingSoonPage />
         } else {
             if (isError && errorMessage) {
@@ -67,11 +114,17 @@ const ParentBase = ({children}) => {
                             isModelOpen={isModalOpen}
                             onClose={()=> setIsModalOpen(false)}
                         />
+
+                        <ReportModal
+                            isModelOpen={reportModal}
+                            onClose={handleReportModalClose}
+                            data={information}
+                        />
                     </AppContainer>
                 )
             }
         }
-    }, [isLoading, children, width, isError, errorMessage, isModalOpen])
+    }, [isLoading, children, width, isError, errorMessage, isModalOpen, reportModal, information])
 
     return getBaseContent();
 };

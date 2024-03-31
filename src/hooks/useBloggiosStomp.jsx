@@ -18,17 +18,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {dispatchErrorMessage} from "../service/functions";
 import {addError} from "../state/errorSlice";
 import SockJS from "sockjs-client";
 import {over} from "stompjs";
+import {SEND_MESSAGE} from "../constant/WebsocketEndpoint";
 
 let stompClient = null;
 const useBloggiosStomp = () => {
 
+    const [isConnected, setIsConnected] = useState(false);
     const {isAuthenticated, userId, accessToken, remoteAddress} = useSelector(state=> state.auth);
+    const messageSelector = useSelector((state)=> state.chat);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -37,13 +40,31 @@ const useBloggiosStomp = () => {
         }
     }, [isAuthenticated]);
 
+    useEffect(()=> {
+        if (
+            messageSelector.hasOwnProperty('message') &&
+            messageSelector.hasOwnProperty('receiverId') &&
+            messageSelector['message'] !== null && messageSelector['message'] !== undefined &&
+            messageSelector['receiverId'] !== null && messageSelector['receiverId'] !== undefined &&
+            isConnected
+        ) {
+            const sendMessagePayload = {
+                senderId: userId,
+                receiverId: messageSelector.receiverId,
+                message: messageSelector.message,
+            }
+            let send = stompClient.send(SEND_MESSAGE, {}, JSON.stringify(sendMessagePayload));
+            console.log(send);
+        }
+    }, [messageSelector])
+
     const connect = () => {
         if (isAuthenticated && userId) {
             const socket = new SockJS(process.env.REACT_APP_WEBSOCKET_URI);
             stompClient = over(socket);
-            if (stompClient) {
-                stompClient.debug = null;
-            }
+            // if (stompClient) {
+            //     stompClient.debug = null;
+            // }
             stompClient.connect({
                 accessToken: accessToken,
                 userId: userId,
@@ -56,17 +77,24 @@ const useBloggiosStomp = () => {
         console.log(payload)
     }
 
+    const onPrivateChat = (payload) => {
+        console.log(payload)
+    }
+
     const stompSubscribe = () => {
-        stompClient.subscribe(`/user/${userId}/private/notify`, onPrivateNotification)
+        stompClient.subscribe(`/user/${userId}/private/notify`, onPrivateNotification);
+        stompClient.subscribe(`/user/${userId}/private/chat`, onPrivateChat);
+
     }
 
     const onConnected = () => {
+        setIsConnected(true);
         stompSubscribe();
-        
     }
 
     const onError = (errorFrame) => {
         dispatchErrorMessage(dispatch, "Error connecting with Server");
+        setIsConnected(false);
         dispatch(addError({
             isError: true,
             errorMessage: errorFrame

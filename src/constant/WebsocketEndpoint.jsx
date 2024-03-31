@@ -18,27 +18,4 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {createSlice} from "@reduxjs/toolkit";
-
-const chatSlice = createSlice({
-    name: 'chat',
-    initialState: {
-        message: null,
-        receiverId: null
-    },
-    reducers: {
-        sendMessage: (state, action) => {
-            const { message, receiverId } = action.payload;
-            state.message = message;
-            state.receiverId = receiverId;
-        },
-        clearMessage: (state, action) => {
-            state.message = null;
-            state.receiverId = null;
-        }
-    }
-});
-
-export { chatSlice }
-
-export const { sendMessage, clearMessage } = chatSlice.actions;
+export const SEND_MESSAGE = '/app/private-message';
