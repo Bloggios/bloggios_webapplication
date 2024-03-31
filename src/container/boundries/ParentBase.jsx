@@ -89,7 +89,7 @@ const ParentBase = ({children}) => {
     }, [reportModal]);
 
     const getBaseContent = useCallback(()=> {
-        if (true) {
+        if (false) {
             return <ComingSoonPage />
         } else {
             if (isError && errorMessage) {
