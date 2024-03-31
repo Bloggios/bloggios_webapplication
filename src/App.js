@@ -27,11 +27,17 @@ import LoaderPage from "./component/loaders/loaderPage";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import {useNavigate} from "react-router-dom";
+import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInterceptor";
+import {checkIsProfileAdded} from "./service/functions";
+import './styles/GlobalStyles.css'
 
 const App = () => {
 
     const dispatch = useDispatch();
     const [isChecking, setIsChecking] = useState(true);
+    const navigate = useNavigate();
+    const authenticatedAxios = AuthenticatedAxiosInterceptor();
 
     useEffect(() => {
         let isMounted = true;
@@ -44,14 +50,15 @@ const App = () => {
         refreshToken()
             .then((response) => {
                 if (isMounted) {
-                    clearTimeout(timeoutId); // Clear the timeout if the response is received
+                    clearTimeout(timeoutId);
+                    const authData = {...response.data, isAuthenticated: true};
+                    dispatch(setCredentials(authData));
+                    checkIsProfileAdded(
+                        authData.accessToken,
+                        dispatch,
+                        navigate
+                    )
                     setIsChecking(false);
-                    const credentials = {
-                        accessToken: response.data.accessToken,
-                        userId: response.data.userId,
-                        isAuthenticated: true
-                    };
-                    dispatch(setCredentials(credentials));
                 }
             })
             .catch((error) => {

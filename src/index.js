@@ -25,15 +25,23 @@ import App from './App';
 import {Provider} from "react-redux";
 import store from "./state/store";
 import {BrowserRouter} from "react-router-dom";
-import BloggiosBase from "./container/baseContainer/bloggiosBase";
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import ParentBase from "./container/boundries/ParentBase";
+import ErrorBase from "./container/boundries/ErrorBase";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
+export const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-      <BrowserRouter>
-          <BloggiosBase>
-              <App />
-          </BloggiosBase>
-      </BrowserRouter>
-  </Provider>
+    <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <ErrorBase>
+                    <ParentBase>
+                        <App/>
+                    </ParentBase>
+                </ErrorBase>
+            </BrowserRouter>
+        </QueryClientProvider>
+    </Provider>
 );

@@ -23,6 +23,11 @@
 
 import axios from "axios";
 
+const AUTH_BASE_URL = process.env.REACT_APP_AUTH_URL;
+
+export const OAUTH2_REDIRECT_URI = `${window.location.origin}/oauth2/redirect`
+export const GOOGLE_AUTH_URL = AUTH_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
+
 export const gatewayAxios = axios.create(
     {
         baseURL: process.env.REACT_APP_API_URL,

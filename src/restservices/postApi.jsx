@@ -19,7 +19,15 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_POST, FETCH_POST_TAGS, POST_LIST} from "../constant/apiConstants";
+import {
+    ADD_POST,
+    AUTH_USER_POSTS,
+    DELETE_POST,
+    FETCH_POST_TAGS,
+    LIKE_COMMENT_COUNT,
+    POST_LIST,
+    USER_POSTS
+} from "../constant/apiConstants";
 
 export const getTenTags = (tagName, config) => {
     const tagPayload = {
@@ -38,11 +46,49 @@ export const addPost = (payload) => {
         .then((response)=> response);
 }
 
-export const postList = (page) => {
+export const getPostList = async (pageParam = 0, options = {}) => {
     const payload = {
-        page: page,
+        page: pageParam,
         size: 10
     }
+    const response = await authenticatedAxios.post(POST_LIST, payload, options);
+    return response.data;
+}
+
+export const searchPostList = (payload) => {
     return authenticatedAxios.post(POST_LIST, payload)
         .then((response)=> response);
+}
+
+export const postDeleteApi = (postId) => {
+    return authenticatedAxios.delete(DELETE_POST, {
+        params: {
+            "postId": postId
+        }
+    }).then((response)=> response);
+};
+
+export const getAuthPost = (page) => {
+    return authenticatedAxios.get(AUTH_USER_POSTS, {
+        params: {
+            "page": page
+        }
+    }).then((response)=> response.data);
+}
+
+export const getUserAuthPost = (userId, page) => {
+    return authenticatedAxios.get(USER_POSTS, {
+        params: {
+            "userId": userId,
+            "page": page
+        }
+    }).then((response)=> response.data);
+}
+
+export const getLikeCommentCount = (postId) => {
+    return authenticatedAxios.get(LIKE_COMMENT_COUNT, {
+        params: {
+            "postId": postId
+        }
+    }).then((response)=> response.data);
 }

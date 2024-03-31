@@ -19,6 +19,12 @@
  */
 
 import {setSnackbar} from "../state/snackbarSlice";
+import {authenticatedAxios, gatewayAxios} from "../restservices/baseAxios";
+import {ADD_IMAGE_TO_PROFILE, PROFILE_ADDED} from "../constant/apiConstants";
+import {setProfile} from "../state/profileSlice";
+import {HOME_PAGE, LANDING_PAGE, PROFILE_ADDITION_INITIAL} from "../constant/pathConstants";
+import {getProfile} from "../restservices/profileApi";
+import {logoutUser} from "../restservices/authApi";
 
 export const dispatchError = (dispatch, error) => {
     if (error.response.status === 400 || error.response.status === 401) {
@@ -38,4 +44,135 @@ export const dispatchError = (dispatch, error) => {
         };
         dispatch(setSnackbar(snackBarData));
     }
+}
+
+export const checkIsProfileAdded = (accessToken, dispatch, navigate) => {
+    gatewayAxios.get(PROFILE_ADDED, {
+        headers: {
+            "Authorization": `Bearer ${accessToken}`
+        }
+    })
+        .then((response) => {
+            if (response?.data?.exist === true && response?.data?.event === 'profile') {
+                dispatch(setProfile({isAdded: true}))
+                fetchProfileAndDispatch(dispatch);
+            } else {
+                const snackBarData = {
+                    isSnackbar: true,
+                    message: 'Please add you Profile Data first',
+                    snackbarType: 'Warning'
+                }
+                dispatch(setSnackbar(snackBarData))
+                navigate(PROFILE_ADDITION_INITIAL, {replace: true});
+            }
+        }).catch((error) => {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+        navigate(HOME_PAGE, {
+            replace: true
+        })
+    })
+}
+
+export const fetchProfileAndDispatch = async (dispatch) => {
+    try {
+        const response = await getProfile();
+        const { data } = response;
+        dispatch(setProfile({...data, isAdded: true}));
+    } catch (error) {
+        setTimeout(fetchProfileAndDispatch, 2000);
+    }
+};
+
+export const initLogout = (navigate, dispatch) => {
+    logoutUser()
+        .then((response)=> {
+            navigate(LANDING_PAGE, {
+                replace: true
+            });
+            window.location.reload();
+        }).catch((error)=> {
+        const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';
+        const snackBarData = {
+            isSnackbar: true,
+            message: message,
+            snackbarType: 'Error'
+        }
+        dispatch(setSnackbar(snackBarData))
+    })
+};
+
+export const handleImageChange = (e, uploadFor, dispatch) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('uploadFor', uploadFor);
+
+            authenticatedAxios.post(ADD_IMAGE_TO_PROFILE, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+                .then((response) => {
+                    const snackbarData = {
+                        isSnackbar: true,
+                        message: `${uploadFor === 'profile' ? 'Profile' : 'Cover'} Image Added Successfully. It may take time to Reflect on Profile`,
+                        snackbarType: 'Success',
+                    };
+                    dispatch(setSnackbar(snackbarData));
+                    setTimeout(() => {
+                        getProfile().then((response) => {
+                            const { data } = response;
+                            dispatch(setProfile({...data, isAdded: true}));
+                        });
+                    }, 1600);
+                })
+                .catch((error) => {
+                    const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
+                    const snackBarData = {
+                        isSnackbar: true,
+                        message: message,
+                        snackbarType: 'Error',
+                    };
+                    dispatch(setSnackbar(snackBarData));
+                });
+        };
+        reader.readAsDataURL(file);
+    }
+    return true;
+};
+
+export const dispatchSuccessMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Success',
+    };
+    dispatch(setSnackbar(snackBarData));
+}
+
+export const dispatchErrorMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Error',
+    };
+    dispatch(setSnackbar(snackBarData));
+}
+
+export const dispatchWarningMessage = (dispatch, message) => {
+    const snackBarData = {
+        isSnackbar: true,
+        message: message,
+        snackbarType: 'Warning'
+    }
+    dispatch(setSnackbar(snackBarData))
 }

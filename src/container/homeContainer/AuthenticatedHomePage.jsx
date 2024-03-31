@@ -26,111 +26,83 @@ import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import useComponentSize from "../../hooks/useComponentSize";
 import bloggios_logo from '../../asset/svg/bg_logo_black.svg'
-import PostList from "../../component/List/PostList";
-import {postList} from "../../restservices/postApi";
-import {debounce} from "lodash";
-import {dispatchError} from "../../service/functions";
-import {clearPostCreated} from "../../state/postCreateSlice";
+import BloggiosBase from "../boundries/bloggiosBase";
+import header_image from '../../asset/svg/home-header_bg.svg'
+import {clearIsCreated} from "../../state/isCreatedSlice";
 
 const ProfileCard = lazy(() => import('../../component/Cards/ProfileCard'));
-const CreatePost = lazy(() => import('../../component/CreatePost/createPostWeb'));
-const CreatePostMobile = lazy(() => import('../../component/CreatePost/createPostMobile'));
+const CreatePost = lazy(() => import('../../component/CreatePost/createPost'));
+const PostList = lazy(() => import('../../component/List/PostList'));
+const ProfileSuggestions = lazy(() => import('../../component/Cards/ProfileSuggestions'));
 
 const AuthenticatedHomePage = () => {
 
-    useSeo('authHomePage')
+    useSeo('authHomePage');
 
     const {width} = useWindowDimensions();
-    const {name, bio, email, profileImage, coverImage} = useSelector((state) => state.profile);
+    const {
+        name,
+        bio,
+        email,
+        profileImage,
+        coverImage,
+        followers,
+        following,
+    } = useSelector((state) => state.profile);
     const [middleSectionRef, middleSectionSize] = useComponentSize();
     const [leftSectionRef, leftSectionSize] = useComponentSize();
-    const [postListLoading, setPostListLoading] = useState(true);
-    const [postListData, setPostListData] = useState([]);
-    const {isCreated} = useSelector((state) => state.postCreate);
+    const [rightSectionRef, rightSectionSize] = useComponentSize();
     const dispatch = useDispatch();
-    const [page, setPage] = useState(0);
-    const [endPage, setEndPage] = useState(false);
+    const {isPost} = useSelector((state)=> state.isCreated);
+    const [postList, setPostList] = useState(true);
 
-    const fetchPostList = useCallback(async () => {
-        if (!endPage) {
-            setPostListLoading(true);
-            try {
-                const response = await postList(page);
-                if (response.data?.object.length === 0) {
-                    setEndPage(true);
-                }
-                setPostListData((prevData) => [...prevData, ...response.data?.object]);
-            } catch (error) {
-                dispatchError(dispatch, error)
-            } finally {
-                setPostListLoading(false);
-            }
+    const dispatchClearIsCreated = useCallback(() => dispatch(clearIsCreated()), [dispatch]);
+
+    useEffect(() => {
+        if (isPost) {
+            setPostList(false);
+            setTimeout(() => {
+                dispatchClearIsCreated();
+                setPostList(true);
+            }, 100);
         }
-    }, [setPostListData, setPostListLoading, page, dispatch, endPage]);
-
-    useEffect(() => {
-        fetchPostList();
-    }, [fetchPostList]);
-
-    useEffect(() => {
-        if (isCreated) {
-            setPostListLoading(true);
-            setPostListData([]);
-            setPage(0);
-            setEndPage(false);
-            const debouncedFetch = debounce(fetchPostList, 1000);
-            debouncedFetch();
-            return () => {
-                dispatch(clearPostCreated());
-                debouncedFetch.cancel();
-            };
-        }
-    }, [isCreated]);
-
-    useEffect(() => {
-        const handleScroll = debounce(() => {
-            const { scrollY, innerHeight } = window;
-            const { offsetHeight } = document.body;
-
-            if (scrollY + innerHeight >= offsetHeight - 250) {
-                setPage((prevPage) => prevPage + 1);
-            }
-        }, 200);
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+    }, [isPost, dispatchClearIsCreated]);
 
     return (
-        <Wrapper>
-            <LeftBar ref={leftSectionRef}>
-                <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width}/>}>
-                    <ProfileCard
-                        name={name}
-                        bio={bio}
-                        coverImage={coverImage ? coverImage : 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-                        profileImage={profileImage ? profileImage : bloggios_logo}
-                        path={'/beingrohit-exe'}
-                        followers={0}
-                        following={0}
-                        email={email}
-                    />
-                </Suspense>
-            </LeftBar>
-            <RightBar></RightBar>
-            <MiddleBar ref={middleSectionRef}>
-                <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'}/>}>
-                    {width > 500 ? <CreatePost image={profileImage ? profileImage : bloggios_logo}/> :
-                        <CreatePostMobile/>}
-                </Suspense>
-                {postListData && (
-                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'}/>}>
-                        <PostList postList={postListData} postListLoading={postListLoading}/>
-                    </Suspense>
+        <BloggiosBase>
+            <Wrapper>
+                {width > 750 && (
+                    <LeftBar ref={leftSectionRef}>
+                        <Suspense fallback={<FallbackLoader height={'400px'} width={leftSectionSize.width} />}>
+                            <ProfileCard
+                                name={name}
+                                bio={bio}
+                                coverImage={coverImage || header_image}
+                                profileImage={profileImage || bloggios_logo}
+                                followers={followers}
+                                following={following}
+                                email={email}
+                            />
+                        </Suspense>
+                    </LeftBar>
                 )}
-            </MiddleBar>
-        </Wrapper>
+                {width > 1200 && (
+                    <RightBar ref={rightSectionRef}>
+                        <Suspense fallback={<FallbackLoader height={'100vh'} width={rightSectionSize.width} />}>
+                            <ProfileSuggestions />
+                        </Suspense>
+                    </RightBar>
+                )}
+                <MiddleBar ref={middleSectionRef}>
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'200px'} />}>
+                        <CreatePost image={profileImage || bloggios_logo} />
+                    </Suspense>
+                    <Suspense fallback={<FallbackLoader width={middleSectionSize.width} height={'400px'} />}>
+                        {postList ? <PostList /> : <FallbackLoader width={middleSectionSize.width} height={'400px'} />}
+                    </Suspense>
+                </MiddleBar>
+            </Wrapper>
+        </BloggiosBase>
     );
 };
 
@@ -141,8 +113,9 @@ const Wrapper = styled.div`
     gap: 0 0;
     grid-auto-flow: row dense;
     grid-template-areas:
-    "Left-Bar Middle-Bar Right-Bar";
+        "Left-Bar Middle-Bar Right-Bar";
     box-sizing: border-box;
+    margin-bottom: 20px;
 
     @media (max-width: 1200px) {
         grid-template-columns: 1fr 2fr;
@@ -151,7 +124,7 @@ const Wrapper = styled.div`
     @media (max-width: 750px) {
         grid-template-columns: 1fr;
         grid-template-areas:
-    "Middle-Bar";
+            "Middle-Bar";
     }
 `;
 
@@ -170,6 +143,11 @@ const LeftBar = styled.div`
 
 const RightBar = styled.div`
     grid-area: Right-Bar;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
 
     @media (max-width: 1200px) {
         display: none;
@@ -184,7 +162,6 @@ const MiddleBar = styled.div`
     align-items: center;
     box-sizing: border-box;
     row-gap: 50px;
-    margin-bottom: 20px;
 
     @media (max-width: 500px) {
         margin-bottom: 70px;

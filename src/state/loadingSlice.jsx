@@ -29,7 +29,7 @@ const loadingSlice = createSlice({
         initiateLoading: (state, action) => {
             state.isLoading = action.payload;
         },
-        clearLoading: (state, action) => {
+        clearLoading: (state) => {
             state.isLoading = false;
         }
     }

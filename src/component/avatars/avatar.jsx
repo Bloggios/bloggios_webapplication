@@ -50,7 +50,7 @@ const Avatar = ({
                 minWidth: size
             }}
         >
-            <ProfileImage src={image} />
+            <ProfileImage loading={"lazy"} src={image} />
         </ProfileImageWrapper>
     );
 };

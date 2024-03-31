@@ -24,24 +24,28 @@ const profileSlice = createSlice({
     name: 'profile',
     initialState: {
         isAdded: false,
-        name: null,
-        profileImageUrl: null
+        name: null
     },
     reducers: {
         setProfile: (state, action) => {
-            const { isAdded, name, profileImageUrl, bio, email, profileImage, coverImage } = action.payload;
+            const { isAdded, name, bio, email, profileImage, coverImage, followers, following, userId, link, isBadge, profileBadges, profileTag } = action.payload;
             state.isAdded = isAdded;
             state.name = name;
-            state.profileImageUrl = profileImageUrl;
             state.bio = bio;
             state.email = email;
             state.profileImage = profileImage;
             state.coverImage = coverImage;
+            state.followers = followers;
+            state.following = following;
+            state.userId = userId;
+            state.link = link;
+            state.isBadge = isBadge;
+            state.profileBadges = profileBadges;
+            state.profileTag = profileTag
         },
-        clearProfile: (state, action) => {
+        clearProfile: (state) => {
             state.isAdded = false;
             state.name = null;
-            state.profileImageUrl=  null;
         }
     }
 });

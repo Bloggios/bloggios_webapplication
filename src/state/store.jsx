@@ -23,7 +23,9 @@ import loadingSlice from "./loadingSlice";
 import snackbarSlice from "./snackbarSlice";
 import {authSlice} from "./authSlice";
 import {profileSlice} from "./profileSlice";
-import {postCreateSlice} from "./postCreateSlice";
+import {isCreatedSlice} from "./isCreatedSlice";
+import errorSlice from "./errorSlice";
+import {chatSlice} from "./chatSlice";
 
 const store = configureStore({
     reducer: {
@@ -31,9 +33,11 @@ const store = configureStore({
         snackbar: snackbarSlice,
         auth: authSlice.reducer,
         profile: profileSlice.reducer,
-        postCreate: postCreateSlice.reducer
+        isCreated: isCreatedSlice.reducer,
+        error: errorSlice,
+        chat: chatSlice.reducer,
     },
-    devTools: false
+    devTools: true
 })
 
 export default store;

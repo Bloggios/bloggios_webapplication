@@ -18,53 +18,121 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import PopoverAvatar from "../tooltips/popoverAvatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import MemoizedNavbarItems from "./NavbarItems";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
-import {navbarProfileLoggedInList, navbarProfileNotLoggedInList} from "../../constant/listConstants";
-import IconLabelDropdown from "../../dropdowns/IconLabelDropdown";
-import {HOME_PAGE} from "../../constant/pathConstants";
+import {navbarProfileNotLoggedInList} from "../../constant/listConstants";
+import IconLabelDropdown from "../dropdowns/IconLabelDropdown";
+import {HOME_PAGE, REPORT_BUG_PAGE, SUPPORT_PAGE} from "../../constant/pathConstants";
 import MemoizedNavbarItemsMobile from "./navbarItemsMobile";
 import {useDispatch, useSelector} from "react-redux";
-import {getProfile} from "../../restservices/profileApi";
+import {getFollow} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
+import {IoIosSearch, IoMdLogOut} from "react-icons/io";
+import {clearIsCreated} from "../../state/isCreatedSlice";
+import {RxSlash} from "react-icons/rx";
+import FallbackLoader from "../loaders/fallbackLoader";
+import {FaRegUser} from "react-icons/fa";
+import {BiHelpCircle} from "react-icons/bi";
+import {AiOutlineBug} from "react-icons/ai";
+
+const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
 const CustomNavbar = () => {
 
     const { width } = useWindowDimensions();
     const navigate = useNavigate();
-    const {isAuthenticated} = useSelector((state)=> state.auth);
-    const {isAdded, name, profileImage} = useSelector((state) => state.profile);
+    const {isAuthenticated, userId} = useSelector((state)=> state.auth);
+    const profileSelector = useSelector((state) => state.profile);
+    const { isAdded, name, bio, email, profileImage, coverImage, followers, following, link, isBadge, profileBadges } = useSelector((state) => state.profile);
+    const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
+    const {isFollowed} = useSelector((state)=> state.isCreated);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await getProfile();
-                const { data } = response;
-                const profileData = {
-                    name: data.name,
-                    isAdded: true,
-                    profileImageUrl: null,
-                    bio: data.bio,
-                    email: data.email,
-                    profileImage: data.profileImage,
-                    coverImage: data.coverImage
-                };
-                dispatch(setProfile(profileData));
-            } catch (error) {
-                setTimeout(fetchProfile, 2000);
+    const navbarProfileLoggedInList = [
+        {
+            id: 1,
+            icon: <FaRegUser fontSize={'18px'}/>,
+            label: 'Profile',
+            path: isAuthenticated && `/profile/${userId}`
+        },
+        {
+            id: 2,
+            icon: <BiHelpCircle fontSize={'18px'}/>,
+            label: 'Help',
+            path: SUPPORT_PAGE
+        },
+        {
+            id: 3,
+            icon: <AiOutlineBug fontSize={'18px'}/>,
+            label: 'Report Bug',
+            path: REPORT_BUG_PAGE
+        },
+        {
+            id: 4,
+            icon: <IoMdLogOut fontSize={'18px'}/>,
+            label: 'Logout',
+            path: HOME_PAGE
+        },
+    ]
+
+    useEffect(()=> {
+        const handleKeyPress = (event) => {
+            if (event.key === '/') {
+                if (!isSearchBarOpen) {
+                    event.preventDefault();
+                    setIsSearchBarOpen(true);
+                }
             }
         };
+            document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isSearchBarOpen, setIsSearchBarOpen])
 
-        if (isAdded) {
-            fetchProfile();
+    useEffect(() => {
+        if (isFollowed) {
+            getFollow()
+                .then((response)=> {
+                    const profileData = {
+                        ...profileSelector,
+                        followers: response.data?.followers,
+                        following: response.data?.following
+                    };
+                    dispatch(setProfile(profileData));
+                    dispatch(clearIsCreated());
+                })
         }
-    }, [isAdded]);
+    }, [isFollowed]);
+
+    const getTopLeftSection = useCallback(()=> {
+        if (width > 700) {
+            return (
+                <IconLabelDropdown
+                    maxWidth={'170px'}
+                    height={'60%'}
+                    source={profileImage ? profileImage : bloggios_logo}
+                    text={name ? name : 'Bloggios'}
+                    itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
+                />
+            )
+        } else if (width <=700 && isAuthenticated) {
+            return (
+                <SearchIconWrapper onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
+                    <IoIosSearch />
+                </SearchIconWrapper>
+            )
+        } else {
+            return (
+                <></>
+            )
+        }
+    }, [width, isAuthenticated, name, profileImage, isSearchBarOpen, dispatch])
 
     return (
         <>
@@ -77,19 +145,28 @@ const CustomNavbar = () => {
                                    size="48px"
                                    cursor={'pointer'}
                                    isTooltipAllowed={true}/>
-                    <SearchBarInput type={'text'} placeholder={'# Explore Bloggios'} maxLength={20}/>
+                    {isAuthenticated && (
+                        <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
+                            <IoIosSearch />
+                            <span>Explore Bloggios</span>
+                            <SearchButton><RxSlash /></SearchButton>
+                        </SearchBarInput>
+                    )}
                 </LogoSearchBarWrapper>
                 {width > 700 && <MemoizedNavbarItems/>}
 
-                <IconLabelDropdown
-                    maxWidth={'170px'}
-                    height={'60%'}
-                    source={profileImage ? profileImage : bloggios_logo}
-                    text={name ? name : 'Bloggios'}
-                    itemsList={isAuthenticated ? navbarProfileLoggedInList : navbarProfileNotLoggedInList}
-                />
+                {getTopLeftSection()}
             </NavbarWrapper>
             {width <= 700 && <MemoizedNavbarItemsMobile />}
+
+            <Suspense fallback={<FallbackLoader height={'400px'} width={'100%'} />}>
+                {isAuthenticated && (
+                    <MemoizedWebSearchBar
+                        isOpen={isSearchBarOpen}
+                        onClose={() => setIsSearchBarOpen(false)}
+                    />
+                )}
+            </Suspense>
         </>
     );
 };
@@ -111,29 +188,73 @@ const LogoSearchBarWrapper = styled.div`
   height: 100%;
 `;
 
-const SearchBarInput = styled.input`
-  padding: 7px 10px;
-  width: 220px;
-  outline: none;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  font-size: 16px;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 1px;
-  background-color: #272727;
-  color: rgba(255, 255, 255, 0.6);
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 14px;
+const SearchBarInput = styled.div`
+    padding: 7px 10px;
+    width: 240px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
     font-weight: 200;
-    letter-spacing: 2px;
-  }
-  &:focus {
+    background-color: #272727;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    &:focus {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 870px) {
+        display: none;
+    }
+`;
+
+const SearchButton = styled.div`
+    height: 22px;
+    aspect-ratio: 1/1;
     border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  @media (max-width: 870px) {
-    display: none;
-  }
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+`;
+
+const SearchIconWrapper = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #4258ff;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    touch-action: manipulation;
+    
+    &:active {
+        color: rgba(255, 255, 255, 1);
+    }
+    
+    @media (max-width: 380px) {
+        height: 30px;
+        width: 30px;
+        font-size: 18px;
+    }
 `;
 
 const MemoizedCustomNavbar = React.memo(CustomNavbar);

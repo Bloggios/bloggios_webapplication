@@ -19,8 +19,7 @@
  */
 
 import React from 'react';
-import styled from "styled-components";
-import GenericLoader from "./genericLoader";
+import styled, {keyframes} from "styled-components";
 
 const LoaderWrapper = styled.div`
   display: flex;
@@ -28,13 +27,37 @@ const LoaderWrapper = styled.div`
   justify-content: center;
 `;
 
-const FallbackLoader = ({height, width, isAuto}) => {
+const rotation = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+`;
+
+const Loader = styled.span`
+    aspect-ratio: 1/1;
+    min-height: 20px;
+    max-height: 48px;
+    height: 100%;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    border-bottom-color: #5567ef !important;
+    animation: ${rotation} 1s linear infinite;
+`;
+
+const FallbackLoader = ({height, width, isAuto, thickness = 5}) => {
     return (
         <LoaderWrapper style={{
             height: isAuto ? 'auto' : height,
             width: isAuto ?  '100%' : width
         }}>
-            <GenericLoader />
+            <Loader style={{
+                border: `${thickness}px solid #f5f5f5`,
+                borderBottomColor: '#5567ef'
+            }} />
         </LoaderWrapper>
     );
 };

@@ -22,20 +22,23 @@ import React from 'react';
 import styled from "styled-components";
 import GenericLoader from "./genericLoader";
 
-const LoaderPage = () => {
+const LoaderPage = ({
+                        height = 'calc(100vh - 72px)',
+                        width = '100%'
+                    }) => {
     return (
-        <LoaderWrapper>
-            <GenericLoader />
+        <LoaderWrapper style={{height: height, width: width}}>
+            <GenericLoader/>
         </LoaderWrapper>
     );
 };
 
 const LoaderWrapper = styled.div`
-  height: calc(100vh - 72px);
-  width: 100vw;
-  display: grid;
-  place-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    backdrop-filter: blur(10px);
 `;
 
 const MemoizedLoaderPage = React.memo(LoaderPage);

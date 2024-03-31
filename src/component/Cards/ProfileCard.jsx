@@ -18,23 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
 import Typography from "../typography/typography";
 import FilledButton from "../buttons/FilledButton";
-import {SlOptionsVertical} from "react-icons/sl";
-import FadeModal from "../modal/FadeModal";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
-import {BiImageAdd} from "react-icons/bi";
-import {authenticatedAxios} from "../../restservices/baseAxios";
-import {ADD_IMAGE_TO_PROFILE} from "../../constant/apiConstants";
-import {getProfile} from "../../restservices/profileApi";
-import {setProfile} from "../../state/profileSlice";
-import {useDispatch} from "react-redux";
-import {setSnackbar} from "../../state/snackbarSlice";
-import {FaRegUser} from "react-icons/fa";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {colors} from '../../styles/Theme';
 
 const ProfileCard = ({
                          name,
@@ -43,75 +34,11 @@ const ProfileCard = ({
                          profileImage,
                          followers,
                          following,
-                         path,
                          email
                      }) => {
 
-    const {width} = useWindowDimensions();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pImage, setPImage] = useState(profileImage);
-    const dispatch = useDispatch();
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleImageChange = (e, uploadFor) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('uploadFor', uploadFor);
-
-                authenticatedAxios.post(ADD_IMAGE_TO_PROFILE, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                })
-                    .then((response) => {
-                        const snackbarData = {
-                            isSnackbar: true,
-                            message: `${uploadFor === 'profile' ? 'Profile' : 'Cover'} Image Added Successfully. It may take time to Reflect on Profile`,
-                            snackbarType: 'Success',
-                        };
-                        dispatch(setSnackbar(snackbarData));
-                        setTimeout(() => {
-                            getProfile().then((response) => {
-                                const { data } = response;
-                                const profileData = {
-                                    name: data.name,
-                                    isAdded: true,
-                                    profileImageUrl: null,
-                                    bio: data.bio,
-                                    email: data.email,
-                                    profileImage: data.profileImage,
-                                    coverImage: data.coverImage,
-                                };
-                                dispatch(setProfile(profileData));
-                            });
-                        }, 1600);
-                    })
-                    .catch((error) => {
-                        const message = error?.response?.data?.message || 'Something went wrong. Please try again later';
-                        const snackBarData = {
-                            isSnackbar: true,
-                            message: message,
-                            snackbarType: 'Error',
-                        };
-                        dispatch(setSnackbar(snackBarData));
-                    });
-            };
-
-            reader.readAsDataURL(file);
-        }
-        closeModal();
-    };
+    const {userId} = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
 
     return (
         <Wrapper>
@@ -158,51 +85,16 @@ const ProfileCard = ({
                 margin: '25px 0 4px 0'
             }}>
                 <FilledButton
-                    borderRadius={'0 0 16px 16px'}
+                    onClick={()=> navigate('/profile/' + userId)}
+                    borderRadius={'16px'}
+                    bgColor={colors.accent80}
+                    hoveredBgColor={colors.accent100}
+                    color={colors.white80}
+                    hoveredColor={colors.white100}
+                    activeBgColor={colors.accent100}
+                    activeColor={colors.white100}
                 />
             </div>
-            <FloatingButton onClick={openModal}>
-                <SlOptionsVertical/>
-            </FloatingButton>
-
-            <FadeModal
-                height={'fit-content'}
-                width={'300px'}
-                padding={'20px'}
-                borderRadius={'16px'}
-                margin={'40px 0 0 0'}
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                bgColor={'#272727'}
-            >
-                <ModalLogoWrapper>
-                    <img src={bloggios_logo} alt="Bloggios" height={'60px'}/>
-                </ModalLogoWrapper>
-
-                <AddImageButtonWrapper htmlFor="image-input">
-                    <span>Upload Profile Image</span>
-                    <FaRegUser fontSize={'25px'} color='#28c916'/>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="image-input"
-                        style={{display: 'none'}}
-                        onChange={(e)=> handleImageChange(e, 'profile')}
-                    />
-                </AddImageButtonWrapper>
-
-                <AddImageButtonWrapper htmlFor="cover-input">
-                    <span>Upload Cover Image</span>
-                    <BiImageAdd fontSize={'25px'} color='#28c916'/>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="cover-input"
-                        style={{display: 'none'}}
-                        onChange={(e)=> handleImageChange(e, 'cover')}
-                    />
-                </AddImageButtonWrapper>
-            </FadeModal>
         </Wrapper>
     );
 };
@@ -212,7 +104,7 @@ const Wrapper = styled.div`
   min-height: 250px;
   height: auto;
   width: clamp(200px, 95%, 300px);
-  background-color: #272727;
+  background-color: ${colors.black200};
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid transparent;
@@ -267,79 +159,6 @@ const TextSpan = styled.div`
   text-overflow: ellipsis;
   font-weight: 200;
   white-space: pre-line;
-`;
-
-const FloatingButton = styled.button`
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  border: 1px solid transparent;
-  outline: none;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.7);
-
-  &:hover {
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    color: rgba(255, 255, 255, 1);
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  &:active {
-    background-color: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: rgba(255, 255, 255, 0.8);
-  }
-`;
-
-const ModalLogoWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-`;
-
-const AddImageButtonWrapper = styled.label`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  text-decoration: none;
-  margin: 20px 0;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 1);
-  opacity: 0.6;
-  transition: all 0.3s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.6);
-    bottom: -7px;
-    left: 0;
-    transform-origin: right;
-    transform: scaleX(0);
-    transition: transform .3s ease-in-out;
-  }
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:hover::before {
-    transform-origin: left;
-    transform: scaleX(1);
-  }
 `;
 
 export default ProfileCard;

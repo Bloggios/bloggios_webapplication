@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -31,46 +31,117 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {FaHeart, FaRegCommentDots, FaRegHeart} from "react-icons/fa";
 import {IoShareSocialOutline} from "react-icons/io5";
 import {getUserProfile} from "../../restservices/profileApi";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {RiDeleteBin5Line} from "react-icons/ri";
+import {getLikeCommentCount} from "../../restservices/postApi";
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {getFormattedDate} from "../../service/DateFunctions";
+import {handlePostDelete} from "../../service/postApiFunctions";
+import SingleColorLoader from "../loaders/SingleColorLoader";
+import {addPostLike, removePostLike} from "../../restservices/likeApi";
+import {dispatchError} from "../../service/functions";
+import FallbackLoader from "../loaders/fallbackLoader";
+import {colors} from "../../styles/Theme";
 
-const Posts = ({
-                   userId,
-                   location,
-                   imagesList,
-                   postBody,
-                   date
-               }) => {
+const CommentModel = lazy(() => import("../modal/CommentModel"));
+
+const Posts = React.forwardRef(({
+    userId,
+    location,
+    imagesList,
+    postBody,
+    date,
+    postId
+}, ref) => {
 
     const [isShown, setIsShown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
-    const {width} = useWindowDimensions();
-    const [formattedDate, setFormattedDate] = useState('');
-    const [userData, setUserData] = useState({
-        name: '',
-        profileImageLink: ''
-    });
+    const { width } = useWindowDimensions();
+    const id = useSelector((state) => state.auth.userId);
+    const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+    const dispatch = useDispatch();
+    const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
     const toggleReadMore = () => {
         setIsExpanded(!isExpanded);
     };
 
+    const fetchPostUser = async () => {
+        const response = await getUserProfile(userId);
+        return response.data;
+    }
 
-    const handleClick = () => {
-        if (isShown) {
-            setIsShown(false)
+    const addLikeMutation = useMutation({
+        mutationFn: () => addPostLike(postId),
+        onSuccess: async () => {
+            await refetchLikeComment();
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    })
+
+    const removeLikeMutation = useMutation({
+        mutationFn: () => removePostLike(postId),
+        onSuccess: async () => {
+            await refetchLikeComment();
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    });
+
+    const handleLike = () => {
+        if (likeCommentCount.isLike) {
+            removeLikeMutation.mutate();
+        } else {
+            addLikeMutation.mutate();
         }
     }
 
-    useEffect(() => {
-        getUserProfile(userId)
-            .then((response) => {
-                setUserData(prevData => ({
-                    ...prevData,
-                    name: response.data?.name,
-                    profileImageLink: response.data?.profileImageLink
-                }));
-            })
-    }, [userId])
+    const getLikeCommentCountResponse = async () => {
+        return await getLikeCommentCount(postId);
+    }
+
+    const {
+        isLoading,
+        error,
+        data: userData,
+        isSuccess,
+        isError
+    } = useQuery({
+        queryKey: ['userProfilePost', userId],
+        queryFn: fetchPostUser,
+        staleTime: 70000
+    })
+
+    const {
+        isLoading: lcIsLoading,
+        error: lcError,
+        isSuccess: lcIsSuccess,
+        data: likeCommentCount,
+        isError: lcIsError,
+        refetch: refetchLikeComment
+    } = useQuery({
+        queryKey: ['lcCount', postId],
+        queryFn: getLikeCommentCountResponse,
+        staleTime: 70000,
+        retry: 2
+    })
+
+    const getPostEntries = useCallback(() => {
+        if (lcIsLoading) {
+            return <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
+        } else if (lcIsSuccess && likeCommentCount) {
+            return `${likeCommentCount.like} Likes ● ${likeCommentCount.comment} Comments`
+        } else if (lcError || lcIsError) {
+            return 'Error Occurred'
+        } else {
+            return 'Error Occurred'
+        }
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount])
 
     const getReadMoreValue = () => {
         const split = postBody.split('\n');
@@ -80,31 +151,95 @@ const Posts = ({
         return false;
     }
 
-    const getFormattedDate = (date) => {
-        const originalDate = new Date(date);
-        const currentDate = new Date();
-        const timeDiffInSeconds = Math.floor((currentDate - originalDate) / 1000);
-        if (timeDiffInSeconds < 60) {
-            return `${timeDiffInSeconds}s ago`;
-        } else if (timeDiffInSeconds < 3600) {
-            return `${Math.floor(timeDiffInSeconds / 60)}m ago`;
-        } else if (timeDiffInSeconds < 86400) {
-            return `${Math.floor(timeDiffInSeconds / 3600)}h ago`;
-        } else if (timeDiffInSeconds < 604800) {
-            return `${Math.floor(timeDiffInSeconds / 86400)}d ago`;
-        } else if (timeDiffInSeconds < 2592000) {
-            return `${Math.floor(timeDiffInSeconds / 604800)}w ago`;
-        } else if (timeDiffInSeconds < 31536000) {
-            return `${Math.floor(timeDiffInSeconds / 2592000)}mo ago`;
-        } else {
-            return `${Math.floor(timeDiffInSeconds / 31536000)}yr ago`;
+    const handleClickOutside = (e) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+            setIsShown(false);
         }
-    }
+    };
 
-    return (
-        <Wrapper onClick={handleClick}>
-            <PostHeader>
-                <LogoNameWrapper>
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    const getLikeIcon = useCallback(()=> {
+        if (lcIsLoading || removeLikeMutation.isPending || addLikeMutation.isPending) {
+            return <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />;
+        } else if (lcIsSuccess && likeCommentCount) {
+            if (likeCommentCount.isLike) {
+                return <FaHeart color={'red'} />
+            } else {
+                return <FaRegHeart />
+            }
+        } else {
+            return <FaRegHeart />
+        }
+    }, [lcIsLoading, removeLikeMutation.isPending, addLikeMutation.isPending, lcIsSuccess, likeCommentCount])
+
+    const getPostFooter = useCallback(() => {
+        if (lcIsLoading) {
+            return <PostFooter>
+                <LikeCommentShareWrapper style={{
+                    height: '44px',
+                    width: '100px'
+                }}>
+                    <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} />
+                </LikeCommentShareWrapper>
+            </PostFooter>
+        } else if (lcIsSuccess && likeCommentCount) {
+            return (
+                <PostFooter>
+                    <LikeCommentShareWrapper>
+                        <IconButton onClick={handleLike}>
+                            {getLikeIcon()}
+                        </IconButton>
+                        <IconButton onClick={() => setIsCommentBoxOpen(!isCommentBoxOpen)}>
+                            <FaRegCommentDots />
+                        </IconButton>
+                        <IconButton>
+                            <IoShareSocialOutline />
+                        </IconButton>
+                    </LikeCommentShareWrapper>
+                </PostFooter>
+            )
+        } else if (lcError || lcIsError) {
+            return (
+                <PostFooter>
+                    <LikeCommentShareWrapper>
+                        <IconButton>
+                            <FaRegHeart />
+                        </IconButton>
+                        <IconButton>
+                            <FaRegCommentDots />
+                        </IconButton>
+                        <IconButton>
+                            <IoShareSocialOutline />
+                        </IconButton>
+                    </LikeCommentShareWrapper>
+                </PostFooter>
+            )
+        }
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen, getLikeIcon])
+
+    const getNameContent = useCallback(() => {
+        if (isLoading) {
+            return (
+                <>
+                    <Avatar
+                        size={width > 500 ? '50px' : '40px'}
+                        position={'relative'}
+                        image={bloggios_logo}
+                    />
+                    <ColumnWrapper>
+                        <SingleColorLoader height={'2px'} width={'2px'} size={'2px'} margin={'0 10px'} />
+                    </ColumnWrapper>
+                </>
+            )
+        } else if (isSuccess && userData) {
+            return (
+                <>
                     <Avatar
                         size={width > 500 ? '50px' : '40px'}
                         position={'relative'}
@@ -118,25 +253,59 @@ const Posts = ({
                             {getFormattedDate(date)}
                         </TimeSpan>
                     </ColumnWrapper>
+                </>
+            )
+        } else if (isError || error) {
+            return (
+                <>
+                    <Avatar
+                        size={width > 500 ? '50px' : '40px'}
+                        position={'relative'}
+                        image={bloggios_logo}
+                    />
+                    <ColumnWrapper>
+                        <NameSpan>
+                            Error Occurred
+                        </NameSpan>
+                        <TimeSpan>
+                            {getFormattedDate(date)}
+                        </TimeSpan>
+                    </ColumnWrapper>
+                </>
+            )
+        }
+    }, [userData, isLoading, isSuccess, width, date, isError, error])
+
+    const postJsxBody = (
+        <>
+            <PostHeader>
+                <LogoNameWrapper>
+                    {getNameContent()}
                 </LogoNameWrapper>
 
-                <OptionsMenu onClick={() => setIsShown(!isShown)}>
-                    <SlOptionsVertical/>
-
+                <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                    <SlOptionsVertical />
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
                         visibility: isShown ? 'visible' : 'hidden',
                         transform: isShown ? 'translateX(0)' : 'translateX(100%)'
                     }}>
-                        <DropDownItemWrapper>
-                            <Typography text={'View Profile'} type={'custom'} size={'14px'}/>
-                            <CgProfile fontSize={'18px'}/>
+                        <DropDownItemWrapper onClick={() => navigate(`/profile/${userId}`)}>
+                            <Typography text={'View Profile'} type={'custom'} size={'14px'} />
+                            <CgProfile fontSize={'18px'} />
                         </DropDownItemWrapper>
 
                         <DropDownItemWrapper>
-                            <Typography text={'Report Post'} type={'custom'} size={'14px'}/>
-                            <MdOutlineReport fontSize={'18px'}/>
+                            <Typography text={'Report Post'} type={'custom'} size={'14px'} />
+                            <MdOutlineReport fontSize={'20px'} />
                         </DropDownItemWrapper>
+
+                        {id === userId && (
+                            <DropDownItemWrapper onClick={() => handlePostDelete(postId, dispatch)}>
+                                <Typography text={'Delete'} type={'custom'} size={'14px'} />
+                                <RiDeleteBin5Line fontSize={'18px'} color={'rgb(223,56,56)'} />
+                            </DropDownItemWrapper>
+                        )}
                     </DropdownWrapper>
                 </OptionsMenu>
             </PostHeader>
@@ -145,10 +314,11 @@ const Posts = ({
                 <PostBodyWrapper style={{
                     margin: imagesList ? '20px 0' : '20px 0 0 0'
                 }}>
-                    <TextContainer style={{
+                    <TextContainer dangerouslySetInnerHTML={{
+                        __html: postBody
+                    }} style={{
                         height: isExpanded ? 'auto' : '65px'
                     }}>
-                        {postBody}
                     </TextContainer>
                     {getReadMoreValue() && (
                         <ReadMoreButton onClick={toggleReadMore}>
@@ -162,33 +332,44 @@ const Posts = ({
                 <ImageSwiperWrapper style={{
                     marginTop: !postBody && '20px'
                 }}>
-                    <ImagesSwiper swiperItems={imagesList}/>
+                    <ImagesSwiper swiperItems={imagesList} />
                 </ImageSwiperWrapper>
             )}
 
-            <PostFooter>
-                <LikeCommentShareWrapper>
-                    <IconButton onClick={() => setIsLiked(!isLiked)}>
-                        {isLiked ? <FaHeart color={'red'}/> : <FaRegHeart/>}
-                    </IconButton>
-                    <IconButton>
-                        <FaRegCommentDots/>
-                    </IconButton>
-                    <IconButton>
-                        <IoShareSocialOutline/>
-                    </IconButton>
-                </LikeCommentShareWrapper>
-            </PostFooter>
-        </Wrapper>
+            <PostEntriesWrapper style={{
+                marginTop: imagesList && '10px'
+            }}>
+                {getPostEntries()}
+            </PostEntriesWrapper>
+
+            {getPostFooter()}
+
+            {isCommentBoxOpen && (
+                <Suspense fallback={<FallbackLoader height={'200px'} width={'100%'} />}>
+                    <CommentModel
+                        name={userData.name}
+                        postId={postId}
+                        refetch={refetchLikeComment}
+                        postUserId={userId}
+                        isModalOpen={isCommentBoxOpen}
+                        closeModal={() => setIsCommentBoxOpen(false)}
+                    />
+                </Suspense>
+            )}
+        </>
     );
-};
+
+    return ref
+        ? <Wrapper ref={ref}>{postJsxBody}</Wrapper>
+        : <Wrapper>{postJsxBody}</Wrapper>;
+});
 
 const Wrapper = styled.div`
     min-width: 100%;
     max-width: 200px; /* Set a maximum width to prevent it from growing indefinitely */
     margin: 0 auto; /* Center the form horizontally */
     height: auto;
-    background-color: #272727;
+    background-color: ${colors.black200};
     border-radius: 20px;
     padding: 20px;
     overflow: hidden; /* Hide any potential overflow */
@@ -256,7 +437,7 @@ const TimeSpan = styled.span`
 const OptionsMenu = styled.button`
     height: 34px;
     width: 34px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: ${colors.black150};
     border-radius: 7px;
     display: flex;
     align-items: center;
@@ -268,14 +449,9 @@ const OptionsMenu = styled.button`
     position: relative;
     transition: background 150ms ease;
 
-    &:hover {
+    &:hover, &:active {
         color: rgba(255, 255, 255, 0.8);
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    &:active {
-        color: rgba(255, 255, 255, 0.6);
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: ${colors.black150};
     }
 `;
 
@@ -355,9 +531,8 @@ const ImageSwiperWrapper = styled.div`
 const PostFooter = styled.div`
     width: 100%;
     height: auto;
-    padding: 10px;
+    padding: 10px 0;
     display: flex;
-
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -418,6 +593,19 @@ const TimingWrapper = styled.div`
     display: flex;
     align-items: center;
     font-weight: 200;
+`;
+
+const PostEntriesWrapper = styled.span`
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    display: flex;
+`;
+
+const Footer = styled.div`
+
 `;
 
 export default Posts;

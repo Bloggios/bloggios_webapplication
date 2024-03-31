@@ -22,7 +22,15 @@ import {useEffect} from 'react';
 import seoConfigs from "./seoConfigs";
 
 const useSeo = (pageKey) => {
+
     useEffect(() => {
+
+        const environment = process.env.REACT_APP_ENVIRONMENT;
+
+        if (environment !== 'production') {
+            return;
+        }
+
         const { title, description, keywords, author, ogType, ogUrl, ogImage, ogTitle, ogDescription } = seoConfigs[pageKey];
 
         document.title = title;

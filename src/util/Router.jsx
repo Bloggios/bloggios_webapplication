@@ -18,36 +18,86 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {HOME_PAGE, LOGIN_PAGE, OTP_PAGE, PROFILE_ADDITION_INITIAL, SIGNUP_PAGE} from "../constant/pathConstants";
+import {
+    ACTIVITY_PAGE,
+    ASK_QUESTION_OUTLET_PAGE,
+    CHATS_PAGE,
+    HOME_PAGE,
+    LANDING_PAGE,
+    LOGIN_PAGE,
+    NOT_FOUND_PAGE,
+    OAUTH_REDIRECT,
+    OTP_PAGE,
+    POST_OUTLET_PAGE,
+    PROFILE_ADDITION_INITIAL,
+    PROFILE_PAGE,
+    QUESTION_PAGE,
+    SECURITY_PAGE,
+    SETTING_PAGE,
+    SIGNUP_PAGE
+} from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
+import OAuthRedirectHandler from "./OAuthRedirectHandler";
+import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
 
-const HomePage = lazy(()=> import('../container/homeContainer/homePage'));
-const LoginPage = lazy(()=> import('../container/userAuthenticationContainer/loginPage'));
-const SignupPage = lazy(()=> import('../container/userAuthenticationContainer/signUpPage'));
-const OtpPage = lazy(()=> import('../container/userAuthenticationContainer/otpPage'));
-const ProfileAdditionInitial = lazy(()=> import('../container/profileContainer/ProfileAdditionInitial'));
+const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
+const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
+const LoginPage = lazy(() => import('../container/userAuthenticationContainer/loginPage'));
+const SignupPage = lazy(() => import('../container/userAuthenticationContainer/signUpPage'));
+const OtpPage = lazy(() => import('../container/userAuthenticationContainer/otpPage'));
+const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/ProfileAdditionInitial'));
+const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'));
+const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
+const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
+const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
+const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
+const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
+const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfileAboutOutlet'));
+const ProfilePostOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfilePostOutlet'));
+const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionOutlet'));
+const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
+const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
+const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/ChatDefaultOutlet'));
 
 const Router = () => {
 
-    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {isAuthenticated, authorities} = useSelector((state) => state.auth);
 
     return (
-        <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
-            <Routes>
-                <Route path={HOME_PAGE} element={<HomePage />} />
-                <Route path={LOGIN_PAGE} element={<LoginPage />} />
-                <Route path={SIGNUP_PAGE} element={<SignupPage />} />
-                <Route path={OTP_PAGE} element={<OtpPage />} />
-
-                <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-                    <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial />} />
-                </Route>
-            </Routes>
-        </Suspense>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                <Routes>
+                    <Route path={LANDING_PAGE} element={<UnauthenticatedHomePage />}/>
+                    <Route path={LOGIN_PAGE} element={<LoginPage/>}/>
+                    <Route path={SIGNUP_PAGE} element={<SignupPage/>}/>
+                    <Route path={OTP_PAGE} element={<OtpPage/>}/>
+                    <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
+                    <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
+                    <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
+                        <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
+                        <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
+                        <Route path={PROFILE_PAGE} element={<ProfilePage />} />
+                        <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
+                        <Route path={SECURITY_PAGE} element={<SecurityPage />} />
+                        <Route path={SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={QUESTION_PAGE} element={<QuestionPage />} >
+                            <Route index element={<QuestionOutlet />} />
+                            <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
+                        </Route>
+                        <Route path={PROFILE_PAGE} element={<ProfilePage />}>
+                            <Route index element={<ProfileAboutOutlet />} />
+                            <Route path={POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
+                        </Route>
+                        <Route path={CHATS_PAGE} element={<ChatPage />} >
+                            <Route index element={<ChatDefaultOutlet />} />
+                            <Route path={':userId'} element={<ChatUserOutlet />} />
+                        </Route>
+                    </Route>
+                </Routes>
+            </Suspense>
     );
 };
 

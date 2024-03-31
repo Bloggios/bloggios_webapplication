@@ -18,14 +18,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet, useNavigate} from "react-router-dom";
 import {LOGIN_PAGE} from "../constant/pathConstants";
+import PropTypes from "prop-types";
 
-const ProtectedRoute = ({isAuthenticated}) => {
+const ProtectedRoute = ({isAuthenticated, authorities}) => {
+
+    const navigate = useNavigate();
+
     if (!isAuthenticated) {
         return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
     }
     return <Outlet />
+}
+
+ProtectedRoute.propTypes = {
+    isAuthenticated: PropTypes.bool
 }
 
 export default ProtectedRoute;

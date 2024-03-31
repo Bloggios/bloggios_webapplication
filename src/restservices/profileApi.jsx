@@ -19,7 +19,16 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {GET_PROFILE, GET_USER_PROFILE} from "../constant/apiConstants";
+import {
+    COUNT_FOLLOW,
+    DETAILED_PROFILE,
+    GET_PROFILE,
+    GET_USER_PROFILE,
+    PROFILE_LIST,
+    PROFILE_SUGGESTIONS,
+    PROFILE_TAGS_LIST,
+    SEARCH_USER_PROFILE_LIST
+} from "../constant/apiConstants";
 
 export const getProfile = () => {
     return authenticatedAxios.get(GET_PROFILE)
@@ -29,4 +38,38 @@ export const getProfile = () => {
 export const getUserProfile = (userId) => {
     return authenticatedAxios.get(GET_USER_PROFILE + '/' + userId)
         .then((response)=> response);
+}
+
+export const getFollow = () => {
+    return authenticatedAxios.get(COUNT_FOLLOW)
+        .then((response)=> response);
+}
+
+export const profileSuggestions = (payload) => {
+    return authenticatedAxios.post(PROFILE_SUGGESTIONS, payload)
+        .then((response)=> response);
+}
+
+export const searchProfileList = (payload) => {
+    return authenticatedAxios.post(PROFILE_LIST, payload)
+        .then((response)=> response);
+}
+
+export const detailedProfile = (userId) => {
+    return authenticatedAxios.get(DETAILED_PROFILE + '/' + userId)
+        .then((response)=> response);
+}
+
+export const profileTagsList = () => {
+    return authenticatedAxios.get(PROFILE_TAGS_LIST)
+        .then((response)=> response);
+}
+
+export const searchProfileData = (text) => {
+    return authenticatedAxios.get(SEARCH_USER_PROFILE_LIST, {
+        params: {
+            "text": text,
+            "size": 20
+        }
+    }).then((response)=> response);
 }

@@ -34,7 +34,7 @@ const snackbarSlice = createSlice({
             state.message = message;
             state.isSnackbar = isSnackbar;
         },
-        clearSnackbar: (state, action) => {
+        clearSnackbar: (state) => {
             state.snackbarType = '';
             state.message = '';
             state.isSnackbar = false;
