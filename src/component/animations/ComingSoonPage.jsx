@@ -50,7 +50,7 @@ const ComingSoonPage = () => {
                         The power of connection,<br/>powered by software
                     </BgTransition>
                     <LaunchingInformation>
-                        Launching Softly on<br/>April 14, 2024
+                        Launching Softly on<br/>April 15, 2024
                     </LaunchingInformation>
                 </TextWrapper>
 
