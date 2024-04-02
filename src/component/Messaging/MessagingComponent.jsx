@@ -23,17 +23,29 @@ import styled from "styled-components";
 import {colors} from "../../styles/Theme";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {Outlet} from "react-router-dom";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const MessagingUserList = lazy(()=> import('./NestedComponents/MessagingUserList'));
+// const MobileUserSearchList = lazy(()=> import('./NestedComponents/MobileUserSearchList'));
 
 const MessagingComponent = () => {
+
+    const {width} = useWindowDimensions();
 
     return (
         <Wrapper>
 
-            <Suspense fallback={<FallbackLoader width={'32%'} height={'100%'} />}>
-                <MessagingUserList />
-            </Suspense>
+            {/*{width > 600 ? (*/}
+            {/*    <Suspense fallback={<FallbackLoader width={'32%'} height={'100%'} />}>*/}
+            {/*        <MessagingUserList />*/}
+            {/*    </Suspense>*/}
+            {/*) : (*/}
+            {/*    <Suspense fallback={<FallbackLoader width={'100%'} height={'70px'} thickness={2} />}>*/}
+            {/*        <MobileUserSearchList />*/}
+            {/*    </Suspense>*/}
+            {/*)}*/}
+
+            <MessagingUserList />
 
             <MessageContainer>
                 <Outlet />
@@ -44,11 +56,14 @@ const MessagingComponent = () => {
 
 const Wrapper = styled.div`
     width: 100%;
-    
     height: 100%;
     display: flex;
     flex-direction: row;
     gap: 16px;
+    
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
 `;
 
 const MessageContainer = styled.div`
@@ -59,6 +74,16 @@ const MessageContainer = styled.div`
     background: ${colors.black150};
     border-radius: 20px;
     padding: 20px;
+    
+    @media (max-width: 1000px) {
+        width: 60%;
+    }
+    
+    @media (max-width: 600px) {
+        width: 100%;
+        padding: 10px;
+        height: calc(100% - 50px);
+    }
 `;
 
 export default MessagingComponent;

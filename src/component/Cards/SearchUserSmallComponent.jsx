@@ -26,17 +26,20 @@ import {useDispatch, useSelector} from "react-redux";
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from "../../state/snackbarSlice";
 import {setIsCreated} from "../../state/isCreatedSlice";
+import {useNavigate} from "react-router-dom";
 
 const SearchUserSmallComponent = ({
-    name,
-    email,
-    fetchedUserId,
-    image
+                                      name,
+                                      email,
+                                      fetchedUserId,
+                                      image,
+                                      onClose
                                   }) => {
 
     const [isFollowing, setIsFollowing] = useState(false);
     const dispatch = useDispatch();
-    const {userId} = useSelector((state)=> state.auth);
+    const {userId} = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
     useEffect(() => {
         checkFollowing(fetchedUserId)
@@ -50,6 +53,7 @@ const SearchUserSmallComponent = ({
 
     const handleFollowing = useCallback(
         (event) => {
+            event.stopPropagation();
             event.preventDefault();
             setIsFollowing(!isFollowing);
 
@@ -79,11 +83,21 @@ const SearchUserSmallComponent = ({
                     dispatch(setSnackbar(snackBarData));
                 });
         },
-        [dispatch, isFollowing, userId]
+        [dispatch, isFollowing, fetchedUserId]
     );
 
+    const handleMessage = (event) => {
+        event.stopPropagation();
+        navigate(`/chats/${fetchedUserId}`);
+        onClose();
+    }
+
+    const handleWrapperClick = (event) => {
+        navigate(`/profile/${fetchedUserId}`)
+    }
+
     return (
-        <Wrapper>
+        <Wrapper onClick={handleWrapperClick}>
             <div style={{
                 width: '100%',
                 display: 'flex',
@@ -101,16 +115,18 @@ const SearchUserSmallComponent = ({
                 </ColumnWrapper>
             </div>
 
-            <ButtonsWrapper>
-                {fetchedUserId!==userId && (
+
+            {fetchedUserId !== userId && (
+                <ButtonsWrapper>
                     <FollowButton onClick={handleFollowing}>
                         {isFollowing ? 'Unfollow' : 'Follow'}
                     </FollowButton>
-                )}
-                <ViewProfileButton>
-                    Profile
-                </ViewProfileButton>
-            </ButtonsWrapper>
+                    <MessageButton onClick={handleMessage}>
+                        Message
+                    </MessageButton>
+                </ButtonsWrapper>
+            )}
+
         </Wrapper>
     );
 };
@@ -214,7 +230,7 @@ const FollowButton = styled.button`
     }
 `;
 
-const ViewProfileButton = styled.button`
+const MessageButton = styled.button`
     outline: none;
     border: none;
     padding: 5px 16px;
@@ -237,7 +253,7 @@ const ViewProfileButton = styled.button`
         background-color: #272727;
         color: rgba(255, 255, 255, 0.6);
     }
-    
+
     @media (max-width: 500px) {
         display: none;
     }

@@ -115,11 +115,13 @@ const ParentBase = ({children}) => {
                             onClose={()=> setIsModalOpen(false)}
                         />
 
-                        <ReportModal
-                            isModelOpen={reportModal}
-                            onClose={handleReportModalClose}
-                            data={information}
-                        />
+                        {reportModal && (
+                            <ReportModal
+                                isModelOpen={reportModal}
+                                onClose={handleReportModalClose}
+                                data={information}
+                            />
+                        )}
                     </AppContainer>
                 )
             }

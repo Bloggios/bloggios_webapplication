@@ -498,7 +498,7 @@ const PostBodyWrapper = styled.div`
 
 const ReadMoreButton = styled.button`
     border: none;
-    background: linear-gradient(to right, rgba(39, 39, 39, 0.5), rgba(39, 39, 39, 0.8), rgba(39, 39, 39, 1));
+    background: transparent;
     color: #007bff;
     cursor: pointer;
     font-size: 14px;

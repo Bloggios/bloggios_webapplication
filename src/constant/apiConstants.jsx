@@ -53,3 +53,5 @@ export const PROFILE_TAGS_LIST = '/user-provider/v1.0/profile/tags-list';
 export const FETCH_QUESTION_TAGS = '/question-provider/v1.0/tags/tag-search';
 export const ADD_QUESTION = '/question-provider/v1.0/question';
 export const SEARCH_USER_PROFILE_LIST = '/user-provider/v1.0/profile/profile-search';
+export const USER_CHAT_HISTORY = '/websockets-provider/v1.0/chat-history/list';
+export const USER_CHAT_LIST = '/websockets-provider/v1.0/user-chat/list';

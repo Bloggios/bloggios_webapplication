@@ -317,6 +317,7 @@ const WebSearchBar = ({
                                                         key={user.userId}
                                                         name={user.name}
                                                         email={user.email}
+                                                        onClose={onClose}
                                                         fetchedUserId={user.userId}
                                                         image={user.profileImage}
                                                     />

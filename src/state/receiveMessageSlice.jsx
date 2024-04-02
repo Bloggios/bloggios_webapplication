@@ -18,28 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
-import {profileSlice} from "./profileSlice";
-import {isCreatedSlice} from "./isCreatedSlice";
-import errorSlice from "./errorSlice";
-import {chatSlice} from "./chatSlice";
-import {receiveMessageSlice} from "./receiveMessageSlice";
+import {createSlice} from "@reduxjs/toolkit";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer,
-        profile: profileSlice.reducer,
-        isCreated: isCreatedSlice.reducer,
-        error: errorSlice,
-        chat: chatSlice.reducer,
-        receiveMessage: receiveMessageSlice.reducer,
+const receiveMessageSlice = createSlice({
+    name: 'receiveMessage',
+    initialState: {
+        message: null,
+        senderId: null,
+        receiverId: null
     },
-    devTools: true
-})
+    reducers: {
+        createReceiveMessage: (state, action) => {
+            const { message, senderId, receiverId } = action.payload;
+            state.message = message;
+            state.senderId = senderId;
+            state.receiverId = receiverId;
+        },
+        clearReceiveMessage: (state, action) => {
+            state.message = null;
+            state.senderId = null;
+            state.receiverId = null;
+        }
+    }
+});
 
-export default store;
+export { receiveMessageSlice }
+
+export const { createReceiveMessage, clearReceiveMessage } = receiveMessageSlice.actions;

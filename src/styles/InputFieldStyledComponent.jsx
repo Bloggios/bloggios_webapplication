@@ -18,28 +18,57 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {configureStore} from "@reduxjs/toolkit";
-import loadingSlice from "./loadingSlice";
-import snackbarSlice from "./snackbarSlice";
-import {authSlice} from "./authSlice";
-import {profileSlice} from "./profileSlice";
-import {isCreatedSlice} from "./isCreatedSlice";
-import errorSlice from "./errorSlice";
-import {chatSlice} from "./chatSlice";
-import {receiveMessageSlice} from "./receiveMessageSlice";
+import styled, {css} from "styled-components";
 
-const store = configureStore({
-    reducer: {
-        loading: loadingSlice,
-        snackbar: snackbarSlice,
-        auth: authSlice.reducer,
-        profile: profileSlice.reducer,
-        isCreated: isCreatedSlice.reducer,
-        error: errorSlice,
-        chat: chatSlice.reducer,
-        receiveMessage: receiveMessageSlice.reducer,
-    },
-    devTools: true
-})
+const Field = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    margin-top: 20px;
+`;
 
-export default store;
+const FieldStyle = css`
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 300;
+`;
+
+const Label = styled.label`
+    ${FieldStyle};
+    color: rgba(245, 245, 245, 0.8);
+`;
+
+const InputStyle = css`
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    color: rgba(245, 245, 245, 0.8);
+    border-radius: 4px;
+    box-shadow: inset rgba(245, 245, 245, 0.1) 0 0 16px -6px;
+
+    &:focus {
+        color: rgba(245, 245, 245, 1);
+    }
+`;
+
+const Input = styled.input`
+    ${FieldStyle};
+    ${InputStyle};
+`;
+
+const TextArea = styled.textarea`
+    ${FieldStyle};
+    ${InputStyle};
+    resize: none;
+`;
+
+export {
+    Field,
+    Label,
+    Input,
+    TextArea
+}

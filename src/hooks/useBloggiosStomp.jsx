@@ -25,6 +25,7 @@ import {addError} from "../state/errorSlice";
 import SockJS from "sockjs-client";
 import {over} from "stompjs";
 import {SEND_MESSAGE} from "../constant/WebsocketEndpoint";
+import {createReceiveMessage} from "../state/receiveMessageSlice";
 
 let stompClient = null;
 const useBloggiosStomp = () => {
@@ -78,7 +79,14 @@ const useBloggiosStomp = () => {
     }
 
     const onPrivateChat = (payload) => {
-        console.log(payload)
+        let body = JSON.parse(payload.body);
+        const data = {
+            message: body.message,
+            senderId: body.senderId,
+            receiverId: body.receiverId
+        }
+        dispatch(createReceiveMessage(data));
+
     }
 
     const stompSubscribe = () => {

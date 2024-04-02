@@ -50,6 +50,7 @@ body {
   touch-action: manipulation !important;
   -ms-touch-action: manipulation !important;
   -webkit-tap-highlight-color: transparent !important;
+  scrollbar-width: thin !important;
 }
 
 code {

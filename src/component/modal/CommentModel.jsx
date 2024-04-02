@@ -32,6 +32,7 @@ import {addPostComment} from "../../restservices/commentApi";
 import {useDispatch, useSelector} from "react-redux";
 import {clearIsCreated, setIsCreated} from "../../state/isCreatedSlice";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {colors} from "../../styles/Theme";
 
 const CommentList = lazy(()=> import('../List/CommentList'));
 
@@ -223,7 +224,7 @@ const CommentModel = ({
                 margin={'40px 0 0 0'}
                 isOpen={isModalOpen}
                 onClose={closeModal}
-                bgColor={'#272727'}
+                bgColor={colors.black50}
             >
                 <Wrapper>
                     <CommentListWrapper>
