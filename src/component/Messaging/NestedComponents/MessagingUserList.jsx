@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {IoSearch} from "react-icons/io5";
 import {colors} from "../../../styles/Theme";
 import IconButton from "../../buttons/IconButton";
 import styled from "styled-components";
 import useIsInputFocused from "../../../hooks/useIsInputFocused";
 import {bgBlackRounded} from "../../../asset/svg";
-import {detailedProfile, searchProfileData} from "../../../restservices/profileApi";
+import {searchProfileData} from "../../../restservices/profileApi";
 import {dispatchError, dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
 import {useDispatch, useSelector} from "react-redux";
 import FallbackLoader from "../../loaders/fallbackLoader";
@@ -33,7 +33,7 @@ import {AiOutlineClose} from "react-icons/ai";
 import {uuidValidator} from "../../../util/ComponentValidators";
 import {useNavigate} from "react-router-dom";
 import {userChatHistory as chatHistoryApi} from '../../../restservices/WebsocketsApi';
-import {useQueries, useQuery} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import MessagingUserDataCard from './MessagingUserDataCard';
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 

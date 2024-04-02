@@ -1,12 +1,12 @@
 import React, {useCallback} from "react";
 import useUserProfile from "../../../hooks/useUserProfile";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import { colors } from "../../../styles/Theme";
-import { dispatchErrorMessage, dispatchWarningMessage } from "../../../service/functions";
-import { uuidValidator } from "../../../util/ComponentValidators";
-import { bgBlackRounded } from "../../../asset/svg";
+import {colors} from "../../../styles/Theme";
+import {dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
+import {uuidValidator} from "../../../util/ComponentValidators";
+import {bgBlackRounded} from "../../../asset/svg";
 import FallbackLoader from "../../loaders/fallbackLoader";
 
 const MessagingUserDataCard = ({ id }) => {

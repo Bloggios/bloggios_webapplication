@@ -34,7 +34,7 @@ const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 const SidebarCompressed = () => {
 
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
-    const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
+    const {name, profileImage,} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

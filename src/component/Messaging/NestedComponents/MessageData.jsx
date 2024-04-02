@@ -93,6 +93,12 @@ const Wrapper = styled.div`
         background: ${({ chatType }) => chatType === 'SENDER' ? 'linear-gradient(to right, #4776e6, #8e54e9)' : 'linear-gradient(to right, #aa076b, #61045f)'};
         color: ${colors.white100};
         padding: 8px;
+        hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -webkit-hyphens: auto;
+        overflow: hidden;
+        word-wrap: break-word;
     }
 `;
 

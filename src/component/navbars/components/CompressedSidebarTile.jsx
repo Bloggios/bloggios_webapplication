@@ -24,11 +24,12 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {BiHomeAlt2} from "react-icons/bi";
 import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {CgProfile} from "react-icons/cg";
 import {MdOutlineSecurity} from "react-icons/md";
 import {IoIosSettings} from "react-icons/io";
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {BsChatDots} from "react-icons/bs";
+import {IoNotificationsOutline} from "react-icons/io5";
 
 const CompressedSidebarTile = () => {
 
@@ -77,7 +78,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname.includes(CHATS_PAGE)}
                     onClick={() => navigate(CHATS_PAGE)}
                 >
-                    <CgProfile/>
+                    <BsChatDots />
                 </TileIconButton>
                 <TooltipContent
 
@@ -91,7 +92,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname === NOTIFICATIONS_PAGE}
                     onClick={() => navigate(NOTIFICATIONS_PAGE)}
                 >
-                    <FaUserAlt/>
+                    <IoNotificationsOutline />
                 </TileIconButton>
                 <TooltipContent
 

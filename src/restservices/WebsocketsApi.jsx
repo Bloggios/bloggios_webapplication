@@ -1,5 +1,5 @@
 import {USER_CHAT_HISTORY, USER_CHAT_LIST} from "../constant/apiConstants"
-import { authenticatedAxios } from "./baseAxios"
+import {authenticatedAxios} from "./baseAxios"
 
 export const userChatHistory = (userId) => {
     return authenticatedAxios.get(USER_CHAT_HISTORY, {

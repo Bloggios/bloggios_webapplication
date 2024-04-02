@@ -18,10 +18,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy} from 'react';
 import styled from "styled-components";
 import {colors} from "../../styles/Theme";
-import FallbackLoader from "../loaders/fallbackLoader";
 import {Outlet} from "react-router-dom";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 

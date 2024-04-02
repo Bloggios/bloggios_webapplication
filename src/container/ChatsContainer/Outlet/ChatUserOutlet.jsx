@@ -69,7 +69,7 @@ const ChatUserOutlet = () => {
     } = useBloggiosUserChat(authUserId, userId, pageNum, chatList);
 
     useEffect(()=> {
-        if (userChatData && userChatData.length > 0) {
+        if (userChatData) {
             setChatList(userChatData);
         }
     }, [userChatData])
@@ -94,7 +94,7 @@ const ChatUserOutlet = () => {
             chatList.unshift(payload);
             dispatch(clearReceiveMessage())
         }
-    }, [receiveMessageSelector])
+    }, [receiveMessageSelector]);
 
     useLayoutEffect(()=> {
         const isValid = uuidValidator(userId);
@@ -104,6 +104,7 @@ const ChatUserOutlet = () => {
             });
         } else {
             setPageNum(0)
+            setChatList([])
             setQueryEnabled(true);
         }
     }, [userId]);
@@ -142,7 +143,14 @@ const ChatUserOutlet = () => {
         });
 
         if (chat) intObserver.current.observe(chat);
-    }, [hasUserChatNextPage, isUserChatLoading])
+    }, [hasUserChatNextPage, isUserChatLoading]);
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSend();
+        }
+    };
 
     const getChatHeader = useCallback(()=> {
         if (profileData) {
@@ -228,6 +236,7 @@ const ChatUserOutlet = () => {
                             placeholder={`Send Message to ${profileData.name ? profileData.name.split(' ')[0] : 'User'}`}
                             value={message}
                             onChange={(event)=> setMessage(event.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         <IconButton
                             color={'#7081ff'}
@@ -299,6 +308,7 @@ const MessagesList = styled.div`
     display: flex;
     flex-direction: column-reverse;
     gap: 10px;
+    padding: 4px 0;
 `;
 
 const InputField = styled.div`
