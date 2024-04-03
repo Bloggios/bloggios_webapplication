@@ -18,33 +18,44 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {authenticatedAxios} from "./baseAxios";
-import {ADD_QUESTION, FETCH_QUESTION_TAGS, QUESTION_LIST} from "../constant/apiConstants";
+import {useEffect, useState} from 'react';
+import {useDispatch} from "react-redux";
+import {dispatchError} from "../service/functions";
+import {fetchQuestionList} from "../restservices/QuestionApi";
 
-export const fetchQuestionTags = (page, tag, category, signal) => {
-    return authenticatedAxios.get(FETCH_QUESTION_TAGS, {
-        params: {
-            page: page,
-            tagName: tag,
-            category: category,
-        },
-        signal: signal
-    }).then((response)=> response.data);
-}
+const useBloggiosQuestionList = (pageNum, type) => {
 
-export const addQuestion = (formData) => {
-    return authenticatedAxios.post(ADD_QUESTION, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    }).then((response)=> response.data);
-}
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState({});
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const dispatch = useDispatch();
 
-export const fetchQuestionList = (page, signal) => {
-    return authenticatedAxios.get(QUESTION_LIST, {
-        params: {
-            page: page
-        },
-        signal: signal
-    }).then(response => response.data)
-}
+    useEffect(()=> {
+        setIsLoading(true);
+        setIsError(false);
+        setError({});
+
+        const controller = new AbortController();
+        const {signal} = controller;
+
+        fetchQuestionList(pageNum, signal)
+            .then(data => {
+                setData(prev => [...prev, ...data.object]);
+                setHasNextPage(Boolean(data?.object.length));
+                setIsLoading(false);
+            }).catch(e => {
+            setIsLoading(false);
+            if (signal.aborted) return;
+            setIsError(true);
+            dispatchError(dispatch, e);
+            setError({message : e?.response?.data?.message})
+        })
+        return ()=> controller.abort();
+    }, [pageNum])
+
+    return {isLoading, isError, error, data, hasNextPage};
+};
+
+export default useBloggiosQuestionList;

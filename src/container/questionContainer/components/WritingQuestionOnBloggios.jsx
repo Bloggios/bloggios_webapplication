@@ -20,32 +20,19 @@
 
 import React from 'react';
 import styled from "styled-components";
-import {bgBlackRounded} from "../../../asset/svg";
 import {colors} from "../../../styles/Theme";
+import {useNavigate} from "react-router-dom";
+import {ASK_QUESTION_OUTLET_PAGE} from "../../../constant/pathConstants";
 
-const QuestionCard = () => {
+const WritingQuestionOnBloggios = () => {
+
+    const navigate = useNavigate();
+
     return (
         <Wrapper>
-            <UserInfo>
-                <img src={bgBlackRounded} alt="Bloggios"/>
-                <span>Rohit Parihar</span>
-            </UserInfo>
-
-            <Main>
-                <QuestionContent>
-                    <QuestionDetails>
-
-                    </QuestionDetails>
-
-                    <Image>
-
-                    </Image>
-                </QuestionContent>
-
-                <QuestionInfo>
-
-                </QuestionInfo>
-            </Main>
+            <h4>Got a Question ?</h4>
+            <span>Ready to dive into the depths of curiosity? Share your burning questions with us and let the vibrant community illuminate your path with diverse perspectives and insights!</span>
+            <button onClick={()=> navigate(ASK_QUESTION_OUTLET_PAGE)}>Start</button>
         </Wrapper>
     );
 };
@@ -55,61 +42,44 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 20px;
-`;
-
-const UserInfo = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 7px;
+    background-color: #FF3CAC;
+    background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+    padding: 14px;
+    border-radius: 20px;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
     
-    & > img {
-        height: 25px;
-        aspect-ratio: 1/1;
-        object-fit: cover;
-        border-radius: 50%;
+    & > h4 {
+        font-size: clamp(1rem, 0.9654rem + 0.2128vw, 1.125rem);
+        font-weight: 500;
+        font-family: inherit;
+        letter-spacing: inherit;
     }
     
     & > span {
-        font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+        font-size: clamp(0.75rem, 0.7154rem + 0.2128vw, 0.875rem);
         font-weight: 400;
+        font-family: inherit;
+        letter-spacing: inherit;
+        text-align: justify;
+    }
+    
+    & > button {
+        width: fit-content;
+        align-self: flex-end;
+        margin-top: 25px;
+        border: none;
+        outline: none;
+        padding: 7px 16px;
+        border-radius: 10px;
+        background: ${colors.black150};
         color: ${colors.white80};
-        font-family: "Poppins", sans-serif;
-        letter-spacing: 1px;
+        
+        &:hover, &:active {
+            background: ${colors.black200};
+            color: ${colors.white100};
+        }
     }
 `;
 
-const Main = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-`;
-
-const QuestionContent = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 250px;
-`;
-
-const QuestionInfo = styled.div`
-    
-`;
-
-const QuestionDetails = styled.div`
-    width: 70%;
-    background: aquamarine;
-    height: 100%;
-`;
-
-const Image = styled.div`
-    width: 29%;
-    background: bisque;
-    height: 100%;
-`;
-
-export default QuestionCard;
+export default WritingQuestionOnBloggios;

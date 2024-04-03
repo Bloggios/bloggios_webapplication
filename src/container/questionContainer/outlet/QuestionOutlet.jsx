@@ -18,13 +18,48 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy, Suspense, useCallback, useEffect, useMemo, useState} from 'react';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import QuestionCard from "../components/QuestionCard";
+import useBloggiosQuestionList from "../../../hooks/useBloggiosQuestionList";
+import questionCard from "../components/QuestionCard";
+
+const WritingQuestionOnBloggios = lazy(()=> import('../components/WritingQuestionOnBloggios'));
 
 const QuestionOutlet = () => {
 
     const [filterType, setFilterType] = React.useState('recent');
+    const [pageNum, setPageNum] = useState(0);
+    const {
+        isLoading,
+        isError,
+        error,
+        data : questionList,
+        hasNextPage
+    } = useBloggiosQuestionList(pageNum);
+
+    const parseQuestionList = useMemo(()=> {
+        return questionList.map((question, index)=> {
+            if (questionList.length === index + 1) {
+                return (
+                    <QuestionCard />
+                )
+            }
+            return (
+                <QuestionCard />
+            )
+        })
+    }, [questionList])
+
+    const getQuestionList = useCallback(()=> {
+        if (isLoading) {
+            return <FallbackLoader width={'100%'} height={'250px'} />
+        } else if (!isLoading && questionList && questionList.length > 0) {
+            return parseQuestionList
+        }
+    }, [isLoading, questionList, parseQuestionList])
 
     return (
         <Wrapper>
@@ -40,9 +75,17 @@ const QuestionOutlet = () => {
                 </ButtonGroup>
             </QuestionHeader>
 
-            <QuestionList>
+            <MainSection>
+                <QuestionList>
+                    {getQuestionList()}
+                </QuestionList>
 
-            </QuestionList>
+                <QuestionSuggestionList>
+                    <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} thickness={2} />}>
+                        <WritingQuestionOnBloggios />
+                    </Suspense>
+                </QuestionSuggestionList>
+            </MainSection>
         </Wrapper>
     );
 };
@@ -99,12 +142,37 @@ const ButtonGroup = styled.div`
     }
 `;
 
-const QuestionList = styled.div`
+const MainSection = styled.div`
     width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const QuestionList = styled.div`
+    width: 66.5%;
+    min-height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    
+    @media (max-width: 850px) {
+        width: 100%;
+    }
+`;
+
+const QuestionSuggestionList = styled.div`
+    width: 33.2%;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 0 10px 10px;
+    
+    @media (max-width: 850px) {
+        display: none;
+    }
 `;
 
 export default QuestionOutlet;
