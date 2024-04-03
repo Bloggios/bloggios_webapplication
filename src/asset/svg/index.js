@@ -25,6 +25,7 @@ import defaultCover from './home-header_bg.svg';
 import askQuestionYellow from './ask-question-yellow.svg';
 import askQuestionWhite from './ask-question-white.svg';
 import underline from './underline.svg';
+import notFound from './not_found.svg';
 
 export {
     bgAccentRounded,
@@ -33,5 +34,6 @@ export {
     defaultCover,
     askQuestionYellow,
     askQuestionWhite,
-    underline
+    underline,
+    notFound
 };

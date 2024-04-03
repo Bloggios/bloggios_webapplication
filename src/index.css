@@ -88,6 +88,11 @@ input {
   color-scheme: dark;
 }
 
+button {
+  border: none;
+  outline: none;
+}
+
 @media (max-width: 600px) {
   ::-webkit-scrollbar {
     display: none;

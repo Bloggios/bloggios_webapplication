@@ -18,12 +18,44 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import styled from "styled-components";
-import {bgBlackRounded} from "../../../asset/svg";
+import React, {useState} from 'react';
+import styled, {css} from "styled-components";
+import {bgBlackRounded, notFound} from "../../../asset/svg";
 import {colors} from "../../../styles/Theme";
+import {Tooltip} from "react-tooltip";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {getFormattedDate} from "../../../service/DateFunctions";
+import IconButton from "../../../component/buttons/IconButton";
+import {CiSaveDown1} from "react-icons/ci";
 
-const QuestionCard = () => {
+const QuestionCard = ({
+    questionId,
+    userId,
+    title,
+    tags,
+    dateCreated,
+    imageLink,
+    detailsText,
+    isResolved
+                      }) => {
+
+    const [imageLoadError, setImageLoadError] = useState(false);
+    const {width} = useWindowDimensions();
+
+    const handleImageError = (event) => {
+        event.target.src = notFound;
+        setImageLoadError(true);
+    }
+
+    const getDetailsText = () => {
+        if (detailsText && detailsText.length > 0) {
+            const split = detailsText.split('\n');
+            return detailsText.length > 250 || split.length > 3;
+
+        }
+        return false;
+    }
+
     return (
         <Wrapper>
             <UserInfo>
@@ -33,19 +65,74 @@ const QuestionCard = () => {
 
             <Main>
                 <QuestionContent>
-                    <QuestionDetails>
-
+                    <QuestionDetails style={{
+                        width: imageLink ? '70%' : '100%'
+                    }}>
+                        <h2>{title}</h2>
+                        <DetailsText style={{
+                            height: getDetailsText() ? '72px' : 'fit-content'
+                        }}>
+                            {detailsText && detailsText.length > 0 && detailsText}
+                        </DetailsText>
+                        <ReadMoreLink>
+                            Read More
+                        </ReadMoreLink>
                     </QuestionDetails>
 
-                    <Image>
-
-                    </Image>
+                    {imageLink && (
+                        <Image
+                            data-tooltip-id={'question__image--load-tooltip'}
+                            data-tooltip-content={imageLoadError ? 'Image Not Found' : ''}
+                        >
+                            <img
+                                src={imageLink}
+                                alt="Bloggios"
+                                onError={handleImageError}
+                            />
+                        </Image>
+                    )}
                 </QuestionContent>
 
                 <QuestionInfo>
+                    {tags && tags.length > 0 && (
+                        <Tags>
+                            {tags.map((tag, i)=> (
+                                <button key={tag + '_' + i}>
+                                    {tag}
+                                </button>
+                            ))}
+                        </Tags>
+                    )}
+                    <Information>
+                        <span>
+                            {`${getFormattedDate(dateCreated)} ${isResolved ? '· Resolved ✅' : ''} `}
+                        </span>
 
+                        <IconButton
+                            tooltipId={'question__save--icon-tooltip'}
+                            tooltipContent={'Save Question'}
+                            fontSize={'25px'}
+                            padding={'6px'}
+                        >
+                            <CiSaveDown1 />
+                        </IconButton>
+                    </Information>
                 </QuestionInfo>
             </Main>
+            {width > 600 && (
+                <>
+                    <Tooltip
+                        id={'question__image--load-tooltip'}
+                        variant={"error"}
+                    />
+                    <Tooltip
+                        id={'question__save--icon-tooltip'}
+                        variant={"light"}
+                    />
+                </>
+            )}
+
+            <Divider />
         </Wrapper>
     );
 };
@@ -55,7 +142,16 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
+    cursor: pointer;
+`;
+
+const SpanStyles = css`
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+    font-weight: 400;
+    color: ${colors.white80};
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
 `;
 
 const UserInfo = styled.div`
@@ -73,11 +169,7 @@ const UserInfo = styled.div`
     }
     
     & > span {
-        font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
-        font-weight: 400;
-        color: ${colors.white80};
-        font-family: "Poppins", sans-serif;
-        letter-spacing: 1px;
+        ${SpanStyles};
     }
 `;
 
@@ -85,6 +177,7 @@ const Main = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 10px;
 `;
 
@@ -93,23 +186,101 @@ const QuestionContent = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 250px;
 `;
 
 const QuestionInfo = styled.div`
-    
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 7px;
 `;
 
 const QuestionDetails = styled.div`
-    width: 70%;
-    background: aquamarine;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    letter-spacing: 1px;
+    font-family: "Poppins", sans-serif;
+    
+    & > h2 {
+        font-size: clamp(1.25rem, 1.2985rem + -0.2985vw, 1rem);
+        font-weight: 600;
+    }
+`;
+
+const DetailsText = styled.p`
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+    font-weight: 400;
+    color: ${colors.white80};
+    white-space: pre-line;
+    text-align: justify;
+    line-height: 18px;
+    overflow: hidden;
 `;
 
 const Image = styled.div`
     width: 29%;
-    background: bisque;
-    height: 100%;
+    height: auto;
+    
+    & > img {
+        width: 100%;
+        object-fit: contain;
+        max-height: 250px;
+    }
+`;
+
+const Tags = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    flex-wrap: wrap;
+    
+    & > button {
+        width: fit-content;
+        padding: 2px 7px;
+        display: flex;
+        align-items: center;
+        background: ${colors.accent100};
+        cursor: pointer;
+        border-radius: 20px;
+        font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+        letter-spacing: 1px;
+        font-family: "Poppins", sans-serif;
+    }
+`;
+
+const Information = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    & > span {
+        ${SpanStyles};
+    }
+`;
+
+const ReadMoreLink = styled.span`
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+    letter-spacing: 1px;
+    font-family: "Poppins", sans-serif;
+    text-decoration: none;
+    width: fit-content;
+    background: transparent;
+    color: #007bff;
+    cursor: pointer;
+    margin-top: 0;
+`;
+
+const Divider = styled.div`
+    width: 70%;
+    align-self: center;
+    height: 1px;
+    background: ${colors.white10};
+    margin-top: 10px;
 `;
 
 export default QuestionCard;

@@ -18,13 +18,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {lazy, Suspense, useCallback, useMemo, useState} from 'react';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import QuestionCard from "../components/QuestionCard";
 import useBloggiosQuestionList from "../../../hooks/useBloggiosQuestionList";
-import questionCard from "../components/QuestionCard";
+import DataNotFound from "../../../component/NotFound/DataNotFound";
 
 const WritingQuestionOnBloggios = lazy(()=> import('../components/WritingQuestionOnBloggios'));
 
@@ -44,11 +44,31 @@ const QuestionOutlet = () => {
         return questionList.map((question, index)=> {
             if (questionList.length === index + 1) {
                 return (
-                    <QuestionCard />
+                    <QuestionCard
+                        key={question.questionId}
+                        questionId={question.questionId}
+                        userId={question.userId}
+                        title={question.title}
+                        imageLink={question.imageLink}
+                        dateCreated={question.dateCreated}
+                        detailsText={question.detailsText}
+                        tags={question.tags}
+                        dateUpdated={question.dateUpdated}
+                    />
                 )
             }
             return (
-                <QuestionCard />
+                <QuestionCard
+                    key={question.questionId}
+                    questionId={question.questionId}
+                    userId={question.userId}
+                    title={question.title}
+                    imageLink={question.imageLink}
+                    dateCreated={question.dateCreated}
+                    detailsText={question.detailsText}
+                    tags={question.tags}
+                    dateUpdated={question.dateUpdated}
+                />
             )
         })
     }, [questionList])
@@ -58,8 +78,21 @@ const QuestionOutlet = () => {
             return <FallbackLoader width={'100%'} height={'250px'} />
         } else if (!isLoading && questionList && questionList.length > 0) {
             return parseQuestionList
+        } else if (isError && error) {
+            return (
+                <DataNotFound
+                    message={'Error Occurred'}
+                    onClick={()=> window.location.reload()}
+                />
+            )
+        } else if (!isLoading && questionList.length === 0) {
+            return (
+                <NoQuestions>
+                    <span>Be the first to ask Question</span>
+                </NoQuestions>
+            )
         }
-    }, [isLoading, questionList, parseQuestionList])
+    }, [isLoading, questionList, parseQuestionList, isError, error])
 
     return (
         <Wrapper>
@@ -172,6 +205,21 @@ const QuestionSuggestionList = styled.div`
     
     @media (max-width: 850px) {
         display: none;
+    }
+`;
+
+const NoQuestions = styled.div`
+    width: 100%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    & > span {
+        font-size: clamp(0.875rem, 0.8507rem + 0.1493vw, 1rem);
+        letter-spacing: 1px;
+        font-family: "Poppins", sans-serif;
+        color: ${colors.white80};
     }
 `;
 

@@ -20,11 +20,20 @@
 
 import React from 'react';
 import styled from "styled-components";
+import {colors} from "../../styles/Theme";
+import IconButton from "../buttons/IconButton";
+import {HiRefresh} from "react-icons/hi";
 
-const DataNotFound = () => {
+const DataNotFound = ({
+    message,
+    onClick
+                      }) => {
     return (
         <Wrapper>
-            Reload
+            <span>{message}</span>
+            <IconButton onClick={onClick}>
+                <HiRefresh />
+            </IconButton>
         </Wrapper>
     );
 };
@@ -33,6 +42,18 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    align-self: center;
+    
+    & > span {
+        font-size: clamp(0.875rem, 0.8507rem + 0.1493vw, 1rem);
+        letter-spacing: 1px;
+        font-family: "Poppins", sans-serif;
+        color: ${colors.white80};
+        text-align: center;
+    }
 `;
 
 export default DataNotFound;
