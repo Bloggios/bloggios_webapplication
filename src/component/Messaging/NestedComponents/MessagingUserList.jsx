@@ -217,7 +217,8 @@ const MessagingUserList = () => {
 };
 
 const UserInfo = styled.div`
-    width: 32%;
+    width: 31%;
+    max-width: 31%;
     height: 100%;
     flex-shrink: 0;
     overflow: hidden;
@@ -242,7 +243,8 @@ const UserInfo = styled.div`
     }
 
     @media (max-width: 1000px) {
-        width: 40%;
+        width: 39%;
+        max-width: 39%;
     }
 
     @media (max-width: 600px) {

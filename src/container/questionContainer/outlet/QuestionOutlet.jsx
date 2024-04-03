@@ -19,13 +19,92 @@
  */
 
 import React from 'react';
+import styled from "styled-components";
+import {colors} from "../../../styles/Theme";
 
 const QuestionOutlet = () => {
+
+    const [filterType, setFilterType] = React.useState('recent');
+
     return (
-        <div>
-            Questions List
-        </div>
+        <Wrapper>
+            <QuestionHeader>
+                <h5>100 Questions</h5>
+                <ButtonGroup>
+                    <button className={filterType === 'recent' ? 'group__active' : ''} onClick={()=> setFilterType('recent')}>
+                        Recent
+                    </button>
+                    <button className={filterType === 'unresolved' ? 'group__active' : ''} onClick={()=> setFilterType('unresolved')}>
+                        Unresolved
+                    </button>
+                </ButtonGroup>
+            </QuestionHeader>
+
+            <QuestionList>
+
+            </QuestionList>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const QuestionHeader = styled.header`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    border-bottom: 1px solid ${colors.white10};
+    
+    & > h5 {
+        font-family: inherit;
+        letter-spacing: inherit;
+        font-weight: 300;
+    }
+`;
+
+const ButtonGroup = styled.div`
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+    
+    & > button {
+        border: none;
+        outline: none;
+        background: none;
+        border-radius: 20px;
+        overflow: hidden;
+        padding: 10px;
+        
+        &.group__active {
+            background: ${colors.accent100};
+        }
+    }
+    
+    & > button:hover {
+        background: ${colors.accent60};
+    }
+`;
+
+const QuestionList = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+`;
 
 export default QuestionOutlet;
