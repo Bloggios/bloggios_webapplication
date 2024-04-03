@@ -22,7 +22,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
@@ -31,6 +31,7 @@ import {Toaster} from "sonner";
 import ParentInfoModal from "../../component/modal/ParentInfoModal";
 import ComingSoonPage from "../../component/animations/ComingSoonPage";
 import ReportModal from "../../component/modal/ReportModal";
+import {dispatchWarningMessage} from "../../service/functions";
 
 const ParentBase = ({children}) => {
 
@@ -40,6 +41,7 @@ const ParentBase = ({children}) => {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [reportModal, setReportModal] = useState(false);
     const [information, setInformation] = useState({});
+    const dispatch = useDispatch();
     useBloggiosSnackbar();
     useBloggiosStomp();
 
@@ -57,6 +59,32 @@ const ParentBase = ({children}) => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, []);
+
+    useEffect(() => {
+        const handleShake = (event) => {
+            const { x, y, z } = event.accelerationIncludingGravity || event.acceleration;
+
+            // Calculate total acceleration magnitude
+            const acceleration = Math.sqrt(x * x + y * y + z * z);
+
+            // Set a threshold for what constitutes a "shake"
+            const shakeThreshold = 15; // Adjust this value as needed
+
+            // Check if the acceleration is above the threshold
+            if (acceleration > shakeThreshold) {
+                dispatchWarningMessage(dispatch, 'Shaked')
+            }
+        };
+
+        // Add event listener for devicemotion
+        window.addEventListener('devicemotion', handleShake);
+
+        // Clean up by removing event listener when component unmounts
+        return () => {
+            window.removeEventListener('devicemotion', handleShake);
+        };
+    }, []);
+
 
     const handleReportModalClose = () => {
         setReportModal(false);
