@@ -102,7 +102,7 @@ const Posts = React.forwardRef(({
     }
 
     const getLikeCommentCountResponse = async () => {
-        return await getLikeCommentCount(postId);
+        return getLikeCommentCount(postId);
     }
 
     const {

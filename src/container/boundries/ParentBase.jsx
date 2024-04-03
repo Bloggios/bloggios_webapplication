@@ -63,23 +63,15 @@ const ParentBase = ({children}) => {
     useEffect(() => {
         const handleShake = (event) => {
             const { x, y, z } = event.accelerationIncludingGravity || event.acceleration;
-
-            // Calculate total acceleration magnitude
             const acceleration = Math.sqrt(x * x + y * y + z * z);
-
-            // Set a threshold for what constitutes a "shake"
-            const shakeThreshold = 15; // Adjust this value as needed
-
-            // Check if the acceleration is above the threshold
+            const shakeThreshold = 70;
             if (acceleration > shakeThreshold) {
-                dispatchWarningMessage(dispatch, 'Shaked')
+                if (!reportModal) {
+                    setReportModal(true)
+                }
             }
         };
-
-        // Add event listener for devicemotion
         window.addEventListener('devicemotion', handleShake);
-
-        // Clean up by removing event listener when component unmounts
         return () => {
             window.removeEventListener('devicemotion', handleShake);
         };
