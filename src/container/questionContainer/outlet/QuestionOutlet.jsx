@@ -26,7 +26,6 @@ import QuestionCard from "../components/QuestionCard";
 import useBloggiosQuestionList from "../../../hooks/useBloggiosQuestionList";
 import DataNotFound from "../../../component/NotFound/DataNotFound";
 
-const WritingQuestionOnBloggios = lazy(()=> import('../components/WritingQuestionOnBloggios'));
 
 const QuestionOutlet = () => {
 
@@ -108,17 +107,9 @@ const QuestionOutlet = () => {
                 </ButtonGroup>
             </QuestionHeader>
 
-            <MainSection>
-                <QuestionList>
-                    {getQuestionList()}
-                </QuestionList>
-
-                <QuestionSuggestionList>
-                    <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} thickness={2} />}>
-                        <WritingQuestionOnBloggios />
-                    </Suspense>
-                </QuestionSuggestionList>
-            </MainSection>
+            <QuestionList>
+                {getQuestionList()}
+            </QuestionList>
         </Wrapper>
     );
 };
@@ -175,37 +166,13 @@ const ButtonGroup = styled.div`
     }
 `;
 
-const MainSection = styled.div`
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`;
-
 const QuestionList = styled.div`
-    width: 66.5%;
+    width: 100%;
     min-height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    
-    @media (max-width: 850px) {
-        width: 100%;
-    }
-`;
-
-const QuestionSuggestionList = styled.div`
-    width: 33.2%;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 0 10px 10px;
-    
-    @media (max-width: 850px) {
-        display: none;
-    }
 `;
 
 const NoQuestions = styled.div`

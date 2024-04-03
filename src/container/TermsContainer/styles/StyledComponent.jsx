@@ -18,27 +18,27 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const HOME_PAGE = '/home';
-export const LANDING_PAGE = '/'
-export const CHATS_PAGE = '/chats';
-export const NOTIFICATIONS_PAGE = '/notifications';
-export const SERVICES_PAGE = '/services';
-export const SIGNUP_PAGE = '/signup';
-export const LOGIN_PAGE = '/login';
-export const SUPPORT_PAGE = '/support';
-export const REPORT_BUG_PAGE = '/report-bug';
-export const OTP_PAGE = '/otp';
-export const PROFILE_PAGE = '/profile/:id';
-export const PROFILE_ADDITION_INITIAL = '/profile-add-initial';
-export const SETTING_PAGE = '/setting';
-export const ACTIVITY_PAGE = '/activity/:userId';
-export const SECURITY_PAGE = '/security';
-export const CREATE_PAGE = '/create'
-export const NOT_FOUND_PAGE = '*';
-export const OAUTH_REDIRECT = '/oauth2/redirect';
-export const QUESTION_PAGE = '/question'
-export const ASK_QUESTION_OUTLET_PAGE = 'ask-question';
-export const POST_OUTLET_PAGE = 'posts';
-export const ASK_QUESTION_PAGE = '/question/ask-question';
-export const PRIVACY_POLICY = '/privacy-policy';
-export const TERMS_CONDITION = '/terms-condition';
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    min-height: calc(100vh - 72px);
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 16vw;
+`;
+
+const Heading1 = styled.h1`
+    font-size: clamp(1.375rem, 1.0597rem + 1.9403vw, 3rem);
+    letter-spacing: 1px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+`;
+
+export {
+    Wrapper,
+    Heading1
+}

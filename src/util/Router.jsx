@@ -30,13 +30,13 @@ import {
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
-    POST_OUTLET_PAGE,
+    POST_OUTLET_PAGE, PRIVACY_POLICY,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
     QUESTION_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
-    SIGNUP_PAGE
+    SIGNUP_PAGE, TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
@@ -62,6 +62,8 @@ const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/Q
 const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
 const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
 const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/ChatDefaultOutlet'));
+const PrivacyPolicy = lazy(()=> import('../container/TermsContainer/PrivacyPolicy'));
+const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondition'));
 
 const Router = () => {
 
@@ -76,6 +78,8 @@ const Router = () => {
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
+                    <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
+                    <Route path={TERMS_CONDITION} element={<TermsCondition />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>

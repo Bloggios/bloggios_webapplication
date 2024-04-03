@@ -26,7 +26,7 @@ import {Tooltip} from "react-tooltip";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {getFormattedDate} from "../../../service/DateFunctions";
 import IconButton from "../../../component/buttons/IconButton";
-import {CiSaveDown1} from "react-icons/ci";
+import {CiBookmarkPlus, CiSaveDown1} from "react-icons/ci";
 
 const QuestionCard = ({
     questionId,
@@ -36,7 +36,7 @@ const QuestionCard = ({
     dateCreated,
     imageLink,
     detailsText,
-    isResolved
+    isResolved = true
                       }) => {
 
     const [imageLoadError, setImageLoadError] = useState(false);
@@ -114,7 +114,7 @@ const QuestionCard = ({
                             fontSize={'25px'}
                             padding={'6px'}
                         >
-                            <CiSaveDown1 />
+                            <CiBookmarkPlus />
                         </IconButton>
                     </Information>
                 </QuestionInfo>

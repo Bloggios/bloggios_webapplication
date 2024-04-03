@@ -41,7 +41,6 @@ const ParentBase = ({children}) => {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [reportModal, setReportModal] = useState(false);
     const [information, setInformation] = useState({});
-    const dispatch = useDispatch();
     useBloggiosSnackbar();
     useBloggiosStomp();
 
@@ -64,7 +63,7 @@ const ParentBase = ({children}) => {
         const handleShake = (event) => {
             const { x, y, z } = event.accelerationIncludingGravity || event.acceleration;
             const acceleration = Math.sqrt(x * x + y * y + z * z);
-            const shakeThreshold = 70;
+            const shakeThreshold = 61;
             if (acceleration > shakeThreshold) {
                 if (!reportModal) {
                     setReportModal(true)
