@@ -19,12 +19,34 @@
  */
 
 import React from 'react';
+import BloggiosBase from "../boundries/bloggiosBase";
+import styled from "styled-components";
 
 const ReportBugPage = () => {
     return (
-        <div>
-        </div>
+        <BloggiosBase>
+            <Wrapper>
+
+            </Wrapper>
+        </BloggiosBase>
     );
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    min-height: calc(100vh - 72px);
+    box-sizing: border-box;
+    transition: all 400ms ease-in-out;
+
+    @media (max-width: 700px) {
+        margin-bottom: 74px;
+    }
+
+    @media (orientation: portrait) and (max-width: 700px) {
+        height: auto;
+    }
+`;
 
 export default ReportBugPage;

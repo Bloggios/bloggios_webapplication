@@ -22,26 +22,47 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
 import ErrorPage from "../catchPages/ErrorPage";
 import {Toaster} from "sonner";
-import ParentInfoModal from "../../component/modal/ParentInfoModal";
-import ComingSoonPage from "../../component/animations/ComingSoonPage";
 import ReportModal from "../../component/modal/ReportModal";
+import PrivacyModal from "../../component/modal/PrivacyModal";
+import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
+import {dispatchWarningMessage} from "../../service/functions";
 
 const ParentBase = ({children}) => {
 
+    const dispatch = useDispatch();
     const { width, height } = useWindowDimensions();
     const {isLoading} = useSelector(state=> state.loading);
     const {isError, errorMessage} = useSelector(state=> state.error);
-    const [isModalOpen, setIsModalOpen] = useState(true);
     const [reportModal, setReportModal] = useState(false);
     const [information, setInformation] = useState({});
+    const [privacyModal, setPrivacyModal] = useState(false);
     useBloggiosSnackbar();
     useBloggiosStomp();
+
+    useEffect(()=> {
+        if (!privacyModal) {
+            let isAccepted = localStorage.getItem(PRIVACY_TERMS_KEY_LOCAL_STORAGE);
+            if (!isAccepted || isAccepted === 'false') {
+                setPrivacyModal(true);
+            }
+        }
+    }, []);
+
+    const handlePrivacyModalClose = () => {
+        let isAccepted = localStorage.getItem(PRIVACY_TERMS_KEY_LOCAL_STORAGE);
+        if (!isAccepted || isAccepted === 'false') {
+            window.alert('To proceed, kindly acknowledge our Terms and Privacy Policy');
+            dispatchWarningMessage(dispatch, 'To proceed, kindly acknowledge our Terms and Privacy Policy');
+        } else {
+            window.location.reload();
+        }
+    }
 
     useEffect(() => {
         const handleKeyPress = (event) => {
@@ -65,6 +86,9 @@ const ParentBase = ({children}) => {
             const shakeThreshold = 61;
             if (acceleration > shakeThreshold) {
                 if (!reportModal) {
+                    if (privacyModal) {
+                        setPrivacyModal(false);
+                    }
                     setReportModal(true)
                 }
             }
@@ -107,44 +131,42 @@ const ParentBase = ({children}) => {
     }, [reportModal]);
 
     const getBaseContent = useCallback(()=> {
-        if (false) {
-            return <ComingSoonPage />
+        if (isError && errorMessage) {
+            return <ErrorPage />
+        } else if (isLoading) {
+            return (
+                <AppContainer>
+                    <MemoizedLoaderPage />
+                </AppContainer>
+            )
         } else {
-            if (isError && errorMessage) {
-                return <ErrorPage />
-            } else if (isLoading) {
-                return (
-                    <AppContainer>
-                        <MemoizedLoaderPage />
-                    </AppContainer>
-                )
-            } else {
-                return (
-                    <AppContainer>
-                        {children}
-                        <Toaster
-                            position={width > 600 ? "bottom-right" : "bottom-center"}
-                            richColors={true}
-                            closeButton={true}
-                        />
+            return (
+                <AppContainer>
+                    {children}
+                    <Toaster
+                        position={width > 600 ? "bottom-right" : "bottom-center"}
+                        richColors={true}
+                        closeButton={true}
+                    />
 
-                        <ParentInfoModal
-                            isModelOpen={isModalOpen}
-                            onClose={()=> setIsModalOpen(false)}
+                    {reportModal && (
+                        <ReportModal
+                            isModelOpen={reportModal}
+                            onClose={handleReportModalClose}
+                            data={information}
                         />
+                    )}
 
-                        {reportModal && (
-                            <ReportModal
-                                isModelOpen={reportModal}
-                                onClose={handleReportModalClose}
-                                data={information}
-                            />
-                        )}
-                    </AppContainer>
-                )
-            }
+                    {privacyModal && (
+                        <PrivacyModal
+                            isModelOpen={privacyModal}
+                            onClose={handlePrivacyModalClose}
+                        />
+                    )}
+                </AppContainer>
+            )
         }
-    }, [isLoading, children, width, isError, errorMessage, isModalOpen, reportModal, information])
+    }, [isLoading, children, width, isError, errorMessage, reportModal, information, privacyModal])
 
     return getBaseContent();
 };

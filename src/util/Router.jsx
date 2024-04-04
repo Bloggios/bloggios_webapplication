@@ -34,7 +34,7 @@ import {
     PRIVACY_POLICY,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
-    QUESTION_PAGE,
+    QUESTION_PAGE, REPORT_BUG_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
     SIGNUP_PAGE,
@@ -66,6 +66,7 @@ const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
 const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/ChatDefaultOutlet'));
 const PrivacyPolicy = lazy(()=> import('../container/TermsContainer/PrivacyPolicy'));
 const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondition'));
+const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPage'));
 
 const Router = () => {
 
@@ -82,6 +83,7 @@ const Router = () => {
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
                     <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
                     <Route path={TERMS_CONDITION} element={<TermsCondition />} />
+                    <Route path={REPORT_BUG_PAGE} element={<ReportBugPage />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
