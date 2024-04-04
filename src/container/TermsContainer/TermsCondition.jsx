@@ -19,13 +19,51 @@
  */
 
 import React from 'react';
+import {useNavigate} from "react-router-dom";
+import TrackerSelect from "../../component/miscellaneous/TrackerSelect";
+import IconButton from "../../component/buttons/IconButton";
+import {colors} from "../../styles/Theme";
+import {LANDING_PAGE} from "../../constant/pathConstants";
+import {BiHomeAlt2} from "react-icons/bi";
+import styled from "styled-components";
+import {termsNoticeData} from "../../asset/configurations/TermsNoticeData";
 
 const TermsCondition = () => {
-    return (
-        <div>
 
-        </div>
+    const navigate = useNavigate();
+
+    return (
+        <Wrapper>
+            <TrackerSelect mapData={termsNoticeData} />
+            <IconButton
+                style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 10
+                }}
+                fontSize={'28px'}
+                bgColor={colors.accent80}
+                hBgColor={colors.accent100}
+                aBgColor={colors.accent100}
+                onClick={()=> navigate(LANDING_PAGE)}
+            >
+                <BiHomeAlt2/>
+            </IconButton>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    position: relative;
+    transition: all 400ms ease-in-out;
+`;
 
 export default TermsCondition;

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";

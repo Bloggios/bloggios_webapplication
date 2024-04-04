@@ -26,7 +26,7 @@ import {Tooltip} from "react-tooltip";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {getFormattedDate} from "../../../service/DateFunctions";
 import IconButton from "../../../component/buttons/IconButton";
-import {CiBookmarkPlus, CiSaveDown1} from "react-icons/ci";
+import {CiBookmarkPlus} from "react-icons/ci";
 
 const QuestionCard = ({
     questionId,

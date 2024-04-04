@@ -22,6 +22,8 @@ import React, {lazy, Suspense} from "react";
 import styled from "styled-components";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {colors} from "../../styles/Theme";
+import {useNavigate} from "react-router-dom";
+import {PRIVACY_POLICY, TERMS_CONDITION} from "../../constant/pathConstants";
 
 const NewsletterSection = lazy(() =>
   import("../miscellaneous/NewsletterSection")
@@ -29,6 +31,9 @@ const NewsletterSection = lazy(() =>
 const FooterSections = lazy(() => import("../miscellaneous/FooterSections"));
 
 const MainFooter = () => {
+
+    const navigate = useNavigate();
+
   return (
     <Wrapper>
       <Suspense
@@ -55,8 +60,8 @@ const MainFooter = () => {
           <span>Copyright © 2024 | Bloggios</span>
 
           <TermsPrivacy>
-            <span>Terms and Condition</span>
-            <span>Privacy Policy</span>
+            <span onClick={()=> navigate(TERMS_CONDITION)}>Terms and Condition</span>
+            <span onClick={()=> navigate(PRIVACY_POLICY)}>Privacy Policy</span>
           </TermsPrivacy>
         </div>
       </Summary>

@@ -22,7 +22,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
@@ -31,7 +31,6 @@ import {Toaster} from "sonner";
 import ParentInfoModal from "../../component/modal/ParentInfoModal";
 import ComingSoonPage from "../../component/animations/ComingSoonPage";
 import ReportModal from "../../component/modal/ReportModal";
-import {dispatchWarningMessage} from "../../service/functions";
 
 const ParentBase = ({children}) => {
 

@@ -30,13 +30,15 @@ import {
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
-    POST_OUTLET_PAGE, PRIVACY_POLICY,
+    POST_OUTLET_PAGE,
+    PRIVACY_POLICY,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
     QUESTION_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
-    SIGNUP_PAGE, TERMS_CONDITION
+    SIGNUP_PAGE,
+    TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
