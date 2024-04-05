@@ -18,26 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import bgAccentRounded from './bg-accent_rounded.svg';
-import bgBlack from './bg_logo_black.svg';
-import bgBlackRounded from './bg_logo_rounded_black.svg';
-import defaultCover from './home-header_bg.svg';
-import askQuestionYellow from './ask-question-yellow.svg';
-import askQuestionWhite from './ask-question-white.svg';
-import underline from './underline.svg';
-import notFound from './not_found.svg';
-import laptopSvg from './laptop.svg';
-import mobileSvg from './mobile.svg';
+import reportBugMobile from './report_bug_mobile.webp';
 
 export {
-    bgAccentRounded,
-    bgBlack,
-    bgBlackRounded,
-    defaultCover,
-    askQuestionYellow,
-    askQuestionWhite,
-    underline,
-    notFound,
-    laptopSvg,
-    mobileSvg
-};
+    reportBugMobile
+}
