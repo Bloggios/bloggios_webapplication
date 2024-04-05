@@ -597,7 +597,7 @@ const MobileWrapper = styled.div`
     max-width: 95vw;
     min-height: 250px;
     height: auto;
-    background-color: #272727;
+    background-color: ${colors.black200};
     border-radius: 20px;
     padding: 10px 0;
 `;
@@ -614,7 +614,7 @@ const MobileTextArea = styled.textarea`
     width: 95%;
     outline: 2px solid rgba(255, 255, 255, 0.2);
     border: none;
-    background: #1e1e1e;
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 10px;
     resize: none;
@@ -651,7 +651,8 @@ const MobilePostButtonWrapper = styled.div`
 const MobileButton = styled.div`
     height: 50px;
     width: 95%;
-    background: linear-gradient(225deg, #0c0c0c, #0a0a0a);
+    background-color: ${colors.accent100};
+    color: ${colors.white100};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -661,7 +662,12 @@ const MobileButton = styled.div`
     user-select: none;
 
     &:hover {
-        background: linear-gradient(225deg, #151515, #151515);
+        background-color: ${colors.white100};
+        color: ${colors.accent100};
+    }
+
+    &:active {
+        background-color: #e5e5e5;
     }
 `;
 
@@ -696,19 +702,14 @@ const MobileSuggestionChipButton = styled.button`
     border: none;
     outline: none;
     flex-direction: row;
-    background-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.6);
+    background-color: ${colors.accent80};
+    color: ${colors.white80};
     cursor: pointer;
     display: inline-block;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.4);
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    &:active {
-        background-color: rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.7);
+    &:hover, &:active {
+        background-color: ${colors.accent100};
+        color: ${colors.white100};
     }
 `;
 
