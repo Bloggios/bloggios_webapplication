@@ -28,6 +28,7 @@ import underline from './underline.svg';
 import notFound from './not_found.svg';
 import laptopSvg from './laptop.svg';
 import mobileSvg from './mobile.svg';
+import posts from './posts.svg';
 
 export {
     bgAccentRounded,
@@ -39,5 +40,6 @@ export {
     underline,
     notFound,
     laptopSvg,
-    mobileSvg
+    mobileSvg,
+    posts
 };

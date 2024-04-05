@@ -37,7 +37,7 @@ import {
     QUESTION_PAGE, REPORT_BUG_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
-    SIGNUP_PAGE,
+    SIGNUP_PAGE, SUPPORT_PAGE,
     TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
@@ -67,6 +67,7 @@ const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/C
 const PrivacyPolicy = lazy(()=> import('../container/TermsContainer/PrivacyPolicy'));
 const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondition'));
 const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPage'));
+const SupportPage = lazy(()=> import('../container/Support/SupportPage'));
 
 const Router = () => {
 
@@ -84,6 +85,7 @@ const Router = () => {
                     <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
                     <Route path={TERMS_CONDITION} element={<TermsCondition />} />
                     <Route path={REPORT_BUG_PAGE} element={<ReportBugPage />} />
+                    <Route path={SUPPORT_PAGE} element={<SupportPage />} />
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>

@@ -41,4 +41,6 @@ export const colors = {
     white90: 'rgba(245, 245, 245, 0.9)',
     white60: 'rgba(245, 245, 245, 0.6)',
     white10: 'rgba(245, 245, 245, 0.1)',
+    white05: 'rgba(245, 245, 245, 0.05)',
+    white20: 'rgba(245, 245, 245, 0.20)',
 }

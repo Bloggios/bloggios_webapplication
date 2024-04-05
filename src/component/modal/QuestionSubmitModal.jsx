@@ -33,6 +33,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {QUESTION_PAGE} from "../../constant/pathConstants";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const QuestionSubmitModal = ({
                                  isModelOpen,
@@ -41,6 +42,7 @@ const QuestionSubmitModal = ({
                              }) => {
 
     const [bloggiosTips, setBloggiosTips] = useState([]);
+    const {width} = useWindowDimensions();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -194,8 +196,12 @@ const QuestionSubmitModal = ({
                 </ButtonsWrapper>
             </Wrapper>
 
-            <Tooltip id={'question-model-submit-icon-button'}/>
-            <Tooltip id={'question-model-cancel-icon-button'}/>
+            {width > 600 && (
+                <>
+                    <Tooltip id={'question-model-submit-icon-button'}/>
+                    <Tooltip id={'question-model-cancel-icon-button'}/>
+                </>
+            )}
         </FadeModal>
     );
 };

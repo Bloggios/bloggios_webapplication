@@ -57,7 +57,6 @@ const ParentBase = ({children}) => {
     const handlePrivacyModalClose = () => {
         let isAccepted = localStorage.getItem(PRIVACY_TERMS_KEY_LOCAL_STORAGE);
         if (!isAccepted || isAccepted === 'false') {
-            window.alert('To proceed, kindly acknowledge our Terms and Privacy Policy');
             dispatchWarningMessage(dispatch, 'To proceed, kindly acknowledge our Terms and Privacy Policy');
         } else {
             window.location.reload();

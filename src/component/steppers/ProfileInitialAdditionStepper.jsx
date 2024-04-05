@@ -32,6 +32,7 @@ import {authenticatedAxios} from "../../restservices/baseAxios";
 import {ADD_PROFILE} from "../../constant/apiConstants";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const ProfileInitialAdditionStepper = () => {
 
@@ -43,6 +44,7 @@ const ProfileInitialAdditionStepper = () => {
     const navigate = useNavigate();
     const [buttonLoader, setButtonLoader] = useState(false);
     const [options, setOptions] = useState([]);
+    const {width} = useWindowDimensions();
     const [profileData, setProfileData] = useState({
         name: '',
         bio: '',
@@ -309,7 +311,7 @@ const ProfileInitialAdditionStepper = () => {
                     />
                 )}
             </ButtonsContainer>
-            <Tooltip id={'profile-page-name-field'}/>
+            {width > 600 && <Tooltip id={'profile-page-name-field'}/>}
         </Wrapper>
     );
 };

@@ -34,10 +34,12 @@ import {authOtpUserId} from "../../service/authProviderApiService";
 import {useNavigate} from "react-router-dom";
 import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import * as Bg from './StyledComponent';
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const LoginComponent = () => {
 
     const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
     const navigate = useNavigate();
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [buttonLoader, setButtonLoader] = useState(false);
@@ -234,9 +236,13 @@ const LoginComponent = () => {
                 Don't have an Account?
                 <span onClick={()=> navigate(SIGNUP_PAGE)}>Create an Account</span>
             </Bg.AddAccount>
-            <Tooltip id={'password-shown-login-page'}/>
-            <Tooltip id={'login-google-login-page'}/>
-            <Tooltip id={'login-facebook-login-page'}/>
+            {width > 600 && (
+                <>
+                    <Tooltip id={'password-shown-login-page'}/>
+                    <Tooltip id={'login-google-login-page'}/>
+                    <Tooltip id={'login-facebook-login-page'}/>
+                </>
+            )}
         </Bg.Wrapper>
     );
 };

@@ -32,10 +32,12 @@ import {Tooltip} from "react-tooltip";
 import * as Bg from './StyledComponent';
 import {dispatchError, dispatchErrorMessage, dispatchSuccessMessage} from "../../service/functions";
 import {signupUser} from "../../restservices/authApi";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const SignUpComponent = () => {
 
     const navigate = useNavigate();
+    const {width} = useWindowDimensions();
     const dispatch = useDispatch();
     const [buttonLoader, setButtonLoader] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -241,9 +243,13 @@ const SignUpComponent = () => {
                 Already have an Account?
                 <span onClick={()=> navigate(LOGIN_PAGE)}>Login</span>
             </Bg.AddAccount>
-            <Tooltip id={'password-shown-signup-page'}/>
-            <Tooltip id={'signup-google-signup-page'}/>
-            <Tooltip id={'signup-facebook-signup-page'}/>
+            {width > 600 && (
+                <>
+                    <Tooltip id={'password-shown-signup-page'}/>
+                    <Tooltip id={'signup-google-signup-page'}/>
+                    <Tooltip id={'signup-facebook-signup-page'}/>
+                </>
+            )}
         </Bg.Wrapper>
     );
 };
