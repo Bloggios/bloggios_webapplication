@@ -43,3 +43,4 @@ export const ASK_QUESTION_PAGE = '/question/ask-question';
 export const PRIVACY_POLICY = '/privacy-policy';
 export const TERMS_CONDITION = '/terms-condition';
 export const BLOGGIOS_TECH_HELP = 'bloggios-tech';
+export const BLOGGIOS_QAA_HELP = 'bloggios-qaa';

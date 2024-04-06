@@ -156,7 +156,68 @@ const getBloggiosTechQuoteDetails = () => {
             <MoreInformation/>
         </Bg.Wrapper>
     )
+};
+
+const getBloggiosTechTrainingDetails = () => {
+    return(
+        <Bg.Wrapper>
+            <Bg.Paragraph>
+                <strong>Yes</strong>, we offer Corporate Training programs tailored to the needs of your team. Whether it's training on new technologies, development methodologies, or best practices, we can customize a program to enhance the skills and capabilities of your team.
+            </Bg.Paragraph>
+
+            <MoreInformation/>
+        </Bg.Wrapper>
+    )
+};
+
+const getBloggiosTechDevelopmentDetails = () => {
+    return(
+        <Bg.Wrapper>
+            <Bg.Paragraph>
+                We specialize in both Frontend and Backend Development. Whether you need a user-friendly interface for your application or robust backend infrastructure, our team has the expertise to deliver high-quality solutions.
+            </Bg.Paragraph>
+
+            <MoreInformation/>
+        </Bg.Wrapper>
+    )
+};
+
+const getBloggiosTechMobilApplicationDetails = () => {
+    return(
+        <Bg.Wrapper>
+            <Bg.Paragraph>
+                <strong>Yes</strong>, we develop mobile applications for Android, iOS, Mac OS, and Windows platforms. Our experienced developers utilize the latest technologies and best practices to create responsive and feature-rich mobile apps.
+            </Bg.Paragraph>
+
+            <MoreInformation/>
+        </Bg.Wrapper>
+    )
+};
+
+const getBloggiosTechPlatformSpecificDetails = () => {
+    return(
+        <Bg.Wrapper>
+            <Bg.Paragraph>
+                <strong>Absolutely</strong>, we have dedicated teams with expertise in developing platform-specific applications. Whether you need an Android, iOS, Mac OS, or Windows app, we can deliver a solution that meets your requirements and aligns with platform guidelines.
+            </Bg.Paragraph>
+
+            <MoreInformation/>
+        </Bg.Wrapper>
+    )
+};
+
+const getBloggiosTechSecurityDetails = () => {
+    return(
+        <Bg.Wrapper>
+            <Bg.Paragraph>
+                <strong>Security is a top priority for us</strong>. We follow industry best practices and employ robust security measures throughout the development process to safeguard your software against potential threats and vulnerabilities. Additionally, we conduct thorough security testing to identify and address any security issues before deployment.
+            </Bg.Paragraph>
+
+            <MoreInformation/>
+        </Bg.Wrapper>
+    )
 }
+
 
 export const bloggiosTechHelpData = [
     {
@@ -183,5 +244,33 @@ export const bloggiosTechHelpData = [
         id: 5,
         title: 'How can I formally request a quotation for software development services?',
         details: getBloggiosTechQuoteDetails()
+    },
+    {
+        id: 6,
+        title: 'Can you provide Corporate Training for our team on specific technologies or methodologies?',
+        details: getBloggiosTechTrainingDetails()
+    },
+    {
+        id: 7,
+        title: 'Do you specialize in frontend or backend development, or both?',
+        details: getBloggiosTechDevelopmentDetails()
+
+    },
+    {
+        id: 8,
+        title: 'Do you develop mobile applications for all major platforms?',
+        details: getBloggiosTechMobilApplicationDetails()
+
+    },
+    {
+        id: 9,
+        title: 'Can you assist with the development of specific platform-specific apps such as Android, iOS, Mac OS, or Windows?',
+        details: getBloggiosTechPlatformSpecificDetails()
+    },
+    {
+        id: 10,
+        title: 'How do you ensure the security of the software developed by your team?',
+        details: getBloggiosTechSecurityDetails()
     }
+
 ]

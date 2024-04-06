@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import styled, {keyframes} from "styled-components";
 import {colors} from "../../styles/Theme";
 import {FaPlus} from "react-icons/fa";
@@ -79,8 +79,10 @@ const AccordionHeader = styled.div`
     }
     
     & > svg {
+        flex-shrink: 0;
         transform: ${({isOpen}) => (isOpen ? 'rotate(45deg)' : 'rotate(0)')};
         transition: transform 400ms ease-in-out;
+    }
     
     &:hover, &:active {
         color: ${colors.white100};

@@ -26,7 +26,6 @@ import contactInformation from '../../../asset/configurations/static/ContactInfo
 import {IoMdMail} from "react-icons/io";
 import {FaGlobe, FaPhoneAlt} from "react-icons/fa";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
-import EnquiryForm from "../../../component/Forms/EnquiryForm";
 
 const RaiseQueryForm = lazy(()=> import('../../../component/Forms/RaiseQueryForm'));
 

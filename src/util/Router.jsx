@@ -22,7 +22,9 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE, BLOGGIOS_TECH_HELP,
+    ASK_QUESTION_OUTLET_PAGE,
+    BLOGGIOS_QAA_HELP,
+    BLOGGIOS_TECH_HELP,
     CHATS_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
@@ -34,10 +36,12 @@ import {
     PRIVACY_POLICY,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
-    QUESTION_PAGE, REPORT_BUG_PAGE,
+    QUESTION_PAGE,
+    REPORT_BUG_PAGE,
     SECURITY_PAGE,
     SETTING_PAGE,
-    SIGNUP_PAGE, SUPPORT_PAGE,
+    SIGNUP_PAGE,
+    SUPPORT_PAGE,
     TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
@@ -70,6 +74,7 @@ const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondit
 const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPage'));
 const SupportPage = lazy(()=> import('../container/SupportContainer/SupportPage'));
 const DefaultHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/DefaultHelpOutlet'));
+const BloggiosQAAHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosQAAHelpOutlet'));
 
 const Router = () => {
 
@@ -90,6 +95,7 @@ const Router = () => {
                     <Route path={SUPPORT_PAGE} element={<SupportPage />} >
                         <Route index element={<DefaultHelpOutlet />} />
                         <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
+                        <Route path={BLOGGIOS_QAA_HELP} element={<BloggiosQAAHelpOutlet />} />
                     </Route>
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />

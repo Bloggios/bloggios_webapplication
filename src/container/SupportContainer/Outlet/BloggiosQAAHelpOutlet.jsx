@@ -19,11 +19,11 @@
  */
 
 import React, {useState} from 'react';
-import styled from "styled-components";
 import Accordion from "../../../component/Accordions/Accordion";
-import {bloggiosTechHelpData} from "../../../asset/configurations/BloggiosTechHelpSupport";
+import styled from "styled-components";
+import {bloggiosQAAHelpSupportData} from "../../../asset/configurations/BloggiosQAAHelpSupport";
 
-const BloggiosTechHelpOutlet = () => {
+const BloggiosQaaHelpOutlet = () => {
 
     const [openAccordionId, setOpenAccordionId] = useState(null);
 
@@ -38,7 +38,7 @@ const BloggiosTechHelpOutlet = () => {
             </Heading1>
 
             <AccordionContainer>
-                {bloggiosTechHelpData.map((item) => (
+                {bloggiosQAAHelpSupportData.map((item) => (
                     <Accordion
                         key={item.id}
                         data={item}
@@ -98,4 +98,4 @@ const AccordionContainer = styled.div`
     }
 `;
 
-export default BloggiosTechHelpOutlet;
+export default BloggiosQaaHelpOutlet;

@@ -19,6 +19,7 @@
  */
 
 import styled from "styled-components";
+import {colors} from "./Theme";
 
 export const ColumnWrapper = styled.div`
     width: 100%;
@@ -32,4 +33,27 @@ export const RowSpaceBetweenWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+`;
+
+export const Paragraph = styled.p`
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+    line-height: normal;
+    letter-spacing: 1px;
+    color: ${colors.white80};
+    padding: 10px 0;
+`;
+
+export const BgLink = styled.a`
+    font-family: "Poppins", sans-serif;
+    font-size: inherit;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    color: ${colors.linkColor};
+    transition: all 200ms ease-in-out;
+    
+    &:hover, &:active {
+        text-decoration: underline;
+        text-decoration-color: ${colors.linkColor};
+    }
 `;

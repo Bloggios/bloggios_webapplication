@@ -18,9 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {memo, useState} from 'react';
+import React, {memo} from 'react';
 import styled from "styled-components";
-import BloggiosBase from "../boundries/bloggiosBase";
 import {colors} from "../../styles/Theme";
 import {askQuestionWhite, bgBlackRounded, posts} from "../../asset/svg";
 import {messaging, qAndA} from "../../asset/marquee";
@@ -30,7 +29,7 @@ import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import UnAuthBloggiosBase from "../boundries/UnAuthBloggiosBase";
-import {BLOGGIOS_TECH_HELP, SUPPORT_PAGE} from "../../constant/pathConstants";
+import {BLOGGIOS_QAA_HELP, BLOGGIOS_TECH_HELP, SUPPORT_PAGE} from "../../constant/pathConstants";
 
 const SupportPage = () => {
 
@@ -65,7 +64,10 @@ const SupportPage = () => {
                             <span>Bloggios Tech</span>
                         </Card>
 
-                        <Card>
+                        <Card
+                            onClick={()=> handleCardClick(BLOGGIOS_QAA_HELP)}
+                            isActive={location.pathname.includes(BLOGGIOS_QAA_HELP)}
+                        >
                             <img src={qAndA} alt="Questions"/>
                             <span>Q&A</span>
                         </Card>

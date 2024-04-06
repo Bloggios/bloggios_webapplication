@@ -12,6 +12,8 @@ import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import Avatar from "../avatars/avatar";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {colors} from "../../styles/Theme";
+import {BgLink} from "../../styles/StyledComponent";
 
 const ProfileHeader = ({
                            name,
@@ -170,15 +172,27 @@ const ProfileHeader = ({
             </CoverImage>
 
             <UserDetails>
-                <PrimaryDetails>
-                    <ColumnWrapper>
-                        <NameSpan>
-                            {name}
-                        </NameSpan>
-                        <ProfileTagSpan>
-                            {profileTag}
-                        </ProfileTagSpan>
-                    </ColumnWrapper>
+                <ColumnWrapper>
+                    <NameSpan>
+                        {name}
+                    </NameSpan>
+                    <ProfileTagSpan>
+                        {profileTag}
+                    </ProfileTagSpan>
+                </ColumnWrapper>
+
+                <BioFollowWrapper>
+                    {bio && (
+                        <BioWrapper>
+                            {bio}
+                        </BioWrapper>
+                    )}
+
+                    {link && (
+                        <BgLink>
+
+                        </BgLink>
+                    )}
 
                     {id !== userId && (
                         <FetchLoaderButton
@@ -187,29 +201,28 @@ const ProfileHeader = ({
                             onClick={handleFollowing}
                             loaderSize={'2px'}
                             loaderDotsSize={'2px'}
-                            bgColor={'#4258ff'}
-                            hBgColor={'rgba(66, 88, 255, 0.9)'}
-                            aBgColor={'#4258ff'}
-                            color={'rgba(255, 255, 255, 0.8)'}
-                            hColor={'rgba(255, 255, 255, 1)'}
+                            bgColor={colors.accent100}
+                            hBgColor={colors.accent80}
+                            aBgColor={colors.accent100}
+                            color={colors.white80}
+                            hColor={colors.white100}
+                            aColor={colors.white100}
                             borderRadius={'10px'}
                             padding={width > 500 ? '0 16px' : '0 8px'}
                             style={{
-                                height: width > 500 ? '28px' : '22px',
-                                width: width > 500 ? '80px' : '60px',
+                                height: width > 500 ? '28px' : '24px',
+                                width: width > 500 ? '80px' : '72px',
                                 border: 'none',
                                 outline: 'none',
-                                fontSize: width > 500 ? '14px' : '10px'
+                                fontSize: width > 500 ? '14px' : '12px',
+                                alignSelf: 'flex-end',
+                                fontFamily: 'inherit',
+                                letterSpacing: 1,
+                                fontWeight: 400
                             }}
                         />
                     )}
-                </PrimaryDetails>
-
-                {bio && (
-                    <BioWrapper>
-                        {bio}
-                    </BioWrapper>
-                )}
+                </BioFollowWrapper>
             </UserDetails>
         </Wrapper>
     )
@@ -268,17 +281,14 @@ const UserDetails = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 0 20px 0;
     background-color: #0c0c0c;
 `;
 
-const PrimaryDetails = styled.div`
+const ColumnWrapper = styled.div`
     width: 100%;
     height: 70px;
-    background-color: #0c0c0c;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 0 20px 0 170px;
 
     @media (max-width: 700px) {
@@ -287,14 +297,9 @@ const PrimaryDetails = styled.div`
     }
 
     @media (max-width: 500px) {
-        padding: 0 10px 0 90px;
+        padding: 0 10px 0 95px;
         height: 40px;
     }
-`;
-
-const ColumnWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
 `;
 
 const NameSpan = styled.span`
@@ -303,19 +308,17 @@ const NameSpan = styled.span`
     font-weight: 500;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.8);
-    width: 200px;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     @media (max-width: 500px) {
         font-size: clamp(16px, 5vw, 20px);
-        width: 140px;
     }
 
     @media (max-width: 350px) {
         font-size: clamp(16px, 5vw, 20px);
-        width: 100px;
     }
 `;
 
@@ -326,6 +329,7 @@ const ProfileTagSpan = styled.span`
     width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 
     @media (max-width: 500px) {
         width: 140px;
@@ -488,20 +492,28 @@ const ProfileImageChangeButton = styled.label`
     }
 `;
 
+const BioFollowWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 28px;
+    letter-spacing: 1px;
+    font-family: 'Poppins', sans-serif;
+    
+    @media (max-width: 500px) {
+        padding: 10px 16px;
+    }
+`;
+
 const BioWrapper = styled.div`
     width: 100%;
     display: flex;
-    padding: 22px 28px 0 28px;
     font-size: clamp(0.875rem, 0.8059rem + 0.4255vw, 1.125rem);
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 1px;
-    font-family: 'Poppins', sans-serif;
+    color: ${colors.white80};
+    font-family: inherit;
+    letter-spacing: inherit;
     word-wrap: normal;
     white-space: break-spaces;
-
-    @media (max-width: 500px) {
-        padding: 18px 10px 0 10px;
-    }
 `;
 
 export default ProfileHeader
