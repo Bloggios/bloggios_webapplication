@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {memo} from 'react';
+import React, {memo, useState} from 'react';
 import styled from "styled-components";
 import BloggiosBase from "../boundries/bloggiosBase";
 import {colors} from "../../styles/Theme";
@@ -28,13 +28,27 @@ import IconButton from "../../component/buttons/IconButton";
 import {handleDivScroll} from "../../service/commonFunctions";
 import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import UnAuthBloggiosBase from "../boundries/UnAuthBloggiosBase";
+import {BLOGGIOS_TECH_HELP, SUPPORT_PAGE} from "../../constant/pathConstants";
 
 const SupportPage = () => {
 
     const {width} = useWindowDimensions();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleCardClick = (id) => {
+        console.log(location.pathname)
+        if (location.pathname.includes(id)) {
+            navigate(SUPPORT_PAGE);
+        } else {
+            navigate(id);
+        }
+    }
 
     return (
-        <BloggiosBase>
+        <UnAuthBloggiosBase>
             <Wrapper>
                 <HeaderSection className={'wrapper-bg__accent--background'}>
                     <h2>Get Help and Support</h2>
@@ -43,7 +57,10 @@ const SupportPage = () => {
                     </span>
 
                     <CardsContainer id={'bloggiosHelpCardsMain'}>
-                        <Card>
+                        <Card
+                            onClick={()=> handleCardClick(BLOGGIOS_TECH_HELP)}
+                            isActive={location.pathname.includes(BLOGGIOS_TECH_HELP)}
+                        >
                             <img src={bgBlackRounded} alt="Bloggios"/>
                             <span>Bloggios Tech</span>
                         </Card>
@@ -80,8 +97,10 @@ const SupportPage = () => {
                         </IconButtonsGroup>
                     )}
                 </HeaderSection>
+
+                <Outlet />
             </Wrapper>
-        </BloggiosBase>
+        </UnAuthBloggiosBase>
     );
 };
 
@@ -90,7 +109,6 @@ const Wrapper = styled.div`
     max-width: 100%;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 72px);
     box-sizing: border-box;
     transition: all 400ms ease-in-out;
 
@@ -169,7 +187,7 @@ const Card = styled.div`
     background: ${colors.white10};
     border-radius: 20px;
     padding: 16px 10px;
-    border: 2px solid transparent;
+    border: ${({isActive}) => (isActive ? `2px solid ${colors.white40}` : '2px solid transparent')};
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
     cursor: pointer;
     transition: all 250ms ease-in-out;

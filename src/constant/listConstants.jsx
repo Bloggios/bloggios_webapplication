@@ -88,7 +88,7 @@ export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
     {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
     {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />},
-    {page: LANDING_PAGE, tooltip: 'Bloggios Tech', icon: <FaCode/>},
+    {page: SUPPORT_PAGE, tooltip: 'Bloggios Tech', icon: <FaCode/>},
 ];
 
 export const loggedOutNavItems = [
@@ -179,7 +179,7 @@ export const bloggiosTechLinksList = [
         path: 'https://tech.bloggios.com/ecommerce-development'
     },
     {
-        label: 'Software Support',
+        label: 'Software SupportContainer',
         icon: <MdContactSupport />,
         path: 'https://tech.bloggios.com/software-support'
     },
@@ -253,7 +253,7 @@ export const notFoundPageList = [
     },
     {
         id: 3,
-        label: 'Support',
+        label: 'SupportContainer',
         text: 'Need help, please contact support',
         button: 'Learn more',
         icon: <MdOutlineContactSupport />,
@@ -272,7 +272,7 @@ export const errorPageList = [
     },
     {
         id: 3,
-        label: 'Support',
+        label: 'SupportContainer',
         text: 'Need help, please contact support',
         button: 'Learn more',
         icon: <MdOutlineContactSupport />,
@@ -447,7 +447,7 @@ export const whyUsCardListConstants = [
     {
         id: 2,
         icon: techSupport,
-        label: 'Best Tech Support'
+        label: 'Best Tech SupportContainer'
     },
     {
         id: 3,

@@ -20,24 +20,23 @@
 
 import React, {lazy, Suspense} from 'react';
 import styled, {css} from "styled-components";
-import {colors} from "../../styles/Theme";
-import contactInformation from '../../asset/configurations/static/ContactInformation.json';
-import {FaGlobe, FaPhoneAlt} from "react-icons/fa";
+import {colors} from "../../../styles/Theme";
+import SocialLinks from "../../../component/animations/SocialLinks";
+import contactInformation from '../../../asset/configurations/static/ContactInformation.json';
 import {IoMdMail} from "react-icons/io";
-import SocialLinks from "../animations/SocialLinks";
-import FallbackLoader from "../loaders/fallbackLoader";
-import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../constant/ElementIdConstants";
+import {FaGlobe, FaPhoneAlt} from "react-icons/fa";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import EnquiryForm from "../../../component/Forms/EnquiryForm";
 
-const EnquiryForm = lazy(()=> import("../Forms/EnquiryForm"));
+const RaiseQueryForm = lazy(()=> import('../../../component/Forms/RaiseQueryForm'));
 
-const BloggiosTechEnquiry = () => {
-
+const DefaultHelpOutlet = () => {
     return (
-        <Wrapper className={'wrapper-bg__accent--background'} id={BLOGGIOS_TECH_ENQUIRY_SECTION}>
+        <Wrapper className={'wrapper-bg__accent--background'}>
             <Column className={'enquiry-format__section'}>
                 <div style={{display: 'flex', flexDirection: 'column', gap: 28}}>
                     <Header>
-                        Want to turn your<br/>vision into <strong>reality</strong> ?<br/>Let's <strong>discuss!</strong>
+                        Need <strong>Assistance</strong> ?<br/>Submit your <strong>query</strong> <br/>here
                     </Header>
 
                     <ContactInformation>
@@ -72,7 +71,7 @@ const BloggiosTechEnquiry = () => {
 
             <Column className={'enquiry-form__section'}>
                 <Suspense fallback={<FallbackLoader height={'100%'} width={'100%'}/>}>
-                    <EnquiryForm />
+                    <RaiseQueryForm />
                 </Suspense>
             </Column>
         </Wrapper>
@@ -91,15 +90,15 @@ const Wrapper = styled.div`
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     gap: 10px;
     user-select: none;
-    
+
     @media (max-width: 1600px) {
         width: 70%;
     }
-    
+
     @media (max-width: 1200px) {
         width: 95%;
     }
-    
+
     @media (max-width: 880px) {
         flex-direction: column;
         width: 70%;
@@ -109,7 +108,7 @@ const Wrapper = styled.div`
     @media (max-width: 650px) {
         width: 95%;
     }
-    
+
     @media (max-width: 500px) {
         width: 98%;
         padding: 16px 7px 7px 7px;
@@ -202,4 +201,4 @@ const Contact = styled.div`
     }
 `;
 
-export default BloggiosTechEnquiry;
+export default DefaultHelpOutlet;

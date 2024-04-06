@@ -92,9 +92,6 @@ export const fetchProfileAndDispatch = async (dispatch) => {
 export const initLogout = (navigate, dispatch) => {
     logoutUser()
         .then((response)=> {
-            navigate(LANDING_PAGE, {
-                replace: true
-            });
             window.location.reload();
         }).catch((error)=> {
         const message = error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong. Please try again later';

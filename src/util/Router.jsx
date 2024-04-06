@@ -22,7 +22,7 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE,
+    ASK_QUESTION_OUTLET_PAGE, BLOGGIOS_TECH_HELP,
     CHATS_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
@@ -45,6 +45,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
+import BloggiosTechHelpOutlet from "../container/SupportContainer/Outlet/BloggiosTechHelpOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -67,7 +68,8 @@ const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/C
 const PrivacyPolicy = lazy(()=> import('../container/TermsContainer/PrivacyPolicy'));
 const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondition'));
 const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPage'));
-const SupportPage = lazy(()=> import('../container/Support/SupportPage'));
+const SupportPage = lazy(()=> import('../container/SupportContainer/SupportPage'));
+const DefaultHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/DefaultHelpOutlet'));
 
 const Router = () => {
 
@@ -85,7 +87,10 @@ const Router = () => {
                     <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
                     <Route path={TERMS_CONDITION} element={<TermsCondition />} />
                     <Route path={REPORT_BUG_PAGE} element={<ReportBugPage />} />
-                    <Route path={SUPPORT_PAGE} element={<SupportPage />} />
+                    <Route path={SUPPORT_PAGE} element={<SupportPage />} >
+                        <Route index element={<DefaultHelpOutlet />} />
+                        <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
+                    </Route>
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
