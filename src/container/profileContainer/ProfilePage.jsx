@@ -154,7 +154,7 @@ const ProfilePage = () => {
         } else {
             return <PageNotFound/>
         }
-    }, [leftSectionRef, rightSectionRef, width, profileData, id, getMainContent])
+    }, [leftSectionRef, rightSectionRef, width, id, getMainContent])
 
     return (
         isError || error ?

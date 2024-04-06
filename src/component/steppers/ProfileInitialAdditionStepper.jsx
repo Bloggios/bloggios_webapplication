@@ -25,7 +25,7 @@ import IconButton from "../buttons/IconButton";
 import {FaCircleInfo} from "react-icons/fa6";
 import {Tooltip} from "react-tooltip";
 import {profileTagsList} from "../../restservices/profileApi";
-import {dispatchError} from "../../service/functions";
+import {dispatchError, dispatchErrorMessage} from "../../service/functions";
 import {FaCheck} from "react-icons/fa";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import {authenticatedAxios} from "../../restservices/baseAxios";
@@ -33,6 +33,7 @@ import {ADD_PROFILE} from "../../constant/apiConstants";
 import {HOME_PAGE} from "../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {colors} from "../../styles/Theme";
 
 const ProfileInitialAdditionStepper = () => {
 
@@ -122,7 +123,16 @@ const ProfileInitialAdditionStepper = () => {
 
     const handleSubmit = () => {
         setButtonLoader(true);
-        authenticatedAxios.post(ADD_PROFILE, profileData)
+        if (profileData.link.startsWith('http://')) {
+            dispatchErrorMessage(dispatch, 'Unsecured Link is not allowed');
+            setButtonLoader(false);
+            return;
+        }
+        const payload = {
+            ...profileData,
+            link: profileData.link.startsWith('https://') ? profileData.link : `https://${profileData.link}`
+        }
+        authenticatedAxios.post(ADD_PROFILE, payload)
             .then((response) => {
                 setTimeout(()=> {
                     window.location.reload();
@@ -215,16 +225,20 @@ const ProfileInitialAdditionStepper = () => {
                         explore the world you've built!
                     </FieldSummary>
 
-                    <Input
-                        type={'text'}
-                        placeholder={'Enter Link here'}
-                        maxLength={40}
-                        required={true}
-                        autoFocus={true}
-                        value={profileData.link}
-                        onChange={(e) => handleInputChange(e, 'link')}
-                        onKeyDown={handleKeyDown}
-                    />
+                    <LinkInput>
+                        <span>
+                            https://
+                        </span>
+                        <input
+                            type={'text'}
+                            placeholder={'Enter Link here'}
+                            maxLength={200}
+                            autoFocus={true}
+                            value={profileData.link}
+                            onChange={(e) => handleInputChange(e, 'link')}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </LinkInput>
                 </Field>
             )
         } else if (currentStep === 4) {
@@ -489,6 +503,43 @@ const SelectStyle = styled.select`
     & option {
         font-family: 'Poppins', sans-serif;
         letter-spacing: 1px;
+    }
+`;
+
+const LinkInput = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: fit-content;
+    box-shadow: inset rgba(245, 245, 245, 0.1) 0 0 16px -6px;
+    border-radius: 4px;
+    
+    & > span {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        color: ${colors.white50};
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 1px;
+        font-weight: 300;
+    }
+    
+    & > input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        color: rgba(245, 245, 245, 0.8);
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 1px;
+        font-weight: 300;
+
+        &:focus {
+            color: rgba(245, 245, 245, 1);
+        }
     }
 `;
 

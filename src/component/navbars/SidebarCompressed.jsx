@@ -27,6 +27,7 @@ import SimpleLoader from "../loaders/simpleLoader";
 import {initLogout} from "../../service/functions";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {bgBlackRounded} from "../../asset/svg";
 
 const MemoizedCompressedSidebarTile = lazy(()=> import('./components/CompressedSidebarTile'));
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
@@ -40,7 +41,7 @@ const SidebarCompressed = () => {
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
-            if (event.key === '/') {
+            if (event.key === '\\') {
                 if (!isSearchBarOpen) {
                     event.preventDefault();
                     setIsSearchBarOpen(true);
@@ -62,7 +63,7 @@ const SidebarCompressed = () => {
             <Wrapper>
                 <SideBarRoundedWrapper>
                     <SidebarPrimarySection>
-                        <UserAvatar src={profileImage ? profileImage : bloggios_logo} alt={name} />
+                        <UserAvatar src={profileImage ? profileImage : bgBlackRounded} alt={name} />
                         <SearchBarIcon onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
                             <IoIosSearch/>
                         </SearchBarIcon>

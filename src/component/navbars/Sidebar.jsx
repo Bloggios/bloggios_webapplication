@@ -22,11 +22,11 @@ import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
-import {RxSlash} from "react-icons/rx";
 import FallbackLoader from "../loaders/fallbackLoader";
 import IconLabelButton from "../buttons/IconLabelButton";
 import {useNavigate} from "react-router-dom";
 import {initLogout} from "../../service/functions";
+import {TbBackslash} from "react-icons/tb";
 
 const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarProfileContainer'));
 const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
@@ -41,7 +41,7 @@ const Sidebar = ({ref}) => {
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
-            if (event.key === '/') {
+            if (event.key === '\\') {
                 if (!isSearchBarOpen) {
                     event.preventDefault();
                     setIsSearchBarOpen(true);
@@ -76,7 +76,7 @@ const Sidebar = ({ref}) => {
                         <SearchBarInput onClick={() => setIsSearchBarOpen(!isSearchBarOpen)}>
                             <IoIosSearch fontSize={'16px'}/>
                             <span>Explore Bloggios</span>
-                            <SearchButton><RxSlash/></SearchButton>
+                            <SearchButton><TbBackslash /></SearchButton>
                         </SearchBarInput>
 
                         <div style={{

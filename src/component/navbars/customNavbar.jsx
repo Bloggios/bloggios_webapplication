@@ -34,11 +34,11 @@ import {getFollow} from "../../restservices/profileApi";
 import {setProfile} from "../../state/profileSlice";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import {clearIsCreated} from "../../state/isCreatedSlice";
-import {RxSlash} from "react-icons/rx";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {FaRegUser} from "react-icons/fa";
 import {BiHelpCircle} from "react-icons/bi";
 import {AiOutlineBug} from "react-icons/ai";
+import {TbBackslash} from "react-icons/tb";
 
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 
@@ -82,7 +82,7 @@ const CustomNavbar = () => {
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
-            if (event.key === '/') {
+            if (event.key === '\\') {
                 if (!isSearchBarOpen) {
                     event.preventDefault();
                     setIsSearchBarOpen(true);
@@ -132,7 +132,7 @@ const CustomNavbar = () => {
                 <></>
             )
         }
-    }, [width, isAuthenticated, name, profileImage, isSearchBarOpen, dispatch])
+    }, [width, isAuthenticated, name, profileImage, isSearchBarOpen])
 
     return (
         <>
@@ -149,7 +149,7 @@ const CustomNavbar = () => {
                         <SearchBarInput onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)} >
                             <IoIosSearch />
                             <span>Explore Bloggios</span>
-                            <SearchButton><RxSlash /></SearchButton>
+                            <SearchButton><TbBackslash /></SearchButton>
                         </SearchBarInput>
                     )}
                 </LogoSearchBarWrapper>

@@ -45,11 +45,16 @@ export const Paragraph = styled.p`
 `;
 
 export const BgLink = styled.a`
+    width: fit-content;
     font-family: "Poppins", sans-serif;
     font-size: inherit;
     text-decoration: underline;
     text-decoration-color: transparent;
     color: ${colors.linkColor};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
     transition: all 200ms ease-in-out;
     
     &:hover, &:active {

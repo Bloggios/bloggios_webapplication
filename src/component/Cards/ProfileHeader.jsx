@@ -14,6 +14,7 @@ import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {colors} from "../../styles/Theme";
 import {BgLink} from "../../styles/StyledComponent";
+import {IoIosLink} from "react-icons/io";
 
 const ProfileHeader = ({
                            name,
@@ -189,8 +190,8 @@ const ProfileHeader = ({
                     )}
 
                     {link && (
-                        <BgLink>
-
+                        <BgLink href={link} target="_blank" rel="noopener noreferrer">
+                            <IoIosLink /> {` : ${name ? name.split(' ')[0] + "'s Link" : 'Link'}`}
                         </BgLink>
                     )}
 
@@ -498,6 +499,7 @@ const BioFollowWrapper = styled.div`
     flex-direction: column;
     padding: 16px 28px;
     letter-spacing: 1px;
+    gap: 7px;
     font-family: 'Poppins', sans-serif;
     
     @media (max-width: 500px) {
