@@ -51,6 +51,7 @@ const QuestionPage = () => {
                         <Outlet />
                     </Suspense>
                 </QuestionSection>
+
                 <SuggestionSection ref={suggestionRef}>
                     <Suspense fallback={<FallbackLoader width={suggestionSize.width}/>}>
                         {width > 1050 && <ProfileSuggestions/>}
@@ -77,6 +78,7 @@ const Wrapper = styled.div`
 const QuestionSection = styled.div`
     max-width: 75%;
     min-width: auto;
+    height: fit-content;
     flex: 3;
     display: flex;
     flex-direction: column;
@@ -88,6 +90,10 @@ const QuestionSection = styled.div`
     
     @media (max-width: 1050px) {
         max-width: 100%;
+    }
+    
+    @media (max-width: 600px) {
+        padding: 20px 10px;
     }
 `;
 

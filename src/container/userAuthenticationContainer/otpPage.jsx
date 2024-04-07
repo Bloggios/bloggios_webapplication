@@ -21,11 +21,15 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy} from 'react';
 import AuthBase from "../boundries/AuthBase";
-import OtpComponent from "../../component/authentication/OtpComponent";
+import useUnauthenticated from "../../hooks/useUnauthenticated";
+
+const OtpComponent = lazy(()=> import('../../component/authentication/OtpComponent'));
 
 const OtpPage = () => {
+
+    useUnauthenticated();
 
     return (
         <AuthBase

@@ -27,6 +27,7 @@ import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {getFormattedDate} from "../../../service/DateFunctions";
 import IconButton from "../../../component/buttons/IconButton";
 import {CiBookmarkPlus} from "react-icons/ci";
+import {useNavigate} from "react-router-dom";
 
 const QuestionCard = ({
     questionId,
@@ -40,6 +41,7 @@ const QuestionCard = ({
                       }) => {
 
     const [imageLoadError, setImageLoadError] = useState(false);
+    const navigate = useNavigate();
     const {width} = useWindowDimensions();
 
     const handleImageError = (event) => {
@@ -57,7 +59,7 @@ const QuestionCard = ({
     }
 
     return (
-        <Wrapper>
+        <Wrapper onClick={()=> navigate(questionId)}>
             <UserInfo>
                 <img src={bgBlackRounded} alt="Bloggios"/>
                 <span>Rohit Parihar</span>
@@ -70,11 +72,11 @@ const QuestionCard = ({
                     }}>
                         <h2>{title}</h2>
                         <DetailsText style={{
-                            height: getDetailsText() ? '72px' : 'fit-content'
+                            height: getDetailsText() ? '75px' : 'fit-content'
                         }}>
                             {detailsText && detailsText.length > 0 && detailsText}
                         </DetailsText>
-                        <ReadMoreLink>
+                        <ReadMoreLink onClick={()=> navigate(questionId)}>
                             Read More
                         </ReadMoreLink>
                     </QuestionDetails>
@@ -144,6 +146,10 @@ const Wrapper = styled.div`
     gap: 10px;
     padding: 20px 20px 10px 20px;
     cursor: pointer;
+    
+    @media (max-width: 600px) {
+        padding: 16px 7px 10px 7px;
+    }
 `;
 
 const SpanStyles = css`
@@ -215,7 +221,6 @@ const DetailsText = styled.p`
     font-weight: 400;
     color: ${colors.white80};
     white-space: pre-line;
-    text-align: justify;
     line-height: 18px;
     overflow: hidden;
 `;

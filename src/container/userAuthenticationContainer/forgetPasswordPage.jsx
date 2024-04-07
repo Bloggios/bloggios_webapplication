@@ -18,41 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {authenticatedAxios} from "./baseAxios";
-import {ADD_QUESTION, FETCH_QUESTION_TAGS, QUESTION_DETAIL, QUESTION_LIST} from "../constant/apiConstants";
+import React, {lazy, Suspense} from 'react';
+import AuthBase from "../boundries/AuthBase";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import useUnauthenticated from "../../hooks/useUnauthenticated";
 
-export const fetchQuestionTags = (page, tag, category, signal) => {
-    return authenticatedAxios.get(FETCH_QUESTION_TAGS, {
-        params: {
-            page: page,
-            tagName: tag,
-            category: category,
-        },
-        signal: signal
-    }).then((response)=> response.data);
-}
+const ForgetPasswordComponent = lazy(()=> import('../../component/authentication/ForgetPasswordComponent'));
 
-export const addQuestion = (formData) => {
-    return authenticatedAxios.post(ADD_QUESTION, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    }).then((response)=> response.data);
-}
+const ForgetPasswordPage = () => {
 
-export const fetchQuestionList = (page, signal) => {
-    return authenticatedAxios.get(QUESTION_LIST, {
-        params: {
-            page: page
-        },
-        signal: signal
-    }).then(response => response.data)
+    useUnauthenticated();
+
+    return (
+        <AuthBase>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'} />}>
+                <ForgetPasswordComponent />
+            </Suspense>
+        </AuthBase>
+    );
 };
 
-export const fetchQuestionDetail = (questionId) => {
-    return authenticatedAxios.get(QUESTION_DETAIL, {
-        params: {
-            questionId: questionId,
-        }
-    }).then((response)=> response.data);
-}
+export default ForgetPasswordPage;

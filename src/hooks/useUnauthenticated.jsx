@@ -18,41 +18,23 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {authenticatedAxios} from "./baseAxios";
-import {ADD_QUESTION, FETCH_QUESTION_TAGS, QUESTION_DETAIL, QUESTION_LIST} from "../constant/apiConstants";
+import {useLayoutEffect} from 'react';
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {HOME_PAGE} from "../constant/pathConstants";
 
-export const fetchQuestionTags = (page, tag, category, signal) => {
-    return authenticatedAxios.get(FETCH_QUESTION_TAGS, {
-        params: {
-            page: page,
-            tagName: tag,
-            category: category,
-        },
-        signal: signal
-    }).then((response)=> response.data);
-}
+const useUnauthenticated = () => {
 
-export const addQuestion = (formData) => {
-    return authenticatedAxios.post(ADD_QUESTION, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
+    const navigate = useNavigate();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+
+    useLayoutEffect(()=> {
+        if (isAuthenticated) {
+            navigate(HOME_PAGE, {
+                replace: true
+            });
         }
-    }).then((response)=> response.data);
-}
-
-export const fetchQuestionList = (page, signal) => {
-    return authenticatedAxios.get(QUESTION_LIST, {
-        params: {
-            page: page
-        },
-        signal: signal
-    }).then(response => response.data)
+    }, [])
 };
 
-export const fetchQuestionDetail = (questionId) => {
-    return authenticatedAxios.get(QUESTION_DETAIL, {
-        params: {
-            questionId: questionId,
-        }
-    }).then((response)=> response.data);
-}
+export default useUnauthenticated;

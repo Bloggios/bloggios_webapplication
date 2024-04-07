@@ -21,14 +21,12 @@
 import React from 'react';
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
-import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
 import {detailedProfile} from "../../../restservices/profileApi";
 
 const ProfileAboutOutlet = () => {
 
     const {id} = useParams();
-    const {width} = useWindowDimensions();
 
     const fetchProfileData = async () => {
         const response = await detailedProfile(id);

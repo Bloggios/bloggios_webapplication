@@ -50,3 +50,7 @@
     color: #fff;
     background: rgba(255, 255, 255, 1);
 }
+
+ol {
+    padding-left: 25px;
+}

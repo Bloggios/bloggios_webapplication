@@ -22,7 +22,6 @@ import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import SimpleLoader from "../loaders/simpleLoader";
 import {initLogout} from "../../service/functions";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";

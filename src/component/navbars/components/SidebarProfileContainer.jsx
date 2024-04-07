@@ -19,7 +19,6 @@
  */
 
 import React from 'react';
-import bloggios_logo from "../../../asset/svg/bg-accent_rounded.svg";
 import styled from "styled-components";
 import {bgBlackRounded} from "../../../asset/svg";
 

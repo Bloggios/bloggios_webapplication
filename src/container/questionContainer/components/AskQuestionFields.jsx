@@ -160,6 +160,7 @@ const AskQuestionFields = () => {
         timeoutRef.current = setTimeout(() => {
             const delta = editor.getContents();
             const html = editor.getHTML();
+            console.log(html);
             setEditorContent({
                 deltaStatic: delta,
                 htmlData: html,

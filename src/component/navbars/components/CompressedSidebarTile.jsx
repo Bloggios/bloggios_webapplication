@@ -19,7 +19,7 @@
  */
 
 import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {CHATS_PAGE, HOME_PAGE, QUESTION_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {BiHomeAlt2} from "react-icons/bi";
@@ -28,8 +28,7 @@ import {MdOutlineSecurity} from "react-icons/md";
 import {IoIosSettings} from "react-icons/io";
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import {BsChatDots} from "react-icons/bs";
-import {IoNotificationsOutline} from "react-icons/io5";
+import {BsChatDots, BsQuestionCircle} from "react-icons/bs";
 
 const CompressedSidebarTile = () => {
 
@@ -89,15 +88,13 @@ const CompressedSidebarTile = () => {
 
             <TileWrapper>
                 <TileIconButton
-                    active={window.location.pathname === NOTIFICATIONS_PAGE}
-                    onClick={() => navigate(NOTIFICATIONS_PAGE)}
+                    active={window.location.pathname.includes(QUESTION_PAGE)}
+                    onClick={()=> navigate(QUESTION_PAGE)}
                 >
-                    <IoNotificationsOutline />
+                    <BsQuestionCircle />
                 </TileIconButton>
-                <TooltipContent
-
-                >
-                    Notifications
+                <TooltipContent>
+                    Q&A
                 </TooltipContent>
             </TileWrapper>
 

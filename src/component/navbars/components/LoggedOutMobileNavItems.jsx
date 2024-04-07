@@ -19,9 +19,15 @@
  */
 
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {LANDING_PAGE, LOGIN_PAGE, SERVICES_PAGE, SIGNUP_PAGE} from "../../../constant/pathConstants";
+import {
+    LANDING_PAGE,
+    LOGIN_PAGE,
+    REPORT_BUG_PAGE,
+    SERVICES_PAGE,
+    SIGNUP_PAGE,
+    SUPPORT_PAGE
+} from "../../../constant/pathConstants";
 import {GoHome, GoPlusCircle} from "react-icons/go";
 import bloggios_logo from "../../../asset/svg/bg_logo_rounded_black.svg";
 import styled from "styled-components";
@@ -36,7 +42,6 @@ const LoggedOutMobileNavItems = () => {
     const [isShown, setIsShown] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
-    const dispatch = useDispatch();
 
     const handleClickOutside = (e) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -112,14 +117,20 @@ const LoggedOutMobileNavItems = () => {
                         Sign Up
                     </DropdownItem>
 
-                    <DropdownItem>
+                    <DropdownItem
+                        onClick={()=> navigate(REPORT_BUG_PAGE)}
+                        active={window.location.pathname === REPORT_BUG_PAGE}
+                    >
                         <AiOutlineBug fontSize={'16px'}/>
                         Report Bug
                     </DropdownItem>
 
-                    <DropdownItem>
+                    <DropdownItem
+                        onClick={()=> navigate(SUPPORT_PAGE)}
+                        active={window.location.pathname === SUPPORT_PAGE}
+                    >
                         <MdOutlineContactSupport fontSize={'16px'}/>
-                        Support
+                        Help
                     </DropdownItem>
                 </DropdownItems>
             </BottomBar>

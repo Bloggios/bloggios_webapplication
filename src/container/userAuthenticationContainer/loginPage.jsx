@@ -21,18 +21,24 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import useSeo from "../../globalseo/useSeo";
 import AuthBase from "../boundries/AuthBase";
-import LoginComponent from "../../component/authentication/LoginComponent";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import useUnauthenticated from "../../hooks/useUnauthenticated";
+
+const LoginComponent = lazy(()=> import('../../component/authentication/LoginComponent'));
 
 const LoginPage = () => {
 
     useSeo('login');
+    useUnauthenticated();
 
     return (
         <AuthBase>
-            <LoginComponent />
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'} />}>
+                <LoginComponent />
+            </Suspense>
         </AuthBase>
     )
 

@@ -26,6 +26,7 @@ import {
     BLOGGIOS_QAA_HELP,
     BLOGGIOS_TECH_HELP,
     CHATS_PAGE,
+    FORGET_PASSWORD_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
@@ -75,6 +76,8 @@ const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPa
 const SupportPage = lazy(()=> import('../container/SupportContainer/SupportPage'));
 const DefaultHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/DefaultHelpOutlet'));
 const BloggiosQAAHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosQAAHelpOutlet'));
+const ForgetPasswordPage = lazy(()=> import('../container/userAuthenticationContainer/forgetPasswordPage'));
+const QuestionDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionDetailsOutlet'));
 
 const Router = () => {
 
@@ -92,6 +95,7 @@ const Router = () => {
                     <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
                     <Route path={TERMS_CONDITION} element={<TermsCondition />} />
                     <Route path={REPORT_BUG_PAGE} element={<ReportBugPage />} />
+                    <Route path={FORGET_PASSWORD_PAGE} element={<ForgetPasswordPage />} />
                     <Route path={SUPPORT_PAGE} element={<SupportPage />} >
                         <Route index element={<DefaultHelpOutlet />} />
                         <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
@@ -107,6 +111,7 @@ const Router = () => {
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >
                             <Route index element={<QuestionOutlet />} />
                             <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
+                            <Route path={':questionId'} element={<QuestionDetailsOutlet />} />
                         </Route>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />
