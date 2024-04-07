@@ -87,8 +87,7 @@ import {
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
     {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
-    {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />},
-    {page: SUPPORT_PAGE, tooltip: 'Bloggios Tech', icon: <FaCode/>},
+    {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />}
 ];
 
 export const loggedOutNavItems = [

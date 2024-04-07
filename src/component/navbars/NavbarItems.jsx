@@ -25,25 +25,37 @@ import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {FaCode} from "react-icons/fa";
+import {
+    notification,
+    notificationActive
+} from '../../asset/svg';
 
 const NavbarItems = () => {
 
     const navigate = useNavigate();
     const {isAuthenticated} = useSelector((state)=> state.auth);
+    const { snackbarType, message, isSnackbar, path } = useSelector((state) => state.snackbar);
 
     const getNavBarItems = useCallback(()=> {
         return (
             isAuthenticated ? (
-                loggedInNavItems.map((item) => (
-                    <TooltipWrapper key={item.page} tooltip={item.tooltip}>
-                        <NavItem
-                            onClick={() => navigate(item.page)}
-                            active={window.location.pathname === item.page}
-                        >
-                            {item.icon}
-                        </NavItem>
-                    </TooltipWrapper>
-                ))
+                <>
+                {loggedInNavItems.map((item) => (
+                    <NavItem
+                        key={item.page} tooltip={item.tooltip}
+                        onClick={() => navigate(item.page)}
+                        active={window.location.pathname === item.page}
+                    >
+                        {item.icon}
+                    </NavItem>
+                    ))}
+                    <NavItem>
+                        {isSnackbar && snackbarType === 'notification' ?
+                            <Icon src={notificationActive} alt="notification" /> :
+                            <Icon src={notification} alt="notification" />
+                        }
+                    </NavItem>
+                </>
             ) : (
                 <>
                     {
@@ -68,7 +80,7 @@ const NavbarItems = () => {
                 </>
             )
         )
-    }, [isAuthenticated, navigate])
+    }, [isAuthenticated, navigate, isSnackbar, snackbarType])
 
     return (
         <ItemsWrapper>
@@ -105,6 +117,13 @@ const NavItem = styled.div`
     opacity: ${(props) => (props.active ? 1 : 0)};
     transition: all 250ms ease;
   }
+`;
+
+const Icon = styled.img`
+    width: 28px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    position: relative;
 `;
 
 const MemoizedNavbarItems = React.memo(NavbarItems);

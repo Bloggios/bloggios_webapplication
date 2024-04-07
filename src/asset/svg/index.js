@@ -29,6 +29,8 @@ import notFound from './not_found.svg';
 import laptopSvg from './laptop.svg';
 import mobileSvg from './mobile.svg';
 import posts from './posts.svg';
+import notification from './notification.svg';
+import notificationActive from './notification_active.svg';
 
 export {
     bgAccentRounded,
@@ -41,5 +43,7 @@ export {
     notFound,
     laptopSvg,
     mobileSvg,
-    posts
+    posts,
+    notification,
+    notificationActive,
 };

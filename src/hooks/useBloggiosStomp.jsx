@@ -76,6 +76,12 @@ const useBloggiosStomp = () => {
 
     const onPrivateNotification = (payload) => {
         console.log(payload)
+        const notificationPayload =  {
+            snackbarType: 'notification',
+            message: 'You received a new notification',
+            isSnackbar: true,
+        };
+        dispatch(setSnackbar(notificationPayload));
     }
 
     const onPrivateChat = (payload) => {
