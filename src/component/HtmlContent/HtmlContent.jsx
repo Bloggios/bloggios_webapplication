@@ -62,6 +62,7 @@ const HtmlContent = ({
                 const img = imgElements[i];
                 const width = img.getAttribute('width');
                 const imageWidth = width ? width : img.naturalWidth;
+                console.log(imageWidth)
                 if (Number(imageWidth) + 10 > wrapperSize.width) {
                     img.setAttribute('width', wrapperSize.width)
                 } else {

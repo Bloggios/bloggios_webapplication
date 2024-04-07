@@ -49,6 +49,12 @@
     letter-spacing: 1px;
     color: var(--white-80);
     padding: 5px 0;
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 .html-content__main-wrapper code, .html-content__main-wrapper pre {
@@ -137,5 +143,5 @@
 
 .html-content__main-wrapper p.pre__tag-text {
     overflow-x: auto;
-    white-space: nowrap;
+    white-space: pre;
 }

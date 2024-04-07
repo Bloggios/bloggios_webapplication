@@ -18,6 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import {dispatchErrorMessage} from "./functions";
+
 export const Base64URItoMultipartFile = (base64URI, fileName) => {
     const base64Content = base64URI.split(';base64,').pop();
     const byteCharacters = atob(base64Content);
@@ -41,3 +43,63 @@ Base64URItoMultipartFile.extractContentType = (base64URI) => {
         return '';
     }
 };
+
+export const getHtmlContent = (editorContent) => {
+    if (editorContent.htmlData) {
+        const delta = editorContent.deltaStatic;
+        const html = editorContent.htmlData;
+        let blobs = [];
+        let imageTags = [];
+        if (delta.ops) {
+            delta.ops.forEach((op, index) => {
+                if (op.insert && op.insert.image) {
+                    const imageTag = op.insert.image;
+                    const [, contentType, base64Data] = imageTag.match(/^data:(.*?);base64,(.*)$/);
+                    const splitElement = contentType.split('/')[1];
+                    if (!splitElement) {
+                        dispatchErrorMessage('One of the Uploaded Image not Corrupted or not Valid');
+                        return;
+                    }
+                    blobs.push(Base64URItoMultipartFile(imageTag, `random.${splitElement}`));
+                    imageTags.push(imageTag);
+                }
+            });
+        }
+        let finalHtml = html;
+        imageTags.map((tag, index) => {
+            finalHtml = finalHtml.replaceAll(tag, `bloggios-question-image-index${index}`);
+        });
+        return {
+            finalHtml: finalHtml,
+            blobs: blobs,
+            text: editorContent.text
+        }
+    }
+}
+
+export const validateHtmlContent = (htmlContent, dispatch) => {
+    if (htmlContent.text) {
+        const text = htmlContent.text;
+        const words = text.split(/\s+|\\n/);
+        const filteredWords = words.filter(word => word.trim() !== '');
+        if (filteredWords.length > 400) {
+            dispatchErrorMessage(dispatch, 'Question details cannot contains more than 400 Words');
+            return false;
+        }
+    }
+    if (htmlContent.blobs) {
+        const imageBlobs = htmlContent.blobs;
+        if (htmlContent.blobs.length > 4) {
+            dispatchErrorMessage(dispatch, 'You can only add upto 5 Images in Question Details');
+            return false;
+        }
+        for (let i = 0; i < imageBlobs.length; i++) {
+            const blob = imageBlobs[i];
+            if (blob.size > 800 * 1024) { // Convert KB to bytes
+                dispatchErrorMessage(dispatch, 'Image size should be less than 800 KB');
+                return false;
+            }
+        }
+    }
+    return true;
+}

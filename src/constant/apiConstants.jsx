@@ -57,3 +57,4 @@ export const USER_CHAT_HISTORY = '/websockets-provider/v1.0/chat-history/list';
 export const USER_CHAT_LIST = '/websockets-provider/v1.0/user-chat/list';
 export const QUESTION_LIST = '/question-provider/v1.0/question/list';
 export const QUESTION_DETAIL = '/question-provider/v1.0/question';
+export const ADD_ANSWER = '/question-provider/v1.0/answer';

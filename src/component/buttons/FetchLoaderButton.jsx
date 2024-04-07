@@ -73,6 +73,7 @@ const ButtonWrapper = styled.button`
     color: ${(props) => props.color};
     padding: ${(props) => props.padding};
     border-radius: ${(props) => props.borderRadius};
+    cursor: pointer;
 
     &:hover {
         color: ${(props) => props.hColor};

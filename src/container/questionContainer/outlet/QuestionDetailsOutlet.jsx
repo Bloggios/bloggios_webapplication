@@ -41,11 +41,17 @@ import {dispatchSuccessMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
 import HtmlContent from "../../../component/HtmlContent/HtmlContent";
 import useComponentSize from "../../../hooks/useComponentSize";
+import useSeo from "../../../globalseo/useSeo";
+import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
+import {getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
+import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
+import AnswerSubmitModal from "../../../component/modal/AnswerSubmitModal";
 
 const NotFound = lazy(() => import('../../../component/NotFound/NotFound'));
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
+
 export const questionNotFoundList = [
     {
         id: 1,
@@ -79,6 +85,13 @@ const QuestionDetailsOutlet = () => {
     const [tagsData, setTagsData] = useState([]);
     const [modifiedHtmlData, setModifiedHtmlData] = useState('');
     const [wrapperRef, wrapperSize] = useComponentSize();
+    const editorRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const [editorContent, setEditorContent] = useState({});
+    const [buttonLoader, setButtonLoader] = useState(false);
+    const dispatch = useDispatch();
+    const [addAnswerData, setAddAnswerData] = useState(null);
+    const [answerSubmitModal, setAnswerSubmitModal] = useState(false);
 
     const {
         data: questionData,
@@ -94,24 +107,14 @@ const QuestionDetailsOutlet = () => {
     });
 
     useEffect(() => {
-        // Create a temporary div element to parse the HTML string
         if (questionData && questionData.detailsHtml) {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = questionData.detailsHtml;
-
-            // Get all img tags in the HTML data
             const imgTags = tempDiv.getElementsByTagName('img');
-
-            // Manipulate img tags here if needed
             for (let i = 0; i < imgTags.length; i++) {
-                // For example, you can add a class or change src attribute
                 imgTags[i].classList.add('html-data__img-tag');
             }
-
-            // Set the modified HTML data
             setModifiedHtmlData(tempDiv.innerHTML);
-
-            // Cleanup
             return () => {
                 tempDiv.remove();
             };
@@ -125,19 +128,18 @@ const QuestionDetailsOutlet = () => {
         }
     }), [])
 
-    // const handleEditorBlur = (value, editorDelta, source, editor) => {
-    //     clearTimeout(timeoutRef.current);
-    //     timeoutRef.current = setTimeout(() => {
-    //         const delta = editor.getContents();
-    //         const html = editor.getHTML();
-    //         console.log(html);
-    //         setEditorContent({
-    //             deltaStatic: delta,
-    //             htmlData: html,
-    //             text: editor.getText()
-    //         })
-    //     }, 500)
-    // }
+    const handleEditorBlur = (value, editorDelta, source, editor) => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            const delta = editor.getContents();
+            const html = editor.getHTML();
+            setEditorContent({
+                deltaStatic: delta,
+                htmlData: html,
+                text: editor.getText()
+            })
+        }, 500)
+    }
 
     useEffect(() => {
         if (
@@ -148,6 +150,32 @@ const QuestionDetailsOutlet = () => {
             setTagsData(questionData.tags);
         }
     }, [questionData]);
+
+    const handleAnswerSubmit = () => {
+        setButtonLoader(true)
+        if (editorRef.current) {
+            editorRef.current.blur();
+        }
+        const htmlContent = getHtmlContent(editorContent);
+        let isValid = true
+        if (htmlContent) {
+            isValid = validateHtmlContent(htmlContent, dispatch);
+        }
+        setButtonLoader(false);
+        if (isValid) {
+            console.log(htmlContent)
+            setAddAnswerData({
+                questionId: questionId,
+                images: htmlContent?.blobs,
+                detailsHtml: htmlContent?.finalHtml,
+                detailsText: htmlContent?.text
+            })
+            setAnswerSubmitModal(true);
+        } else {
+            editorRef.current.focus();
+            setAnswerSubmitModal(false)
+        }
+    }
 
     const questionNotFound = useMemo(() => {
         return (
@@ -163,59 +191,91 @@ const QuestionDetailsOutlet = () => {
     const getDetails = useCallback(() => {
         if (questionData) {
             return (
-                <Wrapper ref={wrapperRef}>
-                    <Heading1>
-                        {questionData.title}
-                    </Heading1>
+                <>
+                    <Wrapper ref={wrapperRef}>
+                        <Heading1>
+                            {questionData.title}
+                        </Heading1>
 
-                    <Caption>
-                        Asked : {getFormattedDate(questionData.dateCreated)}
-                    </Caption>
+                        <Caption>
+                            Asked : {getFormattedDate(questionData.dateCreated)}
+                        </Caption>
 
-                    <Divider/>
+                        <Divider/>
 
-                    {modifiedHtmlData && modifiedHtmlData.length > 0 && <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize} />}
+                        {modifiedHtmlData && modifiedHtmlData.length > 0 && <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize} />}
 
-                    <TagContainer>
-                        <span>Tags</span>
-                        <Tags>
-                            {tagsData.map((tag, index) => (
-                                <button key={tag.tag + '_' + index}>
-                                    {tag.tag}
-                                </button>
-                            ))}
-                        </Tags>
-                    </TagContainer>
+                        <TagContainer>
+                            <span>Tags</span>
+                            <Tags>
+                                {tagsData.map((tag, index) => (
+                                    <button key={tag.tag + '_' + index}>
+                                        {tag.tag}
+                                    </button>
+                                ))}
+                            </Tags>
+                        </TagContainer>
 
-                    <Divider/>
+                        <Divider/>
 
-                    <YourAnswerSection>
-                        <Heading4>
-                            Do you have Answer ?
-                        </Heading4>
+                        <YourAnswerSection>
+                            <Heading4>
+                                Do you have Answer ?
+                            </Heading4>
 
-                        <QuillField>
-                            <Typography
-                                text={'Question Details'}
-                                type={'custom'}
-                                size={'18px'}
-                                color={'rgba(255, 255, 255, 0.7)'}
-                                spacing={'1px'}
-                                weight={500}
+                            <QuillField>
+                                <Typography
+                                    text={'Answer Details'}
+                                    type={'custom'}
+                                    size={'18px'}
+                                    color={'rgba(255, 255, 255, 0.7)'}
+                                    spacing={'1px'}
+                                    weight={500}
+                                />
+                                <ReactQuill
+                                    ref={editorRef}
+                                    theme="snow"
+                                    modules={quillBasicModules}
+                                    placeholder={'Please add details for your answer'}
+                                    onChange={handleEditorBlur}
+                                />
+                            </QuillField>
+
+                            <FetchLoaderButton
+                                isLoading={buttonLoader}
+                                onClick={handleAnswerSubmit}
+                                text={'Proceed'}
+                                loaderSize={'4px'}
+                                loaderDotsSize={'4px'}
+                                bgColor={'#4258ff'}
+                                hBgColor={'rgba(66, 88, 255, 0.9)'}
+                                aBgColor={'#4258ff'}
+                                color={'rgba(255, 255, 255, 0.8)'}
+                                hColor={'rgba(255, 255, 255, 1)'}
+                                borderRadius={'4px'}
+                                padding={'10px 0'}
+                                style={{
+                                    width: '110px',
+                                    height: '40px',
+                                    border: 'none',
+                                    outline: 'none',
+                                    fontSize: '14px',
+                                    fontFamily: "'Poppins', san-serif",
+                                    alignSelf: 'flex-end'
+                                }}
                             />
-                            {/*<ReactQuill*/}
-                            {/*    ref={editorRef}*/}
-                            {/*    theme="snow"*/}
-                            {/*    modules={modules}*/}
-                            {/*    placeholder={'Please add some details for your question'}*/}
-                            {/*    onChange={handleEditorBlur}*/}
-                            {/*/>*/}
-                        </QuillField>
-                    </YourAnswerSection>
-                </Wrapper>
+                        </YourAnswerSection>
+                    </Wrapper>
+
+                    <AnswerSubmitModal
+                        isModelOpen={answerSubmitModal}
+                        onClose={() => setAnswerSubmitModal(false)}
+                        data={addAnswerData}
+                    />
+                </>
             )
         }
-    }, [questionData, tagsData, wrapperRef, modifiedHtmlData, wrapperSize])
+    }, [questionData, tagsData, wrapperRef, modifiedHtmlData, wrapperSize, quillBasicModules, buttonLoader, answerSubmitModal, addAnswerData])
 
     const getQuestionDetailsContent = useCallback(() => {
             if (questionIsLoading) {

@@ -39,7 +39,7 @@ import IconButton from "../../../component/buttons/IconButton";
 import {CgClose} from "react-icons/cg";
 import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
-import {Base64URItoMultipartFile} from "../../../service/QuillFunctions";
+import {Base64URItoMultipartFile, getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
@@ -179,33 +179,6 @@ const AskQuestionFields = () => {
         return true;
     }
 
-    const validateHtmlContent = (htmlContent) => {
-        if (htmlContent.text) {
-            const text = htmlContent.text;
-            const words = text.split(/\s+|\\n/);
-            const filteredWords = words.filter(word => word.trim() !== '');
-            if (filteredWords.length > 400) {
-                dispatchErrorMessage(dispatch, 'Question details cannot contains more than 400 Words');
-                return false;
-            }
-        }
-        if (htmlContent.blobs) {
-            const imageBlobs = htmlContent.blobs;
-            if (htmlContent.blobs.length > 4) {
-                dispatchErrorMessage(dispatch, 'You can only add upto 5 Images in Question Details');
-                return false;
-            }
-            for (let i = 0; i < imageBlobs.length; i++) {
-                const blob = imageBlobs[i];
-                if (blob.size > 800 * 1024) { // Convert KB to bytes
-                    dispatchErrorMessage(dispatch, 'Image size should be less than 800 KB');
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     const handleValidate = () => {
         setButtonLoader(true);
         if (editorRef.current) {
@@ -219,10 +192,10 @@ const AskQuestionFields = () => {
             setButtonLoader(false);
             return;
         } else {
-            const htmlContent = getHtmlContent();
+            const htmlContent = getHtmlContent(editorContent);
             let isValid = true
             if (htmlContent) {
-                isValid = validateHtmlContent(htmlContent);
+                isValid = validateHtmlContent(htmlContent, dispatch);
             }
             setButtonLoader(false);
             if (isValid) {
@@ -241,46 +214,13 @@ const AskQuestionFields = () => {
         }
     }
 
-    useEffect(() => {
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
-    }, [timeoutId]);
-
-    const getHtmlContent = () => {
-        if (editorContent.htmlData) {
-            const delta = editorContent.deltaStatic;
-            const html = editorContent.htmlData;
-            let blobs = [];
-            let imageTags = [];
-            if (delta.ops) {
-                delta.ops.forEach((op, index) => {
-                    if (op.insert && op.insert.image) {
-                        const imageTag = op.insert.image;
-                        const [, contentType, base64Data] = imageTag.match(/^data:(.*?);base64,(.*)$/);
-                        const splitElement = contentType.split('/')[1];
-                        if (!splitElement) {
-                            dispatchErrorMessage('One of the Uploaded Image not Corrupted or not Valid');
-                            return;
-                        }
-                        blobs.push(Base64URItoMultipartFile(imageTag, `random.${splitElement}`));
-                        imageTags.push(imageTag);
-                    }
-                });
-            }
-            let finalHtml = html;
-            imageTags.map((tag, index) => {
-                finalHtml = finalHtml.replaceAll(tag, `bloggios-question-image-index${index}`);
-            });
-            return {
-                finalHtml: finalHtml,
-                blobs: blobs,
-                text: editorContent.text
-            }
-        }
-    }
+    // useEffect(() => {
+    //     return () => {
+    //         if (timeoutId) {
+    //             clearTimeout(timeoutId);
+    //         }
+    //     };
+    // }, [timeoutId]); Commented on April 7, 2024 T 21:31 IST, to be removed after testing of Add Question
 
     const tagListData = useCallback(() => {
         if (fetchedTagData.length > 0) {
