@@ -24,6 +24,7 @@ import {dispatchSuccessMessage} from "../../service/functions";
 import {useDispatch} from "react-redux";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useReloadOnResize from "../../hooks/useReloadOnResize";
+import FallbackLoader from "../loaders/fallbackLoader";
 
 const HtmlContent = ({
                          htmlData,
@@ -32,6 +33,7 @@ const HtmlContent = ({
 
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();
+    const [isChecking, setIsChecking] = useState(true);
     useReloadOnResize();
 
     const addCopyButton = () => {
@@ -54,7 +56,8 @@ const HtmlContent = ({
         }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+
         const handleImageResize = () => {
             const imgElements = document.getElementsByClassName('html-data__img-tag');
 
@@ -68,11 +71,8 @@ const HtmlContent = ({
                 } else {
                     img.setAttribute('width', imageWidth);
                 }
-
-                if (!img.getAttribute('width') || img.getAttribute('width') == 0) {
-                    img.setAttribute('width', '100%');
-                }
             }
+            setIsChecking(false);
         }
 
         handleImageResize();
@@ -90,8 +90,11 @@ const HtmlContent = ({
         }
     }, [htmlData]);
 
+    if (isChecking) {
+        return <FallbackLoader width={'100%'} height={'100%'}/>
+    }
 
-    return <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
+    return !isChecking && <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
 };
 
 export default HtmlContent;
