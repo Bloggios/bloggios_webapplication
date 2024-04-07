@@ -25,19 +25,22 @@ const snackbarSlice = createSlice({
     initialState: {
         snackbarType: null,
         message: null,
-        isSnackbar: false
+        isSnackbar: false,
+        path: null
     },
     reducers: {
         setSnackbar: (state, action) => {
-            const { snackbarType, message, isSnackbar } = action.payload;
+            const { snackbarType, message, isSnackbar, path } = action.payload;
             state.snackbarType = snackbarType;
             state.message = message;
             state.isSnackbar = isSnackbar;
+            state.path = path;
         },
         clearSnackbar: (state) => {
             state.snackbarType = '';
             state.message = '';
             state.isSnackbar = false;
+            state.path = null;
         }
     }
 });

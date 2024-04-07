@@ -20,13 +20,20 @@
 
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect} from "react";
-import styled from "styled-components";
 import {clearSnackbar} from "../state/snackbarSlice";
 import {toast} from "sonner";
+import {useNavigate} from "react-router-dom";
 
-const useBloggiosSnackbar = () => {
+const useBloggiosSnackbar = (audioRef) => {
     const dispatch = useDispatch();
-    const { snackbarType, message, isSnackbar } = useSelector((state) => state.snackbar);
+    const navigate = useNavigate();
+    const { snackbarType, message, isSnackbar, path } = useSelector((state) => state.snackbar);
+
+    const handleSnackbarAction = () => {
+        if (path) {
+            navigate(path);
+        }
+    }
 
     const getToast = useCallback(() => {
         switch (snackbarType.toLowerCase()) {
@@ -42,32 +49,34 @@ const useBloggiosSnackbar = () => {
             case "Info":
                 toast.info(message);
                 break;
+            case "notification":
+                toast(message, {
+                    action: path && {
+                        label: 'View',
+                        onClick: handleSnackbarAction
+                    }
+                });
+                break;
             default:
                 toast(message);
         }
-    }, [snackbarType, message]);
+    }, [snackbarType, message, path]);
 
     const handleSnackbar = useCallback(() => {
         if (isSnackbar) {
             getToast();
+            if (snackbarType === 'notification' && audioRef.current) {
+                audioRef.current.play().catch(error => {
+                    console.error('Failed to play notification sound:', error);
+                });
+            }
             dispatch(clearSnackbar());
         }
-    }, [isSnackbar, dispatch, getToast]);
+    }, [isSnackbar, dispatch, getToast, snackbarType, audioRef.current]);
 
     useEffect(() => {
         handleSnackbar();
     }, [handleSnackbar]);
 };
-
-const ToastIcon = styled.div`
-    height: 28px;
-    width: 28px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    flex-shrink: 0;
-`;
 
 export default useBloggiosSnackbar;

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
@@ -32,6 +32,7 @@ import ReportModal from "../../component/modal/ReportModal";
 import PrivacyModal from "../../component/modal/PrivacyModal";
 import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
 import {dispatchWarningMessage} from "../../service/functions";
+import bloggiosNotification from '../../asset/audio/bloggiosNotification.mp3';
 
 const ParentBase = ({children}) => {
 
@@ -41,8 +42,9 @@ const ParentBase = ({children}) => {
     const {isError, errorMessage} = useSelector(state=> state.error);
     const [reportModal, setReportModal] = useState(false);
     const [information, setInformation] = useState({});
+    const audioRef = useRef(null);
     const [privacyModal, setPrivacyModal] = useState(false);
-    useBloggiosSnackbar();
+    useBloggiosSnackbar(audioRef);
     useBloggiosStomp();
 
     useEffect(()=> {
@@ -142,6 +144,7 @@ const ParentBase = ({children}) => {
             return (
                 <AppContainer>
                     {children}
+                    <audio style={{display: "none"}} ref={audioRef} src={bloggiosNotification}/>
                     <Toaster
                         position={width > 600 ? "bottom-right" : "bottom-center"}
                         richColors={true}

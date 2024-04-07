@@ -92,7 +92,7 @@ const ChatUserOutlet = () => {
                 chatStatus : 'SENT'
             }
             chatList.unshift(payload);
-            dispatch(clearReceiveMessage())
+            dispatch(clearReceiveMessage());
         }
     }, [receiveMessageSelector]);
 

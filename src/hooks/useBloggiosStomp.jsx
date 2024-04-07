@@ -26,6 +26,7 @@ import SockJS from "sockjs-client";
 import {over} from "stompjs";
 import {SEND_MESSAGE} from "../constant/WebsocketEndpoint";
 import {createReceiveMessage} from "../state/receiveMessageSlice";
+import {setSnackbar} from "../state/snackbarSlice";
 
 let stompClient = null;
 const useBloggiosStomp = () => {
@@ -54,8 +55,7 @@ const useBloggiosStomp = () => {
                 receiverId: messageSelector.receiverId,
                 message: messageSelector.message,
             }
-            let send = stompClient.send(SEND_MESSAGE, {}, JSON.stringify(sendMessagePayload));
-            console.log(send);
+            stompClient.send(SEND_MESSAGE, {}, JSON.stringify(sendMessagePayload));
         }
     }, [messageSelector])
 
@@ -86,7 +86,13 @@ const useBloggiosStomp = () => {
             receiverId: body.receiverId
         }
         dispatch(createReceiveMessage(data));
-
+        const notificationPayload =  {
+            snackbarType: 'notification',
+            message: 'You received a new message',
+            isSnackbar: true,
+            path: `chats/${body.senderId}`
+        };
+        dispatch(setSnackbar(notificationPayload));
     }
 
     const stompSubscribe = () => {
