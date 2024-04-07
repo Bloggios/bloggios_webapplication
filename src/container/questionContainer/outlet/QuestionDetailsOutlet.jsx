@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, useCallback, useLayoutEffect, useMemo} from 'react';
+import React, {lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {uuidValidator} from "../../../util/ComponentValidators";
 import styled from "styled-components";
@@ -31,10 +31,21 @@ import {fetchQuestionDetail} from "../../../restservices/QuestionApi";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {colors} from "../../../styles/Theme";
 import {getFormattedDate} from "../../../service/DateFunctions";
-import '../../../styles/InnerHtmlStyles.css';
+import Typography from "../../../component/typography/typography";
+import ReactQuill, {Quill} from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import ImageResize from 'quill-image-resize-module-react';
+import '../../../styles/QuillEditorStyles.css'
+import {toolbarOptions} from "../../../asset/configurations/QuillConfiguration";
+import {dispatchSuccessMessage} from "../../../service/functions";
+import {useDispatch} from "react-redux";
+import HtmlContent from "../../../component/HtmlContent/HtmlContent";
+import useComponentSize from "../../../hooks/useComponentSize";
 
 const NotFound = lazy(() => import('../../../component/NotFound/NotFound'));
 
+window.Quill = Quill;
+Quill.register('modules/imageResize', ImageResize);
 export const questionNotFoundList = [
     {
         id: 1,
@@ -65,6 +76,9 @@ export const questionNotFoundList = [
 const QuestionDetailsOutlet = () => {
 
     const {questionId} = useParams();
+    const [tagsData, setTagsData] = useState([]);
+    const [modifiedHtmlData, setModifiedHtmlData] = useState('');
+    const [wrapperRef, wrapperSize] = useComponentSize();
 
     const {
         data: questionData,
@@ -79,33 +93,59 @@ const QuestionDetailsOutlet = () => {
         retry: 4
     });
 
-    const addCopyButton = () => {
-        const preElements = document.getElementsByTagName('pre');
-        const preArray = Array.from(preElements);
-        console.log(preArray.length)
-        for (let i = 0; i < preElements.length; i++) {
-            const headerDiv = document.createElement('div');
-            headerDiv.innerHTML = `<span class="pre__header-span">Snippet</span><button class="pre__header-button">Copy</button>`;
-            headerDiv.className = 'pre__header-div';
-            const headerChild = preElements[i].appendChild(headerDiv);
-            preElements[i].style.position = 'relative'
-            const copyChild = headerChild.getElementsByClassName('pre__header-button')[0];
-            copyChild.addEventListener('click', ()=> {
-                const innerText = preElements[i].innerText;
-                navigator.clipboard.writeText(innerText)
-                    .then(()=> {
-                        console.log('Copied')
-                    }).catch(()=> {
-                    console.log('Error')
-                })
-            })
-        }
-    };
-
-    useLayoutEffect(() => {
-        // Add copy buttons once the component is mounted
+    useEffect(() => {
+        // Create a temporary div element to parse the HTML string
         if (questionData && questionData.detailsHtml) {
-            addCopyButton();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = questionData.detailsHtml;
+
+            // Get all img tags in the HTML data
+            const imgTags = tempDiv.getElementsByTagName('img');
+
+            // Manipulate img tags here if needed
+            for (let i = 0; i < imgTags.length; i++) {
+                // For example, you can add a class or change src attribute
+                imgTags[i].classList.add('html-data__img-tag');
+            }
+
+            // Set the modified HTML data
+            setModifiedHtmlData(tempDiv.innerHTML);
+
+            // Cleanup
+            return () => {
+                tempDiv.remove();
+            };
+        }
+    }, [questionData]);
+
+    const quillBasicModules = useMemo(() => ({
+        toolbar: toolbarOptions,
+        imageResize: {
+            modules: ['Resize', 'DisplaySize']
+        }
+    }), [])
+
+    // const handleEditorBlur = (value, editorDelta, source, editor) => {
+    //     clearTimeout(timeoutRef.current);
+    //     timeoutRef.current = setTimeout(() => {
+    //         const delta = editor.getContents();
+    //         const html = editor.getHTML();
+    //         console.log(html);
+    //         setEditorContent({
+    //             deltaStatic: delta,
+    //             htmlData: html,
+    //             text: editor.getText()
+    //         })
+    //     }, 500)
+    // }
+
+    useEffect(() => {
+        if (
+            questionData &&
+            questionData.tags &&
+            questionData.tags.length > 0
+        ) {
+            setTagsData(questionData.tags);
         }
     }, [questionData]);
 
@@ -123,7 +163,7 @@ const QuestionDetailsOutlet = () => {
     const getDetails = useCallback(() => {
         if (questionData) {
             return (
-                <Wrapper>
+                <Wrapper ref={wrapperRef}>
                     <Heading1>
                         {questionData.title}
                     </Heading1>
@@ -132,13 +172,50 @@ const QuestionDetailsOutlet = () => {
                         Asked : {getFormattedDate(questionData.dateCreated)}
                     </Caption>
 
-                    <Divider />
+                    <Divider/>
 
-                    <div dangerouslySetInnerHTML={{__html : questionData.detailsHtml}} />
+                    {modifiedHtmlData && modifiedHtmlData.length > 0 && <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize} />}
+
+                    <TagContainer>
+                        <span>Tags</span>
+                        <Tags>
+                            {tagsData.map((tag, index) => (
+                                <button key={tag.tag + '_' + index}>
+                                    {tag.tag}
+                                </button>
+                            ))}
+                        </Tags>
+                    </TagContainer>
+
+                    <Divider/>
+
+                    <YourAnswerSection>
+                        <Heading4>
+                            Do you have Answer ?
+                        </Heading4>
+
+                        <QuillField>
+                            <Typography
+                                text={'Question Details'}
+                                type={'custom'}
+                                size={'18px'}
+                                color={'rgba(255, 255, 255, 0.7)'}
+                                spacing={'1px'}
+                                weight={500}
+                            />
+                            {/*<ReactQuill*/}
+                            {/*    ref={editorRef}*/}
+                            {/*    theme="snow"*/}
+                            {/*    modules={modules}*/}
+                            {/*    placeholder={'Please add some details for your question'}*/}
+                            {/*    onChange={handleEditorBlur}*/}
+                            {/*/>*/}
+                        </QuillField>
+                    </YourAnswerSection>
                 </Wrapper>
             )
         }
-    }, [questionData])
+    }, [questionData, tagsData, wrapperRef, modifiedHtmlData, wrapperSize])
 
     const getQuestionDetailsContent = useCallback(() => {
             if (questionIsLoading) {
@@ -181,6 +258,12 @@ const Heading1 = styled.h1`
     font-weight: 600;
     color: ${colors.white100};
     font-family: inherit;
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    overflow: hidden;
+    word-wrap: break-word;
 `;
 
 const Caption = styled.span`
@@ -188,6 +271,12 @@ const Caption = styled.span`
     color: ${colors.white80};
     letter-spacing: 1px;
     font-family: inherit;
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    overflow: hidden;
+    word-wrap: break-word;
 `;
 
 const Divider = styled.hr`
@@ -195,6 +284,70 @@ const Divider = styled.hr`
     width: 70%;
     align-self: center;
     margin-top: 10px;
+`;
+
+const TagContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+`;
+
+const Tags = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    flex-wrap: wrap;
+
+    & > button {
+        width: fit-content;
+        padding: 2px 7px;
+        display: flex;
+        align-items: center;
+        background: ${colors.accent100};
+        cursor: pointer;
+        border-radius: 20px;
+        font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+        letter-spacing: 1px;
+        font-family: "Poppins", sans-serif;
+    }
+`;
+
+const YourAnswerSection = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 25px;
+`;
+
+const Heading4 = styled.h4`
+    font-size: clamp(1.25rem, 1.153rem + 0.597vw, 1.75rem);
+    font-family: "Poppins", sans-serif;
+    color: ${colors.white80};
+    letter-spacing: 1px;
+    font-weight: 500;
+`;
+
+const QuillField = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    gap: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+
+
+    & > span {
+        padding: 16px;
+    }
+
+    &:hover {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 `;
 
 export default QuestionDetailsOutlet;

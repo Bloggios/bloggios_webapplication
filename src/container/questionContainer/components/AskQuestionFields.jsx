@@ -38,33 +38,11 @@ import {VscSearchStop} from "react-icons/vsc";
 import IconButton from "../../../component/buttons/IconButton";
 import {CgClose} from "react-icons/cg";
 import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
+import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
+import {Base64URItoMultipartFile} from "../../../service/QuillFunctions";
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
-
-const Base64URItoMultipartFile = (base64URI, fileName) => {
-    const base64Content = base64URI.split(';base64,').pop();
-    const byteCharacters = atob(base64Content);
-    const arrayBuffer = new ArrayBuffer(byteCharacters.length);
-    const byteArray = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-    const blob = new Blob([arrayBuffer], {type: Base64URItoMultipartFile.extractContentType(base64URI)});
-    return new File([blob], fileName, {type: blob.type});
-};
-
-Base64URItoMultipartFile.extractContentType = (base64URI) => {
-    const contentTypeRegex = /^data:(.+);base64,/; // Regex to extract content type
-    const matches = base64URI.match(contentTypeRegex);
-
-    if (matches && matches.length > 1) {
-        console.log(matches[1]);
-        return matches[1];
-    } else {
-        return '';
-    }
-};
 
 const AskQuestionFields = () => {
 
@@ -148,7 +126,7 @@ const AskQuestionFields = () => {
         }
     };
 
-    const modules = useMemo(() => ({
+    const quillBasicModules = useMemo(() => ({
         toolbar: toolbarOptions,
         imageResize: {
             modules: ['Resize', 'DisplaySize']
@@ -388,7 +366,7 @@ const AskQuestionFields = () => {
                     <ReactQuill
                         ref={editorRef}
                         theme="snow"
-                        modules={modules}
+                        modules={quillBasicModules}
                         placeholder={'Please add some details for your question'}
                         onChange={handleEditorBlur}
                     />
@@ -417,7 +395,7 @@ const AskQuestionFields = () => {
                             onChange={(event) => setTagInputValue(event.target.value)}
                             onKeyDown={handleInputKeyDown}
                             placeholder={selectedChips.length === 0 && "Type to search tags"}
-                            maxLength={5}
+                            maxLength={20}
                             ref={tagRef}
                             readOnly={selectedChips.length > 4}
                         />
@@ -436,7 +414,29 @@ const AskQuestionFields = () => {
                     </TagInput>
                 </Fields>
 
-                <button onClick={handleValidate}>Submit</button>
+                <FetchLoaderButton
+                    isLoading={buttonLoader}
+                    onClick={handleValidate}
+                    text={'Proceed'}
+                    loaderSize={'4px'}
+                    loaderDotsSize={'4px'}
+                    bgColor={'#4258ff'}
+                    hBgColor={'rgba(66, 88, 255, 0.9)'}
+                    aBgColor={'#4258ff'}
+                    color={'rgba(255, 255, 255, 0.8)'}
+                    hColor={'rgba(255, 255, 255, 1)'}
+                    borderRadius={'4px'}
+                    padding={'10px 0'}
+                    style={{
+                        width: '110px',
+                        height: '40px',
+                        border: 'none',
+                        outline: 'none',
+                        fontSize: '14px',
+                        fontFamily: "'Poppins', san-serif",
+                        alignSelf: 'flex-end'
+                    }}
+                />
             </ColumnWrapper>
 
             <QuestionSubmitModal

@@ -20,31 +20,25 @@
 
 import {useEffect} from 'react';
 
-const UseReloadOnResize = (widthThreshold = 100, heightThreshold = 100) => {
+const useReloadOnResize = (delay = 500) => {
+
     useEffect(() => {
-        let lastWidth = window.innerWidth;
-        let lastHeight = window.innerHeight;
+        let resizeTimer;
 
         const handleResize = () => {
-            const currentWidth = window.innerWidth;
-            const currentHeight = window.innerHeight;
-
-            const widthChange = Math.abs(currentWidth - lastWidth);
-            const heightChange = Math.abs(currentHeight - lastHeight);
-
-            if (widthChange > widthThreshold || heightChange > heightThreshold) {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
                 window.location.reload();
-            }
-            lastWidth = currentWidth;
-            lastHeight = currentHeight;
+            }, delay);
         };
+
         window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [widthThreshold, heightThreshold]);
+    }, [delay]);
 };
 
-// useReloadOnResize(400, 400);
 
-export default UseReloadOnResize;
+export default useReloadOnResize;

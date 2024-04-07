@@ -18,11 +18,26 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['blockquote', 'code-block'],
-    ['link', 'image'],
-    [{ 'align': [] }],
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    ['clean']                                         // remove formatting button
-];
+export const Base64URItoMultipartFile = (base64URI, fileName) => {
+    const base64Content = base64URI.split(';base64,').pop();
+    const byteCharacters = atob(base64Content);
+    const arrayBuffer = new ArrayBuffer(byteCharacters.length);
+    const byteArray = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], {type: Base64URItoMultipartFile.extractContentType(base64URI)});
+    return new File([blob], fileName, {type: blob.type});
+};
+
+Base64URItoMultipartFile.extractContentType = (base64URI) => {
+    const contentTypeRegex = /^data:(.+);base64,/; // Regex to extract content type
+    const matches = base64URI.match(contentTypeRegex);
+
+    if (matches && matches.length > 1) {
+        console.log(matches[1]);
+        return matches[1];
+    } else {
+        return '';
+    }
+};

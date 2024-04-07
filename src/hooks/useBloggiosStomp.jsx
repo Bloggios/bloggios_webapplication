@@ -63,9 +63,9 @@ const useBloggiosStomp = () => {
         if (isAuthenticated && userId) {
             const socket = new SockJS(process.env.REACT_APP_WEBSOCKET_URI);
             stompClient = over(socket);
-            // if (stompClient) {
-            //     stompClient.debug = null;
-            // }
+            if (stompClient) {
+                stompClient.debug = null;
+            }
             stompClient.connect({
                 accessToken: accessToken,
                 userId: userId,

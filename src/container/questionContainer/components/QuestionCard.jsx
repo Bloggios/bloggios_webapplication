@@ -213,6 +213,12 @@ const QuestionDetails = styled.div`
     & > h2 {
         font-size: clamp(1.25rem, 1.2985rem + -0.2985vw, 1rem);
         font-weight: 600;
+        hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -webkit-hyphens: auto;
+        overflow: hidden;
+        word-wrap: break-word;
     }
 `;
 
