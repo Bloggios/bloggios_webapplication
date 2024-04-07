@@ -68,6 +68,10 @@ const HtmlContent = ({
                 } else {
                     img.setAttribute('width', imageWidth);
                 }
+
+                if (!img.getAttribute('width') || img.getAttribute('width') == 0) {
+                    img.setAttribute('width', '100%');
+                }
             }
         }
 
