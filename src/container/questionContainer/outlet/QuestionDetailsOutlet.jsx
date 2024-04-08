@@ -52,7 +52,7 @@ const NotFound = lazy(() => import('../../../component/NotFound/NotFound'));
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
 
-export const questionNotFoundList = [
+const questionNotFoundList = [
     {
         id: 1,
         label: 'Question List',

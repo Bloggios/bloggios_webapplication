@@ -43,6 +43,8 @@ import {addPostLike, removePostLike} from "../../restservices/likeApi";
 import {dispatchError} from "../../service/functions";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {colors} from "../../styles/Theme";
+import {POST_DETAILS} from "../../constant/apiConstants";
+import {POST_PAGE} from "../../constant/pathConstants";
 
 const CommentModel = lazy(() => import("../modal/CommentModel"));
 
@@ -64,9 +66,7 @@ const Posts = React.forwardRef(({
     const dispatch = useDispatch();
     const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
-    const toggleReadMore = () => {
-        setIsExpanded(!isExpanded);
-    };
+    const postDetails = `${POST_PAGE}/${postId}`;
 
     const fetchPostUser = async () => {
         const response = await getUserProfile(userId);
@@ -93,7 +93,8 @@ const Posts = React.forwardRef(({
         }
     });
 
-    const handleLike = () => {
+    const handleLike = (event) => {
+        event.stopPropagation();
         if (likeCommentCount.isLike) {
             removeLikeMutation.mutate();
         } else {
@@ -195,8 +196,8 @@ const Posts = React.forwardRef(({
                         <IconButton onClick={handleLike}>
                             {getLikeIcon()}
                         </IconButton>
-                        <IconButton onClick={() => setIsCommentBoxOpen(!isCommentBoxOpen)}>
-                            <FaRegCommentDots />
+                        <IconButton>
+                            <FaRegCommentDots onClick={()=> navigate(postDetails)} />
                         </IconButton>
                         <IconButton>
                             <IoShareSocialOutline />
@@ -212,7 +213,7 @@ const Posts = React.forwardRef(({
                             <FaRegHeart />
                         </IconButton>
                         <IconButton>
-                            <FaRegCommentDots />
+                            <FaRegCommentDots onClick={()=> navigate(postDetails)} />
                         </IconButton>
                         <IconButton>
                             <IoShareSocialOutline />
@@ -221,7 +222,7 @@ const Posts = React.forwardRef(({
                 </PostFooter>
             )
         }
-    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen, getLikeIcon])
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, getLikeIcon, navigate])
 
     const getNameContent = useCallback(() => {
         if (isLoading) {
@@ -283,7 +284,10 @@ const Posts = React.forwardRef(({
                     {getNameContent()}
                 </LogoNameWrapper>
 
-                <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                <OptionsMenu ref={dropdownRef} onClick={(event) => {
+                    event.stopPropagation();
+                    setIsShown(!isShown)
+                }}>
                     <SlOptionsVertical />
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
@@ -311,25 +315,30 @@ const Posts = React.forwardRef(({
             </PostHeader>
 
             {postBody && (
-                <PostBodyWrapper style={{
-                    margin: imagesList ? '20px 0' : '20px 0 0 0'
+                <PostBodyWrapper
+                    onClick={()=> navigate(postDetails)}
+                    style={{
+                    margin: imagesList ? '20px 0' : '20px 0 0 0',
+                        cursor: 'pointer',
                 }}>
                     <TextContainer dangerouslySetInnerHTML={{
                         __html: postBody
                     }} style={{
-                        height: isExpanded ? 'auto' : '65px'
+                        height: '65px'
                     }}>
                     </TextContainer>
                     {getReadMoreValue() && (
-                        <ReadMoreButton onClick={toggleReadMore}>
-                            {isExpanded ? 'Read Less' : 'Read More'}
+                        <ReadMoreButton>
+                            Read More
                         </ReadMoreButton>
                     )}
                 </PostBodyWrapper>
             )}
 
             {imagesList && (
-                <ImageSwiperWrapper style={{
+                <ImageSwiperWrapper
+                onClick={(event)=> event.stopPropagation()}
+                    style={{
                     marginTop: !postBody && '20px'
                 }}>
                     <ImagesSwiper swiperItems={imagesList} />
@@ -343,25 +352,12 @@ const Posts = React.forwardRef(({
             </PostEntriesWrapper>
 
             {getPostFooter()}
-
-            {isCommentBoxOpen && (
-                <Suspense fallback={<FallbackLoader height={'200px'} width={'100%'} />}>
-                    <CommentModel
-                        name={userData.name}
-                        postId={postId}
-                        refetch={refetchLikeComment}
-                        postUserId={userId}
-                        isModalOpen={isCommentBoxOpen}
-                        closeModal={() => setIsCommentBoxOpen(false)}
-                    />
-                </Suspense>
-            )}
         </>
     );
 
     return ref
-        ? <Wrapper ref={ref}>{postJsxBody}</Wrapper>
-        : <Wrapper>{postJsxBody}</Wrapper>;
+        ? <Wrapper title={`Click to see ${userData && userData.name + "'s"} post`} ref={ref}>{postJsxBody}</Wrapper>
+        : <Wrapper title={`Click to see ${userData && userData.name + "'s"} post`} >{postJsxBody}</Wrapper>;
 });
 
 const Wrapper = styled.div`

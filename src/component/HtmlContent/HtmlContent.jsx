@@ -31,8 +31,30 @@ const HtmlContent = ({
                          wrapperSize
                      }) => {
 
+    const dispatch = useDispatch();
     const [isChecking, setIsChecking] = useState(true);
     useReloadOnResize();
+
+    const addCopyButton = () => {
+        const preElements = document.getElementsByTagName('pre');
+        for (let i = 0; i < preElements.length; i++) {
+            const preElementInnerHtml = preElements[i].innerText;
+            const headerDiv = document.createElement('div');
+            headerDiv.innerHTML = `<div class="pre__header-inner-div"><span class="pre__header-span">Snippet</span><button class="pre__header-button">Copy</button></div><p class="pre__tag-text">${preElementInnerHtml}</p>`;
+            headerDiv.className = 'pre__header-div';
+            preElements[i].replaceWith(headerDiv);
+            const copyChild = headerDiv.getElementsByClassName('pre__header-button')[0];
+            copyChild.addEventListener('click', () => {
+                navigator.clipboard.writeText(preElementInnerHtml)
+                    .then(() => {
+                        dispatchSuccessMessage(dispatch, 'Snippet copied successfully to clipboard')
+                    }).catch(() => {
+                    console.log('Error')
+                })
+            })
+        }
+        return true;
+    };
 
     const handleImageResize = () => {
         const imgElements = document.getElementsByClassName('html-data__img-tag');
@@ -41,15 +63,16 @@ const HtmlContent = ({
             for (let i = 0; i < imgElements.length; i++) {
                 const img = imgElements[i];
                 const width = img.getAttribute('width');
-                const imageWidth = width ? width : img.naturalWidth || img.width;
+                const imageWidth = width ? width : img.naturalWidth;
+                console.log(imageWidth)
                 if (Number(imageWidth) + 10 > wrapperSize.width) {
                     img.setAttribute('width', wrapperSize.width)
                 } else {
                     img.setAttribute('width', imageWidth);
                 }
             }
-            setIsChecking(false); // Set isChecking to false after resizing images
-        };
+            setIsChecking(false);
+        }
 
         let loadedCount = 0;
         const totalImages = imgElements.length;
@@ -67,23 +90,22 @@ const HtmlContent = ({
         }
 
         if (loadedCount === totalImages) {
-            handleResize();
+            handleResize(); // Call handleResize immediately if all images are already loaded
         }
-    };
+    }
 
     useEffect(() => {
         if (htmlData) {
+            addCopyButton();
             handleImageResize();
-            setIsChecking(false);
         }
-    }, [htmlData, wrapperSize.width]);
-
+    }, [htmlData, isChecking]);
 
     if (isChecking) {
         return <FallbackLoader width={'100%'} height={'100%'}/>
     }
 
-    return <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
+    return !isChecking && <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
 };
 
 export default HtmlContent;

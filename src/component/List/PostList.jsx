@@ -84,7 +84,7 @@ const PostList = () => {
     return (
         <Wrapper>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'280px'} />}>
-                {postData.length > 0 ? postData : <NotPresentSpan>
+                {!isLoading && postData.length > 0 ? postData : <NotPresentSpan>
                     No Post(s) Present 🙅‍♂️
                 </NotPresentSpan>}
             </Suspense>
@@ -98,6 +98,7 @@ const Wrapper = styled.div`
     max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
     display: flex;
     flex-direction: column;
+    align-self: center;
     gap: 25px;
 `;
 

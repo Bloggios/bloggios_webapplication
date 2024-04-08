@@ -35,9 +35,13 @@
   --white-10: rgba(245, 245, 245, 0.1);
   --white-80: rgba(245, 245, 245, 0.8);
   --white-60: rgba(245, 245, 245, 0.6);
+  --white-40: rgba(245, 245, 245, 0.4);
+  --white-40-no-opacity: #7d7d7d;
   --black-100: #1e1e1e;
   --black-50: #272727;
-  --link: #007bff
+  --link: #007bff;
+  --accent-100: rgba(66,88,255,1);
+  --accent-80: rgba(66,88,255,0.8);
 }
 
 html {

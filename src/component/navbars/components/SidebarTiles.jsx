@@ -19,7 +19,14 @@
  */
 
 import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {
+    CHATS_PAGE,
+    HOME_PAGE,
+    NOTIFICATIONS_PAGE, POST_PAGE,
+    QUESTION_PAGE,
+    SECURITY_PAGE,
+    SETTING_PAGE
+} from "../../../constant/pathConstants";
 import {BiHomeAlt2} from "react-icons/bi";
 import {FaHistory, FaUserAlt} from "react-icons/fa";
 import {MdOutlineSecurity} from "react-icons/md";
@@ -29,8 +36,11 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {ACTIVITY_PATH_MATCHER} from "../../../constant/ServiceConstants";
-import {BsChatDots} from "react-icons/bs";
+import {BsChatDots, BsPatchQuestionFill} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
+import {RiChatSmile2Fill} from "react-icons/ri";
+import {GoHomeFill} from "react-icons/go";
+import {HiPaperAirplane} from "react-icons/hi2";
 
 const SidebarTiles = () => {
 
@@ -49,7 +59,7 @@ const SidebarTiles = () => {
                 active={window.location.pathname === HOME_PAGE}
                 onClick={() => navigate(HOME_PAGE)}
             >
-                <BiHomeAlt2/>
+                <GoHomeFill />
                 <TileSpan>Home</TileSpan>
             </Tile>
 
@@ -65,38 +75,30 @@ const SidebarTiles = () => {
                 active={window.location.pathname.includes(CHATS_PAGE)}
                 onClick={() => navigate(CHATS_PAGE)}
             >
-                <BsChatDots />
+                <RiChatSmile2Fill />
                 <TileSpan>Chats</TileSpan>
             </Tile>
 
             <Tile
-                active={window.location.pathname === NOTIFICATIONS_PAGE}
-                onClick={() => navigate(NOTIFICATIONS_PAGE)}
+                active={window.location.pathname.includes(QUESTION_PAGE)}
+                onClick={() => navigate(QUESTION_PAGE)}
             >
-                <IoNotificationsOutline />
-                <TileSpan>Notifications</TileSpan>
+                <BsPatchQuestionFill />
+                <TileSpan>Q&A</TileSpan>
+            </Tile>
+
+            <Tile
+                active={window.location.pathname.includes(POST_PAGE)}
+                onClick={() => navigate(POST_PAGE)}
+            >
+                <HiPaperAirplane />
+                <TileSpan>Posts</TileSpan>
             </Tile>
 
             <div style={{
                 width: '100%',
                 border: '1px dashed rgba(255, 255, 255, 0.2)'
             }}/>
-
-            <Tile
-                active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
-                onClick={() => navigate('/activity/' + userId)}
-            >
-                <FaHistory/>
-                <TileSpan>Activity</TileSpan>
-            </Tile>
-
-            <Tile
-                active={window.location.pathname === SECURITY_PAGE}
-                onClick={() => navigate(SECURITY_PAGE)}
-            >
-                <MdOutlineSecurity/>
-                <TileSpan>Security</TileSpan>
-            </Tile>
 
             <Tile
                 active={window.location.pathname === SETTING_PAGE}

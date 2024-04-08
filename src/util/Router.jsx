@@ -33,7 +33,7 @@ import {
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
-    POST_OUTLET_PAGE,
+    PROFILE_POST_OUTLET_PAGE,
     PRIVACY_POLICY,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
@@ -43,7 +43,7 @@ import {
     SETTING_PAGE,
     SIGNUP_PAGE,
     SUPPORT_PAGE,
-    TERMS_CONDITION
+    TERMS_CONDITION, POST_PAGE
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
@@ -78,6 +78,9 @@ const DefaultHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet
 const BloggiosQAAHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosQAAHelpOutlet'));
 const ForgetPasswordPage = lazy(()=> import('../container/userAuthenticationContainer/forgetPasswordPage'));
 const QuestionDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionDetailsOutlet'));
+const PostPage = lazy(()=> import('../container/PostContainer/PostPage'));
+const PostSectionOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostSectionOutlet'));
+const PostDetailsOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostDetailsOutlet'));
 
 const Router = () => {
 
@@ -115,11 +118,16 @@ const Router = () => {
                         </Route>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />
-                            <Route path={POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
+                            <Route path={PROFILE_POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
                         </Route>
                         <Route path={CHATS_PAGE} element={<ChatPage />} >
                             <Route index element={<ChatDefaultOutlet />} />
                             <Route path={':userId'} element={<ChatUserOutlet />} />
+                        </Route>
+
+                        <Route path={POST_PAGE} element={<PostPage />} >
+                            <Route index element={<PostSectionOutlet />} />
+                            <Route path={':postId'} element={<PostDetailsOutlet />} />
                         </Route>
                     </Route>
                 </Routes>

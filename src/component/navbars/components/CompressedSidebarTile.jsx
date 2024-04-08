@@ -19,7 +19,14 @@
  */
 
 import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, QUESTION_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {
+    CHATS_PAGE,
+    HOME_PAGE,
+    POST_PAGE,
+    QUESTION_PAGE,
+    SECURITY_PAGE,
+    SETTING_PAGE
+} from "../../../constant/pathConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {BiHomeAlt2} from "react-icons/bi";
@@ -28,7 +35,10 @@ import {MdOutlineSecurity} from "react-icons/md";
 import {IoIosSettings} from "react-icons/io";
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import {BsChatDots, BsQuestionCircle} from "react-icons/bs";
+import {BsChatDots, BsPatchQuestionFill, BsQuestionCircle} from "react-icons/bs";
+import {GoHomeFill} from "react-icons/go";
+import {RiChatSmile2Fill} from "react-icons/ri";
+import {HiPaperAirplane} from "react-icons/hi2";
 
 const CompressedSidebarTile = () => {
 
@@ -51,7 +61,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname === HOME_PAGE}
                     onClick={() => navigate(HOME_PAGE)}
                 >
-                    <BiHomeAlt2/>
+                    <GoHomeFill />
                 </TileIconButton>
                 <TooltipContent>
                     Home
@@ -77,7 +87,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname.includes(CHATS_PAGE)}
                     onClick={() => navigate(CHATS_PAGE)}
                 >
-                    <BsChatDots />
+                    <RiChatSmile2Fill />
                 </TileIconButton>
                 <TooltipContent
 
@@ -91,10 +101,22 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname.includes(QUESTION_PAGE)}
                     onClick={()=> navigate(QUESTION_PAGE)}
                 >
-                    <BsQuestionCircle />
+                    <BsPatchQuestionFill />
                 </TileIconButton>
                 <TooltipContent>
                     Q&A
+                </TooltipContent>
+            </TileWrapper>
+
+            <TileWrapper>
+                <TileIconButton
+                    active={window.location.pathname.includes(POST_PAGE)}
+                    onClick={() => navigate(POST_PAGE)}
+                >
+                    <HiPaperAirplane />
+                </TileIconButton>
+                <TooltipContent>
+                    Posts
                 </TooltipContent>
             </TileWrapper>
 
@@ -102,32 +124,6 @@ const CompressedSidebarTile = () => {
                 width: '100%',
                 border: '1px dashed rgba(255, 255, 255, 0.2)'
             }}/>
-
-            <TileWrapper>
-                <TileIconButton
-                    active={window.location.pathname.includes(ACTIVITY_PATH)}
-                    onClick={() => navigate('/activity/' + userId)}
-                >
-                    <FaHistory/>
-                </TileIconButton>
-                <TooltipContent
-
-                >
-                    Activity
-                </TooltipContent>
-            </TileWrapper>
-
-            <TileWrapper>
-                <TileIconButton
-                    active={window.location.pathname === SECURITY_PATH}
-                    onClick={() => navigate(SECURITY_PAGE)}
-                >
-                    <MdOutlineSecurity/>
-                </TileIconButton>
-                <TooltipContent>
-                    Security
-                </TooltipContent>
-            </TileWrapper>
 
             <TileWrapper>
                 <TileIconButton

@@ -21,6 +21,7 @@
 import React from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import {bgBlackRounded} from "../../asset/svg";
 
 const Avatar = ({
                     image,
@@ -33,7 +34,13 @@ const Avatar = ({
                     borderRadius = '20px',
                     border = '4px solid #1a1a1a',
                     translate,
+                    fallbackImage = bgBlackRounded
                 }) => {
+
+    const handleImageError = (event) => {
+        event.target.src = fallbackImage
+    }
+
     return (
         <ProfileImageWrapper
             style={{
@@ -50,30 +57,30 @@ const Avatar = ({
                 minWidth: size
             }}
         >
-            <ProfileImage loading={"lazy"} src={image} />
+            <ProfileImage loading={"lazy"} src={image} onError={handleImageError}/>
         </ProfileImageWrapper>
     );
 };
 
 const ProfileImageWrapper = styled.div`
-  background-color: #1a1a1a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 `;
 
 const ProfileImage = styled.img`
-  object-fit: cover;
-  aspect-ratio: 1/1;
-  height: 100%;
-  width: 100%;
-  transition: all 250ms ease;
-  cursor: pointer;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    height: 100%;
+    width: 100%;
+    transition: all 250ms ease;
+    cursor: pointer;
 
-  &:hover {
-    transform: scale(1.08);
-  }
+    &:hover {
+        transform: scale(1.08);
+    }
 `;
 
 Avatar.propTypes = {
