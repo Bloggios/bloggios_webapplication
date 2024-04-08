@@ -31,63 +31,59 @@ const HtmlContent = ({
                          wrapperSize
                      }) => {
 
-    const dispatch = useDispatch();
     const [isChecking, setIsChecking] = useState(true);
     useReloadOnResize();
-
-    const addCopyButton = () => {
-        const preElements = document.getElementsByTagName('pre');
-        for (let i = 0; i < preElements.length; i++) {
-            const preElementInnerHtml = preElements[i].innerText;
-            const headerDiv = document.createElement('div');
-            headerDiv.innerHTML = `<div class="pre__header-inner-div"><span class="pre__header-span">Snippet</span><button class="pre__header-button">Copy</button></div><p class="pre__tag-text">${preElementInnerHtml}</p>`;
-            headerDiv.className = 'pre__header-div';
-            preElements[i].replaceWith(headerDiv);
-            const copyChild = headerDiv.getElementsByClassName('pre__header-button')[0];
-            copyChild.addEventListener('click', () => {
-                navigator.clipboard.writeText(preElementInnerHtml)
-                    .then(() => {
-                        dispatchSuccessMessage(dispatch, 'Snippet copied successfully to clipboard')
-                    }).catch(() => {
-                    console.log('Error')
-                })
-            })
-        }
-        return true;
-    };
 
     const handleImageResize = () => {
         const imgElements = document.getElementsByClassName('html-data__img-tag');
 
-        for (let i = 0; i < imgElements.length; i++) {
-            const img = imgElements[i];
-            const width = img.getAttribute('width');
-            const imageWidth = width ? width : img.naturalWidth;
-            console.log(imageWidth)
-            if (Number(imageWidth) + 10 > wrapperSize.width) {
-                img.setAttribute('width', wrapperSize.width)
+        const handleResize = () => {
+            for (let i = 0; i < imgElements.length; i++) {
+                const img = imgElements[i];
+                const width = img.getAttribute('width');
+                const imageWidth = width ? width : img.naturalWidth || img.width;
+                if (Number(imageWidth) + 10 > wrapperSize.width) {
+                    img.setAttribute('width', wrapperSize.width)
+                } else {
+                    img.setAttribute('width', imageWidth);
+                }
+            }
+            setIsChecking(false); // Set isChecking to false after resizing images
+        };
+
+        let loadedCount = 0;
+        const totalImages = imgElements.length;
+        for (let i = 0; i < totalImages; i++) {
+            if (imgElements[i].complete) {
+                loadedCount++;
             } else {
-                img.setAttribute('width', imageWidth);
+                imgElements[i].addEventListener('load', () => {
+                    loadedCount++;
+                    if (loadedCount === totalImages) {
+                        handleResize(); // Call handleResize when all images are loaded
+                    }
+                });
             }
         }
-        return true;
-    }
+
+        if (loadedCount === totalImages) {
+            handleResize();
+        }
+    };
 
     useEffect(() => {
         if (htmlData) {
-            const addCopyButtonResponse = addCopyButton();
-            const handleImageResponse = handleImageResize();
-            if (addCopyButtonResponse && handleImageResponse) {
-                setIsChecking(false);
-            }
+            handleImageResize();
+            setIsChecking(false);
         }
-    }, [htmlData, isChecking]);
+    }, [htmlData, wrapperSize.width]);
+
 
     if (isChecking) {
         return <FallbackLoader width={'100%'} height={'100%'}/>
     }
 
-    return !isChecking && <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
+    return <div className={'html-content__main-wrapper'} dangerouslySetInnerHTML={{__html: htmlData}}/>
 };
 
 export default HtmlContent;

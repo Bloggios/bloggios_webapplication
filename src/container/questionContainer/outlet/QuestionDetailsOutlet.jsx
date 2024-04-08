@@ -152,17 +152,17 @@ const QuestionDetailsOutlet = () => {
     }, [questionData]);
 
     const handleAnswerSubmit = () => {
+        let isChecking = true;
+        clearTimeout(timeoutRef.current);
         setButtonLoader(true)
-        if (editorRef.current) {
-            editorRef.current.blur();
-        }
         const htmlContent = getHtmlContent(editorContent);
         let isValid = true
         if (htmlContent) {
             isValid = validateHtmlContent(htmlContent, dispatch);
         }
         setButtonLoader(false);
-        if (isValid) {
+        isChecking = false;
+        if (isValid && !isChecking) {
             console.log(htmlContent)
             setAddAnswerData({
                 questionId: questionId,
@@ -177,7 +177,7 @@ const QuestionDetailsOutlet = () => {
         }
     }
 
-    const questionNotFound = useMemo(() => {
+    const questionNotFound = () => {
         return (
             <Wrapper>
                 <NotFound
@@ -186,9 +186,9 @@ const QuestionDetailsOutlet = () => {
                 />
             </Wrapper>
         )
-    }, []);
+    }
 
-    const getDetails = useCallback(() => {
+    const getDetails = () => {
         if (questionData) {
             return (
                 <>
@@ -275,31 +275,30 @@ const QuestionDetailsOutlet = () => {
                 </>
             )
         }
-    }, [questionData, tagsData, wrapperRef, modifiedHtmlData, wrapperSize, quillBasicModules, buttonLoader, answerSubmitModal, addAnswerData])
+    }
 
-    const getQuestionDetailsContent = useCallback(() => {
-            if (questionIsLoading) {
-                return <FallbackLoader width={'100%'} height={'100%'}/>
-            } else if (
-                !questionIsLoading &&
-                !questionIsError &&
-                questionIsSuccess &&
-                questionData
-            ) {
-                return getDetails();
-            } else if (!questionIsLoading && questionIsError) {
-                return questionNotFound;
-            }
-        }, [questionIsLoading, questionIsError, questionIsSuccess, questionData, getDetails, questionNotFound]
-    )
+    const getQuestionDetailsContent = () => {
+        if (questionIsLoading) {
+            return <FallbackLoader width={'100%'} height={'100%'}/>
+        } else if (
+            !questionIsLoading &&
+            !questionIsError &&
+            questionIsSuccess &&
+            questionData
+        ) {
+            return getDetails();
+        } else if (!questionIsLoading && questionIsError) {
+            return questionNotFound;
+        }
+    }
 
-    const getMainContent = useCallback(() => {
+    const getMainContent = () => {
         if (uuidValidator(questionId)) {
             return getQuestionDetailsContent();
         } else {
             return questionNotFound;
         }
-    }, [questionId, questionNotFound, getQuestionDetailsContent])
+    }
 
     return getMainContent();
 };
