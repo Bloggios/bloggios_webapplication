@@ -32,7 +32,6 @@ const HtmlContent = ({
                      }) => {
 
     const dispatch = useDispatch();
-    const {width} = useWindowDimensions();
     const [isChecking, setIsChecking] = useState(true);
     useReloadOnResize();
 
@@ -54,41 +53,35 @@ const HtmlContent = ({
                 })
             })
         }
+        return true;
     };
 
-    useLayoutEffect(() => {
+    const handleImageResize = () => {
+        const imgElements = document.getElementsByClassName('html-data__img-tag');
 
-        const handleImageResize = () => {
-            const imgElements = document.getElementsByClassName('html-data__img-tag');
-
-            for (let i = 0; i < imgElements.length; i++) {
-                const img = imgElements[i];
-                const width = img.getAttribute('width');
-                const imageWidth = width ? width : img.naturalWidth;
-                console.log(imageWidth)
-                if (Number(imageWidth) + 10 > wrapperSize.width) {
-                    img.setAttribute('width', wrapperSize.width)
-                } else {
-                    img.setAttribute('width', imageWidth);
-                }
+        for (let i = 0; i < imgElements.length; i++) {
+            const img = imgElements[i];
+            const width = img.getAttribute('width');
+            const imageWidth = width ? width : img.naturalWidth;
+            console.log(imageWidth)
+            if (Number(imageWidth) + 10 > wrapperSize.width) {
+                img.setAttribute('width', wrapperSize.width)
+            } else {
+                img.setAttribute('width', imageWidth);
             }
-            setIsChecking(false);
         }
+        return true;
+    }
 
-        handleImageResize();
-
-        window.addEventListener('resize', handleImageResize);
-
-        return () => {
-            window.removeEventListener('resize', handleImageResize);
-        }
-    }, [width])
-
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (htmlData) {
-            addCopyButton();
+            const addCopyButtonResponse = addCopyButton();
+            const handleImageResponse = handleImageResize();
+            if (addCopyButtonResponse && handleImageResponse) {
+                setIsChecking(false);
+            }
         }
-    }, [htmlData]);
+    }, [htmlData, isChecking]);
 
     if (isChecking) {
         return <FallbackLoader width={'100%'} height={'100%'}/>
