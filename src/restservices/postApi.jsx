@@ -95,5 +95,5 @@ export const getLikeCommentCount = (postId) => {
 
 export const getPostDetails = (postId) => {
     return authenticatedAxios.get(`${POST_DETAILS}/${postId}`)
-        .then((response)=> response.data);
+        .then((response)=> response);
 }

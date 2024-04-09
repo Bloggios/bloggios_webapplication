@@ -40,7 +40,7 @@ import {getFormattedDate} from "../../service/DateFunctions";
 import {handlePostDelete} from "../../service/postApiFunctions";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 import {addPostLike, removePostLike} from "../../restservices/likeApi";
-import {dispatchError} from "../../service/functions";
+import {dispatchError, dispatchWarningMessage} from "../../service/functions";
 import FallbackLoader from "../loaders/fallbackLoader";
 import {colors} from "../../styles/Theme";
 import {POST_DETAILS} from "../../constant/apiConstants";
@@ -58,13 +58,11 @@ const Posts = React.forwardRef(({
 }, ref) => {
 
     const [isShown, setIsShown] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
     const { width } = useWindowDimensions();
     const id = useSelector((state) => state.auth.userId);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
-    const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
     const postDetails = `${POST_PAGE}/${postId}`;
 
@@ -95,10 +93,14 @@ const Posts = React.forwardRef(({
 
     const handleLike = (event) => {
         event.stopPropagation();
-        if (likeCommentCount.isLike) {
-            removeLikeMutation.mutate();
+        if (likeCommentCount && !lcIsLoading && !lcIsError) {
+            if (likeCommentCount.isLike) {
+                removeLikeMutation.mutate();
+            } else {
+                addLikeMutation.mutate();
+            }
         } else {
-            addLikeMutation.mutate();
+            dispatchWarningMessage(dispatch, 'Wait')
         }
     }
 
@@ -177,7 +179,7 @@ const Posts = React.forwardRef(({
         } else {
             return <FaRegHeart />
         }
-    }, [lcIsLoading, removeLikeMutation.isPending, addLikeMutation.isPending, lcIsSuccess, likeCommentCount])
+    }, [lcIsLoading, removeLikeMutation, addLikeMutation, lcIsSuccess, likeCommentCount])
 
     const getPostFooter = useCallback(() => {
         if (lcIsLoading) {

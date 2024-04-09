@@ -18,33 +18,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const colors = {
-    black50: '#272727',
-    black70: '#212121',
-    black100: '#1e1e1e',
-    black150: '#1c1c1c',
-    black80: 'rgba(28, 28, 28, 1)',
-    black200: '#121212',
-    black400: '#0c0c0c',
-    black500: '#0a0a0a',
+export const countWords = (data) => {
+    return data.split(/\s+/).length
+}
 
-    accent80: 'rgba(66,88,255,0.8)',
-    accent70: 'rgba(66,88,255,0.7)',
-    accent100: 'rgba(66,88,255,1)',
-    accent90: 'rgba(66,88,255,0.9)',
-    accent60: 'rgba(66,88,255,0.6)',
-
-    white50: 'rgba(245, 245, 245, 0.5)',
-    white80: 'rgba(245, 245, 245, 0.8)',
-    white70: 'rgba(245, 245, 245, 0.7)',
-    white100: 'rgba(245, 245, 245, 1)',
-    white90: 'rgba(245, 245, 245, 0.9)',
-    white60: 'rgba(245, 245, 245, 0.6)',
-    white10: 'rgba(245, 245, 245, 0.1)',
-    white05: 'rgba(245, 245, 245, 0.05)',
-    white20: 'rgba(245, 245, 245, 0.20)',
-    white40: 'rgba(245, 245, 245, 0.40)',
-    whiteOpaque40: '#7d7d7d',
-
-    linkColor: '#007bff'
+export const countLines = (data) => {
+    return (data.match(/\n/g) || []).length
 }

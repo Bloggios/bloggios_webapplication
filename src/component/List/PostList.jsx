@@ -84,7 +84,7 @@ const PostList = () => {
     return (
         <Wrapper>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'280px'} />}>
-                {!isLoading && postData.length > 0 ? postData : <NotPresentSpan>
+                {postData.length > 0 ? postData : <NotPresentSpan>
                     No Post(s) Present 🙅‍♂️
                 </NotPresentSpan>}
             </Suspense>

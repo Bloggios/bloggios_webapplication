@@ -20,8 +20,7 @@
 
 .bloggios-post-swiper-main {
     width: 100%;
-    min-height: 250px;
-    height: auto;
+    height: 100%;
     background: var(--black-50);
     display: flex;
     align-items: center;
@@ -56,4 +55,20 @@
     width: 16px;
     background: var(--link);
     border-radius: 6px;
+}
+
+.anchor__post-details-inner-html {
+    font-family: "Poppins", sans-serif;
+    font-size: inherit;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    color: var(--link);
+    transition: all 200ms ease-in-out;
+}
+
+@media (max-width: 600px) {
+
+    .bloggios-post-swiper-main {
+        border-radius: 0;
+    }
 }

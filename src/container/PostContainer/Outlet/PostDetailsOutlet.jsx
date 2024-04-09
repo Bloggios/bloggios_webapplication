@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {uuidValidator} from "../../../util/ComponentValidators";
 import styled from "styled-components";
@@ -30,17 +30,10 @@ import {LANDING_PAGE, POST_PAGE, SUPPORT_PAGE} from "../../../constant/pathConst
 import {bgBlackRounded} from "../../../asset/svg";
 import {MdOutlineContactSupport} from "react-icons/md";
 import {HiPaperAirplane} from "react-icons/hi2";
-import {colors} from "../../../styles/Theme";
 import 'swiper/css/pagination';
-import {Swiper, SwiperSlide} from "swiper/react";
-import {Pagination, Zoom} from "swiper/modules";
 import '../../../styles/PostSwiperStyles.css';
-import Avatar from "../../../component/avatars/avatar";
-import {ColumnWrapper} from "../../../styles/StyledComponent";
-import useUserProfile from "../../../hooks/useUserProfile";
-import {detailedProfile, getUserProfile} from "../../../restservices/profileApi";
-import {useDispatch, useSelector} from "react-redux";
-import {dispatchError} from "../../../service/functions";
+import {detailedProfile} from "../../../restservices/profileApi";
+import RenderImagesPostDetails from "../component/RenderImagesPostDetails";
 
 const postNotFoundList = [
     {
@@ -71,6 +64,95 @@ const postNotFoundList = [
 
 const PostDetailsOutlet = () => {
 
+    const {postId} = useParams();
+    const [isError, setIsError] = useState(false);
+    const [isPostDetailsEnabled, setIsPostDetailsEnabled] = useState(false);
+    const [isProfileEnabled, setIsProfileEnabled] = useState(false);
+    const [profileId, setProfileId] = useState(null);
+
+
+    const fetchProfileData = async () => {
+            const response = await detailedProfile(profileId);
+            return response.data;
+    };
+
+    const fetchPostDetails = async () => {
+        const response = await getPostDetails(postId);
+        return response.data;
+    }
+
+    const {
+        isLoading: pdIsLoading,
+        error: pdError,
+        isError: pdIsError,
+        isSuccess: pdIsSuccess,
+        data: pdData,
+        status: pdStatus
+    } = useQuery({
+        queryKey: ['post', postId],
+        queryFn: fetchPostDetails,
+        staleTime: 120000,
+        enabled: isPostDetailsEnabled
+    });
+
+    const {
+        isLoading: pfIsLoading,
+        error: pfError,
+        data: profileData,
+        isSuccess: pfIsSuccess,
+        isError: pfIsError,
+        isPending: pfIsPending
+    } = useQuery({
+        queryKey: ['userPostProfile', postId],
+        queryFn: fetchProfileData,
+        staleTime: 120000,
+        enabled: isProfileEnabled
+    })
+
+    useLayoutEffect(() => {
+        const isValid = uuidValidator(postId);
+        if (!isValid) {
+            setIsError(true);
+        } else {
+            setIsPostDetailsEnabled(true);
+        }
+    }, []);
+
+    useEffect(()=> {
+        if (pdIsSuccess) {
+            setProfileId(pdData?.userId);
+            setIsProfileEnabled(true);
+        }
+    }, [pdStatus, pdIsSuccess]);
+
+    const RenderPostDetails = () => {
+        if (pdIsLoading || (pfIsLoading || pfIsPending)) {
+            return <FallbackLoader width={'100%'} height={'100%'} />
+        } else if (pdIsSuccess && pfIsSuccess && pdData && profileData) {
+            return <RenderImagesPostDetails pdData={pdData} profileData={profileData} />
+        } else if (pdIsError || pfIsError) {
+            return <NotFound list={postNotFoundList} />
+        }
+    }
+
+    return (
+        <Wrapper>
+            {isError ? <NotFound list={postNotFoundList} /> : <RenderPostDetails />}
+        </Wrapper>
+    )
 }
+
+const Wrapper = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    @media (max-width: 600px) {
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+`;
 
 export default PostDetailsOutlet;

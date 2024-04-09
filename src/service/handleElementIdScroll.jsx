@@ -18,6 +18,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import askQuestionDescriptionSection from "../container/questionContainer/components/AskQuestionDescriptionSection";
+
 const handleElementIdScroll = (id) => {
     const element = document.getElementById(id);
     window.scrollTo({
@@ -26,6 +28,14 @@ const handleElementIdScroll = (id) => {
     })
 };
 
+const scrollIntoView = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
 export {
-    handleElementIdScroll
+    handleElementIdScroll,
+    scrollIntoView
 }

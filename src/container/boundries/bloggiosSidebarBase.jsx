@@ -67,7 +67,7 @@ const AppContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100vw;
-    min-height: 95vh;
+    min-height: 92vh;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: hidden;

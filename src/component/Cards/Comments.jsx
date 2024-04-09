@@ -21,7 +21,7 @@
 import React, {useCallback} from 'react';
 import styled from "styled-components";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {getUserProfile} from "../../restservices/profileApi";
+import {detailedProfile, getUserProfile} from "../../restservices/profileApi";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import {getFormattedDate} from "../../service/DateFunctions";
@@ -32,6 +32,12 @@ import {setIsCreated} from "../../state/isCreatedSlice";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {useNavigate} from "react-router-dom";
 import {FaRegHeart} from "react-icons/fa";
+import {askQuestionWhite, bgBlackRounded, notFound} from "../../asset/svg";
+import {colors} from "../../styles/Theme";
+import Avatar from "../avatars/avatar";
+import {GoBlocked} from "react-icons/go";
+import {MdBlock, MdOutlineReport} from "react-icons/md";
+import {ImBlocked} from "react-icons/im";
 
 const Comments = React.forwardRef(({
                                        postId,
@@ -49,7 +55,7 @@ const Comments = React.forwardRef(({
     const navigate = useNavigate();
 
     const fetchPostUser = async () => {
-        const response = await getUserProfile(userId);
+        const response = await detailedProfile(userId);
         return response.data;
     }
 
@@ -60,7 +66,7 @@ const Comments = React.forwardRef(({
         isSuccess,
         isError
     } = useQuery({
-        queryKey: ['userProfilePost', userId],
+        queryKey: ['userProfile', userId],
         queryFn: fetchPostUser,
         staleTime: 70000
     })
@@ -86,7 +92,7 @@ const Comments = React.forwardRef(({
     const getDeleteButton = useCallback(()=> {
         if (authId === postUserId || authId === userId) {
             return (
-                <ButtonIcon style={{color: 'rgb(188, 46, 46)'}} onClick={()=> deleteCommentMutation.mutate()}>
+                <ButtonIcon disabled={deleteCommentMutation.isPending} style={{color: 'rgb(188, 46, 46)'}} onClick={()=> deleteCommentMutation.mutate()}>
                     {deleteCommentMutation.isPending
                     ? <SingleColorLoader width={'2px'} height={'2px'} size={'2px'} />
                     : <RiDeleteBin5Line />}
@@ -104,18 +110,22 @@ const Comments = React.forwardRef(({
             )
         } else if (isSuccess && userData) {
             return (
-                <RowWrapper style={{
+                <RowWrapper
+                    title={`Visit ${userData ? userData.name + "'s" : ''} Profile`}
+                    style={{
                     justifyContent: 'space-between'
-                }}>
+                }}
+                >
                     <RowWrapper onClick={()=> navigate(`/profile/${userId}`)}>
-                        <ImageButton>
-                            <img
-                                src={userData.profileImage ? userData.profileImage : bloggios_logo}
-                                alt={userData.name}
-                                height={'100%'}
-                            />
-                        </ImageButton>
-                        <ColumnWrapper>
+                        <Avatar
+                            size={'55px'}
+                            image={userData.profileImage ? userData.profileImage : bgBlackRounded}
+                            fallbackImage={notFound}
+                            borderRadius={'50%'}
+                        />
+                        <ColumnWrapper style={{
+                            gap: 0
+                        }}>
                             <NameSpan>
                                 {userData.name}
                             </NameSpan>
@@ -134,17 +144,24 @@ const Comments = React.forwardRef(({
 
     const getCommentData = useCallback(()=> {
         return (
-            <RowWrapper style={{
-                padding: '5px 0 10px 5px',
-                borderBottom: '2px dashed rgba(255, 255, 255, 0.2)'
-            }}>
+            <ColumnWrapper>
                 <CommentSpan>
                     {comment}
                 </CommentSpan>
-                <ButtonIcon style={{color: 'rgba(255, 255, 255, 0.6)', paddingTop: '2px'}}>
-                    <FaRegHeart />
-                </ButtonIcon>
-            </RowWrapper>
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '5px'
+                }}>
+                    <ButtonIcon title={'Like Comment'} style={{color: 'rgba(255, 255, 255, 0.6)', paddingTop: '2px', alignSelf: 'flex-start'}}>
+                        <FaRegHeart />
+                    </ButtonIcon>
+                    <ButtonIcon title={'Report Comment'} style={{color: 'rgba(255, 255, 255, 0.6)', alignSelf: 'flex-start'}}>
+                        <MdBlock />
+                    </ButtonIcon>
+                </div>
+            </ColumnWrapper>
         )
     }, [])
 
@@ -165,33 +182,29 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 7px;
-    padding: 7px;
+    padding: 7px 7px 10px 7px;
+    font-family: "Poppins", sans-serif;
+    border-bottom: 1px solid ${colors.white10};
 `;
 
 const NameSpan = styled.span`
-    font-size: clamp(10px, 2vw, 14px);
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
     letter-spacing: 1px;
     width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.8);
-
-    @media (max-width: 400px) {
-        width: 160px;
-    }
-
-    @media (max-width: 300px) {
-        width: 100px;
-    }
+    font-weight: 500;
+    color: ${colors.white80};
+    font-family: inherit;
 `;
 
 const DateEditedSpan = styled.span`
-    font-size: 10px;
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
     letter-spacing: 1px;
-    font-weight: 200;
-    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+    color: ${colors.white60};
+    font-family: inherit;
 `;
 
 const RowWrapper = styled.div`
@@ -211,17 +224,6 @@ const RowWrapper = styled.div`
             color: rgba(255, 255, 255, 0.8);
         }
     }
-`;
-
-const ImageButton = styled.button`
-    height: 34px;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    outline: none;
-    border: none;
-    background: transparent;
-    overflow: hidden;
-    flex-shrink: 0;
 `;
 
 const ColumnWrapper = styled.div`
@@ -257,11 +259,16 @@ const ButtonIcon = styled.button`
 `;
 
 const CommentSpan = styled.span`
-    font-size: clamp(10px, 2vw, 12px);
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
     letter-spacing: 1px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.8);
     flex: 1;
+    font-family: inherit;
+    color: ${colors.white80};
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    word-wrap: break-word;
 `;
 
 export default Comments;
