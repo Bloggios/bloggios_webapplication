@@ -512,6 +512,11 @@ const TextContainer = styled.div`
     line-height: 22px;
     font-weight: 300;
     white-space: pre-line;
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    word-wrap: break-word;
 
     @media (max-width: 500px) {
         font-size: 14px;

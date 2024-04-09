@@ -34,7 +34,8 @@ const Avatar = ({
                     borderRadius = '20px',
                     border = '4px solid #1a1a1a',
                     translate,
-                    fallbackImage = bgBlackRounded
+                    fallbackImage = bgBlackRounded,
+                    onClick
                 }) => {
 
     const handleImageError = (event) => {
@@ -43,6 +44,7 @@ const Avatar = ({
 
     return (
         <ProfileImageWrapper
+            onClick={onClick}
             style={{
                 position,
                 top,

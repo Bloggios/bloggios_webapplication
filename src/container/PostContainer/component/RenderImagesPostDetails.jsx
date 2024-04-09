@@ -22,7 +22,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled, {css} from "styled-components";
 import {colors} from "../../../styles/Theme";
 import Avatar from "../../../component/avatars/avatar";
-import {bgBlackRounded} from "../../../asset/svg";
+import {bgBlackRounded, notFound} from "../../../asset/svg";
 import {ColumnWrapper} from "../../../styles/StyledComponent";
 import 'swiper/css/pagination';
 import {Swiper, SwiperSlide} from "swiper/react";
@@ -276,10 +276,14 @@ const RenderImagesPostDetails = ({
                 <Avatar
                     size={'70px'}
                     borderRadius={'50%'}
-                    image={bgBlackRounded}
+                    image={profileData.profileImage ? profileData.profileImage : bgBlackRounded}
+                    fallbackImage={notFound}
+                    onClick={()=> navigate(`/profile/${profileData.userId}`)}
                 />
 
-                <ColumnWrapper style={{
+                <ColumnWrapper
+                    onClick={()=> navigate(`/profile/${profileData.userId}`)}
+                    style={{
                     justifyContent: 'center',
                     gap: 2
                 }}>

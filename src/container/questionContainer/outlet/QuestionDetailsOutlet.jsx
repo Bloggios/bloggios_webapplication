@@ -161,8 +161,6 @@ const QuestionDetailsOutlet = () => {
 
                         <QuestionAnswersSection answers={questionData.answers} questionUserId={questionData.userId} />
 
-                        <Divider width={'70%'} verticalSpacing={'10px'}/>
-
                         <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
                             <YourAnswerSection questionId={questionId} />
                         </Suspense>

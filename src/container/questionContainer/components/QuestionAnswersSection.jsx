@@ -22,6 +22,7 @@ import React from 'react';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import AnswerContent from "./AnswerContent";
+import {ColumnWrapper} from "../../../styles/StyledComponent";
 
 const QuestionAnswersSection = ({
                                     answers,
@@ -33,9 +34,13 @@ const QuestionAnswersSection = ({
                 {`${answers.length} ${answers.length > 1 ? 'Answers' : 'Answer'}`}
             </Heading4>
 
-            {answers.map((answer, index) => (
-                <AnswerContent answer={answer} key={answer.answerId} questionUserId={questionUserId} />
-            ))}
+            <ColumnWrapper style={{
+                gap: 40
+            }}>
+                {answers.map((answer, index) => (
+                    <AnswerContent answer={answer} key={answer.answerId} questionUserId={questionUserId} />
+                ))}
+            </ColumnWrapper>
         </Wrapper>
     );
 };

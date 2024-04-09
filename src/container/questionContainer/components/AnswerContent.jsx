@@ -18,15 +18,43 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import styled from "styled-components";
+import React, {useCallback, useEffect, useState} from 'react';
+import styled, {css} from "styled-components";
 import HtmlContent from "../../../component/HtmlContent/HtmlContent";
 import useComponentSize from "../../../hooks/useComponentSize";
+import Avatar from "../../../component/avatars/avatar";
+import {bgBlackRounded, notFound} from "../../../asset/svg";
+import {ColumnWrapper} from "../../../styles/StyledComponent";
+import IconButton from "../../../component/buttons/IconButton";
+import {POST_PAGE} from "../../../constant/pathConstants";
+import {AiOutlineClose} from "react-icons/ai";
+import {colors} from "../../../styles/Theme";
+import useUserProfile from "../../../hooks/useUserProfile";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import loadingSlice from "../../../state/loadingSlice";
+import Divider from "../../../component/divider/divider";
+import {SlUserFollow} from "react-icons/sl";
+import {CiBookmarkPlus} from "react-icons/ci";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 const AnswerContent = ({
                            answer,
-    questionUserId
+                           questionUserId
                        }) => {
+
+    const {userId} = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
+
+    const {
+        isLoading,
+        error,
+        profileData,
+        isSuccess,
+        isError,
+        isPending,
+        refetch,
+    } = useUserProfile(answer?.userId, true);
 
     const [modifiedHtmlData, setModifiedHtmlData] = useState('');
     const [wrapperRef, wrapperSize] = useComponentSize();
@@ -46,12 +74,82 @@ const AnswerContent = ({
         }
     }, [answer]);
 
+    const RenderUserInfoSection = useCallback(()=> {
+        if (isLoading && !isSuccess) {
+            return <FallbackLoader width={'10%'} height={'70px'} thickness={2} />
+        } else if (isSuccess && profileData && !isError && !isPending) {
+            return (
+                <UserInfoSection>
+                    <Avatar
+                        size={'60px'}
+                        borderRadius={'50%'}
+                        image={profileData.profileImage ? profileData.profileImage : bgBlackRounded}
+                        fallbackImage={notFound}
+                        onClick={()=> navigate(`/profile/${profileData.userId}`)}
+                    />
+
+                    <ColumnWrapper
+                        onClick={()=> navigate(`/profile/${profileData.userId}`)}
+                        style={{
+                        justifyContent: 'center',
+                        gap: 2
+                    }}>
+                        <Heading5>
+                            {profileData.name}
+                        </Heading5>
+
+                        <Caption>
+                            {profileData.email}
+                        </Caption>
+                    </ColumnWrapper>
+                </UserInfoSection>
+            )
+        } else if (isError && !isLoading) {
+            return (
+                <UserInfoSection>
+                    <Heading5>Error Occurred ⚠️</Heading5>
+                </UserInfoSection>
+            )
+        }
+    }, [isLoading, isSuccess, profileData, isError, isPending])
+
     return (
         <Wrapper ref={wrapperRef}>
-            <UserInfoSection>
-
-            </UserInfoSection>
+            <RenderUserInfoSection />
             <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize}/>
+
+            <IconsGroup>
+                <div style={{
+                    width: 'fit-content',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16
+                }}>
+                    <IconButton
+                        bgColor={colors.black80}
+                        hBgColor={colors.black150}
+                        aBgColor={colors.black150}
+                        fontSize={'22px'}
+                        padding={'6px'}
+                    >
+                        <SlUserFollow />
+                    </IconButton>
+                    {userId === questionUserId && (
+                        <AcceptedButton>
+                            Accept Answer ✅
+                        </AcceptedButton>
+                    )}
+                </div>
+
+                <IconButton
+                    fontSize={'25px'}
+                    padding={'6px'}
+                >
+                    <CiBookmarkPlus />
+                </IconButton>
+            </IconsGroup>
+
+            <Divider width={'60%'} verticalSpacing={'4px'} color={colors.white20} />
         </Wrapper>
     );
 };
@@ -62,6 +160,65 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 10px;
     font-family: "Poppins", sans-serif;
+`;
+
+const UserInfoSection = styled.div`
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+`;
+
+const TextOverFlowStyle = css`
+    font-family: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const Heading5 = styled.h5`
+    width: 100%;
+    font-size: clamp(1rem, 0.9515rem + 0.2985vw, 1.25rem);
+    letter-spacing: inherit;
+    font-weight: 500;
+    ${TextOverFlowStyle};
+`;
+
+const Caption = styled.span`
+    width: 100%;
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
+    color: ${colors.whiteOpaque40};
+    font-weight: 400;
+    ${TextOverFlowStyle};
+`;
+
+const IconsGroup = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+`;
+
+const AcceptedButton = styled.button`
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: ${colors.white80};
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    background-color: ${colors.black80};
+    border-radius: 10px;
+    padding: 5px 10px;
+    
+    &:hover, &:active {
+        color: ${colors.white100};
+        background-color: ${colors.black150};
+    }
 `;
 
 export default AnswerContent;
