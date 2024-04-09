@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {uuidValidator} from "../../../util/ComponentValidators";
 import styled from "styled-components";
@@ -31,23 +31,17 @@ import {fetchQuestionDetail} from "../../../restservices/QuestionApi";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {colors} from "../../../styles/Theme";
 import {getFormattedDate} from "../../../service/DateFunctions";
-import Typography from "../../../component/typography/typography";
-import ReactQuill, {Quill} from "react-quill";
+import {Quill} from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from 'quill-image-resize-module-react';
 import '../../../styles/QuillEditorStyles.css'
-import {toolbarOptions} from "../../../asset/configurations/QuillConfiguration";
-import {dispatchSuccessMessage} from "../../../service/functions";
-import {useDispatch} from "react-redux";
 import HtmlContent from "../../../component/HtmlContent/HtmlContent";
 import useComponentSize from "../../../hooks/useComponentSize";
-import useSeo from "../../../globalseo/useSeo";
-import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
-import {getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
-import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
-import AnswerSubmitModal from "../../../component/modal/AnswerSubmitModal";
+import Divider from "../../../component/divider/divider";
+import QuestionAnswersSection from "../components/QuestionAnswersSection";
 
 const NotFound = lazy(() => import('../../../component/NotFound/NotFound'));
+const YourAnswerSection = lazy(()=> import('../components/YourAnswerSection'));
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
@@ -85,13 +79,6 @@ const QuestionDetailsOutlet = () => {
     const [tagsData, setTagsData] = useState([]);
     const [modifiedHtmlData, setModifiedHtmlData] = useState('');
     const [wrapperRef, wrapperSize] = useComponentSize();
-    const editorRef = useRef(null);
-    const timeoutRef = useRef(null);
-    const [editorContent, setEditorContent] = useState({});
-    const [buttonLoader, setButtonLoader] = useState(false);
-    const dispatch = useDispatch();
-    const [addAnswerData, setAddAnswerData] = useState(null);
-    const [answerSubmitModal, setAnswerSubmitModal] = useState(false);
 
     const {
         data: questionData,
@@ -121,26 +108,6 @@ const QuestionDetailsOutlet = () => {
         }
     }, [questionData]);
 
-    const quillBasicModules = useMemo(() => ({
-        toolbar: toolbarOptions,
-        imageResize: {
-            modules: ['Resize', 'DisplaySize']
-        }
-    }), [])
-
-    const handleEditorBlur = (value, editorDelta, source, editor) => {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            const delta = editor.getContents();
-            const html = editor.getHTML();
-            setEditorContent({
-                deltaStatic: delta,
-                htmlData: html,
-                text: editor.getText()
-            })
-        }, 500)
-    }
-
     useEffect(() => {
         if (
             questionData &&
@@ -150,32 +117,6 @@ const QuestionDetailsOutlet = () => {
             setTagsData(questionData.tags);
         }
     }, [questionData]);
-
-    const handleAnswerSubmit = () => {
-        let isChecking = true;
-        clearTimeout(timeoutRef.current);
-        setButtonLoader(true)
-        const htmlContent = getHtmlContent(editorContent);
-        let isValid = true
-        if (htmlContent) {
-            isValid = validateHtmlContent(htmlContent, dispatch);
-        }
-        setButtonLoader(false);
-        isChecking = false;
-        if (isValid && !isChecking) {
-            console.log(htmlContent)
-            setAddAnswerData({
-                questionId: questionId,
-                images: htmlContent?.blobs,
-                detailsHtml: htmlContent?.finalHtml,
-                detailsText: htmlContent?.text
-            })
-            setAnswerSubmitModal(true);
-        } else {
-            editorRef.current.focus();
-            setAnswerSubmitModal(false)
-        }
-    }
 
     const questionNotFound = () => {
         return (
@@ -201,7 +142,7 @@ const QuestionDetailsOutlet = () => {
                             Asked : {getFormattedDate(questionData.dateCreated)}
                         </Caption>
 
-                        <Divider/>
+                        <Divider width={'70%'} verticalSpacing={'10px'}/>
 
                         {modifiedHtmlData && modifiedHtmlData.length > 0 && <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize} />}
 
@@ -216,62 +157,16 @@ const QuestionDetailsOutlet = () => {
                             </Tags>
                         </TagContainer>
 
-                        <Divider/>
+                        <Divider width={'70%'} verticalSpacing={'10px'}/>
 
-                        <YourAnswerSection>
-                            <Heading4>
-                                Do you have Answer ?
-                            </Heading4>
+                        <QuestionAnswersSection answers={questionData.answers} questionUserId={questionData.userId} />
 
-                            <QuillField>
-                                <Typography
-                                    text={'Answer Details'}
-                                    type={'custom'}
-                                    size={'18px'}
-                                    color={'rgba(255, 255, 255, 0.7)'}
-                                    spacing={'1px'}
-                                    weight={500}
-                                />
-                                <ReactQuill
-                                    ref={editorRef}
-                                    theme="snow"
-                                    modules={quillBasicModules}
-                                    placeholder={'Please add details for your answer'}
-                                    onChange={handleEditorBlur}
-                                />
-                            </QuillField>
+                        <Divider width={'70%'} verticalSpacing={'10px'}/>
 
-                            <FetchLoaderButton
-                                isLoading={buttonLoader}
-                                onClick={handleAnswerSubmit}
-                                text={'Proceed'}
-                                loaderSize={'4px'}
-                                loaderDotsSize={'4px'}
-                                bgColor={'#4258ff'}
-                                hBgColor={'rgba(66, 88, 255, 0.9)'}
-                                aBgColor={'#4258ff'}
-                                color={'rgba(255, 255, 255, 0.8)'}
-                                hColor={'rgba(255, 255, 255, 1)'}
-                                borderRadius={'4px'}
-                                padding={'10px 0'}
-                                style={{
-                                    width: '110px',
-                                    height: '40px',
-                                    border: 'none',
-                                    outline: 'none',
-                                    fontSize: '14px',
-                                    fontFamily: "'Poppins', san-serif",
-                                    alignSelf: 'flex-end'
-                                }}
-                            />
-                        </YourAnswerSection>
+                        <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                            <YourAnswerSection questionId={questionId} />
+                        </Suspense>
                     </Wrapper>
-
-                    <AnswerSubmitModal
-                        isModelOpen={answerSubmitModal}
-                        onClose={() => setAnswerSubmitModal(false)}
-                        data={addAnswerData}
-                    />
                 </>
             )
         }
@@ -338,13 +233,6 @@ const Caption = styled.span`
     word-wrap: break-word;
 `;
 
-const Divider = styled.hr`
-    color: ${colors.white10};
-    width: 70%;
-    align-self: center;
-    margin-top: 10px;
-`;
-
 const TagContainer = styled.div`
     width: 100%;
     display: flex;
@@ -371,41 +259,6 @@ const Tags = styled.div`
         font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
         letter-spacing: 1px;
         font-family: "Poppins", sans-serif;
-    }
-`;
-
-const YourAnswerSection = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 25px;
-`;
-
-const Heading4 = styled.h4`
-    font-size: clamp(1.25rem, 1.153rem + 0.597vw, 1.75rem);
-    font-family: "Poppins", sans-serif;
-    color: ${colors.white80};
-    letter-spacing: 1px;
-    font-weight: 500;
-`;
-
-const QuillField = styled.div`
-    display: flex;
-    flex-direction: column;
-    padding: 4px;
-    gap: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    cursor: pointer;
-
-
-    & > span {
-        padding: 16px;
-    }
-
-    &:hover {
-        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 `;
 

@@ -38,7 +38,10 @@ const FetchLoaderButton = ({
                                loaderSize,
                                loaderDotsSize,
                                onClick,
-                               type
+                               type,
+                               disabled,
+                               dColor,
+                               dBgColor
                            }) => {
 
     return (
@@ -54,6 +57,9 @@ const FetchLoaderButton = ({
             aColor={aColor}
             borderRadius={borderRadius}
             padding={padding}
+            disabled={disabled}
+            dColor={dColor}
+            dBgColor={dBgColor}
         >
             {isLoading ?
                 <SingleColorLoader color={loaderColor} size={loaderSize} height={loaderDotsSize}
@@ -83,6 +89,12 @@ const ButtonWrapper = styled.button`
     &:active {
         color: ${(props) => props.aColor};
         background-color: ${(props) => props.aBgColor};
+    }
+    
+    &:disabled {
+        cursor: not-allowed;
+        color: ${(props)=> props.dColor};
+        background-color: ${(props)=> props.dBgColor};
     }
 `;
 

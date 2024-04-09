@@ -18,14 +18,50 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import styled from "styled-components";
+import HtmlContent from "../../../component/HtmlContent/HtmlContent";
+import useComponentSize from "../../../hooks/useComponentSize";
 
-const RenderNoImagesPostDetails = () => {
+const AnswerContent = ({
+                           answer,
+    questionUserId
+                       }) => {
+
+    const [modifiedHtmlData, setModifiedHtmlData] = useState('');
+    const [wrapperRef, wrapperSize] = useComponentSize();
+
+    useEffect(() => {
+        if (answer && answer.detailsHtml) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = answer.detailsHtml;
+            const imgTags = tempDiv.getElementsByTagName('img');
+            for (let i = 0; i < imgTags.length; i++) {
+                imgTags[i].classList.add('html-data__img-tag');
+            }
+            setModifiedHtmlData(tempDiv.innerHTML);
+            return () => {
+                tempDiv.remove();
+            };
+        }
+    }, [answer]);
+
     return (
-        <div>
-            
-        </div>
+        <Wrapper ref={wrapperRef}>
+            <UserInfoSection>
+
+            </UserInfoSection>
+            <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize}/>
+        </Wrapper>
     );
 };
 
-export default RenderNoImagesPostDetails;
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: "Poppins", sans-serif;
+`;
+
+export default AnswerContent;

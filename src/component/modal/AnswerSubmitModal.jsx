@@ -53,10 +53,15 @@ const AnswerSubmitModal = ({
         mutationFn: (formData) => addAnswer(formData),
         onSuccess: async (response) => {
             dispatchSuccessMessage(dispatch, response.message);
-            navigate(`${QUESTION_PAGE}/${data.questionId}`);
+            onClose();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
         },
         onError: (error) => {
-            dispatchError(dispatch, error)
+            dispatchError(dispatch, error);
+            onClose();
         }
     });
 
