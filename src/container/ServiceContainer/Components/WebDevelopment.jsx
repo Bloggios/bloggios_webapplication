@@ -33,7 +33,7 @@ import {
     elasticsearchService,
     flutterService,
     gcpService,
-    githubService,
+    githubService, googleanalyticsService,
     graphqlService,
     javascriptService,
     javaService,
@@ -45,7 +45,7 @@ import {
     pythonService,
     reactService, reduxService,
     springService,
-    swiftService
+    swiftService, typescriptService
 } from "../../../asset/ServicesMarquee";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import SingleMarquee from "../../../component/animations/SingleMarquee";
@@ -57,7 +57,7 @@ export const bloggiosWebDevelopment = [
     },
     {
         id: 2,
-        icon: javaService
+        icon: javascriptService
     },
     {
         id: 3,
@@ -93,62 +93,11 @@ export const bloggiosWebDevelopment = [
     },
     {
         id: 11,
-        icon: swiftService
+        icon: googleanalyticsService
     },
     {
         id: 12,
-        icon: pythonService
-    }
-];
-
-export const bloggiosTechServiceLtrMarquee = [
-    {
-        id: 14,
-        icon: reactService
-    },
-    {
-        id: 15,
-        icon: flutterService
-    },
-    {
-        id: 16,
-        icon: kubernetesService
-    },
-    {
-        id: 17,
-        icon: mongodbService
-    },
-    {
-        id: 18,
-        icon: gcpService
-    },
-    {
-        id: 19,
-        icon: githubService
-    },
-    {
-        id: 20,
-        icon: nextjsService
-    },
-    {
-        id: 21,
-        icon: nodejsService
-    },
-    {
-        id: 22,
-        icon: oauthService
-    },
-    {
-        id: 23,
-        icon: postgresqlService
-    },
-    {
-        id: 24,
-        icon: postmanService
-    },
-    {
-        id: 25,
-        icon: javaService
+        icon: typescriptService
     }
 ];
 
@@ -172,7 +121,8 @@ const WebDevelopment = () => {
 
             <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} thickness={2} />}>
                 <SingleMarquee
-                    marqueeList={}
+                    marqueeList={bloggiosWebDevelopment}
+                    margin={'50px 0'}
                 />
             </Suspense>
 

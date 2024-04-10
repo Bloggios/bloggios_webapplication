@@ -45,14 +45,17 @@ import Marquee from "react-fast-marquee";
 import MemoizedHomeMarqueeCard from "../Cards/HomeMarqueeCard";
 import styled from "styled-components";
 
-const SingleMarquee = ({marqueeList}) => {
+const SingleMarquee = ({
+                           marqueeList,
+                           margin
+                       }) => {
     return (
-        <Wrapper>
+        <Wrapper style={{margin: margin}} >
             <Marquee
                 autoFill={true}
                 direction={'right'}
             >
-                {marqueeList.map((marquee)=> (
+                {marqueeList.map((marquee) => (
                     <MemoizedHomeMarqueeCard
                         key={marquee.id}
                         image={marquee.icon}
@@ -68,7 +71,6 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 50px;
-    margin: 25px 0 50px 0;
 `;
 
 export default SingleMarquee;
