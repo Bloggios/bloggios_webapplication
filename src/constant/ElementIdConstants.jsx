@@ -26,3 +26,5 @@ export const BLOGGIOS_TECH_CONTACT_US = 'bloggiosTechContactUs';
 export const BLOGGIOS_TECH_INTRODUCTION_SECTION = 'bloggiosTechIntroductionSection';
 export const BLOGGIOS_TECH_ENQUIRY_SECTION = 'bloggiosTechEnquirySection';
 export const POST_DETAILS_COMMENT_LIST_SECTION = 'postDetailsCommentListSection';
+export const WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'webDevelopmentSection';
+export const INDUSTRY_CARDS_PRODUCT_DEVELOPMENT_SECTION = 'industryCardsProductDevelopmentSection';

@@ -19,23 +19,14 @@
  */
 
 import React from 'react';
-import {
-    CHATS_PAGE,
-    HOME_PAGE,
-    POST_PAGE,
-    QUESTION_PAGE,
-    SECURITY_PAGE,
-    SETTING_PAGE
-} from "../../../constant/pathConstants";
+import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {BiHomeAlt2} from "react-icons/bi";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {MdOutlineSecurity} from "react-icons/md";
+import {FaUserAlt} from "react-icons/fa";
 import {IoIosSettings} from "react-icons/io";
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import {BsChatDots, BsPatchQuestionFill, BsQuestionCircle} from "react-icons/bs";
+import {BsPatchQuestionFill} from "react-icons/bs";
 import {GoHomeFill} from "react-icons/go";
 import {RiChatSmile2Fill} from "react-icons/ri";
 import {HiPaperAirplane} from "react-icons/hi2";

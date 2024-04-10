@@ -21,9 +21,8 @@
 import React, {useCallback} from 'react';
 import styled from "styled-components";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {detailedProfile, getUserProfile} from "../../restservices/profileApi";
+import {detailedProfile} from "../../restservices/profileApi";
 import SingleColorLoader from "../loaders/SingleColorLoader";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import {getFormattedDate} from "../../service/DateFunctions";
 import {useDispatch, useSelector} from "react-redux";
 import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
@@ -32,12 +31,10 @@ import {setIsCreated} from "../../state/isCreatedSlice";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {useNavigate} from "react-router-dom";
 import {FaRegHeart} from "react-icons/fa";
-import {askQuestionWhite, bgBlackRounded, notFound} from "../../asset/svg";
+import {bgBlackRounded, notFound} from "../../asset/svg";
 import {colors} from "../../styles/Theme";
 import Avatar from "../avatars/avatar";
-import {GoBlocked} from "react-icons/go";
-import {MdBlock, MdOutlineReport} from "react-icons/md";
-import {ImBlocked} from "react-icons/im";
+import {MdBlock} from "react-icons/md";
 
 const Comments = React.forwardRef(({
                                        postId,

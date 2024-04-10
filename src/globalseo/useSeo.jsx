@@ -19,7 +19,6 @@
  */
 
 import {useEffect} from 'react';
-import seoConfigs from "./seoConfigs";
 
 const useSeo = (seoPayload) => {
 

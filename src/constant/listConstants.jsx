@@ -66,7 +66,13 @@ import {
     socialMedia,
     testing
 } from "../asset/marquee";
-import {bgAccentRounded} from "../asset/svg";
+import {
+    bankingDevelopment,
+    bgAccentRounded,
+    ecommerceDevelopment, educationDevelopment, erpDevelopment,
+    healthcareDevelopment,
+    ottDevelopment
+} from "../asset/svg";
 import {
     BLOGGIOS_TECH_CONTACT_US,
     BLOGGIOS_TECH_SERVICE_TAB,
@@ -508,5 +514,44 @@ export const mainStreamServiceBloggiosTech = [
         label: 'Tech Experts',
         path: '/services/tech-experts',
         text: 'Uncover the perfect candidate by combining technical challenges.'
+    },
+];
+
+export const productDevelopment = [
+    {
+        id: 1,
+        title: 'E-Commerce Development',
+        description: 'Tailor-made software solutions for retail and ecommerce, optimizing customer experiences, managing inventory, and streamlining transactions. Enhance sales, automate processes, and stay ahead of the competition with our comprehensive development services.',
+        icon: ecommerceDevelopment
+    },
+    {
+        id: 2,
+        title: 'Healthcare Management Development',
+        description: 'Efficient software solutions for retail and healthcare management, optimizing operations, patient care, and inventory tracking. Improve customer service, streamline workflows, and ensure compliance with our specialized development expertise.',
+        icon: healthcareDevelopment
+    },
+    {
+        id: 3,
+        title: 'Banking and Finance Development',
+        description: 'Cutting-edge software solutions for banking and finance, enhancing security, transaction speed, and customer experience. Streamline operations, manage assets, and stay compliant with our tailored development services.',
+        icon: bankingDevelopment
+    },
+    {
+        id: 4,
+        title: 'OTT Development',
+        description: 'Empower your OTT platform with our advanced software development solutions. Deliver seamless streaming experiences, personalized content recommendations, and robust user management features to captivate audiences and drive growth.',
+        icon: ottDevelopment
+    },
+    {
+        id: 5,
+        title: 'Education Service Development',
+        description: 'Revolutionize education with our software development solutions. Enhance learning experiences, manage resources efficiently, and facilitate remote education. From e-learning platforms to student management systems, we\'ve got you covered.',
+        icon: educationDevelopment
+    },
+    {
+        id: 6,
+        title: 'ERP Development',
+        description: 'Maximize efficiency with our ERP development solutions. Streamline business processes, integrate operations, and enhance decision-making with real-time insights. Tailored to your needs for seamless enterprise management.',
+        icon: erpDevelopment
     },
 ]

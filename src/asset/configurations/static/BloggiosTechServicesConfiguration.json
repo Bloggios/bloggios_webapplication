@@ -1,0 +1,74 @@
+{
+  "id": "bloggios__tech-service",
+  "name": "Bloggios Tech Services",
+  "version": "1.0",
+  "date": "10-04-2024T14:56",
+  "productDevelopment": [
+    {
+      "id": 1,
+      "title": "Software Development",
+      "description": "Leverage Agile development to continuously build high-quality, maintainable software with reduced technical debt.",
+      "path": "/services/product-development#softwareDevelopmentSection"
+    },
+    {
+      "id": 2,
+      "title": "Web Development",
+      "description": "Craft websites, web solutions, and custom applications designed around your users, empowering your online growth.",
+      "path": "/services/product-development#webDevelopmentSection"
+    },
+    {
+      "id": 3,
+      "title": "Mobile Development",
+      "description": "Develop a distinct mobile app brand that caters to specific market needs while prioritizing a seamless user experience.",
+      "path": "/services/product-development#MobileDevelopmentSection"
+    },
+    {
+      "id": 4,
+      "title": "Backend Development",
+      "description": "Empowering users with flawless interactions through resilient and secure backend development.",
+      "path": "/services/product-development#backendDevelopmentSection"
+    }
+  ],
+  "conceptCreation": [
+    {
+      "id": 1,
+      "title": "Technical Architecture",
+      "description": "Establishing the blueprint for software systems, including technology stack selection, database design, and scalability planning to ensure efficient, secure, and scalable solutions.",
+      "path": "/services/concept-creation#technicalArchitectureSection"
+    },
+    {
+      "id": 2,
+      "title": "Scoping Session",
+      "description": "Initial phase involving requirements gathering, stakeholder interviews, and goal setting to define project scope and objectives, laying the foundation for successful software development.",
+      "path": "/services/concept-creation#webDevelopmentSection"
+    }
+  ],
+  "technicalSupport": [
+    {
+      "id": 1,
+      "title": "Technical Support",
+      "description": "Providing assistance for troubleshooting, bug fixing, and error resolution to ensure seamless operation of software systems and resolve user issues promptly.",
+      "path": "/services/technical-support#technicalSupportSection"
+    },
+    {
+      "id": 2,
+      "title": "Performance Monitoring",
+      "description": "Monitoring software performance ensures optimal efficiency by tracking response times and resource usage. Swift issue resolution maintains reliability and enhances user experience.",
+      "path": "/services/technical-support#performanceMonitoringSection"
+    }
+  ],
+  "techTraining": [
+    {
+      "id": 1,
+      "title": "Corporate Training",
+      "description": "Conducting tailored training programs for employees to enhance their skills, productivity, and performance within the organization, aligning with business objectives.",
+      "path": "/services/support-training#corporateTrainingSection"
+    },
+    {
+      "id": 2,
+      "title": "Individual Training",
+      "description": "Offering specialized training sessions to equip individuals with the knowledge and expertise required to understand and utilize technical tools, systems, and processes effectively.",
+      "path": "/services/support-training#technicalTrainingSection"
+    }
+  ]
+}

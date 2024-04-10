@@ -18,14 +18,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {addAnswer, addQuestion} from "../../restservices/QuestionApi";
+import {addAnswer} from "../../restservices/QuestionApi";
 import {dispatchError, dispatchSuccessMessage} from "../../service/functions";
-import {QUESTION_PAGE} from "../../constant/pathConstants";
 import FadeModal from "./FadeModal";
 import {colors} from "../../styles/Theme";
 import IconButton from "../buttons/IconButton";

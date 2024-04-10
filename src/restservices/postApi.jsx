@@ -24,7 +24,8 @@ import {
     AUTH_USER_POSTS,
     DELETE_POST,
     FETCH_POST_TAGS,
-    LIKE_COMMENT_COUNT, POST_DETAILS,
+    LIKE_COMMENT_COUNT,
+    POST_DETAILS,
     POST_LIST,
     USER_POSTS
 } from "../constant/apiConstants";

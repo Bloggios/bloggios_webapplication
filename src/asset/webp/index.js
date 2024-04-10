@@ -19,7 +19,11 @@
  */
 
 import reportBugMobile from './report_bug_mobile.webp';
+import intellijBackend from './intellij_backend.webp';
+import bloggiosLogin from './bloggios_login.webp';
 
 export {
-    reportBugMobile
+    reportBugMobile,
+    intellijBackend,
+    bloggiosLogin
 }

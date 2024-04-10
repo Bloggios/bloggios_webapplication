@@ -33,17 +33,19 @@ import {
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
-    PROFILE_POST_OUTLET_PAGE,
-    PRIVACY_POLICY,
+    POST_PAGE,
+    PRIVACY_POLICY, PRODUCT_DEVELOPMENT_SERVICE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
+    PROFILE_POST_OUTLET_PAGE,
     QUESTION_PAGE,
     REPORT_BUG_PAGE,
     SECURITY_PAGE,
+    SERVICES_PAGE,
     SETTING_PAGE,
     SIGNUP_PAGE,
     SUPPORT_PAGE,
-    TERMS_CONDITION, POST_PAGE
+    TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
@@ -51,6 +53,7 @@ import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
 import BloggiosTechHelpOutlet from "../container/SupportContainer/Outlet/BloggiosTechHelpOutlet";
+import DefaultServiceOutlet from "../container/ServiceContainer/Outlets/DefaultServiceOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -81,6 +84,8 @@ const QuestionDetailsOutlet = lazy(()=> import('../container/questionContainer/o
 const PostPage = lazy(()=> import('../container/PostContainer/PostPage'));
 const PostSectionOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostSectionOutlet'));
 const PostDetailsOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostDetailsOutlet'));
+const ServicePage = lazy(()=> import('../container/ServiceContainer/ServicePage'));
+const ProductDevelopmentOutlet = lazy(()=> import('../container/ServiceContainer/Outlets/ProductDevelopmentOutlet'));
 
 const Router = () => {
 
@@ -103,6 +108,10 @@ const Router = () => {
                         <Route index element={<DefaultHelpOutlet />} />
                         <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
                         <Route path={BLOGGIOS_QAA_HELP} element={<BloggiosQAAHelpOutlet />} />
+                    </Route>
+                    <Route path={SERVICES_PAGE} element={<ServicePage />} >
+                        <Route index element={<DefaultServiceOutlet />} />
+                        <Route path={PRODUCT_DEVELOPMENT_SERVICE} element={<ProductDevelopmentOutlet />} />
                     </Route>
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />

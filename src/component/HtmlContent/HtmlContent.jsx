@@ -18,11 +18,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../styles/InnerHtmlStyles.css';
 import {dispatchSuccessMessage} from "../../service/functions";
 import {useDispatch} from "react-redux";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useReloadOnResize from "../../hooks/useReloadOnResize";
 import FallbackLoader from "../loaders/fallbackLoader";
 

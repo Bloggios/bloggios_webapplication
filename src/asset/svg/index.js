@@ -31,6 +31,13 @@ import mobileSvg from './mobile.svg';
 import posts from './posts.svg';
 import notification from './notification.svg';
 import notificationActive from './notification_active.svg';
+import meshBackground from './mesh_background.svg';
+import ecommerceDevelopment from './ecommerce_development.svg';
+import healthcareDevelopment from './healthcare_development.svg';
+import bankingDevelopment from './banking_development.svg';
+import ottDevelopment from './ott_development.svg';
+import educationDevelopment from './education_development.svg';
+import erpDevelopment from './erp_development.svg';
 
 export {
     bgAccentRounded,
@@ -46,4 +53,11 @@ export {
     posts,
     notification,
     notificationActive,
+    meshBackground,
+    ecommerceDevelopment,
+    healthcareDevelopment,
+    bankingDevelopment,
+    ottDevelopment,
+    educationDevelopment,
+    erpDevelopment
 };

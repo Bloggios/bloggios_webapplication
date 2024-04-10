@@ -46,3 +46,5 @@ export const BLOGGIOS_TECH_HELP = 'bloggios-tech';
 export const BLOGGIOS_QAA_HELP = 'bloggios-qaa';
 export const FORGET_PASSWORD_PAGE = '/forget-password';
 export const POST_PAGE = '/post';
+export const PRODUCT_DEVELOPMENT_SERVICE = 'product-development';
+export const MOBILE_APPLICATION_DEVELOPMENT_SERVICE = 'mobile-development';

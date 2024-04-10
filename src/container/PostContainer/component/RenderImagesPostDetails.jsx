@@ -52,7 +52,7 @@ import CommentList from "../../../component/List/CommentList";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import IconButton from "../../../component/buttons/IconButton";
 import useBackAvailable from "../../../hooks/useBackAvailable";
-import {AiFillHome, AiOutlineClose, AiOutlineHome} from "react-icons/ai";
+import {AiOutlineClose} from "react-icons/ai";
 import {useNavigate} from "react-router-dom";
 import {POST_PAGE} from "../../../constant/pathConstants";
 

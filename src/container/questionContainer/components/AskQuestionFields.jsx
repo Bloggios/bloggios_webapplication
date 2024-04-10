@@ -39,7 +39,7 @@ import IconButton from "../../../component/buttons/IconButton";
 import {CgClose} from "react-icons/cg";
 import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
-import {Base64URItoMultipartFile, getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
+import {getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);

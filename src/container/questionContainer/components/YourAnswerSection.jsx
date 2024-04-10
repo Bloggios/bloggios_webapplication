@@ -19,7 +19,6 @@
  */
 
 import React, {useMemo, useRef, useState} from 'react';
-import Typography from "../../../component/typography/typography";
 import ReactQuill from "react-quill";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import {colors} from "../../../styles/Theme";
