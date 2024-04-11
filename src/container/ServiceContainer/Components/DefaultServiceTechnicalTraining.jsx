@@ -24,11 +24,20 @@ import {useNavigate} from "react-router-dom";
 import {Card, CardButton, Heading4, Heading6, NfCards, Paragraph1, Paragraph2} from "./DefaultServiceStyledComponents";
 import {FaArrowRightLong} from "react-icons/fa6";
 import styled from "styled-components";
+import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../../constant/ElementIdConstants";
 
 const DefaultServiceTechnicalTraining = () => {
 
     const {techTraining} = ListConfiguration;
-    const navigate = useNavigate();
+
+    const handleClick = () => {
+        const enquiryForm = document.getElementById(BLOGGIOS_TECH_ENQUIRY_SECTION);
+        if (enquiryForm) {
+            enquiryForm.scrollIntoView({
+                behavior: "smooth"
+            })
+        }
+    }
 
     return (
         <Wrapper>
@@ -62,8 +71,8 @@ const DefaultServiceTechnicalTraining = () => {
                             </Paragraph2>
                         </div>
 
-                        <CardButton onClick={()=> navigate(item.path)}>
-                            Explore <FaArrowRightLong />
+                        <CardButton onClick={handleClick}>
+                            More Details <FaArrowRightLong />
                         </CardButton>
                     </Card>
                 ))}

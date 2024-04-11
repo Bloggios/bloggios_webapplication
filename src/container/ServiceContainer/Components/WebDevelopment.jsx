@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {memo, Suspense} from 'react';
+import React, {memo, Suspense, useEffect} from 'react';
 import styled from "styled-components";
 import {WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
 import {colors} from "../../../styles/Theme";
@@ -49,6 +49,7 @@ import {
 } from "../../../asset/ServicesMarquee";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import SingleMarquee from "../../../component/animations/SingleMarquee";
+import RequestServiceButton from "./RequestServiceButton";
 
 const bloggiosWebDevelopment = [
     {
@@ -102,6 +103,7 @@ const bloggiosWebDevelopment = [
 ];
 
 const WebDevelopment = () => {
+
     return (
         <Wrapper id={WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION}>
             <h2>Web <span className={'gradient__light-yellow'}>Development</span></h2>
@@ -140,6 +142,13 @@ const WebDevelopment = () => {
                     height={'auto'}
                 />
             </TrackerData>
+
+            <RequestServiceButton
+                buttonText={'Consult Web Dev Experts'}
+                style={{
+                    alignSelf: 'center'
+                }}
+            />
         </Wrapper>
     );
 };

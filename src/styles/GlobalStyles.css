@@ -109,7 +109,7 @@ main.page--mesh__background--svg {
 }
 
 button.button__scroll--icon:hover .button__scroll-down--icon {
-    animation: scroll-down 2s infinite;
+    animation: scroll-down 1500ms infinite;
 }
 
 div.wrapper-bg__accent--background {

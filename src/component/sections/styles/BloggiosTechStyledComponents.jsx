@@ -31,39 +31,6 @@ const Wrapper = styled.div`
     font-family: 'Poppins', sans-serif;
 `;
 
-const Introducing = styled.h2`
-    font-size: clamp(1.5625rem, 0.5093rem + 6.4815vw, 3.75rem);
-    color: rgba(255, 255, 255, 1);
-    font-weight: 600;
-    letter-spacing: 1px;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(270deg, #ee4700, #ffb628);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-`;
-
-const Heading = styled.h1`
-    font-size: clamp(1.875rem, 0.3704rem + 9.2593vw, 5rem);
-    color: rgba(255, 255, 255, 1);
-    font-weight: 600;
-    letter-spacing: 1px;
-    font-family: 'Poppins', sans-serif;
-`;
-
-const SubText = styled.h4`
-    font-size: clamp(1.125rem, 0.463rem + 4.0741vw, 2.5rem);
-    font-weight: 400;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.8);
-`;
-
-const ButtonGroup = styled.div`
-    margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-`;
-
 const ButtonStyles = css`
     border: none;
     outline: none;
@@ -94,18 +61,10 @@ const NavigateButton = styled.button`
     align-items: center;
     justify-content: center;
     border: 1px solid transparent;
-    
-    &:hover {
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
 `;
 
 export {
     Wrapper,
-    Introducing,
-    Heading,
-    SubText,
-    ButtonGroup,
     ExploreProjects,
     NavigateButton
 }

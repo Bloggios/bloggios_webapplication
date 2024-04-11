@@ -35,26 +35,36 @@ const BloggiosTechDataCard = lazy(() => import('../Cards/BloggiosTechDataCard'))
 const BloggiosTechIntroductionSectionSummary = () => {
     return (
         <Wrapper id={sectionId} className={'home__black-lines--background'}>
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
-                <BloggiosTechSectionHeader />
-            </Suspense>
+            <BgTransition
+                component={'div'}
+                type={'bg__fi'}
+                delay={0.1}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                    <BloggiosTechSectionHeader/>
+                </Suspense>
+            </BgTransition>
 
             <BgTransition
                 component={'div'}
-                type={'bg__zi'}
+                type={'bg__fi'}
                 delay={0.2}
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
                 }}
             >
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
-                    <BloggiosTechDataCard />
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
+                    <BloggiosTechDataCard/>
                 </Suspense>
 
                 <ScrollDownAnimatedButton
                     margin={'10px auto'}
-                    onClick={()=> handleElementIdScroll(BLOGGIOS_TECH_WHY_BLOGGIOS)}
+                    onClick={() => handleElementIdScroll(BLOGGIOS_TECH_WHY_BLOGGIOS)}
                 />
             </BgTransition>
         </Wrapper>
@@ -70,7 +80,7 @@ const Wrapper = styled.div`
     font-family: 'Poppins', sans-serif;
     justify-content: center;
     gap: 100px;
-    
+
     @media (max-height: 700px) {
         gap: 34px;
     }

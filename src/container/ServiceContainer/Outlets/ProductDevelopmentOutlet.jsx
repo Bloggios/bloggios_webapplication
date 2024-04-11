@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useEffect} from 'react';
 import styled from "styled-components";
 import ServicesBase from "../Components/ServiceHeader";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
@@ -33,6 +33,7 @@ import {INDUSTRY_CARDS_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/Elem
 import IconButton from "../../../component/buttons/IconButton";
 import {handleDivScroll} from "../../../service/commonFunctions";
 import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
+import {useLocation} from "react-router-dom";
 
 const BloggiosTechDataCard = lazy(() => import('../../../component/Cards/BloggiosTechDataCard'));
 const WebDevelopment = lazy(()=> import('../Components/WebDevelopment'));
@@ -42,7 +43,24 @@ const BackendDevelopment = lazy(()=> import('../Components/BackendDevelopment'))
 const ProductDevelopmentOutlet = () => {
 
     const [wrapperRef, wrapperSize] = useComponentSize();
+    const {hash} = useLocation();
     const {width} = useWindowDimensions();
+
+    const scrollToSection = () => {
+        if (hash) {
+            const id = hash.substring(1);
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            window.scrollTo(0, 0);
+        }
+    };
+
+    useEffect(() => {
+        scrollToSection();
+    }, [hash]);
 
     const HeadingContent = () => {
         return (
@@ -52,6 +70,7 @@ const ProductDevelopmentOutlet = () => {
             </>
         )
     }
+
     return (
         <Wrapper ref={wrapperRef}>
             <ServicesBase

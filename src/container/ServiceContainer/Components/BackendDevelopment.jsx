@@ -52,6 +52,7 @@ import {
     swiftService
 } from "../../../asset/ServicesMarquee";
 import {backendDevelopmentData} from "../../../asset/configurations/BackendDevelopmentTrackerSelectData";
+import RequestServiceButton from "./RequestServiceButton";
 
 const bloggiosBackendDevelopment = [
     {
@@ -168,6 +169,13 @@ const BackendDevelopment = () => {
                     height={'auto'}
                 />
             </TrackerData>
+
+            <RequestServiceButton
+                buttonText={'Consult Backend Expert'}
+                style={{
+                    alignSelf: 'center'
+                }}
+            />
         </Wrapper>
     );
 };

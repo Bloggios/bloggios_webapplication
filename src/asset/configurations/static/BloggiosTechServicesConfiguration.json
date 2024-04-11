@@ -8,7 +8,7 @@
       "id": 1,
       "title": "Software Development",
       "description": "Leverage Agile development to continuously build high-quality, maintainable software with reduced technical debt.",
-      "path": "/services/product-development#softwareDevelopmentSection"
+      "path": "/services/product-development"
     },
     {
       "id": 2,
@@ -20,7 +20,7 @@
       "id": 3,
       "title": "Mobile Development",
       "description": "Develop a distinct mobile app brand that caters to specific market needs while prioritizing a seamless user experience.",
-      "path": "/services/product-development#MobileDevelopmentSection"
+      "path": "/services/product-development#mobileDevelopmentSection"
     },
     {
       "id": 4,

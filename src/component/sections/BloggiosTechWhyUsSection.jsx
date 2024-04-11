@@ -23,10 +23,14 @@ import * as Bg from './styles/BloggiosTechWhyUsSectionSc';
 import {whyUsCardListConstants} from "../../constant/listConstants";
 import {BLOGGIOS_TECH_WHY_BLOGGIOS} from "../../constant/ElementIdConstants";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import BgTransition from "../animations/BgTransition";
+import {useNavigate} from "react-router-dom";
+import {SERVICES_PAGE} from "../../constant/pathConstants";
 
 const BloggiosTechWhyUsSection = () => {
 
     const {width} = useWindowDimensions();
+    const navigate = useNavigate();
 
     const getList = useCallback(()=> {
         if (width > 800 || width < 500) {
@@ -39,34 +43,70 @@ const BloggiosTechWhyUsSection = () => {
     return (
         <Bg.Wrapper id={BLOGGIOS_TECH_WHY_BLOGGIOS}>
             <Bg.WhyUs>
-                <Bg.Title>
-                    What makes <strong>Bloggios</strong><br/>Different
-                </Bg.Title>
-                <Bg.WhyUsButton>
+                <BgTransition
+                    component={'div'}
+                    delay={0.1}
+                >
+                    <Bg.Title>
+                        What makes <strong>Bloggios</strong><br/>Different
+                    </Bg.Title>
+                </BgTransition>
+                <BgTransition
+                    component={'div'}
+                    delay={0.1}
+                >
+                <Bg.WhyUsButton onClick={()=> navigate(SERVICES_PAGE)}>
                     Explore More
                 </Bg.WhyUsButton>
+                </BgTransition>
                 <Bg.Cards>
-                    {getList().map((item)=> (
-                        <Bg.Card key={item.id}>
+                    {getList().map((item, index)=> (
+                        <BgTransition
+                            component={'div'}
+                            delay={index/10 + 0.1}
+                            key={item.id}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                justifyContent: 'space-between',
+                                gap: '10px',
+                                padding: '20px',
+                                borderRadius: '10px',
+                                background: '#4258ff',
+                                maxWidth: '300px',
+                            }}
+                        >
                             <Bg.Icon src={item.icon} alt={item.label} />
                             <Bg.Label>{item.label}</Bg.Label>
-                        </Bg.Card>
+                        </BgTransition>
                     ))}
                 </Bg.Cards>
             </Bg.WhyUs>
 
             <Bg.Divider />
 
-            <Bg.Thoughts>
-                <Bg.ThoughtTitle>
-                    <strong>Bloggios</strong><br/>Way
-                </Bg.ThoughtTitle>
+            <BgTransition
+                component={'div'}
+                delay={0.2}
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <Bg.Thoughts>
+                    <Bg.ThoughtTitle>
+                        <strong>Bloggios</strong><br/>Way
+                    </Bg.ThoughtTitle>
 
-                <Bg.SummaryDiv>
-                    <p>At Bloggios, we craft technological marvels engineered for expansion. Our exclusive development methodologies ensure steadfast, user-centric innovations that propel effortless digital metamorphosis for Enterprises and burgeoning Scale-up ventures.</p>
-                    <h4>This, is the Bloggios brand of seamless technology.</h4>
-                </Bg.SummaryDiv>
-            </Bg.Thoughts>
+                    <Bg.SummaryDiv>
+                        <p>At Bloggios, we craft technological marvels engineered for expansion. Our exclusive development methodologies ensure steadfast, user-centric innovations that propel effortless digital metamorphosis for Enterprises and burgeoning Scale-up ventures.</p>
+                        <h4>This, is the Bloggios brand of seamless technology.</h4>
+                    </Bg.SummaryDiv>
+                </Bg.Thoughts>
+            </BgTransition>
         </Bg.Wrapper>
     );
 };

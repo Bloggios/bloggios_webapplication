@@ -21,13 +21,15 @@
 import React from 'react';
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {SIGNUP_PAGE} from "../../constant/pathConstants";
+import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import MemoizedScrollDownAnimatedButton from "../animations/ScrollDownAnimatedButton";
 import BgTransition from "../animations/BgTransition";
+import {useSelector} from "react-redux";
 
 const HomeHeader = () => {
 
     const navigate = useNavigate();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
 
     const handleScroll = () => {
         const element = document.getElementById('transitionSection');
@@ -35,6 +37,14 @@ const HomeHeader = () => {
             top: element.offsetTop,
             behavior: 'smooth'
         })
+    }
+
+    const handleButtonClick = () => {
+        if (isAuthenticated) {
+            navigate(HOME_PAGE);
+        } else {
+            navigate(SIGNUP_PAGE);
+        }
     }
 
     return (
@@ -52,8 +62,8 @@ const HomeHeader = () => {
                 <StreamlinedText>
                     Your digital partner for software mastery, social influence, immersive learning, and seamless forms. We transcend boundaries, fostering innovation and crafting a dynamic digital experience. Elevate your journey with Bloggios—where code meets community, and possibilities unfold effortlessly.
                 </StreamlinedText>
-                <GetStartedButton onClick={()=> navigate(SIGNUP_PAGE)} className="full-rounded">
-                    <span>Get Started</span>
+                <GetStartedButton onClick={handleButtonClick} className="full-rounded">
+                    <span>{isAuthenticated ? 'My Home' : 'Get Started'}</span>
                     <div className="border full-rounded"></div>
                 </GetStartedButton>
                 <MemoizedScrollDownAnimatedButton
