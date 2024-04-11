@@ -255,6 +255,10 @@ const DetailedInformation = styled.div`
         color: ${colors.white80};
         text-align: justify;
     }
+
+    @media (max-width: 1200px) {
+        width: 100%;
+    }
 `;
 
 const TrackerData = styled.div`
