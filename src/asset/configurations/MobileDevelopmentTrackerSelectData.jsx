@@ -47,43 +47,15 @@ const Paragraph = styled.p`
     padding: 10px 0;
 `;
 
-const getUiUx = () => {
+const getPlatform = () => {
     return (
         <Wrapper>
             <Heading2>
-                Captivating User Interfaces (UI) and User Experience (UX)
+                Platform Mastery
             </Heading2>
 
             <Paragraph>
-                We go beyond aesthetics to craft user journeys that are intuitive, engaging, and tailored to your target audience. Our UI/UX specialists leverage user research, competitor analysis, and industry best practices to design interfaces that are not only visually appealing but also foster user-friendly navigation and interaction.
-            </Paragraph>
-        </Wrapper>
-    )
-}
-
-const getResponsiveDesign = () => {
-    return (
-        <Wrapper>
-            <Heading2>
-                Responsive Design and Development
-            </Heading2>
-
-            <Paragraph>
-                We ensure your website seamlessly adapts to any device, from desktops to tablets and smartphones. Our developers utilize responsive frameworks and meticulously test across different screen sizes to guarantee a flawless user experience regardless of platform.
-            </Paragraph>
-        </Wrapper>
-    )
-}
-
-const getSeo = () => {
-    return (
-        <Wrapper>
-            <Heading2>
-                Search Engine Optimization (SEO) Foundations
-            </Heading2>
-
-            <Paragraph>
-                We build your website with a strong SEO foundation, employing best practices for on-page optimization and technical SEO. This helps your website rank higher in search engine results pages (SERPs), driving organic traffic and increasing brand visibility.
+                Our developers are gurus of both native app development (Swift/Kotlin) and cross-platform frameworks (React Native, Flutter). This mastery ensures we craft the perfect solution for your specific needs and target audience, whether you require the deep functionality of native apps or the broader reach of cross-platform development.
             </Paragraph>
         </Wrapper>
     )
@@ -93,34 +65,77 @@ const getPerformance = () => {
     return (
         <Wrapper>
             <Heading2>
-                Performance Optimization
+                Performance Optimization Obsession
             </Heading2>
 
             <Paragraph>
-                Speed is crucial in today's fast-paced digital world.  Our team optimizes website performance, including image compression, code minification, and caching strategies, to deliver lightning-fast loading times that keep users engaged and coming back for more.
+                A laggy app is a losing app. That's why we're obsessed with performance optimization. We employ advanced code optimization techniques and conduct rigorous testing across various devices and operating systems. This relentless pursuit of smoothness guarantees a responsive and delightful user experience.
             </Paragraph>
         </Wrapper>
     )
 }
 
-const getScalable = () => {
+const getDataDriven = () => {
     return (
         <Wrapper>
             <Heading2>
-                Scalable and Secure Infrastructure
+                Data-Driven Decisions for Continuous Improvement
             </Heading2>
 
             <Paragraph>
-                We build your website on secure, scalable platforms that can accommodate future growth. Our developers leverage the latest security protocols and tools to safeguard your website from potential threats, ensuring your data and user information remain protected.
+                Data is king in the mobile world. We integrate powerful app analytics tools to gather user insights and understand how users interact with your app. This real-time data empowers us to optimize app features, prioritize bug fixes, and ensure your app stays relevant and drives user engagement in the ever-changing mobile landscape.
             </Paragraph>
         </Wrapper>
     )
 }
 
-export const webDevelopmentData = {
-    'UI & UX' : getUiUx(),
-    'Responsive Design' : getResponsiveDesign(),
-    'SEO' : getSeo(),
+const getUiUx = () => {
+    return (
+        <Wrapper>
+            <Heading2>
+                UI/UX Craftsmanship
+            </Heading2>
+
+            <Paragraph>
+                We believe a beautiful app is just as important as a functional one. Our UI/UX designers create user interfaces that are intuitive, engaging, and aesthetically pleasing. This ensures your app not only delivers results but also provides a delightful user experience that keeps users coming back for more.
+            </Paragraph>
+        </Wrapper>
+    )
+}
+
+const getAgileAndDevops = () => {
+    return (
+        <Wrapper>
+            <Heading2>
+                Agile Development and DevOps Powerhouse
+            </Heading2>
+
+            <Paragraph>
+                We don't just write code, we deploy it with lightning speed. By leveraging agile methodologies, we iterate rapidly on your mobile app, incorporating your feedback seamlessly. Our DevOps expertise streamlines deployment and guarantees seamless app updates, keeping your app fresh and users engaged.
+            </Paragraph>
+        </Wrapper>
+    )
+}
+
+const getTechStackTitan = () => {
+    return (
+        <Wrapper>
+            <Heading2>
+                Tech Stack Titan
+            </Heading2>
+
+            <Paragraph>
+                We stay ahead of the curve by wielding cutting-edge technologies like cloud integration, AI/ML features, and advanced security protocols. This tech stack powerhouse allows us to create robust, scalable mobile apps that can evolve alongside your business needs and user demands, ensuring your app remains future-proof.
+            </Paragraph>
+        </Wrapper>
+    )
+}
+
+export const mobileDevelopmentData = {
+    'Platform' : getPlatform(),
     'Performance' : getPerformance(),
-    "Scalable": getScalable()
+    'Data Driven' : getDataDriven(),
+    'UI/UX': getUiUx(),
+    'Agile & DevOps': getAgileAndDevops(),
+    'Tech Stack Titan': getTechStackTitan(),
 }

@@ -27,4 +27,6 @@ export const BLOGGIOS_TECH_INTRODUCTION_SECTION = 'bloggiosTechIntroductionSecti
 export const BLOGGIOS_TECH_ENQUIRY_SECTION = 'bloggiosTechEnquirySection';
 export const POST_DETAILS_COMMENT_LIST_SECTION = 'postDetailsCommentListSection';
 export const WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'webDevelopmentSection';
+export const MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'mobileDevelopmentSection';
+export const BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'backendDevelopmentSection';
 export const INDUSTRY_CARDS_PRODUCT_DEVELOPMENT_SECTION = 'industryCardsProductDevelopmentSection';

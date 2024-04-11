@@ -19,45 +19,48 @@
  */
 
 import React, {memo, Suspense} from 'react';
-import styled from "styled-components";
-import {WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
-import {colors} from "../../../styles/Theme";
-import {bloggiosLogin, intellijBackend} from "../../../asset/webp";
-import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
-import {webDevelopmentData} from "../../../asset/configurations/WebDevelopmentTrackerSelectData";
 import {
-    angularService,
+    BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION,
+    WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION
+} from "../../../constant/ElementIdConstants";
+import {inforingUi, mobileUi, postman} from "../../../asset/webp";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import SingleMarquee from "../../../component/animations/SingleMarquee";
+import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
+import {mobileDevelopmentData} from "../../../asset/configurations/MobileDevelopmentTrackerSelectData";
+import styled from "styled-components";
+import {colors} from "../../../styles/Theme";
+import {
     awsService,
     azureService,
     dockerService,
     elasticsearchService,
-    flutterService,
-    gcpService,
-    githubService, googleanalyticsService,
+    flutterService, githubService,
+    googleanalyticsService,
+    grafanaService,
     graphqlService,
-    javascriptService,
     javaService,
-    kafkaService,
+    jenkinsService,
+    jiraService, kafkaService,
+    kotlinService,
     kubernetesService,
-    mongodbService,
-    nextjsService,
-    nodejsService, oauthService, postgresqlService, postmanService,
-    pythonService,
-    reactService, reduxService,
+    mongodbService, oauthService,
+    postgresqlService,
+    postmanService,
+    reactService,
     springService,
-    swiftService, typescriptService
+    swiftService
 } from "../../../asset/ServicesMarquee";
-import FallbackLoader from "../../../component/loaders/fallbackLoader";
-import SingleMarquee from "../../../component/animations/SingleMarquee";
+import {backendDevelopmentData} from "../../../asset/configurations/BackendDevelopmentTrackerSelectData";
 
-const bloggiosWebDevelopment = [
+const bloggiosBackendDevelopment = [
     {
         id: 1,
-        icon: reactService
+        icon: javaService
     },
     {
         id: 2,
-        icon: javascriptService
+        icon: springService
     },
     {
         id: 3,
@@ -65,15 +68,15 @@ const bloggiosWebDevelopment = [
     },
     {
         id: 4,
-        icon: azureService
+        icon: kafkaService
     },
     {
         id: 5,
-        icon: angularService
+        icon: postmanService
     },
     {
         id: 6,
-        icon: graphqlService
+        icon: elasticsearchService
     },
     {
         id: 7,
@@ -81,61 +84,86 @@ const bloggiosWebDevelopment = [
     },
     {
         id: 8,
-        icon: nextjsService
+        icon: postgresqlService
     },
     {
         id: 9,
-        icon: nodejsService
+        icon: kubernetesService
     },
     {
         id: 10,
-        icon: reduxService
+        icon: mongodbService
     },
     {
         id: 11,
-        icon: googleanalyticsService
+        icon: grafanaService
     },
     {
         id: 12,
-        icon: typescriptService
+        icon: jenkinsService
+    },
+    {
+        id: 13,
+        icon: githubService
+    },
+    {
+        id: 14,
+        icon: oauthService
+    },
+    {
+        id: 15,
+        icon: jiraService
+    },
+    {
+        id: 16,
+        icon: azureService
     }
 ];
 
-const WebDevelopment = () => {
+const BackendDevelopment = () => {
     return (
-        <Wrapper id={WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION}>
-            <h2>Web <span className={'gradient__light-yellow'}>Development</span></h2>
+        <Wrapper id={BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION}>
+            <h2>Backend <span className={'gradient__light-yellow'}>Development</span></h2>
 
             <RowWrapper>
                 <ImageWrapper>
-                    <img src={bloggiosLogin} alt="Backend Code"/>
+                    <img src={postman} alt="Postman"/>
                 </ImageWrapper>
 
                 <DataWrapper className={'service--outlet__row-data'}>
-                    <h2>Web Development</h2>
+                    <h2>Backend Development</h2>
                     <Paragraph2>
-                        Unleash the power of the web with <strong className={'gradient__light-yellow-green'}>Bloggios</strong> expert web development services. We craft custom websites, CMS solutions, and web applications tailored to your business goals. From user-friendly interfaces to responsive design, we ensure a flawless user experience across all devices, propelling your brand's success in the ever-evolving digital landscape.
+                        Have you ever wondered what powers the features you love on <strong
+                        className={'gradient__dark-orange'}>Bloggios</strong>? That's the magic of
+                        backend development! Our skilled backend developers are the architects behind the scenes,
+                        crafting the server-side logic that makes everything tick. They build and maintain the databases
+                        that store your content, create APIs to connect different parts of Bloggios, and ensure
+                        everything runs smoothly and securely. So, the next time you seamlessly post a blog or connect
+                        with your audience, remember the talented backend developers making it all possible at <strong
+                        className={'gradient__dark-orange'}>Bloggios</strong>!
                     </Paragraph2>
                 </DataWrapper>
             </RowWrapper>
 
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} thickness={2} />}>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} thickness={2}/>}>
                 <SingleMarquee
-                    marqueeList={bloggiosWebDevelopment}
+                    marqueeList={bloggiosBackendDevelopment}
                     margin={'50px 0'}
                 />
             </Suspense>
 
             <DetailedInformation>
-                <h4>Unleash the Power of the Web with <br/><span className={'gradient__dark-orange'}>Bloggios</span> Web Development Expertise</h4>
+                <h4>Elevate Your App's Potential with Robust Backend Development</h4>
                 <p>
-                    At <span className={'gradient__dark-orange'}>Bloggios</span>, we're passionate about crafting exceptional web experiences that empower your business to thrive online.  Our team of seasoned web developers combines cutting-edge technology with strategic planning to deliver bespoke solutions that transform your vision into reality. Here's how we elevate your web presence:
+                    At Bloggios, our backend development prowess propels your app to the forefront of innovation. With
+                    meticulous attention to detail and cutting-edge technologies, we craft seamless and scalable
+                    solutions tailored to elevate your brand and engage users on a whole new level.
                 </p>
             </DetailedInformation>
 
             <TrackerData>
                 <BloggiosTrackerSelect
-                    mapData={webDevelopmentData}
+                    mapData={backendDevelopmentData}
                     margin={'25px 0 0 0'}
                     height={'auto'}
                 />
@@ -152,7 +180,7 @@ const Wrapper = styled.div`
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
     color: ${colors.white100};
-    
+
     & > h2 {
         font-size: clamp(1.25rem, 0.9043rem + 2.1277vw, 2.5rem);
         font-family: inherit;
@@ -168,11 +196,11 @@ const RowWrapper = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin-top: 70px;
-    
+
     @media (max-width: 800px) {
         margin-top: 40px;
     }
-    
+
     @media (max-width: 600px) {
         flex-direction: column-reverse;
         margin-top: 20px;
@@ -182,13 +210,16 @@ const RowWrapper = styled.div`
 
 const ImageWrapper = styled.div`
     width: 48%;
+    max-height: 440px;
     display: flex;
-    
+    flex-direction: row;
+    justify-content: center;
+
     & > img {
         width: 100%;
         object-fit: contain;
     }
-    
+
     @media (max-width: 600px) {
         width: 100%;
     }
@@ -200,7 +231,7 @@ const DataWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
     gap: 25px;
-    
+
     & > h2 {
         font-size: clamp(1.25rem, 1.1117rem + 0.8511vw, 1.75rem);
         font-family: "Poppins", sans-serif;
@@ -211,7 +242,7 @@ const DataWrapper = styled.div`
     @media (max-width: 600px) {
         width: 100%;
         gap: 20px;
-        
+
         & > h2 {
             text-align: center;
         }
@@ -223,7 +254,7 @@ const Paragraph2 = styled.p`
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
     color: ${colors.white80};
-    
+
     @media (max-width: 1000px) {
         font-size: clamp(0.75rem, 0.7061rem + 0.2703vw, 0.875rem);
     }
@@ -238,14 +269,14 @@ const DetailedInformation = styled.div`
     letter-spacing: 1px;
     margin-top: 40px;
     align-self: center;
-    
+
     & > h4 {
         font-size: clamp(1rem, 0.7926rem + 1.2766vw, 1.75rem);
         font-family: inherit;
         letter-spacing: inherit;
         font-weight: 600;
     }
-    
+
     & > p {
         font-size: clamp(0.875rem, 0.7401rem + 0.6349vw, 1.375rem);
         font-family: inherit;
@@ -259,7 +290,7 @@ const TrackerData = styled.div`
     width: 70%;
     display: flex;
     align-self: center;
-    
+
     @media (max-width: 1200px) {
         width: 85%;
     }
@@ -269,4 +300,4 @@ const TrackerData = styled.div`
     }
 `;
 
-export default memo(WebDevelopment);
+export default memo(BackendDevelopment);

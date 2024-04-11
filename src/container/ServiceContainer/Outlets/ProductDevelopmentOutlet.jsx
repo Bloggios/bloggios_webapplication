@@ -36,6 +36,8 @@ import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 
 const BloggiosTechDataCard = lazy(() => import('../../../component/Cards/BloggiosTechDataCard'));
 const WebDevelopment = lazy(()=> import('../Components/WebDevelopment'));
+const MobileDevelopment = lazy(()=> import('../Components/MobileDevelopment'));
+const BackendDevelopment = lazy(()=> import('../Components/BackendDevelopment'));
 
 const ProductDevelopmentOutlet = () => {
 
@@ -108,10 +110,22 @@ const ProductDevelopmentOutlet = () => {
                 />
             </IndustryTarget>
 
-            <Divider width={'70%'} color={colors.white20} />
+            <Divider width={'70%'} color={colors.white20} verticalSpacing={'40px'} />
 
             <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
                 <WebDevelopment />
+            </Suspense>
+
+            <Divider width={'70%'} color={colors.white20} verticalSpacing={'40px'} />
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
+                <MobileDevelopment />
+            </Suspense>
+
+            <Divider width={'70%'} color={colors.white20} verticalSpacing={'40px'} />
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>
+                <BackendDevelopment />
             </Suspense>
         </Wrapper>
     );

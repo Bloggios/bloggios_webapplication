@@ -19,45 +19,35 @@
  */
 
 import React, {memo, Suspense} from 'react';
-import styled from "styled-components";
-import {WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
-import {colors} from "../../../styles/Theme";
-import {bloggiosLogin, intellijBackend} from "../../../asset/webp";
+import {
+    MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION,
+    WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION
+} from "../../../constant/ElementIdConstants";
+import {bloggiosLogin, inforingUi, mobileUi} from "../../../asset/webp";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import SingleMarquee from "../../../component/animations/SingleMarquee";
 import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
 import {webDevelopmentData} from "../../../asset/configurations/WebDevelopmentTrackerSelectData";
+import styled from "styled-components";
+import {colors} from "../../../styles/Theme";
+import {bloggiosWebDevelopment} from "./WebDevelopment";
 import {
     angularService,
     awsService,
-    azureService,
-    dockerService,
-    elasticsearchService,
-    flutterService,
-    gcpService,
-    githubService, googleanalyticsService,
-    graphqlService,
-    javascriptService,
-    javaService,
-    kafkaService,
-    kubernetesService,
-    mongodbService,
-    nextjsService,
-    nodejsService, oauthService, postgresqlService, postmanService,
-    pythonService,
-    reactService, reduxService,
-    springService,
-    swiftService, typescriptService
+    azureService, dockerService, flutterService, googleanalyticsService, graphqlService,
+    javascriptService, javaService, jenkinsService, jiraService, kotlinService, nextjsService, nodejsService,
+    reactService, reduxService, swiftService, typescriptService
 } from "../../../asset/ServicesMarquee";
-import FallbackLoader from "../../../component/loaders/fallbackLoader";
-import SingleMarquee from "../../../component/animations/SingleMarquee";
+import {mobileDevelopmentData} from "../../../asset/configurations/MobileDevelopmentTrackerSelectData";
 
-const bloggiosWebDevelopment = [
+const bloggiosMobileDevelopment = [
     {
         id: 1,
         icon: reactService
     },
     {
         id: 2,
-        icon: javascriptService
+        icon: javaService
     },
     {
         id: 3,
@@ -69,7 +59,7 @@ const bloggiosWebDevelopment = [
     },
     {
         id: 5,
-        icon: angularService
+        icon: swiftService
     },
     {
         id: 6,
@@ -81,15 +71,15 @@ const bloggiosWebDevelopment = [
     },
     {
         id: 8,
-        icon: nextjsService
+        icon: flutterService
     },
     {
         id: 9,
-        icon: nodejsService
+        icon: kotlinService
     },
     {
         id: 10,
-        icon: reduxService
+        icon: jiraService
     },
     {
         id: 11,
@@ -97,45 +87,46 @@ const bloggiosWebDevelopment = [
     },
     {
         id: 12,
-        icon: typescriptService
+        icon: jenkinsService
     }
 ];
 
-const WebDevelopment = () => {
+const MobileDevelopment = () => {
     return (
-        <Wrapper id={WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION}>
-            <h2>Web <span className={'gradient__light-yellow'}>Development</span></h2>
+        <Wrapper id={MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION}>
+            <h2>Mobile <span className={'gradient__light-yellow'}>Development</span></h2>
 
             <RowWrapper>
                 <ImageWrapper>
-                    <img src={bloggiosLogin} alt="Backend Code"/>
+                    <img src={mobileUi} alt="Mobile UI"/>
+                    <img src={inforingUi} alt="Inforing UI"/>
                 </ImageWrapper>
 
                 <DataWrapper className={'service--outlet__row-data'}>
-                    <h2>Web Development</h2>
+                    <h2>Mobile Development</h2>
                     <Paragraph2>
-                        Unleash the power of the web with <strong className={'gradient__light-yellow-green'}>Bloggios</strong> expert web development services. We craft custom websites, CMS solutions, and web applications tailored to your business goals. From user-friendly interfaces to responsive design, we ensure a flawless user experience across all devices, propelling your brand's success in the ever-evolving digital landscape.
+                        <strong className={'gradient__light-yellow-green'}>Bloggios</strong> crafts custom mobile apps that put your brand at users' fingertips.  Our expert developers design user-centric experiences that seamlessly integrate with your business goals.  Whether it's fostering engagement, driving sales, or enhancing brand loyalty, we create intuitive interfaces and ensure flawless performance across all devices.  In today's ever-evolving mobile landscape, Bloggios helps you  transform your brand into an indispensable pocket companion, propelling you towards success.
                     </Paragraph2>
                 </DataWrapper>
             </RowWrapper>
 
             <Suspense fallback={<FallbackLoader width={'100%'} height={'100px'} thickness={2} />}>
                 <SingleMarquee
-                    marqueeList={bloggiosWebDevelopment}
+                    marqueeList={bloggiosMobileDevelopment}
                     margin={'50px 0'}
                 />
             </Suspense>
 
             <DetailedInformation>
-                <h4>Unleash the Power of the Web with <br/><span className={'gradient__dark-orange'}>Bloggios</span> Web Development Expertise</h4>
+                <h4><span className={'gradient__dark-orange'}>Bloggios</span> builds winning mobile apps. <br/> Engage users, elevate your brand.</h4>
                 <p>
-                    At <span className={'gradient__dark-orange'}>Bloggios</span>, we're passionate about crafting exceptional web experiences that empower your business to thrive online.  Our team of seasoned web developers combines cutting-edge technology with strategic planning to deliver bespoke solutions that transform your vision into reality. Here's how we elevate your web presence:
+                    <span className={'gradient__dark-orange'}>Bloggios</span> mobile development team is fueled by passion and expertise. We leverage cutting-edge technology and strategic planning to craft custom mobile apps. We don't just build apps, we transform your vision into an indispensable mobile companion that drives engagement and propels your brand's success. From intuitive interfaces to seamless functionality, we create exceptional mobile experiences that get results.
                 </p>
             </DetailedInformation>
 
             <TrackerData>
                 <BloggiosTrackerSelect
-                    mapData={webDevelopmentData}
+                    mapData={mobileDevelopmentData}
                     margin={'25px 0 0 0'}
                     height={'auto'}
                 />
@@ -182,7 +173,10 @@ const RowWrapper = styled.div`
 
 const ImageWrapper = styled.div`
     width: 48%;
+    max-height: 440px;
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     
     & > img {
         width: 100%;
@@ -269,4 +263,4 @@ const TrackerData = styled.div`
     }
 `;
 
-export default memo(WebDevelopment);
+export default memo(MobileDevelopment);

@@ -44,6 +44,10 @@ import swiftService from './swift_service.svg';
 import reduxService from './redux_service.svg';
 import googleanalyticsService from './googleanalytics_service.svg';
 import typescriptService from './typescript_service.svg';
+import kotlinService from './kotlin_service.svg';
+import jenkinsService from './jenkins_service.svg';
+import jiraService from './jira_service.svg';
+import grafanaService from './grafana_service.svg';
 
 export {
     angularService,
@@ -71,5 +75,9 @@ export {
     swiftService,
     reduxService,
     googleanalyticsService,
-    typescriptService
+    typescriptService,
+    kotlinService,
+    jenkinsService,
+    jiraService,
+    grafanaService
 }

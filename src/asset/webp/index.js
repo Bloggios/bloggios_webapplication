@@ -21,9 +21,15 @@
 import reportBugMobile from './report_bug_mobile.webp';
 import intellijBackend from './intellij_backend.webp';
 import bloggiosLogin from './bloggios_login.webp';
+import mobileUi from './mobile_ui.webp';
+import inforingUi from './inforing_ui.webp';
+import postman from './postman.webp';
 
 export {
     reportBugMobile,
     intellijBackend,
-    bloggiosLogin
+    bloggiosLogin,
+    mobileUi,
+    inforingUi,
+    postman
 }
