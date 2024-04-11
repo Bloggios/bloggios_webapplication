@@ -29,7 +29,12 @@ import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import UnAuthBloggiosBase from "../boundries/UnAuthBloggiosBase";
-import {BLOGGIOS_QAA_HELP, BLOGGIOS_TECH_HELP, SUPPORT_PAGE} from "../../constant/pathConstants";
+import {
+    BLOGGIOS_MESSAGING_HELP, BLOGGIOS_OTHERS_HELP, BLOGGIOS_POST_HELP,
+    BLOGGIOS_QAA_HELP,
+    BLOGGIOS_TECH_HELP,
+    SUPPORT_PAGE
+} from "../../constant/pathConstants";
 
 const SupportPage = () => {
 
@@ -72,17 +77,26 @@ const SupportPage = () => {
                             <span>Q&A</span>
                         </Card>
 
-                        <Card>
+                        <Card
+                            onClick={()=> handleCardClick(BLOGGIOS_POST_HELP)}
+                            isActive={location.pathname.includes(BLOGGIOS_POST_HELP)}
+                        >
                             <img src={posts} alt="Bloggios"/>
                             <span>Post</span>
                         </Card>
 
-                        <Card>
+                        <Card
+                            onClick={()=> handleCardClick(BLOGGIOS_MESSAGING_HELP)}
+                            isActive={location.pathname.includes(BLOGGIOS_MESSAGING_HELP)}
+                        >
                             <img src={messaging} alt="Bloggios"/>
                             <span>Messaging</span>
                         </Card>
 
-                        <Card>
+                        <Card
+                            onClick={()=> handleCardClick(BLOGGIOS_OTHERS_HELP)}
+                            isActive={location.pathname.includes(BLOGGIOS_OTHERS_HELP)}
+                        >
                             <img src={askQuestionWhite} alt="Bloggios"/>
                             <span>Others</span>
                         </Card>

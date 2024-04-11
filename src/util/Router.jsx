@@ -22,7 +22,7 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE,
+    ASK_QUESTION_OUTLET_PAGE, BLOGGIOS_MESSAGING_HELP, BLOGGIOS_OTHERS_HELP, BLOGGIOS_POST_HELP,
     BLOGGIOS_QAA_HELP,
     BLOGGIOS_TECH_HELP,
     CHATS_PAGE,
@@ -86,6 +86,9 @@ const PostSectionOutlet = lazy(()=> import('../container/PostContainer/Outlet/Po
 const PostDetailsOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostDetailsOutlet'));
 const ServicePage = lazy(()=> import('../container/ServiceContainer/ServicePage'));
 const ProductDevelopmentOutlet = lazy(()=> import('../container/ServiceContainer/Outlets/ProductDevelopmentOutlet'));
+const BloggiosMessagingHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosMessagingHelpOutlet'));
+const BloggiosPostHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosPostHelpOutlet'));
+const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosOthersHelpOutlet'));
 
 const Router = () => {
 
@@ -108,6 +111,9 @@ const Router = () => {
                         <Route index element={<DefaultHelpOutlet />} />
                         <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
                         <Route path={BLOGGIOS_QAA_HELP} element={<BloggiosQAAHelpOutlet />} />
+                        <Route path={BLOGGIOS_MESSAGING_HELP} element={<BloggiosMessagingHelpOutlet />} />
+                        <Route path={BLOGGIOS_POST_HELP} element={<BloggiosPostHelpOutlet />} />
+                        <Route path={BLOGGIOS_OTHERS_HELP} element={<BloggiosOthersHelpOutlet />} />
                     </Route>
                     <Route path={SERVICES_PAGE} element={<ServicePage />} >
                         <Route index element={<DefaultServiceOutlet />} />
