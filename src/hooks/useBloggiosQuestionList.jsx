@@ -30,6 +30,7 @@ const useBloggiosQuestionList = (pageNum, type) => {
     const [isError, setIsError] = useState(false);
     const [error, setError] = useState({});
     const [hasNextPage, setHasNextPage] = useState(false);
+    const [noQuestions, setNoQuestions] = useState(0);
     const dispatch = useDispatch();
 
     useEffect(()=> {
@@ -43,6 +44,7 @@ const useBloggiosQuestionList = (pageNum, type) => {
         fetchQuestionList(pageNum, signal)
             .then(data => {
                 setData(prev => [...prev, ...data.object]);
+                setNoQuestions(data?.totalRecordsCount);
                 setHasNextPage(Boolean(data?.object.length));
                 setIsLoading(false);
             }).catch(e => {
@@ -55,7 +57,7 @@ const useBloggiosQuestionList = (pageNum, type) => {
         return ()=> controller.abort();
     }, [pageNum])
 
-    return {isLoading, isError, error, data, hasNextPage};
+    return {isLoading, isError, error, data, hasNextPage, noQuestions};
 };
 
 export default useBloggiosQuestionList;

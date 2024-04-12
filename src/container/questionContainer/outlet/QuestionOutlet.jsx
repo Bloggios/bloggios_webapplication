@@ -36,7 +36,8 @@ const QuestionOutlet = () => {
         isError,
         error,
         data : questionList,
-        hasNextPage
+        hasNextPage,
+        noQuestions
     } = useBloggiosQuestionList(pageNum);
 
     const parseQuestionList = useMemo(()=> {
@@ -53,6 +54,7 @@ const QuestionOutlet = () => {
                         detailsText={question.detailsText}
                         tags={question.tags}
                         dateUpdated={question.dateUpdated}
+                        isResolved={question.isResolved}
                     />
                 )
             }
@@ -67,6 +69,7 @@ const QuestionOutlet = () => {
                     detailsText={question.detailsText}
                     tags={question.tags}
                     dateUpdated={question.dateUpdated}
+                    isResolved={question.isResolved}
                 />
             )
         })
@@ -96,7 +99,7 @@ const QuestionOutlet = () => {
     return (
         <Wrapper>
             <QuestionHeader>
-                <h5>100 Questions</h5>
+                <h5>{`${noQuestions} Questions`}</h5>
                 <ButtonGroup>
                     <button className={filterType === 'recent' ? 'group__active' : ''} onClick={()=> setFilterType('recent')}>
                         Recent

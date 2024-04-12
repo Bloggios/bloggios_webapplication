@@ -28,6 +28,8 @@ import {getFormattedDate} from "../../../service/DateFunctions";
 import IconButton from "../../../component/buttons/IconButton";
 import {CiBookmarkPlus} from "react-icons/ci";
 import {useNavigate} from "react-router-dom";
+import useUserProfile from "../../../hooks/useUserProfile";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
 
 const QuestionCard = ({
     questionId,
@@ -37,12 +39,21 @@ const QuestionCard = ({
     dateCreated,
     imageLink,
     detailsText,
-    isResolved = true
+    isResolved
                       }) => {
 
     const [imageLoadError, setImageLoadError] = useState(false);
     const navigate = useNavigate();
     const {width} = useWindowDimensions();
+    const {
+        isLoading,
+        error,
+        profileData,
+        isSuccess,
+        isError,
+        isPending,
+        refetch
+    } = useUserProfile(userId, true);
 
     const handleImageError = (event) => {
         event.target.src = notFound;
@@ -50,20 +61,37 @@ const QuestionCard = ({
     }
 
     const getDetailsText = () => {
+        console.log(detailsText.length)
         if (detailsText && detailsText.length > 0) {
             const split = detailsText.split('\n');
             return detailsText.length > 250 || split.length > 3;
-
         }
         return false;
     }
 
+    const UserInformation = () => {
+        if (isLoading) {
+            return <FallbackLoader width={'10%'} height={'25px'} thickness={1} />
+        } else if (isSuccess && profileData && !isLoading && !isError) {
+            return (
+                <UserInfo>
+                    <img src={profileData.profileImage ? profileData.profileImage : bgBlackRounded} alt="Bloggios"/>
+                    <span>{profileData.name}</span>
+                </UserInfo>
+            )
+        } else if (isError && !isLoading) {
+            return (
+                <UserInfo>
+                    <img src={bgBlackRounded} alt="Bloggios"/>
+                    <span>Error Occurred ⛔️</span>
+                </UserInfo>
+            )
+        }
+    }
+
     return (
         <Wrapper onClick={()=> navigate(questionId)}>
-            <UserInfo>
-                <img src={bgBlackRounded} alt="Bloggios"/>
-                <span>Rohit Parihar</span>
-            </UserInfo>
+            <UserInformation />
 
             <Main>
                 <QuestionContent>
@@ -72,13 +100,10 @@ const QuestionCard = ({
                     }}>
                         <h2>{title}</h2>
                         <DetailsText style={{
-                            height: getDetailsText() ? '75px' : 'fit-content'
+                            maxHeight: 75
                         }}>
                             {detailsText && detailsText.length > 0 && detailsText}
                         </DetailsText>
-                        <ReadMoreLink onClick={()=> navigate(questionId)}>
-                            Read More
-                        </ReadMoreLink>
                     </QuestionDetails>
 
                     {imageLink && (
