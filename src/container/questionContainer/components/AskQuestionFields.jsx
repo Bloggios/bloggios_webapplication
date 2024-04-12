@@ -29,7 +29,7 @@ import ReactQuill, {Quill} from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from 'quill-image-resize-module-react';
 import '../../../styles/QuillEditorStyles.css'
-import {dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
+import {dispatchError, dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
 import QuestionTag from "./QuestionTag";
 import useQuestionTagList from "../../../hooks/useQuestionTagList";
@@ -40,6 +40,7 @@ import {CgClose} from "react-icons/cg";
 import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import {getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
+import {fetchQuestionTags} from "../../../restservices/QuestionApi";
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
@@ -58,37 +59,42 @@ const AskQuestionFields = () => {
     const [titleData, setTitleData] = useState('');
     const [buttonLoader, setButtonLoader] = useState(false);
     const [submitModal, setSubmitModal] = useState(false);
-    const [timeoutId, setTimeoutId] = useState(null);
     const timeoutRef = useRef(null);
     const [addQuestionData, setAddQuestionData] = useState(null);
-    const {
-        isLoading: tagIsLoading,
-        isError: tagIsError,
-        error: fetchedTagError,
-        data: fetchedTagData,
-        hasNextPage: tagHasNextPage
-    } = useQuestionTagList(pageNum, tagInputValue);
-    const intObserver = useRef();
+    const [isTagLoading, setIsTagLoading] = useState(false);
+    const [fetchedTagData, setFetchedTagData] = useState([]);
+    const [isTagError, setIsTagError] = useState(false);
 
-    const lastTagRef = useCallback(post => {
-        if (tagIsLoading) return;
-        if (intObserver.current) intObserver.current.disconnect();
+    useEffect(()=> {
+        setIsTagLoading(true)
+        const controller = new AbortController();
+        const {signal} = controller;
 
-        intObserver.current = new IntersectionObserver(tags => {
-            if (tags[0].isIntersecting && tagHasNextPage) {
-                setPageNum(prevState => prevState + 1);
-            }
-        });
+        const debounce = setTimeout(() => {
+            fetchQuestionTags(0, tagInputValue.length > 0 ? tagInputValue.trim() : null, '', signal)
+                .then(data => {
+                    setFetchedTagData(data?.object);
+                    setIsTagLoading(false);
+                }).catch(e => {
+                    setIsTagLoading(false);
+                    if (signal.aborted) return;
+                    setIsTagError(true);
+                    dispatchError(dispatch, e);
+            })
+            return ()=> controller.abort();
+        }, 500);
 
-        if (post) intObserver.current.observe(post);
-    }, [tagIsLoading, tagHasNextPage])
+        return ()=> {
+            clearTimeout(debounce);
+            setIsTagLoading(false);
+        };
+    }, [tagInputValue])
 
     useEffect(() => {
         if (tagInputValue.length > 0) {
             setIsSuggestion(true)
         } else {
             setIsSuggestion(false);
-            setPageNum(0)
         }
     }, [tagInputValue]);
 
@@ -106,7 +112,6 @@ const AskQuestionFields = () => {
             if (event.key === 'Escape') {
                 setIsSuggestion(false);
                 setTagInputValue('');
-                setPageNum(0);
             }
         };
         document.addEventListener('keydown', handleKeyPress);
@@ -151,7 +156,6 @@ const AskQuestionFields = () => {
         if (isSuggestion) {
             setIsSuggestion(false);
             setTagInputValue('');
-            setPageNum(0);
         }
     }
 
@@ -214,38 +218,17 @@ const AskQuestionFields = () => {
         }
     }
 
-    // useEffect(() => {
-    //     return () => {
-    //         if (timeoutId) {
-    //             clearTimeout(timeoutId);
-    //         }
-    //     };
-    // }, [timeoutId]); Commented on April 7, 2024 T 21:31 IST, to be removed after testing of Add Question
-
     const tagListData = useCallback(() => {
         if (fetchedTagData.length > 0) {
-            return fetchedTagData.map((tag, i) => {
-                if (!tagIsError && fetchedTagData.length === i + 1) {
-                    return (
-                        <QuestionTag
-                            ref={lastTagRef}
-                            tag={tag.tag}
-                            category={tag.category}
-                            key={i + tag.category}
-                            onClick={() => handleChipClick(tag.tag)}
-                        />
-                    )
-                }
-                return (
-                    <QuestionTag
-                        tag={tag.tag}
-                        category={tag.category}
-                        key={i + tag.category}
-                        onClick={() => handleChipClick(tag.tag)}
-                    />
-                )
-            })
-        } else if (!tagIsLoading && fetchedTagData.length === 0) {
+            return fetchedTagData.map((tag, i) => (
+                <QuestionTag
+                    tag={tag.tag}
+                    category={tag.category}
+                    key={i + tag.category}
+                    onClick={() => handleChipClick(tag.tag)}
+                />
+            ))
+        } else if (!isTagLoading && fetchedTagData.length === 0) {
             return (
                 <NotResultFoundWrapper>
                     <div style={{
@@ -259,14 +242,30 @@ const AskQuestionFields = () => {
                         <VscSearchStop/>
                     </div>
                     <NotFoundMessage>
-                        {tagInputValue.length <= 3
-                            ? 'Minimum 3 Characters Required'
-                            : 'Not Data Found'}
+                        No Data Found
+                    </NotFoundMessage>
+                </NotResultFoundWrapper>
+            )
+        } else if (isTagError) {
+            return (
+                <NotResultFoundWrapper>
+                    <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '50px',
+                        color: 'rgba(255,255,255,0.6)'
+                    }}>
+                        <VscSearchStop/>
+                    </div>
+                    <NotFoundMessage>
+                        Error Occurred
                     </NotFoundMessage>
                 </NotResultFoundWrapper>
             )
         }
-    }, [tagIsLoading, fetchedTagData, lastTagRef, tagIsError, tagInputValue.length])
+    }, [fetchedTagData, isTagLoading, isTagError])
 
     return (
         <>
@@ -348,7 +347,7 @@ const AskQuestionFields = () => {
                                     </IconButton>
                                 </SuggestionHeader>
                                 {tagListData()}
-                                {tagIsLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={2}/>}
+                                {isTagLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={1}/>}
                             </SuggestionsContainer>
                         )}
                     </TagInput>
