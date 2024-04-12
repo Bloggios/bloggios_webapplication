@@ -19,28 +19,6 @@
  */
 
 import React from 'react';
-import {
-    angularService,
-    awsService,
-    azureService,
-    dockerService,
-    elasticsearchService,
-    flutterService,
-    gcpService,
-    githubService,
-    graphqlService,
-    javascriptService,
-    javaService,
-    kafkaService,
-    kubernetesService,
-    mongodbService,
-    nextjsService,
-    nodejsService, oauthService, postgresqlService, postmanService,
-    pythonService,
-    reactService,
-    springService,
-    swiftService
-} from "../../asset/ServicesMarquee";
 import Marquee from "react-fast-marquee";
 import MemoizedHomeMarqueeCard from "../Cards/HomeMarqueeCard";
 import styled from "styled-components";

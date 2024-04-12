@@ -25,53 +25,66 @@ import {colors} from "../../../styles/Theme";
 import {Tooltip} from "react-tooltip";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {getFormattedDate} from "../../../service/DateFunctions";
-import IconButton from "../../../component/buttons/IconButton";
 import {CiBookmarkPlus} from "react-icons/ci";
 import {useNavigate} from "react-router-dom";
 import useUserProfile from "../../../hooks/useUserProfile";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {RiDeleteBin5Line} from "react-icons/ri";
+import {useDispatch, useSelector} from "react-redux";
+import {useMutation} from "@tanstack/react-query";
+import {dispatchError, dispatchSuccessMessage} from "../../../service/functions";
+import {deleteQuestion} from "../../../restservices/QuestionApi";
+import LoaderIconButton from "../../../component/buttons/LoaderIconButton";
 
 const QuestionCard = ({
-    questionId,
-    userId,
-    title,
-    tags,
-    dateCreated,
-    imageLink,
-    detailsText,
-    isResolved
+                          questionId,
+                          userId,
+                          title,
+                          tags,
+                          dateCreated,
+                          imageLink,
+                          detailsText,
+                          isResolved,
+                          refetch
                       }) => {
 
     const [imageLoadError, setImageLoadError] = useState(false);
+    const authUserId = useSelector(state => state.auth.userId);
     const navigate = useNavigate();
     const {width} = useWindowDimensions();
+    const dispatch = useDispatch();
+
     const {
         isLoading,
-        error,
         profileData,
         isSuccess,
         isError,
-        isPending,
-        refetch
     } = useUserProfile(userId, true);
+
+    const deleteQuestionMutation = useMutation({
+        mutationFn: () => deleteQuestion(questionId),
+        onSuccess: () => {
+            refetch();
+            dispatchSuccessMessage(dispatch, 'Question Deleted')
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    });
 
     const handleImageError = (event) => {
         event.target.src = notFound;
         setImageLoadError(true);
     }
 
-    const getDetailsText = () => {
-        console.log(detailsText.length)
-        if (detailsText && detailsText.length > 0) {
-            const split = detailsText.split('\n');
-            return detailsText.length > 250 || split.length > 3;
-        }
-        return false;
+    const handleDeleteClick = (event) => {
+        event.stopPropagation();
+        deleteQuestionMutation.mutate();
     }
 
     const UserInformation = () => {
         if (isLoading) {
-            return <FallbackLoader width={'10%'} height={'25px'} thickness={1} />
+            return <FallbackLoader width={'10%'} height={'25px'} thickness={1}/>
         } else if (isSuccess && profileData && !isLoading && !isError) {
             return (
                 <UserInfo>
@@ -90,8 +103,8 @@ const QuestionCard = ({
     }
 
     return (
-        <Wrapper onClick={()=> navigate(questionId)}>
-            <UserInformation />
+        <Wrapper onClick={() => navigate(questionId)}>
+            <UserInformation/>
 
             <Main>
                 <QuestionContent>
@@ -123,7 +136,7 @@ const QuestionCard = ({
                 <QuestionInfo>
                     {tags && tags.length > 0 && (
                         <Tags>
-                            {tags.map((tag, i)=> (
+                            {tags.map((tag, i) => (
                                 <button key={tag + '_' + i}>
                                     {tag}
                                 </button>
@@ -135,14 +148,32 @@ const QuestionCard = ({
                             {`${getFormattedDate(dateCreated)} ${isResolved ? '· Resolved ✅' : ''} `}
                         </span>
 
-                        <IconButton
-                            tooltipId={'question__save--icon-tooltip'}
-                            tooltipContent={'Save Question'}
-                            fontSize={'25px'}
-                            padding={'6px'}
-                        >
-                            <CiBookmarkPlus />
-                        </IconButton>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: '5px'
+                        }}>
+                            {authUserId === userId && (
+                                <LoaderIconButton
+                                    tooltipId={'question__delete--icon-tooltip'}
+                                    tooltipContent={'Delete Question'}
+                                    fontSize={'25px'}
+                                    padding={'6px'}
+                                    onClick={handleDeleteClick}
+                                    isLoading={deleteQuestionMutation.isPending}
+                                >
+                                    <RiDeleteBin5Line color={'rgb(223,56,56)'}/>
+                                </LoaderIconButton>
+                            )}
+                            <LoaderIconButton
+                                tooltipId={'question__save--icon-tooltip'}
+                                tooltipContent={'Save Question'}
+                                fontSize={'25px'}
+                                padding={'6px'}
+                            >
+                                <CiBookmarkPlus/>
+                            </LoaderIconButton>
+                        </div>
                     </Information>
                 </QuestionInfo>
             </Main>
@@ -156,10 +187,14 @@ const QuestionCard = ({
                         id={'question__save--icon-tooltip'}
                         variant={"light"}
                     />
+                    <Tooltip
+                        id={'question__delete--icon-tooltip'}
+                        variant={"light"}
+                    />
                 </>
             )}
 
-            <Divider />
+            <Divider/>
         </Wrapper>
     );
 };
@@ -171,7 +206,7 @@ const Wrapper = styled.div`
     gap: 10px;
     padding: 20px 20px 10px 20px;
     cursor: pointer;
-    
+
     @media (max-width: 600px) {
         padding: 16px 7px 10px 7px;
     }
@@ -191,14 +226,14 @@ const UserInfo = styled.div`
     flex-direction: row;
     align-items: center;
     gap: 7px;
-    
+
     & > img {
         height: 25px;
         aspect-ratio: 1/1;
         object-fit: cover;
         border-radius: 50%;
     }
-    
+
     & > span {
         ${SpanStyles};
     }
@@ -234,7 +269,7 @@ const QuestionDetails = styled.div`
     gap: 10px;
     letter-spacing: 1px;
     font-family: "Poppins", sans-serif;
-    
+
     & > h2 {
         font-size: clamp(1.25rem, 1.2985rem + -0.2985vw, 1rem);
         font-weight: 600;
@@ -259,7 +294,7 @@ const DetailsText = styled.p`
 const Image = styled.div`
     width: 29%;
     height: auto;
-    
+
     & > img {
         width: 100%;
         object-fit: contain;
@@ -273,7 +308,7 @@ const Tags = styled.div`
     flex-direction: row;
     gap: 4px;
     flex-wrap: wrap;
-    
+
     & > button {
         width: fit-content;
         padding: 2px 7px;
@@ -293,7 +328,7 @@ const Information = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     & > span {
         ${SpanStyles};
     }

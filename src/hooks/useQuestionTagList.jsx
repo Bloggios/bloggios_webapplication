@@ -20,8 +20,6 @@
 
 import {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {dispatchError} from "../service/functions";
-import {fetchQuestionTags} from "../restservices/QuestionApi";
 
 const useQuestionTagList = (page = 0, tag, category) => {
     const [data, setData] = useState([]);

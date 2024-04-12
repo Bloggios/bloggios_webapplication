@@ -18,11 +18,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {memo, Suspense, useEffect} from 'react';
+import React, {memo, Suspense} from 'react';
 import styled from "styled-components";
 import {WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
 import {colors} from "../../../styles/Theme";
-import {bloggiosLogin, intellijBackend} from "../../../asset/webp";
+import {bloggiosLogin} from "../../../asset/webp";
 import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
 import {webDevelopmentData} from "../../../asset/configurations/WebDevelopmentTrackerSelectData";
 import {
@@ -30,22 +30,14 @@ import {
     awsService,
     azureService,
     dockerService,
-    elasticsearchService,
-    flutterService,
-    gcpService,
-    githubService, googleanalyticsService,
+    googleanalyticsService,
     graphqlService,
     javascriptService,
-    javaService,
-    kafkaService,
-    kubernetesService,
-    mongodbService,
     nextjsService,
-    nodejsService, oauthService, postgresqlService, postmanService,
-    pythonService,
-    reactService, reduxService,
-    springService,
-    swiftService, typescriptService
+    nodejsService,
+    reactService,
+    reduxService,
+    typescriptService
 } from "../../../asset/ServicesMarquee";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import SingleMarquee from "../../../component/animations/SingleMarquee";

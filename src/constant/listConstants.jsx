@@ -69,7 +69,9 @@ import {
 import {
     bankingDevelopment,
     bgAccentRounded,
-    ecommerceDevelopment, educationDevelopment, erpDevelopment,
+    ecommerceDevelopment,
+    educationDevelopment,
+    erpDevelopment,
     healthcareDevelopment,
     ottDevelopment
 } from "../asset/svg";

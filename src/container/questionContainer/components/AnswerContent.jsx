@@ -32,15 +32,23 @@ import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import Divider from "../../../component/divider/divider";
 import {SlUserFollow} from "react-icons/sl";
 import {CiBookmarkPlus} from "react-icons/ci";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import LoaderIconButton from "../../../component/buttons/LoaderIconButton";
+import {RiDeleteBin5Line} from "react-icons/ri";
+import {useMutation} from "@tanstack/react-query";
+import {deleteAnswer} from "../../../restservices/QuestionApi";
+import {dispatchError, dispatchSuccessMessage} from "../../../service/functions";
 
 const AnswerContent = ({
                            answer,
-                           questionUserId
+                           questionUserId,
+                           questionId,
+                           refetch
                        }) => {
 
-    const {userId} = useSelector((state)=> state.auth);
+    const {userId} = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const {
@@ -49,9 +57,19 @@ const AnswerContent = ({
         profileData,
         isSuccess,
         isError,
-        isPending,
-        refetch,
+        isPending
     } = useUserProfile(answer?.userId, true);
+
+    const deleteAnswerMutation = useMutation({
+        mutationFn: () => deleteAnswer(questionId, answer?.answerId),
+        onSuccess: () => {
+            refetch();
+            dispatchSuccessMessage(dispatch, 'Answer Deleted')
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    });
 
     const [modifiedHtmlData, setModifiedHtmlData] = useState('');
     const [wrapperRef, wrapperSize] = useComponentSize();
@@ -71,9 +89,9 @@ const AnswerContent = ({
         }
     }, [answer]);
 
-    const RenderUserInfoSection = useCallback(()=> {
+    const RenderUserInfoSection = useCallback(() => {
         if (isLoading && !isSuccess) {
-            return <FallbackLoader width={'10%'} height={'70px'} thickness={2} />
+            return <FallbackLoader width={'10%'} height={'70px'} thickness={2}/>
         } else if (isSuccess && profileData && !isError && !isPending) {
             return (
                 <UserInfoSection>
@@ -82,15 +100,15 @@ const AnswerContent = ({
                         borderRadius={'50%'}
                         image={profileData.profileImage ? profileData.profileImage : bgBlackRounded}
                         fallbackImage={notFound}
-                        onClick={()=> navigate(`/profile/${profileData.userId}`)}
+                        onClick={() => navigate(`/profile/${profileData.userId}`)}
                     />
 
                     <ColumnWrapper
-                        onClick={()=> navigate(`/profile/${profileData.userId}`)}
+                        onClick={() => navigate(`/profile/${profileData.userId}`)}
                         style={{
-                        justifyContent: 'center',
-                        gap: 2
-                    }}>
+                            justifyContent: 'center',
+                            gap: 2
+                        }}>
                         <Heading5>
                             {profileData.name}
                         </Heading5>
@@ -108,11 +126,11 @@ const AnswerContent = ({
                 </UserInfoSection>
             )
         }
-    }, [isLoading, isSuccess, profileData, isError, isPending])
+    }, [isLoading, isSuccess, profileData, isError, isPending, navigate])
 
     return (
         <Wrapper ref={wrapperRef}>
-            <RenderUserInfoSection />
+            <RenderUserInfoSection/>
             <HtmlContent htmlData={modifiedHtmlData} wrapperSize={wrapperSize}/>
 
             <IconsGroup>
@@ -129,7 +147,7 @@ const AnswerContent = ({
                         fontSize={'22px'}
                         padding={'6px'}
                     >
-                        <SlUserFollow />
+                        <SlUserFollow/>
                     </IconButton>
                     {userId === questionUserId && (
                         <AcceptedButton>
@@ -138,15 +156,45 @@ const AnswerContent = ({
                     )}
                 </div>
 
-                <IconButton
-                    fontSize={'25px'}
-                    padding={'6px'}
-                >
-                    <CiBookmarkPlus />
-                </IconButton>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '5px'
+                }}>
+                    {questionUserId === userId && (
+                        <LoaderIconButton
+                            tooltipId={'question__delete--icon-tooltip'}
+                            tooltipContent={'Delete Question'}
+                            fontSize={'25px'}
+                            padding={'6px'}
+                            onClick={() => deleteAnswerMutation.mutate()}
+                            isLoading={deleteAnswerMutation.isPending}
+                        >
+                            <RiDeleteBin5Line color={'rgb(223,56,56)'}/>
+                        </LoaderIconButton>
+                    )}
+                    {profileData?.userId === userId && (
+                        <LoaderIconButton
+                            tooltipId={'question__delete--icon-tooltip'}
+                            tooltipContent={'Delete Question'}
+                            fontSize={'25px'}
+                            padding={'6px'}
+                            onClick={() => deleteAnswerMutation.mutate()}
+                            isLoading={deleteAnswerMutation.isPending}
+                        >
+                            <RiDeleteBin5Line color={'rgb(223,56,56)'}/>
+                        </LoaderIconButton>
+                    )}
+                    <IconButton
+                        fontSize={'25px'}
+                        padding={'6px'}
+                    >
+                        <CiBookmarkPlus/>
+                    </IconButton>
+                </div>
             </IconsGroup>
 
-            <Divider width={'60%'} verticalSpacing={'4px'} color={colors.white20} />
+            <Divider width={'60%'} verticalSpacing={'4px'} color={colors.white20}/>
         </Wrapper>
     );
 };
@@ -211,7 +259,7 @@ const AcceptedButton = styled.button`
     background-color: ${colors.black80};
     border-radius: 10px;
     padding: 5px 10px;
-    
+
     &:hover, &:active {
         color: ${colors.white100};
         background-color: ${colors.black150};

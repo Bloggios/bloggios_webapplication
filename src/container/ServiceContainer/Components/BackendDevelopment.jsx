@@ -19,15 +19,11 @@
  */
 
 import React, {memo, Suspense} from 'react';
-import {
-    BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION,
-    WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION
-} from "../../../constant/ElementIdConstants";
-import {inforingUi, mobileUi, postman} from "../../../asset/webp";
+import {BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
+import {postman} from "../../../asset/webp";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import SingleMarquee from "../../../component/animations/SingleMarquee";
 import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
-import {mobileDevelopmentData} from "../../../asset/configurations/MobileDevelopmentTrackerSelectData";
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import {
@@ -35,21 +31,18 @@ import {
     azureService,
     dockerService,
     elasticsearchService,
-    flutterService, githubService,
-    googleanalyticsService,
+    githubService,
     grafanaService,
-    graphqlService,
     javaService,
     jenkinsService,
-    jiraService, kafkaService,
-    kotlinService,
+    jiraService,
+    kafkaService,
     kubernetesService,
-    mongodbService, oauthService,
+    mongodbService,
+    oauthService,
     postgresqlService,
     postmanService,
-    reactService,
-    springService,
-    swiftService
+    springService
 } from "../../../asset/ServicesMarquee";
 import {backendDevelopmentData} from "../../../asset/configurations/BackendDevelopmentTrackerSelectData";
 import RequestServiceButton from "./RequestServiceButton";

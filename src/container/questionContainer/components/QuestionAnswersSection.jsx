@@ -26,7 +26,9 @@ import {ColumnWrapper} from "../../../styles/StyledComponent";
 
 const QuestionAnswersSection = ({
                                     answers,
-                                    questionUserId
+                                    questionUserId,
+                                    questionId,
+                                    refetch
                                 }) => {
     return (
         <Wrapper>
@@ -38,7 +40,13 @@ const QuestionAnswersSection = ({
                 gap: 40
             }}>
                 {answers.map((answer, index) => (
-                    <AnswerContent answer={answer} key={answer.answerId} questionUserId={questionUserId} />
+                    <AnswerContent
+                        answer={answer}
+                        key={answer.answerId}
+                        questionUserId={questionUserId}
+                        questionId={questionId}
+                        refetch={refetch}
+                    />
                 ))}
             </ColumnWrapper>
         </Wrapper>

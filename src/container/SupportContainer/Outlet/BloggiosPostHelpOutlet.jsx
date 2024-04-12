@@ -19,7 +19,6 @@
  */
 
 import React, {useState} from 'react';
-import {bloggiosTechHelpData} from "../../../asset/configurations/BloggiosTechHelpSupport";
 import Accordion from "../../../component/Accordions/Accordion";
 import styled from "styled-components";
 import {bloggiosPostHelpSupport} from "../../../asset/configurations/BloggiosPostHelpSupport";

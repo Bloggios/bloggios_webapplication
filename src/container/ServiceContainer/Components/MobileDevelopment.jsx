@@ -19,24 +19,27 @@
  */
 
 import React, {memo, Suspense} from 'react';
-import {
-    MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION,
-    WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION
-} from "../../../constant/ElementIdConstants";
-import {bloggiosLogin, inforingUi, mobileUi} from "../../../asset/webp";
+import {MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION} from "../../../constant/ElementIdConstants";
+import {inforingUi, mobileUi} from "../../../asset/webp";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import SingleMarquee from "../../../component/animations/SingleMarquee";
 import BloggiosTrackerSelect from "../../../component/miscellaneous/BloggiosTrackerSelect";
-import {webDevelopmentData} from "../../../asset/configurations/WebDevelopmentTrackerSelectData";
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import {bloggiosWebDevelopment} from "./WebDevelopment";
 import {
-    angularService,
     awsService,
-    azureService, dockerService, flutterService, googleanalyticsService, graphqlService,
-    javascriptService, javaService, jenkinsService, jiraService, kotlinService, nextjsService, nodejsService,
-    reactService, reduxService, swiftService, typescriptService
+    azureService,
+    dockerService,
+    flutterService,
+    googleanalyticsService,
+    graphqlService,
+    javaService,
+    jenkinsService,
+    jiraService,
+    kotlinService,
+    reactService,
+    swiftService
 } from "../../../asset/ServicesMarquee";
 import {mobileDevelopmentData} from "../../../asset/configurations/MobileDevelopmentTrackerSelectData";
 import RequestServiceButton from "./RequestServiceButton";

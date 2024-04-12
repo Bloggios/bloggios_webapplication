@@ -19,7 +19,15 @@
  */
 
 import {authenticatedAxios} from "./baseAxios";
-import {ADD_ANSWER, ADD_QUESTION, FETCH_QUESTION_TAGS, QUESTION_DETAIL, QUESTION_LIST} from "../constant/apiConstants";
+import {
+    ADD_ANSWER,
+    ADD_FAVOURITE_QUESTION_TAGS,
+    ADD_QUESTION,
+    FETCH_QUESTION_TAGS,
+    GET_QUESTION_TAB_TAGS,
+    QUESTION_DETAIL,
+    QUESTION_LIST
+} from "../constant/apiConstants";
 
 export const fetchQuestionTags = (page, tag, category, signal) => {
     return authenticatedAxios.get(FETCH_QUESTION_TAGS, {
@@ -40,12 +48,13 @@ export const addQuestion = (formData) => {
     }).then((response)=> response.data);
 }
 
-export const fetchQuestionList = (page, signal) => {
+export const fetchQuestionList = (page, isResolved, tag) => {
     return authenticatedAxios.get(QUESTION_LIST, {
         params: {
-            page: page
-        },
-        signal: signal
+            page: page,
+            isResolved: isResolved,
+            tag: tag
+        }
     }).then(response => response.data)
 };
 
@@ -63,4 +72,31 @@ export const addAnswer = (formData) => {
             'Content-Type': 'multipart/form-data',
         }
     }).then((response)=> response.data);
+}
+
+export const getQuestionTabBarData = () => {
+    return authenticatedAxios.get(GET_QUESTION_TAB_TAGS)
+        .then((response)=> response.data);
+}
+
+export const addFavouriteQuestionTags = (payload) => {
+    return authenticatedAxios.post(ADD_FAVOURITE_QUESTION_TAGS, payload)
+        .then((response)=> response.data);
+}
+
+export const deleteQuestion = (questionId) => {
+    return authenticatedAxios.delete(ADD_QUESTION, {
+        params: {
+            questionId: questionId,
+        }
+    }).then(response => response.data);
+}
+
+export const deleteAnswer = (questionId, answerId) => {
+    return authenticatedAxios.delete(ADD_ANSWER, {
+        params: {
+            questionId: questionId,
+            answerId: answerId
+        }
+    }).then(response => response.data);
 }

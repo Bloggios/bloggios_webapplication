@@ -11,27 +11,28 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *      
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *      
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
 import React, {useCallback, useEffect} from 'react';
-import styled from "styled-components";
-import {colors} from "../../../styles/Theme";
-import {useInfiniteQuery} from "@tanstack/react-query";
+import {useParams} from "react-router-dom";
 import {fetchQuestionList} from "../../../restservices/QuestionApi";
+import {useInfiniteQuery} from "@tanstack/react-query";
 import QuestionCard from "../components/QuestionCard";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import IconButton from "../../../component/buttons/IconButton";
 import {FiPlusCircle} from "react-icons/fi";
+import styled from "styled-components";
+import {colors} from "../../../styles/Theme";
 
-
-const QuestionOutlet = () => {
+const QuestionTagDetailsOutlet = () => {
 
     const [filterType, setFilterType] = React.useState('recent');
+    const {tag} = useParams();
     const [totalQuestions, setTotalQuestions] = React.useState(0);
 
     const questionListApi = async ({pageParam}) => {
@@ -39,7 +40,7 @@ const QuestionOutlet = () => {
         if (filterType === 'unresolved') {
             isResolved = false;
         }
-        return fetchQuestionList(pageParam - 1, isResolved);
+        return fetchQuestionList(pageParam - 1, isResolved, tag);
     }
 
     const {
@@ -64,7 +65,7 @@ const QuestionOutlet = () => {
 
     useEffect(()=> {
         refetch();
-    }, [filterType])
+    }, [filterType, tag])
 
     useEffect(() => {
         if (questionList) {
@@ -86,7 +87,6 @@ const QuestionOutlet = () => {
                 imageLink={item.imageLink}
                 detailsText={item.detailsText}
                 isResolved={item.isResolved}
-                refetch={refetch}
             />
         ))
     });
@@ -222,4 +222,4 @@ const FetchMoreButtonWrapper = styled.div`
     justify-content: center;
 `;
 
-export default QuestionOutlet;
+export default QuestionTagDetailsOutlet;

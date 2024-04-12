@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -44,7 +44,6 @@ import {dispatchError, dispatchWarningMessage} from "../../service/functions";
 import {colors} from "../../styles/Theme";
 import {POST_PAGE} from "../../constant/pathConstants";
 
-const CommentModel = lazy(() => import("../modal/CommentModel"));
 
 const Posts = React.forwardRef(({
     userId,

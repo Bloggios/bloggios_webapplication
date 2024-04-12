@@ -32,7 +32,6 @@ import '../../../styles/QuillEditorStyles.css'
 import {dispatchError, dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
 import QuestionTag from "./QuestionTag";
-import useQuestionTagList from "../../../hooks/useQuestionTagList";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {VscSearchStop} from "react-icons/vsc";
 import IconButton from "../../../component/buttons/IconButton";
@@ -49,13 +48,11 @@ const AskQuestionFields = () => {
 
     const [titleRef, isTitleFocused] = useIsInputFocused();
     const editorRef = useRef(null);
-    const [tagRef, isTagFocused] = useIsInputFocused();
     const [tagInputValue, setTagInputValue] = useState('');
     const [selectedChips, setSelectedChips] = useState([]);
     const [editorContent, setEditorContent] = useState({});
     const dispatch = useDispatch();
     const [isSuggestion, setIsSuggestion] = useState(false);
-    const [pageNum, setPageNum] = useState(0);
     const [titleData, setTitleData] = useState('');
     const [buttonLoader, setButtonLoader] = useState(false);
     const [submitModal, setSubmitModal] = useState(false);
@@ -335,7 +332,6 @@ const AskQuestionFields = () => {
                             onKeyDown={handleInputKeyDown}
                             placeholder={selectedChips.length === 0 && "Type to search tags"}
                             maxLength={20}
-                            ref={tagRef}
                             readOnly={selectedChips.length > 4}
                         />
                         {isSuggestion && (

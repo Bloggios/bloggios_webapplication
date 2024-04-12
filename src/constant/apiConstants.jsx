@@ -59,3 +59,5 @@ export const QUESTION_LIST = '/question-provider/v1.0/question/list';
 export const QUESTION_DETAIL = '/question-provider/v1.0/question';
 export const ADD_ANSWER = '/question-provider/v1.0/answer';
 export const POST_DETAILS = '/post-provider/v1.0/post';
+export const GET_QUESTION_TAB_TAGS = '/question-provider/v1.0/tags/favourite-tags';
+export const ADD_FAVOURITE_QUESTION_TAGS = '/question-provider/v1.0/tags/add-favourite';

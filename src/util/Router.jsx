@@ -22,7 +22,10 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE,
-    ASK_QUESTION_OUTLET_PAGE, BLOGGIOS_MESSAGING_HELP, BLOGGIOS_OTHERS_HELP, BLOGGIOS_POST_HELP,
+    ASK_QUESTION_OUTLET_PAGE,
+    BLOGGIOS_MESSAGING_HELP,
+    BLOGGIOS_OTHERS_HELP,
+    BLOGGIOS_POST_HELP,
     BLOGGIOS_QAA_HELP,
     BLOGGIOS_TECH_HELP,
     CHATS_PAGE,
@@ -34,7 +37,8 @@ import {
     OAUTH_REDIRECT,
     OTP_PAGE,
     POST_PAGE,
-    PRIVACY_POLICY, PRODUCT_DEVELOPMENT_SERVICE,
+    PRIVACY_POLICY,
+    PRODUCT_DEVELOPMENT_SERVICE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
     PROFILE_POST_OUTLET_PAGE,
@@ -89,6 +93,7 @@ const ProductDevelopmentOutlet = lazy(()=> import('../container/ServiceContainer
 const BloggiosMessagingHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosMessagingHelpOutlet'));
 const BloggiosPostHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosPostHelpOutlet'));
 const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosOthersHelpOutlet'));
+const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionTagDetailsOutlet'));
 
 const Router = () => {
 
@@ -130,6 +135,7 @@ const Router = () => {
                             <Route index element={<QuestionOutlet />} />
                             <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
                             <Route path={':questionId'} element={<QuestionDetailsOutlet />} />
+                            <Route path={'tags/:tag'} element={<QuestionTagDetailsOutlet />} />
                         </Route>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />

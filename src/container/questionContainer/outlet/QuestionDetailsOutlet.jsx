@@ -85,7 +85,9 @@ const QuestionDetailsOutlet = () => {
         isLoading: questionIsLoading,
         isError: questionIsError,
         error: questionError,
-        isSuccess: questionIsSuccess
+        isSuccess: questionIsSuccess,
+        refetch,
+        isRefetching
     } = useQuery({
         queryKey: ['question', questionId],
         queryFn: () => fetchQuestionDetail(questionId),
@@ -159,7 +161,12 @@ const QuestionDetailsOutlet = () => {
 
                         <Divider width={'70%'} verticalSpacing={'10px'}/>
 
-                        <QuestionAnswersSection answers={questionData.answers} questionUserId={questionData.userId} />
+                        <QuestionAnswersSection
+                            answers={questionData.answers}
+                            questionUserId={questionData.userId}
+                            questionId={questionData.questionId}
+                            refetch={refetch}
+                        />
 
                         <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
                             <YourAnswerSection questionId={questionId} />
@@ -171,7 +178,7 @@ const QuestionDetailsOutlet = () => {
     }
 
     const getQuestionDetailsContent = () => {
-        if (questionIsLoading) {
+        if (questionIsLoading || isRefetching) {
             return <FallbackLoader width={'100%'} height={'100%'}/>
         } else if (
             !questionIsLoading &&
