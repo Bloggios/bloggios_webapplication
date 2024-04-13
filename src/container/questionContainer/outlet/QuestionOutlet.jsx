@@ -101,7 +101,7 @@ const QuestionOutlet = () => {
                 <span>Error Occurred</span>
             )
         }
-    }, [isLoading, isFetchingNextPage, isSuccess, questionList, isError, questionContent, error, refetch, isRefetching]);
+    }, [isLoading, isFetchingNextPage, isSuccess, questionList, isError, questionContent, error, isRefetching]);
 
     const getLoadingOrFetchMoreContent = useCallback(()=> {
         if (!isLoading && isFetchingNextPage) {

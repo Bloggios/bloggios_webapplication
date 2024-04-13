@@ -118,6 +118,16 @@ div.wrapper-bg__accent--background {
     background-size: cover;
 }
 
+.span__center-text {
+   text-align: center;
+}
+
+.error__color {
+    color: #FF204E;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+}
+
 @keyframes scroll-down {
     0%,
     100% {

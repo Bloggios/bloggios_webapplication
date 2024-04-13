@@ -61,3 +61,4 @@ export const ADD_ANSWER = '/question-provider/v1.0/answer';
 export const POST_DETAILS = '/post-provider/v1.0/post';
 export const GET_QUESTION_TAB_TAGS = '/question-provider/v1.0/tags/favourite-tags';
 export const ADD_FAVOURITE_QUESTION_TAGS = '/question-provider/v1.0/tags/add-favourite';
+export const FOLLOWER_FOLLOWING_LIST_API = '/user-provider/v1.0/follow-api/follow-list-with-user';
