@@ -21,7 +21,7 @@
 import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
-    ACTIVITY_PAGE,
+    ACTIVITY_PAGE, ADMIN_PAGE,
     ASK_QUESTION_OUTLET_PAGE,
     BLOGGIOS_MESSAGING_HELP,
     BLOGGIOS_OTHERS_HELP,
@@ -58,6 +58,7 @@ import OAuthRedirectHandler from "./OAuthRedirectHandler";
 import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
 import BloggiosTechHelpOutlet from "../container/SupportContainer/Outlet/BloggiosTechHelpOutlet";
 import DefaultServiceOutlet from "../container/ServiceContainer/Outlets/DefaultServiceOutlet";
+import AdminProtectedRoute from "./AdminProtectedRoute";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -94,6 +95,7 @@ const BloggiosMessagingHelpOutlet = lazy(()=> import('../container/SupportContai
 const BloggiosPostHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosPostHelpOutlet'));
 const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosOthersHelpOutlet'));
 const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionTagDetailsOutlet'));
+const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
 
 const Router = () => {
 
@@ -150,6 +152,10 @@ const Router = () => {
                             <Route index element={<PostSectionOutlet />} />
                             <Route path={':postId'} element={<PostDetailsOutlet />} />
                         </Route>
+                    </Route>
+
+                    <Route element={<AdminProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>} >
+                        <Route path={ADMIN_PAGE} element={<AdminPage />} />
                     </Route>
                 </Routes>
             </Suspense>

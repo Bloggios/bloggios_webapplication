@@ -18,20 +18,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Navigate, Outlet, useNavigate} from "react-router-dom";
+import React, {lazy} from 'react';
+import {Navigate, Outlet} from "react-router-dom";
 import {LOGIN_PAGE} from "../constant/pathConstants";
-import PropTypes from "prop-types";
 
-const ProtectedRoute = ({isAuthenticated}) => {
+const ForbiddenPage = lazy(()=> import('../container/catchPages/ForbiddenPage'));
+
+const AdminProtectedRoute = ({isAuthenticated, authorities}) => {
+
+    const roles = ['ROLE_MANAGER', 'ROLE_ADMIN'];
 
     if (!isAuthenticated) {
         return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
+    } else if (!authorities.some(authority => roles.includes(authority))) {
+        return <ForbiddenPage />
     }
     return <Outlet />
-}
+};
 
-ProtectedRoute.propTypes = {
-    isAuthenticated: PropTypes.bool
-}
-
-export default ProtectedRoute;
+export default AdminProtectedRoute;

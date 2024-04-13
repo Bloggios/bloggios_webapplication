@@ -27,6 +27,7 @@ import {checkFollowing, followUser, unfollowUser} from "../../restservices/follo
 import {setSnackbar} from "../../state/snackbarSlice";
 import {setIsCreated} from "../../state/isCreatedSlice";
 import {useNavigate} from "react-router-dom";
+import {bgBlackRounded} from "../../asset/svg";
 
 const SearchUserSmallComponent = ({
                                       name,
@@ -106,7 +107,7 @@ const SearchUserSmallComponent = ({
             }}>
                 <Avatar
                     size={'40px'}
-                    image={image ? image : bloggios_logo}
+                    image={image ? image : bgBlackRounded}
                     borderRadius={'50%'}
                 />
                 <ColumnWrapper>

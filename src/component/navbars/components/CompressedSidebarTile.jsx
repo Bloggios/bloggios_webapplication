@@ -18,8 +18,15 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import React, {useCallback, useEffect} from 'react';
+import {
+    ADMIN_PAGE,
+    CHATS_PAGE,
+    HOME_PAGE,
+    POST_PAGE,
+    QUESTION_PAGE,
+    SETTING_PAGE
+} from "../../../constant/pathConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {FaUserAlt} from "react-icons/fa";
@@ -28,19 +35,41 @@ import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {BsPatchQuestionFill} from "react-icons/bs";
 import {GoHomeFill} from "react-icons/go";
-import {RiChatSmile2Fill} from "react-icons/ri";
+import {RiAdminFill, RiChatSmile2Fill} from "react-icons/ri";
 import {HiPaperAirplane} from "react-icons/hi2";
 
 const CompressedSidebarTile = () => {
 
     const PROFILE_PATH = '/profile/';
-    const ACTIVITY_PATH = '/activity/';
-    const SECURITY_PATH = '/security';
     const SETTING_PATH = '/setting';
-
-    const {userId} = useSelector((state)=> state.auth);
+    const roles = ['ROLE_MANAGER', 'ROLE_ADMIN']
+    const {userId, authorities} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
+
+    useEffect(() => {
+        const roles = ['ROLE_MANAGER', 'ROLE_ADMIN']
+        const some = authorities.every(authority => roles.includes(authority));
+        console.log(some)
+    }, [authorities]);
+
+    const getAdminContent = useCallback(()=> {
+        if (authorities.some(authority => roles.includes(authority))) {
+            return (
+                <TileWrapper>
+                    <TileIconButton
+                        active={window.location.pathname === ADMIN_PAGE}
+                        onClick={() => navigate(ADMIN_PAGE)}
+                    >
+                        <RiAdminFill />
+                    </TileIconButton>
+                    <TooltipContent>
+                        Admin Panel
+                    </TooltipContent>
+                </TileWrapper>
+            )
+        }
+    }, [authorities, navigate])
 
     return (
         <TilesWrapper style={{
@@ -115,6 +144,8 @@ const CompressedSidebarTile = () => {
                 width: '100%',
                 border: '1px dashed rgba(255, 255, 255, 0.2)'
             }}/>
+
+            {getAdminContent()}
 
             <TileWrapper>
                 <TileIconButton

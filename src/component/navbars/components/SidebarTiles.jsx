@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
 import {FaUserAlt} from "react-icons/fa";
 import {IoIosSettings} from "react-icons/io";
@@ -30,10 +30,12 @@ import {BsPatchQuestionFill} from "react-icons/bs";
 import {RiChatSmile2Fill} from "react-icons/ri";
 import {GoHomeFill} from "react-icons/go";
 import {HiPaperAirplane} from "react-icons/hi2";
+import {colors} from "../../../styles/Theme";
+import Divider from "../../divider/divider";
 
 const SidebarTiles = () => {
 
-    const {userId} = useSelector((state)=> state.auth);
+    const {userId, authorities} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
     const profilePath = `/profile/${userId}`;
@@ -84,10 +86,7 @@ const SidebarTiles = () => {
                 <TileSpan>Posts</TileSpan>
             </Tile>
 
-            <div style={{
-                width: '100%',
-                border: '1px dashed rgba(255, 255, 255, 0.2)'
-            }}/>
+            <Divider width={'90%'} color={colors.white20} verticalSpacing={'10px'}/>
 
             <Tile
                 active={window.location.pathname === SETTING_PAGE}

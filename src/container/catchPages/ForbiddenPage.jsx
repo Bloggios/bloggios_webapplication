@@ -18,20 +18,34 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Navigate, Outlet, useNavigate} from "react-router-dom";
-import {LOGIN_PAGE} from "../constant/pathConstants";
-import PropTypes from "prop-types";
+import React, {lazy, Suspense} from 'react';
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import {errorPageList} from "../../constant/listConstants";
+import styled from "styled-components";
 
-const ProtectedRoute = ({isAuthenticated}) => {
+const NotFound = lazy(() => import('../../component/NotFound/NotFound'));
 
-    if (!isAuthenticated) {
-        return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />
-    }
-    return <Outlet />
-}
+const ForbiddenPage = () => {
+    return (
+        <Wrapper>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
+                <NotFound
+                    errorStatus={'403 Forbidden'}
+                    title={'Unauthorized Access'}
+                    message={"You don't have required authorities to access this page"}
+                    list={errorPageList}
+                />
+            </Suspense>
+        </Wrapper>
+    );
+};
 
-ProtectedRoute.propTypes = {
-    isAuthenticated: PropTypes.bool
-}
+const Wrapper = styled.div`
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
-export default ProtectedRoute;
+export default ForbiddenPage;
