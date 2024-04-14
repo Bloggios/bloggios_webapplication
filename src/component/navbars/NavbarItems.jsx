@@ -26,94 +26,100 @@ import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {FaCode} from "react-icons/fa";
 import {notification, notificationActive} from '../../asset/svg';
+import {CgMoreO} from "react-icons/cg";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {Tooltip} from "react-tooltip";
 
 const NavbarItems = () => {
 
     const navigate = useNavigate();
-    const {isAuthenticated} = useSelector((state)=> state.auth);
-    const { snackbarType, message, isSnackbar, path } = useSelector((state) => state.snackbar);
+    const {userId, isAuthenticated} = useSelector((state) => state.auth);
+    const {snackbarType, message, isSnackbar, path} = useSelector((state) => state.snackbar);
 
-    const getNavBarItems = useCallback(()=> {
+    const getNavBarItems = useCallback(() => {
         return (
             isAuthenticated ? (
                 <>
-                {loggedInNavItems.map((item) => (
+                    {loggedInNavItems.map((item) => (
+                        <NavItem
+                            key={item.page}
+                            onClick={() => navigate(item.page)}
+                            active={window.location.pathname === item.page}
+                            data-tooltip-id={item.tooltipId}
+                            data-tooltip-content={item.tooltip}
+                        >
+                            {item.icon}
+                        </NavItem>
+                    ))}
                     <NavItem
-                        key={item.page} tooltip={item.tooltip}
+                        data-tooltip-id={'navitems__more--tooltip'}
+                        data-tooltip-content={'More'}
+                        onClick={() => navigate(`/profile/${userId}`)}
+                    >
+                        <CgMoreO/>
+                    </NavItem>
+                    <NavItem>
+                        {isSnackbar && snackbarType === 'notification' ?
+                            <Icon src={notificationActive} alt="notification"/> :
+                            <Icon src={notification} alt="notification"/>
+                        }
+                    </NavItem>
+                </>
+            ) : (
+                loggedOutNavItems.map((item) => (
+                    <NavItem
+                        data-tooltip-id={item.tooltipId}
+                        data-tooltip-content={item.tooltip}
                         onClick={() => navigate(item.page)}
                         active={window.location.pathname === item.page}
                     >
                         {item.icon}
                     </NavItem>
-                    ))}
-                    <NavItem>
-                        {isSnackbar && snackbarType === 'notification' ?
-                            <Icon src={notificationActive} alt="notification" /> :
-                            <Icon src={notification} alt="notification" />
-                        }
-                    </NavItem>
-                </>
-            ) : (
-                <>
-                    {
-                        loggedOutNavItems.map((item) => (
-                            <TooltipWrapper key={item.page} tooltip={item.tooltip}>
-                                <NavItem
-                                    onClick={() => navigate(item.page)}
-                                    active={window.location.pathname === item.page}
-                                >
-                                    {item.icon}
-                                </NavItem>
-                            </TooltipWrapper>
-                        ))
-                    }
-                    <TooltipWrapper tooltip={'Bloggios Tech'}>
-                        <NavItem
-                            onClick={() => window.open('https://tech.bloggios.com', 'blank')}
-                        >
-                            <FaCode />
-                        </NavItem>
-                    </TooltipWrapper>
-                </>
+                ))
             )
         )
-    }, [isAuthenticated, navigate, isSnackbar, snackbarType])
+    }, [isAuthenticated, navigate, isSnackbar, snackbarType, userId])
 
     return (
-        <ItemsWrapper>
-            {getNavBarItems()}
-        </ItemsWrapper>
+        <>
+            <ItemsWrapper>
+                {getNavBarItems()}
+            </ItemsWrapper>
+            <Tooltip id={'navitems__home--tooltip'} place={'bottom'} variant={'light'} />
+            <Tooltip id={'navitems__services-tooltip'} place={'bottom'} variant={'light'} />
+            <Tooltip id={'navitems__more--tooltip'} place={'bottom'} variant={'light'} />
+        </>
     );
 };
 
 const ItemsWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 5vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5vw;
 `;
 
 const NavItem = styled.div`
-  font-size: 25px;
-  position: relative;
-  cursor: pointer;
-  color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
+    font-size: 25px;
+    position: relative;
+    cursor: pointer;
+    color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
 
-  &::before {
-    content: '';
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
-    background-color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
-    box-shadow: ${(props) => props.active ? '1px 0 20px 4px rgba(66, 88, 255, 0.43)' : 'none'};
-    visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
-    opacity: ${(props) => (props.active ? 1 : 0)};
-    transition: all 250ms ease;
-  }
+    &::before {
+        content: '';
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
+        background-color: ${(props) => (props.active ? '#7688ff' : '#e5e5e5')};
+        box-shadow: ${(props) => props.active ? '1px 0 20px 4px rgba(66, 88, 255, 0.43)' : 'none'};
+        visibility: ${(props) => (props.active ? 'visible' : 'hidden')};
+        opacity: ${(props) => (props.active ? 1 : 0)};
+        transition: all 250ms ease;
+    }
 `;
 
 const Icon = styled.img`

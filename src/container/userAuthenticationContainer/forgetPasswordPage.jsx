@@ -30,7 +30,11 @@ const ForgetPasswordPage = () => {
     useUnauthenticated();
 
     return (
-        <AuthBase>
+        <AuthBase
+            title={'Reset Password'}
+            smallSubTitle={'Forgot password? Enter email to reset. '}
+            longSubTitle={'Forgot password? Enter your email and we\'ll send reset instructions.'}
+        >
             <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'} />}>
                 <ForgetPasswordComponent />
             </Suspense>

@@ -59,6 +59,7 @@ import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
 import BloggiosTechHelpOutlet from "../container/SupportContainer/Outlet/BloggiosTechHelpOutlet";
 import DefaultServiceOutlet from "../container/ServiceContainer/Outlets/DefaultServiceOutlet";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import ProductIdeationOutlet from "../container/ServiceContainer/Outlets/ProductIdeationOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -125,6 +126,7 @@ const Router = () => {
                     <Route path={SERVICES_PAGE} element={<ServicePage />} >
                         <Route index element={<DefaultServiceOutlet />} />
                         <Route path={PRODUCT_DEVELOPMENT_SERVICE} element={<ProductDevelopmentOutlet />} />
+                        <Route path={'product-ideation'} element={<ProductIdeationOutlet />} /> {/* Testing Purpose */}
                     </Route>
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />

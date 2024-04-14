@@ -45,7 +45,7 @@ import {
     MdOutlineContactSupport,
     MdOutlineNotifications
 } from "react-icons/md";
-import {CgProfile, CgWebsite} from "react-icons/cg";
+import {CgMoreO, CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
@@ -68,7 +68,7 @@ import {
 } from "../asset/marquee";
 import {
     bankingDevelopment,
-    bgAccentRounded,
+    bgAccentRounded, bgBlackRounded,
     ecommerceDevelopment,
     educationDevelopment,
     erpDevelopment,
@@ -91,16 +91,16 @@ import {
     visionarySolutions,
     workWithBest
 } from '../asset/whyUs/index';
+import Avatar from "../component/avatars/avatar";
 
 export const loggedInNavItems = [
-    {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
-    {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
-    {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />}
+    {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <FaCode />, tooltipId: 'navitems__services-tooltip'},
 ];
 
 export const loggedOutNavItems = [
-    {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
-    {page: SERVICES_PAGE, tooltip: 'Services', icon: <GrServices />},
+    {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <FaCode />, tooltipId: 'navitems__services-tooltip'},
     {page: CREATE_PAGE, tooltip: 'Create', icon: <GoPlusCircle />},
 ];
 
