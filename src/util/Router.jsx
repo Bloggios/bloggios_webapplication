@@ -70,7 +70,7 @@ const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/
 const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'));
 const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
 const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
-const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
+const SettingPage = lazy(()=> import('../container/settingContainer/SettingPage'));
 const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
 const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
 const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfileAboutOutlet'));
