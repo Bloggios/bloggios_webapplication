@@ -18,64 +18,57 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import FallbackLoader from "../../component/loaders/fallbackLoader";
+import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
 import styled from "styled-components";
-import {colors} from "../../styles/Theme";
-import {Outlet} from "react-router-dom";
+import * as Bg from '../Components/StyledComponent';
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {useDispatch, useSelector} from "react-redux";
+import {bgBlackRounded, defaultCover} from "../../../asset/svg";
+import useIsInputFocused from "../../../hooks/useIsInputFocused";
+import {profileTagsList} from "../../../restservices/profileApi";
+import {dispatchError} from "../../../service/functions";
 
-const SettingWebBar = lazy(() => import('./Components/SettingWebBar'));
+const ProfilePhotoContainer = lazy(()=> import('../Components/ProfilePhotoContainer'));
+const ProfileDataEditFields = lazy(()=> import('../Components/ProfileDataEditFields'));
 
-const SettingWebPage = () => {
+const EditProfileOutlet = () => {
+
     return (
         <Wrapper>
-            <SettingContent>
-                <Outlet />
-            </SettingContent>
+            <Bg.Heading2>
+                Edit Profile
+            </Bg.Heading2>
 
-            <SettingBarContent>
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
-                    <SettingWebBar/>
-                </Suspense>
-            </SettingBarContent>
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'70px'} thickness={2} />}>
+                <ProfilePhotoContainer />
+            </Suspense>
+
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                <ProfileDataEditFields />
+            </Suspense>
+
+            <BloggiosDataFooter>
+
+            </BloggiosDataFooter>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 20px 20px 20px 10px;
-    
-    @media (max-width: 1000px) {
-        padding: 20px 0 20px 10px;
-    }
-`;
-
-const SettingContent = styled.div`
-    width: calc(100% - 310px);
-    height: fit-content;
+    width: 60%;
     display: flex;
     flex-direction: column;
-    border-radius: 16px;
-    background: ${colors.black400};
-    
-    @media (max-width: 1000px) {
-        width: calc(100% - 220px);
+    gap: 16px;
+    padding: 25px 10px;
+    align-self: center;
+
+    @media (max-width: 1600px) {
+        width: 75%;
     }
 `;
 
-const SettingBarContent = styled.div`
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px;
+const BloggiosDataFooter = styled.div`
     
-    @media (max-width: 1000px) {
-        width: 220px;
-    }
 `;
 
-export default SettingWebPage;
+export default EditProfileOutlet;

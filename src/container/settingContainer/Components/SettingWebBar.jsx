@@ -23,20 +23,29 @@ import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import Divider from "../../../component/divider/divider";
 import {FaRegUserCircle} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
+import {blueBadge, goldenBadge} from "../../../asset/svg";
+import {RiVerifiedBadgeFill, RiVerifiedBadgeLine} from "react-icons/ri";
+import {GoVerified} from "react-icons/go";
 
 const settingListItems = [
     {
         id: 1,
         label: 'Edit Profile',
-        icon: <FaRegUserCircle />
+        icon: <FaRegUserCircle />,
+        path: '/setting/edit-profile',
     },
     {
         id: 2,
         label: 'Verification',
-
+        icon: <RiVerifiedBadgeLine />,
+        path: '/setting/verification',
     }
 ]
 const SettingWebBar = () => {
+
+    const navigate = useNavigate();
+
     return (
         <Wrapper>
             <h2>
@@ -46,11 +55,16 @@ const SettingWebBar = () => {
             <Divider width={'90%'} verticalSpacing={'4px'} color={colors.white20} />
 
             <TilesWrapper>
-
-                <Tile>
-                    <FaRegUserCircle />
-                    <span>Edit Profile</span>
-                </Tile>
+                {settingListItems.map((item) => (
+                    <Tile
+                        key={item.id}
+                        isActive={window.location.pathname.includes(item.path)}
+                        onClick={()=> navigate(item.path)}
+                    >
+                        {item.icon}
+                        <span>{item.label}</span>
+                    </Tile>
+                ))}
             </TilesWrapper>
         </Wrapper>
     );
@@ -81,6 +95,7 @@ const TilesWrapper = styled.div`
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    gap: 16px;
 `;
 
 const Tile = styled.div`
@@ -89,8 +104,8 @@ const Tile = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background: transparent;
-    color: ${colors.white80};
+    background-color: ${(props) => (props.isActive ? colors.accent80 : 'transparent')};
+    color: ${(props) => (props.isActive ? colors.white90 : colors.white80)};
     border-radius: 10px;
     padding: 10px;
     transition: all 100ms ease-out;
@@ -99,20 +114,22 @@ const Tile = styled.div`
         font-size: 20px;
     }
     
+    & > img {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        object-fit: cover;
+    }
+    
     & > span {
         font-size: 15px;
         font-family: "Poppins", sans-serif;
         letter-spacing: 1px;
     }
     
-    &:hover {
-        background-color: ${colors.white20};
+    &:hover, &:active {
+        background-color: ${colors.accent100};
         color: ${colors.white100};
-    }
-    
-    &:active {
-        background-color: ${colors.white10};
-        color: ${colors.white80};
     }
 `;
 
