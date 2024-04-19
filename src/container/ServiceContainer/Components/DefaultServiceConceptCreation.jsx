@@ -24,12 +24,14 @@ import {useNavigate} from "react-router-dom";
 import {Card, CardButton, Heading4, Heading6, NfCards, Paragraph1, Paragraph2} from "./DefaultServiceStyledComponents";
 import {FaArrowRightLong} from "react-icons/fa6";
 import styled from "styled-components";
-import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../../constant/ElementIdConstants";
+import {
+    BLOGGIOS_TECH_ENQUIRY_SECTION,
+    PRODUCT_IDEATION_SERVICE_PAGE_SECTION
+} from "../../../constant/ElementIdConstants";
 
 const DefaultServiceConceptCreation = () => {
 
     const {conceptCreation} = ListConfiguration;
-    const navigate = useNavigate();
 
     const handleClick = () => {
         const enquiryForm = document.getElementById(BLOGGIOS_TECH_ENQUIRY_SECTION);
@@ -41,7 +43,7 @@ const DefaultServiceConceptCreation = () => {
     }
 
     return (
-        <Wrapper>
+        <Wrapper id={PRODUCT_IDEATION_SERVICE_PAGE_SECTION}>
             <Heading4 style={{
                 textAlign: 'left',
                 fontWeight: 600

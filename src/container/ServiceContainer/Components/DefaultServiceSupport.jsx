@@ -23,7 +23,10 @@ import ListConfiguration from "../../../asset/configurations/static/BloggiosTech
 import {Card, CardButton, Heading4, Heading6, NfCards, Paragraph1, Paragraph2} from "./DefaultServiceStyledComponents";
 import {FaArrowRightLong} from "react-icons/fa6";
 import styled from "styled-components";
-import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../../constant/ElementIdConstants";
+import {
+    BLOGGIOS_TECH_ENQUIRY_SECTION,
+    TECHNICAL_SUPPORT_SERVICE_PAGE_SECTION
+} from "../../../constant/ElementIdConstants";
 
 const DefaultServiceSupport = () => {
 
@@ -39,7 +42,7 @@ const DefaultServiceSupport = () => {
     }
 
     return (
-        <Wrapper>
+        <Wrapper id={TECHNICAL_SUPPORT_SERVICE_PAGE_SECTION}>
             <Heading4 style={{
                 textAlign: 'left',
                 fontWeight: 600

@@ -37,22 +37,22 @@
                 {
                     "id": "bg__service__l1",
                     "label": "Product Development",
-                    "path": "/sevices/product-development"
+                    "path": "/services/product-development"
                 },
                 {
                     "id": "bg__service__l2",
-                    "label": "Concept Creation",
-                    "path": "/sevices/concept-creation"
+                    "label": "Product Ideation",
+                    "path": "/services#productIdeationServicePageSection"
                 },
                 {
                     "id": "bg__service__l3",
-                    "label": "Tech Training",
-                    "path": "/sevices/support-training"
+                    "label": "Technical Support",
+                    "path": "/services#technicalSupportServicePageSection"
                 },
                 {
                     "id": "bg__service__l4",
-                    "label": "Tech Experts",
-                    "path": "/sevices/tech-experts"
+                    "label": "Tech Training",
+                    "path": "/services#technicalExpertServicePageSection"
                 }
             ]
         },
@@ -67,18 +67,18 @@
                 },
                 {
                     "id": "bg__company__l2",
-                    "label": "About Us",
-                    "path": "/about"
+                    "label": "Bloggios Tech",
+                    "path": "/services"
                 },
                 {
                     "id": "bg__company__l3",
-                    "label": "Blog",
-                    "path": "/blog"
+                    "label": "Report Bug",
+                    "path": "/report-bug"
                 },
                 {
                     "id": "bg__company__l4",
-                    "label": "Contact",
-                    "path": "/contact"
+                    "label": "Support",
+                    "path": "/support"
                 }
             ]
         }

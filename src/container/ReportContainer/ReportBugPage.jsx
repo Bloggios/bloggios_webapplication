@@ -74,7 +74,7 @@ const ReportBugPage = () => {
                         </li>
                         <li>
                             <strong>Describe the Issue: </strong>
-                            n the message text box, provide a comprehensive description of the bug, including all
+                            In the message text box, provide a comprehensive description of the bug, including all
                             relevant details necessary for us to effectively address and rectify the issue.
                         </li>
                         <li>
@@ -122,7 +122,7 @@ const ReportBugPage = () => {
                         </li>
                         <li>
                             <strong>Describe the Issue: </strong>
-                            n the message text box, provide a comprehensive description of the bug, including all relevant details necessary for us to effectively address and rectify the issue.
+                            In the message text box, provide a comprehensive description of the bug, including all relevant details necessary for us to effectively address and rectify the issue.
                         </li>
                         <li>
                             <strong>Submit Your Report: </strong>

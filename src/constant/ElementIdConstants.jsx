@@ -30,3 +30,6 @@ export const WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'webDevelopmentSectio
 export const MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'mobileDevelopmentSection';
 export const BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'backendDevelopmentSection';
 export const INDUSTRY_CARDS_PRODUCT_DEVELOPMENT_SECTION = 'industryCardsProductDevelopmentSection';
+export const PRODUCT_IDEATION_SERVICE_PAGE_SECTION = 'productIdeationServicePageSection';
+export const TECHNICAL_SUPPORT_SERVICE_PAGE_SECTION = 'technicalSupportServicePageSection';
+export const TECHNICAL_EXPERT_SERVICE_PAGE_SECTION = 'technicalExpertServicePageSection';
