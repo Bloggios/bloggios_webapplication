@@ -494,7 +494,7 @@ const SelectStyle = styled.select`
         display: none;
     }
 
-    &:hover, :focus {
+    &:hover, &:focus {
         color: #f5f5f5;
         background: #2a2a2a;
         border: none;

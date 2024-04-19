@@ -51,3 +51,4 @@ export const FORGET_PASSWORD_PAGE = '/forget-password';
 export const POST_PAGE = '/post';
 export const PRODUCT_DEVELOPMENT_SERVICE = 'product-development';
 export const ADMIN_PAGE = '/admin-page';
+export const EDIT_PROFILE_SETTING = 'edit-profile';

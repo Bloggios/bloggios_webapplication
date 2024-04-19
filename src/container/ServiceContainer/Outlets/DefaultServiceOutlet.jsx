@@ -18,11 +18,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, memo, Suspense} from 'react';
+import React, {lazy, memo, Suspense, useEffect} from 'react';
 import styled from "styled-components";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import Divider from "../../../component/divider/divider";
 import {colors} from "../../../styles/Theme";
+import {useLocation} from "react-router-dom";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const DefaultServiceHeader = lazy(()=> import('../Components/DefaultServiceHeader'));
 const DefaultServiceProductDevelopment = lazy(()=> import('../Components/DefaultServiceProductDevelopment'));
@@ -32,6 +34,25 @@ const DefaultServiceSupport = lazy(()=> import('../Components/DefaultServiceSupp
 const DefaultServiceTraining = lazy(()=> import('../Components/DefaultServiceTechnicalTraining'));
 
 const DefaultServiceOutlet = () => {
+
+    const {hash} = useLocation();
+
+    const scrollToSection = () => {
+        if (hash) {
+            const id = hash.substring(1);
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            window.scrollTo(0, 0);
+        }
+    };
+
+    useEffect(() => {
+        scrollToSection();
+    }, [hash]);
+
     return (
         <Wrapper>
 

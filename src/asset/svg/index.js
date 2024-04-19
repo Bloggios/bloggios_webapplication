@@ -38,6 +38,8 @@ import bankingDevelopment from './banking_development.svg';
 import ottDevelopment from './ott_development.svg';
 import educationDevelopment from './education_development.svg';
 import erpDevelopment from './erp_development.svg';
+import blueBadge from './blue_badge.svg';
+import goldenBadge from './golden_badge.svg';
 
 export {
     bgAccentRounded,
@@ -59,5 +61,7 @@ export {
     bankingDevelopment,
     ottDevelopment,
     educationDevelopment,
-    erpDevelopment
+    erpDevelopment,
+    blueBadge,
+    goldenBadge
 };

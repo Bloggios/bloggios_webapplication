@@ -75,12 +75,12 @@ const PrivacyModal = ({
                     <li>
                         <strong>Privacy Policy</strong>
                         &nbsp;
-                        <Link href={PRIVACY_POLICY_PAGE} target={'_blank'}>Bloggios Privacy Policy Details</Link>
+                        <Link href={process.env.REACT_APP_PRIVACY_POLICY} target={'_blank'}>Bloggios Privacy Policy Details</Link>
                     </li>
                     <li>
                         <strong>Terms and Condition</strong>
                         &nbsp;
-                        <Link href={TERMS_AND_CONDITION_PAGE} target={'_blank'}>Bloggios Terms and Conditions Details</Link>
+                        <Link href={process.env.REACT_APP_TERMS_CONDITION} target={'_blank'}>Bloggios Terms and Conditions Details</Link>
                     </li>
                 </UnorderedList>
 

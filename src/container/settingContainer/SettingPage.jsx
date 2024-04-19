@@ -18,8 +18,31 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-export const PROFILE_PATH_MATCHER = '/profile/';
-export const ACTIVITY_PATH_MATCHER = '/activity/';
-export const BLOGGIOS_TECH_LINK = 'https://tech.bloggios.com'
-export const PRIVACY_TERMS_KEY_LOCAL_STORAGE = 'bg__privacy--term-accepted';
+import React, {lazy, Suspense} from 'react';
+import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+
+const SettingWebPage = lazy(()=> import('./SettingWebPage'));
+const SettingMobilePage = lazy(()=> import('./SettingMobilePage'));
+
+const SettingPage = () => {
+
+    const {width} = useWindowDimensions();
+
+    return (
+        <BloggiosSidebarBase>
+            {width > 850 ? (
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
+                    <SettingWebPage />
+                </Suspense>
+            ) : (
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                    <SettingMobilePage />
+                </Suspense>
+            )}
+        </BloggiosSidebarBase>
+    );
+};
+
+export default SettingPage;

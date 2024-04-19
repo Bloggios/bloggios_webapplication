@@ -28,7 +28,7 @@ import {
     BLOGGIOS_POST_HELP,
     BLOGGIOS_QAA_HELP,
     BLOGGIOS_TECH_HELP,
-    CHATS_PAGE,
+    CHATS_PAGE, EDIT_PROFILE_SETTING,
     FORGET_PASSWORD_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
@@ -70,7 +70,7 @@ const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/
 const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'));
 const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
 const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
-const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
+const SettingPage = lazy(()=> import('../container/settingContainer/SettingPage'));
 const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
 const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
 const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfileAboutOutlet'));
@@ -97,6 +97,7 @@ const BloggiosPostHelpOutlet = lazy(()=> import('../container/SupportContainer/O
 const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosOthersHelpOutlet'));
 const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionTagDetailsOutlet'));
 const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
+const EditProfileSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/EditProfileOutlet'));
 
 const Router = () => {
 
@@ -134,7 +135,9 @@ const Router = () => {
                         <Route path={PROFILE_PAGE} element={<ProfilePage />} />
                         <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
                         <Route path={SECURITY_PAGE} element={<SecurityPage />} />
-                        <Route path={SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={SETTING_PAGE} element={<SettingPage />} >
+                            <Route path={EDIT_PROFILE_SETTING} element={<EditProfileSettingOutlet />}/>
+                        </Route>
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >
                             <Route index element={<QuestionOutlet />} />
                             <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
