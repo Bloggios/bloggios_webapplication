@@ -44,7 +44,6 @@ const PrivacyModal = ({
     }
 
     const handleDisagree = () => {
-        window.alert('To proceed, kindly acknowledge our Terms and Privacy Policy');
         dispatchWarningMessage(dispatch, 'To proceed, kindly acknowledge our Terms and Privacy Policy');
     }
 
