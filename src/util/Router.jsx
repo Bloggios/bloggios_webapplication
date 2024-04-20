@@ -98,6 +98,7 @@ const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer
 const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionTagDetailsOutlet'));
 const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
 const EditProfileSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/EditProfileOutlet'));
+const DefaultSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/DefaultSettingOutlet'));
 
 const Router = () => {
 
@@ -136,6 +137,7 @@ const Router = () => {
                         <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
                         <Route path={SECURITY_PAGE} element={<SecurityPage />} />
                         <Route path={SETTING_PAGE} element={<SettingPage />} >
+                            <Route index element={<DefaultSettingOutlet />} />
                             <Route path={EDIT_PROFILE_SETTING} element={<EditProfileSettingOutlet />}/>
                         </Route>
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >

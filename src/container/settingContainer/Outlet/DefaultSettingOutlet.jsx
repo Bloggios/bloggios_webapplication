@@ -18,30 +18,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {Outlet} from "react-router-dom";
+import React from 'react';
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import EditProfileOutlet from "./EditProfileOutlet";
+import SettingListOutlet from "./SettingListOutlet";
 
-const SettingWebPage = lazy(()=> import('./SettingWebPage'));
-const SettingMobilePage = lazy(()=> import('./SettingMobilePage'));
-
-const SettingPage = () => {
+const DefaultSettingOutlet = () => {
 
     const {width} = useWindowDimensions();
 
-    return (
-        <BloggiosSidebarBase>
-            {width > 850 ? (
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
-                    <SettingWebPage />
-                </Suspense>
-            ) : (
-                <Outlet />
-            )}
-        </BloggiosSidebarBase>
-    );
+    return width > 850 ? <EditProfileOutlet /> : <SettingListOutlet />
 };
 
-export default SettingPage;
+export default DefaultSettingOutlet;

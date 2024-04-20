@@ -11,37 +11,21 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
-import FallbackLoader from "../../component/loaders/fallbackLoader";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {Outlet} from "react-router-dom";
+import React from 'react';
 
-const SettingWebPage = lazy(()=> import('./SettingWebPage'));
-const SettingMobilePage = lazy(()=> import('./SettingMobilePage'));
-
-const SettingPage = () => {
-
-    const {width} = useWindowDimensions();
-
+const SettingListOutlet = () => {
     return (
-        <BloggiosSidebarBase>
-            {width > 850 ? (
-                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'}/>}>
-                    <SettingWebPage />
-                </Suspense>
-            ) : (
-                <Outlet />
-            )}
-        </BloggiosSidebarBase>
+        <div>
+            Setting List
+        </div>
     );
 };
 
-export default SettingPage;
+export default SettingListOutlet;

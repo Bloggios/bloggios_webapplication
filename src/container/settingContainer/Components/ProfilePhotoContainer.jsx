@@ -5,13 +5,15 @@ import {ColumnWrapper} from "../../../styles/StyledComponent";
 import * as Bg from "./StyledComponent";
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import {handleImageChange} from "../../../service/functions";
 
 const ProfilePhotoContainer = () => {
 
     const {name, email, profileImage, coverImage, link, profileTag} = useSelector((state)=> state.profile);
     const [isLoading, setIsLoading] = useState(true);
+    const dispatch = useDispatch();
 
     useLayoutEffect(() => {
         if (name && name.length > 0) {
@@ -46,6 +48,13 @@ const ProfilePhotoContainer = () => {
 
             <Button>
                 Change Photo
+                <input
+                    type="file"
+                    accept="image/*"
+                    id="image-input"
+                    style={{display: 'none'}}
+                    onChange={(e) => handleImageChange(e, 'profile', dispatch)}
+                />
             </Button>
         </ProfileContainer>
     );
@@ -72,7 +81,7 @@ const InfoWrapper = styled.div`
     gap: 10px;
 `;
 
-const Button = styled.button`
+const Button = styled.label`
     width: fit-content;
     height: fit-content;
     display: flex;
