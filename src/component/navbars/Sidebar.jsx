@@ -22,11 +22,13 @@ import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
-import {RxSlash} from "react-icons/rx";
 import FallbackLoader from "../loaders/fallbackLoader";
 import IconLabelButton from "../buttons/IconLabelButton";
 import {useNavigate} from "react-router-dom";
 import {initLogout} from "../../service/functions";
+import {TbBackslash} from "react-icons/tb";
+import Divider from "../divider/divider";
+import {colors} from "../../styles/Theme";
 
 const MemoizedSidebarProfileContainer = lazy(()=> import('./components/SidebarProfileContainer'));
 const MemoizedSidebarTiles = lazy(()=> import('./components/SidebarTiles'));
@@ -35,13 +37,13 @@ const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 const Sidebar = ({ref}) => {
 
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
-    const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
+    const {name, bio, email, profileImage} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
-            if (event.key === '/') {
+            if (event.key === '\\') {
                 if (!isSearchBarOpen) {
                     event.preventDefault();
                     setIsSearchBarOpen(true);
@@ -76,14 +78,10 @@ const Sidebar = ({ref}) => {
                         <SearchBarInput onClick={() => setIsSearchBarOpen(!isSearchBarOpen)}>
                             <IoIosSearch fontSize={'16px'}/>
                             <span>Explore Bloggios</span>
-                            <SearchButton><RxSlash/></SearchButton>
+                            <SearchButton><TbBackslash /></SearchButton>
                         </SearchBarInput>
 
-                        <div style={{
-                            width: '100%',
-                            border: '1px dashed rgba(255, 255, 255, 0.2)',
-                            margin: '20px 0'
-                        }}/>
+                        <Divider width={'90%'} color={colors.white20} verticalSpacing={'20px'}/>
 
                         <Suspense fallback={<FallbackLoader height={'250px'} width={'100%'}/>}>
                             <MemoizedSidebarTiles/>

@@ -23,7 +23,14 @@ import styled from "styled-components";
 import {GoHome, GoPlusCircle} from "react-icons/go";
 import {useDispatch, useSelector} from "react-redux";
 import bloggios_logo from '../../../asset/svg/bg_logo_rounded_black.svg'
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {
+    CHATS_PAGE,
+    HOME_PAGE,
+    NOTIFICATIONS_PAGE,
+    REPORT_BUG_PAGE,
+    SETTING_PAGE,
+    SUPPORT_PAGE
+} from "../../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
 import {BsChatDots} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
@@ -31,6 +38,8 @@ import {FaHistory, FaUserAlt} from "react-icons/fa";
 import {IoIosSettings, IoMdLogOut} from "react-icons/io";
 import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";
 import {initLogout} from "../../../service/functions";
+import {BiHelpCircle} from "react-icons/bi";
+import {AiOutlineBug} from "react-icons/ai";
 
 const LoggedInMobileNavItems = () => {
 
@@ -118,6 +127,22 @@ const LoggedInMobileNavItems = () => {
                     >
                         <FaHistory fontSize={'16px'}/>
                         Activity
+                    </DropdownItem>
+
+                    <DropdownItem
+                        onClick={()=> navigate(SUPPORT_PAGE)}
+                        active={window.location.pathname === SUPPORT_PAGE}
+                    >
+                        <BiHelpCircle fontSize={'16px'}/>
+                        Help
+                    </DropdownItem>
+
+                    <DropdownItem
+                        onClick={()=> navigate(REPORT_BUG_PAGE)}
+                        active={window.location.pathname === REPORT_BUG_PAGE}
+                    >
+                        <AiOutlineBug fontSize={'16px'}/>
+                        Report Bug
                     </DropdownItem>
 
                     <DropdownItem

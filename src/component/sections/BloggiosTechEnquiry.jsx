@@ -26,13 +26,14 @@ import {FaGlobe, FaPhoneAlt} from "react-icons/fa";
 import {IoMdMail} from "react-icons/io";
 import SocialLinks from "../animations/SocialLinks";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../constant/ElementIdConstants";
 
 const EnquiryForm = lazy(()=> import("../Forms/EnquiryForm"));
 
 const BloggiosTechEnquiry = () => {
 
     return (
-        <Wrapper className={'wrapper-bg__accent--background'}>
+        <Wrapper className={'wrapper-bg__accent--background'} id={BLOGGIOS_TECH_ENQUIRY_SECTION}>
             <Column className={'enquiry-format__section'}>
                 <div style={{display: 'flex', flexDirection: 'column', gap: 28}}>
                     <Header>

@@ -28,6 +28,8 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import IconButton from "../buttons/IconButton";
 import {FaAngleLeft, FaAngleRight} from "react-icons/fa";
 import {handleDivScroll} from "../../service/commonFunctions";
+import BgTransition from "../animations/BgTransition";
+import {SERVICES_PAGE} from "../../constant/pathConstants";
 
 const BloggiosTechServicesSection = () => {
 
@@ -38,9 +40,18 @@ const BloggiosTechServicesSection = () => {
         <>
             <Divider />
             <Wrapper>
-                <Title>
+                <BgTransition
+                    component={'h2'}
+                    delay={0.1}
+                    style={{
+                        fontSize: 'clamp(1.75rem, 1.223rem + 3.2432vw, 3.25rem)',
+                        fontFamily: "'Poppins', sans-serif",
+                        letterSpacing: '1px',
+                        fontWeight: 600,
+                    }}
+                >
                     What we Offer
-                </Title>
+                </BgTransition>
 
                 {width < 500 && (
                     <IconButtonsGroup>
@@ -72,7 +83,7 @@ const BloggiosTechServicesSection = () => {
                     ))}
                 </Container>
 
-                <Summary>
+                <Summary onClick={()=> navigate(SERVICES_PAGE)}>
                     Explore Services
                 </Summary>
             </Wrapper>

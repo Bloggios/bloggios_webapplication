@@ -3,7 +3,7 @@
     position: relative;
 }
 
-.swiper {
+.bloggios-custom-creative-swiper .swiper {
     width: 100%;
     height: auto;
     display: flex;
@@ -12,7 +12,7 @@
     border-radius: 20px;
 }
 
-.swiper-slide {
+.bloggios-custom-creative-swiper .swiper-slide {
     width: 100%;
     display: flex;
     align-items: center;
@@ -22,8 +22,8 @@
     color: #fff;
 }
 
-.swiper-button-prev,
-.swiper-button-next {
+.bloggios-custom-creative-swiper .swiper-button-prev,
+.bloggios-custom-creative-swiper .swiper-button-next {
     color: #616161 !important;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
@@ -32,16 +32,16 @@
     font-size: 16px;
 }
 
-.swiper-button-prev:after,
-.swiper-button-next:after{
+.bloggios-custom-creative-swiper .swiper-button-prev:after,
+.bloggios-custom-creative-swiper .swiper-button-next:after{
     display: none;
 }
 
-.swiper-pagination {
+.bloggios-custom-creative-swiper .swiper-pagination {
     position: absolute;
 }
 
-.swiper-pagination-bullet {
+.bloggios-custom-creative-swiper .swiper-pagination-bullet {
     width: 8px;
     height: 8px;
     border: 1px solid rgba(255, 255, 255, 0.8);
@@ -54,15 +54,15 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
-.swiper-pagination-bullet-active {
+.bloggios-custom-creative-swiper .swiper-pagination-bullet-active {
     color: #fff;
     background: #4258ff;
 }
 
 @media (max-width: 500px) {
 
-    .swiper-button-prev,
-    .swiper-button-next {
+    .bloggios-custom-creative-swiper .swiper-button-prev,
+    .bloggios-custom-creative-swiper .swiper-button-next {
         color: #616161 !important;
         background-color: rgba(0, 0, 0, 0.1);
         border-radius: 50%;

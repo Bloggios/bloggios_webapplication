@@ -18,14 +18,42 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import FadeModal from "./FadeModal";
+import styled, {css} from "styled-components";
+import {colors} from "../../styles/Theme";
+import * as Bg from '../../styles/InputFieldStyledComponent';
+import {useDispatch, useSelector} from "react-redux";
+import {dispatchSuccessMessage} from "../../service/functions";
 
 const ReportModal = ({
     isModelOpen,
     onClose,
-    data
+    data : reportData
                      }) => {
+
+    const dispatch = useDispatch();
+    const {isAuthenticated} = useSelector((state)=> state.auth);
+    const {name, email} = useSelector((state)=> state.profile);
+
+    const [data, setData] = useState({
+        name: isAuthenticated && name ? name : '',
+        email: isAuthenticated && email ? email : '',
+        message: ''
+    });
+
+    const handleInputChange = (event, property) => {
+        setData(prevState => ({
+            ...prevState, [property] : event.target.value
+        }));
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log({...data, ...reportData});
+        dispatchSuccessMessage(dispatch, 'Bug Reported');
+        onClose();
+    }
 
     return (
         <FadeModal
@@ -33,14 +61,107 @@ const ReportModal = ({
             onClose={onClose}
             height={'fit-content'}
             width={'clamp(250px, 95%, 550px)'}
-            bgColor={'#4258ff'}
+            bgColor={colors.black70}
             padding={'20px'}
             margin={'70px 0 0 0'}
             borderRadius={'20px'}
         >
-            <span>{data && JSON.stringify(data)}</span>
+            <Wrapper>
+                <h4>Report Bug</h4>
+
+                <Form onSubmit={handleSubmit}>
+                    <Bg.Field>
+                        <Bg.Label>
+                            Name
+                        </Bg.Label>
+                        <Bg.Input
+                            type={'text'}
+                            inputMode={'text'}
+                            maxLength={40}
+                            placeholder={'Your Name'}
+                            value={data.name}
+                            onChange={(event) => handleInputChange(event, 'name')}
+                        />
+                    </Bg.Field>
+
+                    <Bg.Field>
+                        <Bg.Label>
+                            Email
+                        </Bg.Label>
+                        <Bg.Input
+                            type={'email'}
+                            inputMode={'email'}
+                            maxLength={40}
+                            placeholder={'Your Email'}
+                            value={data.email}
+                            onChange={(event) => handleInputChange(event, 'email')}
+                        />
+                    </Bg.Field>
+
+                    <Bg.Field>
+                        <Bg.Label>
+                            Message
+                        </Bg.Label>
+                        <Bg.TextArea
+                            rows={4}
+                            spellCheck={false}
+                            maxLength={200}
+                            value={data.message}
+                            onChange={(event) => handleInputChange(event, 'message')}
+                            placeholder={'Please describe issue here'}
+                        />
+                    </Bg.Field>
+
+                    <Button>
+                        Report
+                    </Button>
+                </Form>
+            </Wrapper>
         </FadeModal>
     );
 };
+
+const FlexStyle = css`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const Wrapper = styled.div`
+    ${FlexStyle};
+    
+    & > h4 {
+        font-size: clamp(1.125rem, 0.9521rem + 1.0638vw, 1.75rem);
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: ${colors.white80};
+    }
+`;
+
+const Form = styled.form`
+    ${FlexStyle};
+`;
+
+const Button = styled.button`
+    width: fit-content;
+    padding: 7px 16px;
+    background: ${colors.accent80};
+    color: ${colors.white80};
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(0.75rem, 0.7154rem + 0.2128vw, 0.875rem);
+    letter-spacing: 1px;
+    font-weight: 400;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    align-self: flex-end;
+    
+    &:hover, &:active {
+        background: ${colors.accent100};
+        color: ${colors.white100};
+    }
+`;
 
 export default ReportModal;

@@ -45,7 +45,7 @@ import {
     MdOutlineContactSupport,
     MdOutlineNotifications
 } from "react-icons/md";
-import {CgProfile, CgWebsite} from "react-icons/cg";
+import {CgMoreO, CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
@@ -66,7 +66,15 @@ import {
     socialMedia,
     testing
 } from "../asset/marquee";
-import {bgAccentRounded} from "../asset/svg";
+import {
+    bankingDevelopment,
+    bgAccentRounded, bgBlackRounded,
+    ecommerceDevelopment,
+    educationDevelopment,
+    erpDevelopment,
+    healthcareDevelopment,
+    ottDevelopment
+} from "../asset/svg";
 import {
     BLOGGIOS_TECH_CONTACT_US,
     BLOGGIOS_TECH_SERVICE_TAB,
@@ -83,17 +91,16 @@ import {
     visionarySolutions,
     workWithBest
 } from '../asset/whyUs/index';
+import Avatar from "../component/avatars/avatar";
 
 export const loggedInNavItems = [
-    {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
-    {page: CHATS_PAGE, tooltip: 'Chats', icon: <BsChatDots/>},
-    {page: QUESTION_PAGE, tooltip: 'Q&A', icon: <BsQuestionCircle />},
-    {page: LANDING_PAGE, tooltip: 'Bloggios Tech', icon: <FaCode/>},
+    {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <FaCode />, tooltipId: 'navitems__services-tooltip'},
 ];
 
 export const loggedOutNavItems = [
-    {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>},
-    {page: SERVICES_PAGE, tooltip: 'Services', icon: <GrServices />},
+    {page: LANDING_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
+    {page: SERVICES_PAGE, tooltip: 'Services', icon: <FaCode />, tooltipId: 'navitems__services-tooltip'},
     {page: CREATE_PAGE, tooltip: 'Create', icon: <GoPlusCircle />},
 ];
 
@@ -179,7 +186,7 @@ export const bloggiosTechLinksList = [
         path: 'https://tech.bloggios.com/ecommerce-development'
     },
     {
-        label: 'Software Support',
+        label: 'Software SupportContainer',
         icon: <MdContactSupport />,
         path: 'https://tech.bloggios.com/software-support'
     },
@@ -253,7 +260,7 @@ export const notFoundPageList = [
     },
     {
         id: 3,
-        label: 'Support',
+        label: 'SupportContainer',
         text: 'Need help, please contact support',
         button: 'Learn more',
         icon: <MdOutlineContactSupport />,
@@ -272,7 +279,7 @@ export const errorPageList = [
     },
     {
         id: 3,
-        label: 'Support',
+        label: 'SupportContainer',
         text: 'Need help, please contact support',
         button: 'Learn more',
         icon: <MdOutlineContactSupport />,
@@ -447,7 +454,7 @@ export const whyUsCardListConstants = [
     {
         id: 2,
         icon: techSupport,
-        label: 'Best Tech Support'
+        label: 'Best Tech SupportContainer'
     },
     {
         id: 3,
@@ -509,5 +516,44 @@ export const mainStreamServiceBloggiosTech = [
         label: 'Tech Experts',
         path: '/services/tech-experts',
         text: 'Uncover the perfect candidate by combining technical challenges.'
+    },
+];
+
+export const productDevelopment = [
+    {
+        id: 1,
+        title: 'E-Commerce Development',
+        description: 'Tailor-made software solutions for retail and ecommerce, optimizing customer experiences, managing inventory, and streamlining transactions. Enhance sales, automate processes, and stay ahead of the competition with our comprehensive development services.',
+        icon: ecommerceDevelopment
+    },
+    {
+        id: 2,
+        title: 'Healthcare Management Development',
+        description: 'Efficient software solutions for retail and healthcare management, optimizing operations, patient care, and inventory tracking. Improve customer service, streamline workflows, and ensure compliance with our specialized development expertise.',
+        icon: healthcareDevelopment
+    },
+    {
+        id: 3,
+        title: 'Banking and Finance Development',
+        description: 'Cutting-edge software solutions for banking and finance, enhancing security, transaction speed, and customer experience. Streamline operations, manage assets, and stay compliant with our tailored development services.',
+        icon: bankingDevelopment
+    },
+    {
+        id: 4,
+        title: 'OTT Development',
+        description: 'Empower your OTT platform with our advanced software development solutions. Deliver seamless streaming experiences, personalized content recommendations, and robust user management features to captivate audiences and drive growth.',
+        icon: ottDevelopment
+    },
+    {
+        id: 5,
+        title: 'Education Service Development',
+        description: 'Revolutionize education with our software development solutions. Enhance learning experiences, manage resources efficiently, and facilitate remote education. From e-learning platforms to student management systems, we\'ve got you covered.',
+        icon: educationDevelopment
+    },
+    {
+        id: 6,
+        title: 'ERP Development',
+        description: 'Maximize efficiency with our ERP development solutions. Streamline business processes, integrate operations, and enhance decision-making with real-time insights. Tailored to your needs for seamless enterprise management.',
+        icon: erpDevelopment
     },
 ]

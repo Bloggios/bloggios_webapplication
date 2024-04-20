@@ -23,30 +23,33 @@ import styled, {css} from "styled-components";
 import {BiPlus} from "react-icons/bi";
 import {FaChevronLeft, FaChevronRight} from "react-icons/fa";
 import {handleDivScroll} from "../../service/commonFunctions";
+import {useQuery} from "@tanstack/react-query";
+import {getQuestionTabBarData} from "../../restservices/QuestionApi";
+import FallbackLoader from "../loaders/fallbackLoader";
+import FavouriteTagsModel from "../modal/FavouriteTagsModel";
+import {useNavigate} from "react-router-dom";
 
 const QuestionsTabBar = () => {
 
-    const dummyList = [
-        "Following",
-        "Software Engineering",
-        "Java",
-        "React",
-        "Politics",
-        "Flutter",
-        "Javascript",
-        "Node.js",
-        "Rust",
-        "Ruby on Rails",
-        "Spring Boot",
-        "OAuth2.0",
-        "Angular"
-    ];
-
+    const [isModelOpen, setIsModelOpen] = useState(false);
+    const navigate = useNavigate();
     const tabBarRef = useRef(null);
     const [isScrollButton, setIsScrollButton] = useState({
         right: true,
         left: false
     });
+
+    const {
+        isLoading,
+        isSuccess,
+        data,
+        isError,
+        refetch
+    } = useQuery({
+        queryKey: ['questionTabBarData'],
+        queryFn: getQuestionTabBarData,
+        staleTime: 700000
+    })
 
     useEffect(() => {
         const container = tabBarRef.current;
@@ -67,30 +70,53 @@ const QuestionsTabBar = () => {
         };
     }, []);
 
-    return (
-        <Wrapper>
-            <TabBar id={"questionTabBar"} ref={tabBarRef}>
-                <IconWrapper>
-                    <BiPlus />
-                </IconWrapper>
-                {dummyList.map((item, index)=> (
-                    <TabSpan key={index}>
+    const TabListContent = () => {
+        if (isLoading) {
+            return <FallbackLoader width={'100%'} height={'40px'} thickness={1}/>
+        } else if (isSuccess && data) {
+            return (
+                data?.tags.map((item, index) => (
+                    <TabSpan key={item.split(' ')[0] + index} onClick={()=> navigate(`/question/tags/${item}`)}>
                         {item}
                     </TabSpan>
-                ))}
-            </TabBar>
-            {isScrollButton.right && (
-                <RightButton onClick={()=> handleDivScroll('right', 'questionTabBar')}>
-                    <FaChevronRight />
-                </RightButton>
-            )}
+                ))
+            )
+        } else if (isError && !isLoading) {
+            return <span>Error Occurred</span>
+        }
+    }
 
-            {isScrollButton.left && (
-                <LeftButton onClick={()=> handleDivScroll('left', 'questionTabBar')}>
-                    <FaChevronLeft />
-                </LeftButton>
+    return (
+        <>
+            <Wrapper>
+                <TabBar id={"questionTabBar"} ref={tabBarRef}>
+                    <IconWrapper onClick={()=> setIsModelOpen(true)}>
+                        <BiPlus/>
+                    </IconWrapper>
+                    <TabListContent/>
+                </TabBar>
+                {isScrollButton.right && (
+                    <RightButton onClick={() => handleDivScroll('right', 'questionTabBar')}>
+                        <FaChevronRight/>
+                    </RightButton>
+                )}
+
+                {isScrollButton.left && (
+                    <LeftButton onClick={() => handleDivScroll('left', 'questionTabBar')}>
+                        <FaChevronLeft/>
+                    </LeftButton>
+                )}
+            </Wrapper>
+
+            {isModelOpen && (
+                <FavouriteTagsModel
+                    isModelOpen={isModelOpen}
+                    onClose={()=> setIsModelOpen(false)}
+                    data={data ? data : []}
+                    refetch={refetch}
+                />
             )}
-        </Wrapper>
+        </>
     );
 };
 
@@ -109,7 +135,7 @@ const TabBar = styled.div`
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -127,12 +153,12 @@ const IconWrapper = styled.div`
     touch-action: manipulation;
     -ms-touch-action: manipulation;
     color: rgba(255, 255, 255, 0.7);
-    
+
     &:hover {
         background-color: rgba(255, 255, 255, 0.08);
         color: rgba(255, 255, 255, 1);
     }
-    
+
     &:active {
         background-color: rgba(255, 255, 255, 0.04);
         color: rgba(255, 255, 255, 0.8);
@@ -176,11 +202,11 @@ const ScrollButton = css`
     cursor: pointer;
     touch-action: manipulation;
     -ms-touch-action: manipulation;
-    
+
     &:hover {
         color: rgba(255, 255, 255, 1);
     }
-    
+
     &:active {
         color: rgba(255, 255, 255, 0.8);
     }

@@ -74,6 +74,11 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
         [dispatch, isFollowing, userId]
     );
 
+    const handleChatNavigate = (event) => {
+        event.stopPropagation();
+        navigate(`/chats/${userId}`)
+    }
+
     return (
             <Wrapper onClick={()=> navigate('/profile/' + userId)} key={userId}>
                 <RowWrapper>
@@ -90,7 +95,7 @@ const SmallProfileCard = ({ bio, name, email, image, userId }) => {
 
                 <ButtonsWrapper>
                     <ViewProfile onClick={handleFollowing}>{isFollowing ? 'Unfollow' : 'Follow'}</ViewProfile>
-                    <Message>Message</Message>
+                    <Message onClick={handleChatNavigate}>Message</Message>
                 </ButtonsWrapper>
             </Wrapper>
     );

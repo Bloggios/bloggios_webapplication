@@ -25,6 +25,7 @@ import {
     DELETE_POST,
     FETCH_POST_TAGS,
     LIKE_COMMENT_COUNT,
+    POST_DETAILS,
     POST_LIST,
     USER_POSTS
 } from "../constant/apiConstants";
@@ -91,4 +92,9 @@ export const getLikeCommentCount = (postId) => {
             "postId": postId
         }
     }).then((response)=> response.data);
+}
+
+export const getPostDetails = (postId) => {
+    return authenticatedAxios.get(`${POST_DETAILS}/${postId}`)
+        .then((response)=> response);
 }

@@ -18,18 +18,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY = 'bloggiosTechIntroductionSectionSummary';
-const BLOGGIOS_TECH_SERVICE_TAB = 'bloggiosTechServiceTab';
-const BLOGGIOS_TECH_WHY_BLOGGIOS = 'bloggiosTechWhyBloggios';
-const BLOGGIOS_TECH_TECH_STACK = 'bloggiosTechTechStack';
-const BLOGGIOS_TECH_CONTACT_US = 'bloggiosTechContactUs';
-const BLOGGIOS_TECH_INTRODUCTION_SECTION = 'bloggiosTechIntroductionSection'
-
-export {
-    BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY,
-    BLOGGIOS_TECH_SERVICE_TAB,
-    BLOGGIOS_TECH_WHY_BLOGGIOS,
-    BLOGGIOS_TECH_TECH_STACK,
-    BLOGGIOS_TECH_CONTACT_US,
-    BLOGGIOS_TECH_INTRODUCTION_SECTION
-}
+export const BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY = 'bloggiosTechIntroductionSectionSummary';
+export const BLOGGIOS_TECH_SERVICE_TAB = 'bloggiosTechServiceTab';
+export const BLOGGIOS_TECH_WHY_BLOGGIOS = 'bloggiosTechWhyBloggios';
+export const BLOGGIOS_TECH_TECH_STACK = 'bloggiosTechTechStack';
+export const BLOGGIOS_TECH_CONTACT_US = 'bloggiosTechContactUs';
+export const BLOGGIOS_TECH_INTRODUCTION_SECTION = 'bloggiosTechIntroductionSection';
+export const BLOGGIOS_TECH_ENQUIRY_SECTION = 'bloggiosTechEnquirySection';
+export const POST_DETAILS_COMMENT_LIST_SECTION = 'postDetailsCommentListSection';
+export const WEB_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'webDevelopmentSection';
+export const MOBILE_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'mobileDevelopmentSection';
+export const BACKEND_DEVELOPMENT_PRODUCT_DEVELOPMENT_SECTION = 'backendDevelopmentSection';
+export const INDUSTRY_CARDS_PRODUCT_DEVELOPMENT_SECTION = 'industryCardsProductDevelopmentSection';
+export const PRODUCT_IDEATION_SERVICE_PAGE_SECTION = 'productIdeationServicePageSection';
+export const TECHNICAL_SUPPORT_SERVICE_PAGE_SECTION = 'technicalSupportServicePageSection';
+export const TECHNICAL_EXPERT_SERVICE_PAGE_SECTION = 'technicalExpertServicePageSection';

@@ -18,15 +18,64 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
+import React, {lazy, Suspense} from 'react';
+import FallbackLoader from "../../component/loaders/fallbackLoader";
+import styled from "styled-components";
+import {colors} from "../../styles/Theme";
+import {Outlet} from "react-router-dom";
 
-const SettingPage = () => {
+const SettingWebBar = lazy(() => import('./Components/SettingWebBar'));
+
+const SettingWebPage = () => {
     return (
-        <BloggiosSidebarBase>
+        <Wrapper>
+            <SettingContent>
+                <Outlet />
+            </SettingContent>
 
-        </BloggiosSidebarBase>
+            <SettingBarContent>
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'}/>}>
+                    <SettingWebBar/>
+                </Suspense>
+            </SettingBarContent>
+        </Wrapper>
     );
 };
 
-export default SettingPage;
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 20px 20px 10px;
+    
+    @media (max-width: 1000px) {
+        padding: 20px 0 20px 10px;
+    }
+`;
+
+const SettingContent = styled.div`
+    width: calc(100% - 310px);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    background: ${colors.black400};
+    
+    @media (max-width: 1000px) {
+        width: calc(100% - 220px);
+    }
+`;
+
+const SettingBarContent = styled.div`
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    
+    @media (max-width: 1000px) {
+        width: 220px;
+    }
+`;
+
+export default SettingWebPage;

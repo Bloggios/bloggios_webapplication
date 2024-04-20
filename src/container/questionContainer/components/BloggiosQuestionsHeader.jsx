@@ -77,6 +77,7 @@ const BloggiosQuestions = styled.div`
     
     @media (max-width: 600px) {
         aspect-ratio: 16/5;
+        border-radius: 16px;
     }
 
     @media (max-width: 450px) {
@@ -133,7 +134,7 @@ const BloggiosQuestionMain = styled.div`
 
     @media (max-width: 400px) {
         flex-direction: column;
-        padding: 10px 20px;
+        padding: 10px 7px;
         gap: 20px;
         border-radius: 25px;
     }

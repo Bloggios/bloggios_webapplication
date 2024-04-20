@@ -1,0 +1,10 @@
+{
+  apps : [
+    {
+      name      : "bloggios-uat",
+      script    : "npx",
+      interpreter: "none",
+      args: "serve -s build -p 2005"
+    }
+  ]
+}

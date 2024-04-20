@@ -51,7 +51,7 @@ const ChatPage = () => {
 
 const Wrapper = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     flex-direction: row;
     padding: 20px 20px 20px 10px;
@@ -63,7 +63,8 @@ const Wrapper = styled.div`
 `;
 
 const LeftSection = styled.div`
-    flex: 3;
+    max-width: 75%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -74,16 +75,26 @@ const LeftSection = styled.div`
     user-select: none;
     background-color: ${colors.black400};
     padding: 20px;
+    
+    @media (max-width: 700px) {
+        height: calc(100vh - 160px);
+    }
+    
+    @media (max-width: 1050px) {
+        max-width: 100%;
+        width: 100%;
+    }
 `;
 
 const RightSection = styled.div`
-    flex: 1;
+    max-width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
 
     @media (max-width: 1050px) {
         display: none;
+        max-width: none;
     }
 `;
 

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Avatar from "../avatars/avatar";
 import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import styled from "styled-components";
@@ -40,11 +40,10 @@ import {getFormattedDate} from "../../service/DateFunctions";
 import {handlePostDelete} from "../../service/postApiFunctions";
 import SingleColorLoader from "../loaders/SingleColorLoader";
 import {addPostLike, removePostLike} from "../../restservices/likeApi";
-import {dispatchError} from "../../service/functions";
-import FallbackLoader from "../loaders/fallbackLoader";
+import {dispatchError, dispatchWarningMessage} from "../../service/functions";
 import {colors} from "../../styles/Theme";
+import {POST_PAGE} from "../../constant/pathConstants";
 
-const CommentModel = lazy(() => import("../modal/CommentModel"));
 
 const Posts = React.forwardRef(({
     userId,
@@ -56,17 +55,13 @@ const Posts = React.forwardRef(({
 }, ref) => {
 
     const [isShown, setIsShown] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
     const { width } = useWindowDimensions();
     const id = useSelector((state) => state.auth.userId);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
-    const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
-    const toggleReadMore = () => {
-        setIsExpanded(!isExpanded);
-    };
+    const postDetails = `${POST_PAGE}/${postId}`;
 
     const fetchPostUser = async () => {
         const response = await getUserProfile(userId);
@@ -93,16 +88,21 @@ const Posts = React.forwardRef(({
         }
     });
 
-    const handleLike = () => {
-        if (likeCommentCount.isLike) {
-            removeLikeMutation.mutate();
+    const handleLike = (event) => {
+        event.stopPropagation();
+        if (likeCommentCount && !lcIsLoading && !lcIsError) {
+            if (likeCommentCount.isLike) {
+                removeLikeMutation.mutate();
+            } else {
+                addLikeMutation.mutate();
+            }
         } else {
-            addLikeMutation.mutate();
+            dispatchWarningMessage(dispatch, 'Wait')
         }
     }
 
     const getLikeCommentCountResponse = async () => {
-        return await getLikeCommentCount(postId);
+        return getLikeCommentCount(postId);
     }
 
     const {
@@ -176,7 +176,7 @@ const Posts = React.forwardRef(({
         } else {
             return <FaRegHeart />
         }
-    }, [lcIsLoading, removeLikeMutation.isPending, addLikeMutation.isPending, lcIsSuccess, likeCommentCount])
+    }, [lcIsLoading, removeLikeMutation, addLikeMutation, lcIsSuccess, likeCommentCount])
 
     const getPostFooter = useCallback(() => {
         if (lcIsLoading) {
@@ -195,8 +195,8 @@ const Posts = React.forwardRef(({
                         <IconButton onClick={handleLike}>
                             {getLikeIcon()}
                         </IconButton>
-                        <IconButton onClick={() => setIsCommentBoxOpen(!isCommentBoxOpen)}>
-                            <FaRegCommentDots />
+                        <IconButton>
+                            <FaRegCommentDots onClick={()=> navigate(postDetails)} />
                         </IconButton>
                         <IconButton>
                             <IoShareSocialOutline />
@@ -212,7 +212,7 @@ const Posts = React.forwardRef(({
                             <FaRegHeart />
                         </IconButton>
                         <IconButton>
-                            <FaRegCommentDots />
+                            <FaRegCommentDots onClick={()=> navigate(postDetails)} />
                         </IconButton>
                         <IconButton>
                             <IoShareSocialOutline />
@@ -221,7 +221,7 @@ const Posts = React.forwardRef(({
                 </PostFooter>
             )
         }
-    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, isCommentBoxOpen, setIsCommentBoxOpen, getLikeIcon])
+    }, [lcIsError, lcIsLoading, lcIsSuccess, lcError, likeCommentCount, getLikeIcon, navigate])
 
     const getNameContent = useCallback(() => {
         if (isLoading) {
@@ -283,7 +283,10 @@ const Posts = React.forwardRef(({
                     {getNameContent()}
                 </LogoNameWrapper>
 
-                <OptionsMenu ref={dropdownRef} onClick={() => setIsShown(!isShown)}>
+                <OptionsMenu ref={dropdownRef} onClick={(event) => {
+                    event.stopPropagation();
+                    setIsShown(!isShown)
+                }}>
                     <SlOptionsVertical />
                     <DropdownWrapper style={{
                         opacity: isShown ? 1 : 0,
@@ -311,25 +314,30 @@ const Posts = React.forwardRef(({
             </PostHeader>
 
             {postBody && (
-                <PostBodyWrapper style={{
-                    margin: imagesList ? '20px 0' : '20px 0 0 0'
+                <PostBodyWrapper
+                    onClick={()=> navigate(postDetails)}
+                    style={{
+                    margin: imagesList ? '20px 0' : '20px 0 0 0',
+                        cursor: 'pointer',
                 }}>
                     <TextContainer dangerouslySetInnerHTML={{
                         __html: postBody
                     }} style={{
-                        height: isExpanded ? 'auto' : '65px'
+                        height: '65px'
                     }}>
                     </TextContainer>
                     {getReadMoreValue() && (
-                        <ReadMoreButton onClick={toggleReadMore}>
-                            {isExpanded ? 'Read Less' : 'Read More'}
+                        <ReadMoreButton>
+                            Read More
                         </ReadMoreButton>
                     )}
                 </PostBodyWrapper>
             )}
 
             {imagesList && (
-                <ImageSwiperWrapper style={{
+                <ImageSwiperWrapper
+                onClick={(event)=> event.stopPropagation()}
+                    style={{
                     marginTop: !postBody && '20px'
                 }}>
                     <ImagesSwiper swiperItems={imagesList} />
@@ -343,25 +351,12 @@ const Posts = React.forwardRef(({
             </PostEntriesWrapper>
 
             {getPostFooter()}
-
-            {isCommentBoxOpen && (
-                <Suspense fallback={<FallbackLoader height={'200px'} width={'100%'} />}>
-                    <CommentModel
-                        name={userData.name}
-                        postId={postId}
-                        refetch={refetchLikeComment}
-                        postUserId={userId}
-                        isModalOpen={isCommentBoxOpen}
-                        closeModal={() => setIsCommentBoxOpen(false)}
-                    />
-                </Suspense>
-            )}
         </>
     );
 
     return ref
-        ? <Wrapper ref={ref}>{postJsxBody}</Wrapper>
-        : <Wrapper>{postJsxBody}</Wrapper>;
+        ? <Wrapper title={`Click to see ${userData && userData.name + "'s"} post`} ref={ref}>{postJsxBody}</Wrapper>
+        : <Wrapper title={`Click to see ${userData && userData.name + "'s"} post`} >{postJsxBody}</Wrapper>;
 });
 
 const Wrapper = styled.div`
@@ -498,7 +493,7 @@ const PostBodyWrapper = styled.div`
 
 const ReadMoreButton = styled.button`
     border: none;
-    background: linear-gradient(to right, rgba(39, 39, 39, 0.5), rgba(39, 39, 39, 0.8), rgba(39, 39, 39, 1));
+    background: transparent;
     color: #007bff;
     cursor: pointer;
     font-size: 14px;
@@ -514,6 +509,11 @@ const TextContainer = styled.div`
     line-height: 22px;
     font-weight: 300;
     white-space: pre-line;
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -webkit-hyphens: auto;
+    word-wrap: break-word;
 
     @media (max-width: 500px) {
         font-size: 14px;
@@ -602,10 +602,6 @@ const PostEntriesWrapper = styled.span`
     letter-spacing: 1px;
     margin-left: 10px;
     display: flex;
-`;
-
-const Footer = styled.div`
-
 `;
 
 export default Posts;

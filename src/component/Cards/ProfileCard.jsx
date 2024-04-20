@@ -118,7 +118,7 @@ const CoverImageWrapper = styled.img`
   width: 100%;
   height: 140px;
   object-fit: cover;
-  object-position: left center;
+  object-position: center center;
 `;
 
 const FollowWrapper = styled.div`

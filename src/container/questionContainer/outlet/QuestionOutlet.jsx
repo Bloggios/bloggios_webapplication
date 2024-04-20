@@ -18,14 +18,208 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
+import styled from "styled-components";
+import {colors} from "../../../styles/Theme";
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {fetchQuestionList} from "../../../restservices/QuestionApi";
+import QuestionCard from "../components/QuestionCard";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import IconButton from "../../../component/buttons/IconButton";
+import {FiPlusCircle} from "react-icons/fi";
+
 
 const QuestionOutlet = () => {
+
+    const [filterType, setFilterType] = React.useState('recent');
+    const [totalQuestions, setTotalQuestions] = React.useState(0);
+
+    const questionListApi = async ({pageParam}) => {
+        let isResolved = undefined;
+        if (filterType === 'unresolved') {
+            isResolved = false;
+        }
+        return fetchQuestionList(pageParam - 1, isResolved);
+    }
+
+    const {
+        data: questionList,
+        error,
+        isError,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        isLoading,
+        isSuccess,
+        refetch,
+        isRefetching
+    } = useInfiniteQuery({
+        queryKey: ['questionsList'],
+        queryFn: questionListApi,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages) => {
+            return lastPage?.object?.length ? allPages?.length + 1 : undefined
+        }
+    })
+
+    useEffect(()=> {
+        refetch();
+    }, [filterType])
+
+    useEffect(() => {
+        if (questionList) {
+            questionList.pages.map((data) => {
+                setTotalQuestions(data?.totalRecordsCount)
+            })
+        }
+    }, [questionList]);
+
+    const questionContent = questionList?.pages.map((value) => {
+        return value?.object.map((item) => (
+            <QuestionCard
+                key={item.questionId}
+                questionId={item.questionId}
+                userId={item.userId}
+                title={item.title}
+                tags={item.tags}
+                dateCreated={item.dateCreated}
+                imageLink={item.imageLink}
+                detailsText={item.detailsText}
+                isResolved={item.isResolved}
+                refetch={refetch}
+            />
+        ))
+    });
+
+    const getQuestionList = useCallback(()=> {
+        if ((isLoading && !isFetchingNextPage) || isRefetching) {
+            return <FallbackLoader width={'100%'} height={'100px'} />
+        } else if (isSuccess && questionList && !isLoading && !isError) {
+            return questionContent;
+        } else if (isError && error) {
+            return (
+                <span>Error Occurred</span>
+            )
+        }
+    }, [isLoading, isFetchingNextPage, isSuccess, questionList, isError, questionContent, error, isRefetching]);
+
+    const getLoadingOrFetchMoreContent = useCallback(()=> {
+        if (!isLoading && isFetchingNextPage) {
+            return <FallbackLoader width={'100%'} height={'70px'} />
+        } else if (!isLoading && hasNextPage) {
+            return (
+                <FetchMoreButtonWrapper>
+                    <IconButton onClick={fetchNextPage} fontSize={'34px'} padding={'0'}>
+                        <FiPlusCircle />
+                    </IconButton>
+                </FetchMoreButtonWrapper>
+            )
+        }
+    }, [isLoading, isFetchingNextPage, hasNextPage, fetchNextPage])
+
     return (
-        <div>
-            Questions List
-        </div>
+        <Wrapper>
+            <QuestionHeader>
+                <h5>{`${totalQuestions} Questions`}</h5>
+                <ButtonGroup>
+                    <button className={filterType === 'recent' ? 'group__active' : ''} onClick={()=> setFilterType('recent')}>
+                        Recent
+                    </button>
+                    <button className={filterType === 'unresolved' ? 'group__active' : ''} onClick={()=> setFilterType('unresolved')}>
+                        Unresolved
+                    </button>
+                </ButtonGroup>
+            </QuestionHeader>
+
+            <QuestionList>
+                {getQuestionList()}
+                {getLoadingOrFetchMoreContent()}
+            </QuestionList>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const QuestionHeader = styled.header`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: clamp(0.75rem, 0.6809rem + 0.4255vw, 1rem);
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    border-bottom: 1px solid ${colors.white10};
+
+    & > h5 {
+        font-family: inherit;
+        letter-spacing: inherit;
+        font-weight: 300;
+    }
+`;
+
+const ButtonGroup = styled.div`
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+
+    & > button {
+        border: none;
+        outline: none;
+        background: none;
+        border-radius: 20px;
+        overflow: hidden;
+        padding: 10px;
+
+        &.group__active {
+            background: ${colors.accent100};
+        }
+    }
+
+    & > button:hover {
+        background: ${colors.accent60};
+    }
+`;
+
+const QuestionList = styled.div`
+    width: 100%;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+`;
+
+const NoQuestions = styled.div`
+    width: 100%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    & > span {
+        font-size: clamp(0.875rem, 0.8507rem + 0.1493vw, 1rem);
+        letter-spacing: 1px;
+        font-family: "Poppins", sans-serif;
+        color: ${colors.white80};
+    }
+`;
+
+const FetchMoreButtonWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
 export default QuestionOutlet;

@@ -1,0 +1,46 @@
+<!--
+  - Copyright © 2023-2024 Rohit Parihar and Bloggios
+  - All rights reserved.
+  - This software is the property of Rohit Parihar and is protected by copyright law.
+  - The software, including its source code, documentation, and associated files, may not be used, copied, modified, distributed, or sublicensed without the express written consent of Rohit Parihar.
+  - For licensing and usage inquiries, please contact Rohit Parihar at rohitparih@gmail.com, or you can also contact support@bloggios.com.
+  - This software is provided as-is, and no warranties or guarantees are made regarding its fitness for any particular purpose or compatibility with any specific technology.
+  - For license information and terms of use, please refer to the accompanying LICENSE file or visit http://www.apache.org/licenses/LICENSE-2.0.
+  - Unauthorized use of this software may result in legal action and liability for damages.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and limitations under the License.
+  -->
+
+<svg width="256px" height="256px" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid" fill="#000000">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier">
+        <defs>
+            <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="a">
+                <feOffset dy="16" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                <feGaussianBlur stdDeviation="9" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.214965466 0" in="shadowBlurOuter1"
+                               result="shadowMatrixOuter1"></feColorMatrix>
+                <feMerge>
+                    <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+        <path d="M127.979 155.387L256 27.93v-7.323C256 9.227 246.773 0 235.392 0H20.608C9.227 0 0 9.227 0 20.608v150.304l71.067-70.656 56.912 55.13"
+              fill="#FF9C0B"></path>
+        <path d="M71.088 157.83L0 228.767v6.624C0 246.773 9.227 256 20.608 256h214.784c11.381 0 20.608-9.227 20.608-20.608V86.597L127.979 214.053 71.088 157.83"
+              fill="#FB5722"></path>
+        <path d="M0 170.912l71.067-70.656 56.912 55.13L256 27.932l-.021 58.682-128 127.44-56.891-56.224L0 228.768v-57.856"
+              fill="#F2F2F2" filter="url(#a)"></path>
+        <path d="M99.552 185.968l.005-58.117-28.469 29.978 28.464 28.139" fill="#FF9B07"></path>
+    </g>
+</svg>

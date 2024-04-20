@@ -20,8 +20,6 @@
 
 import {useEffect, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {dispatchError} from "../service/functions";
-import {fetchQuestionTags} from "../restservices/QuestionApi";
 
 const useQuestionTagList = (page = 0, tag, category) => {
     const [data, setData] = useState([]);
@@ -45,25 +43,7 @@ const useQuestionTagList = (page = 0, tag, category) => {
             setTagHistory(prevState => ({
                 ...prevState, currentTag: tag
             }));
-            fetchQuestionTags(page, tag.toString().trim(), category, signal)
-                .then(data => {
-                    setTagHistory(prevState => ({
-                        ...prevState, lastTag: tag
-                    }));
-                    if (tagHistory.lastTag === tag) {
-                        setData(prev => [...prev, ...data.object]);
-                    } else {
-                        setData(data.object);
-                    }
-                    setHasNextPage(Boolean(data?.object.length));
-                    setIsLoading(false);
-                }).catch(e => {
-                setIsLoading(false);
-                if (signal.aborted) return;
-                setIsError(true);
-                dispatchError(dispatch, e);
-                setError({message : e?.response?.data?.message})
-            })
+
             return ()=> controller.abort();
         }, 500);
 

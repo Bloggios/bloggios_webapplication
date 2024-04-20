@@ -29,88 +29,69 @@ import ReactQuill, {Quill} from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from 'quill-image-resize-module-react';
 import '../../../styles/QuillEditorStyles.css'
-import {dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
+import {dispatchError, dispatchErrorMessage, dispatchWarningMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
 import QuestionTag from "./QuestionTag";
-import useQuestionTagList from "../../../hooks/useQuestionTagList";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {VscSearchStop} from "react-icons/vsc";
 import IconButton from "../../../component/buttons/IconButton";
 import {CgClose} from "react-icons/cg";
 import QuestionSubmitModal from "../../../component/modal/QuestionSubmitModal";
+import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
+import {getHtmlContent, validateHtmlContent} from "../../../service/QuillFunctions";
+import {fetchQuestionTags} from "../../../restservices/QuestionApi";
 
 window.Quill = Quill;
 Quill.register('modules/imageResize', ImageResize);
-
-const Base64URItoMultipartFile = (base64URI, fileName) => {
-    const base64Content = base64URI.split(';base64,').pop();
-    const byteCharacters = atob(base64Content);
-    const arrayBuffer = new ArrayBuffer(byteCharacters.length);
-    const byteArray = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-    const blob = new Blob([arrayBuffer], {type: Base64URItoMultipartFile.extractContentType(base64URI)});
-    return new File([blob], fileName, {type: blob.type});
-};
-
-Base64URItoMultipartFile.extractContentType = (base64URI) => {
-    const contentTypeRegex = /^data:(.+);base64,/; // Regex to extract content type
-    const matches = base64URI.match(contentTypeRegex);
-
-    if (matches && matches.length > 1) {
-        console.log(matches[1]);
-        return matches[1];
-    } else {
-        return '';
-    }
-};
 
 const AskQuestionFields = () => {
 
     const [titleRef, isTitleFocused] = useIsInputFocused();
     const editorRef = useRef(null);
-    const [tagRef, isTagFocused] = useIsInputFocused();
     const [tagInputValue, setTagInputValue] = useState('');
     const [selectedChips, setSelectedChips] = useState([]);
     const [editorContent, setEditorContent] = useState({});
     const dispatch = useDispatch();
     const [isSuggestion, setIsSuggestion] = useState(false);
-    const [pageNum, setPageNum] = useState(0);
     const [titleData, setTitleData] = useState('');
     const [buttonLoader, setButtonLoader] = useState(false);
     const [submitModal, setSubmitModal] = useState(false);
-    const [timeoutId, setTimeoutId] = useState(null);
     const timeoutRef = useRef(null);
     const [addQuestionData, setAddQuestionData] = useState(null);
-    const {
-        isLoading: tagIsLoading,
-        isError: tagIsError,
-        error: fetchedTagError,
-        data: fetchedTagData,
-        hasNextPage: tagHasNextPage
-    } = useQuestionTagList(pageNum, tagInputValue);
-    const intObserver = useRef();
+    const [isTagLoading, setIsTagLoading] = useState(false);
+    const [fetchedTagData, setFetchedTagData] = useState([]);
+    const [isTagError, setIsTagError] = useState(false);
 
-    const lastTagRef = useCallback(post => {
-        if (tagIsLoading) return;
-        if (intObserver.current) intObserver.current.disconnect();
+    useEffect(()=> {
+        setIsTagLoading(true)
+        const controller = new AbortController();
+        const {signal} = controller;
 
-        intObserver.current = new IntersectionObserver(tags => {
-            if (tags[0].isIntersecting && tagHasNextPage) {
-                setPageNum(prevState => prevState + 1);
-            }
-        });
+        const debounce = setTimeout(() => {
+            fetchQuestionTags(0, tagInputValue.length > 0 ? tagInputValue.trim() : null, '', signal)
+                .then(data => {
+                    setFetchedTagData(data?.object);
+                    setIsTagLoading(false);
+                }).catch(e => {
+                    setIsTagLoading(false);
+                    if (signal.aborted) return;
+                    setIsTagError(true);
+                    dispatchError(dispatch, e);
+            })
+            return ()=> controller.abort();
+        }, 500);
 
-        if (post) intObserver.current.observe(post);
-    }, [tagIsLoading, tagHasNextPage])
+        return ()=> {
+            clearTimeout(debounce);
+            setIsTagLoading(false);
+        };
+    }, [tagInputValue])
 
     useEffect(() => {
         if (tagInputValue.length > 0) {
             setIsSuggestion(true)
         } else {
             setIsSuggestion(false);
-            setPageNum(0)
         }
     }, [tagInputValue]);
 
@@ -128,7 +109,6 @@ const AskQuestionFields = () => {
             if (event.key === 'Escape') {
                 setIsSuggestion(false);
                 setTagInputValue('');
-                setPageNum(0);
             }
         };
         document.addEventListener('keydown', handleKeyPress);
@@ -148,7 +128,7 @@ const AskQuestionFields = () => {
         }
     };
 
-    const modules = useMemo(() => ({
+    const quillBasicModules = useMemo(() => ({
         toolbar: toolbarOptions,
         imageResize: {
             modules: ['Resize', 'DisplaySize']
@@ -160,6 +140,7 @@ const AskQuestionFields = () => {
         timeoutRef.current = setTimeout(() => {
             const delta = editor.getContents();
             const html = editor.getHTML();
+            console.log(html);
             setEditorContent({
                 deltaStatic: delta,
                 htmlData: html,
@@ -172,7 +153,6 @@ const AskQuestionFields = () => {
         if (isSuggestion) {
             setIsSuggestion(false);
             setTagInputValue('');
-            setPageNum(0);
         }
     }
 
@@ -200,33 +180,6 @@ const AskQuestionFields = () => {
         return true;
     }
 
-    const validateHtmlContent = (htmlContent) => {
-        if (htmlContent.text) {
-            const text = htmlContent.text;
-            const words = text.split(/\s+|\\n/);
-            const filteredWords = words.filter(word => word.trim() !== '');
-            if (filteredWords.length > 400) {
-                dispatchErrorMessage(dispatch, 'Question details cannot contains more than 400 Words');
-                return false;
-            }
-        }
-        if (htmlContent.blobs) {
-            const imageBlobs = htmlContent.blobs;
-            if (htmlContent.blobs.length > 4) {
-                dispatchErrorMessage(dispatch, 'You can only add upto 5 Images in Question Details');
-                return false;
-            }
-            for (let i = 0; i < imageBlobs.length; i++) {
-                const blob = imageBlobs[i];
-                if (blob.size > 800 * 1024) { // Convert KB to bytes
-                    dispatchErrorMessage(dispatch, 'Image size should be less than 800 KB');
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     const handleValidate = () => {
         setButtonLoader(true);
         if (editorRef.current) {
@@ -240,10 +193,10 @@ const AskQuestionFields = () => {
             setButtonLoader(false);
             return;
         } else {
-            const htmlContent = getHtmlContent();
+            const htmlContent = getHtmlContent(editorContent);
             let isValid = true
             if (htmlContent) {
-                isValid = validateHtmlContent(htmlContent);
+                isValid = validateHtmlContent(htmlContent, dispatch);
             }
             setButtonLoader(false);
             if (isValid) {
@@ -262,71 +215,17 @@ const AskQuestionFields = () => {
         }
     }
 
-    useEffect(() => {
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
-    }, [timeoutId]);
-
-    const getHtmlContent = () => {
-        if (editorContent.htmlData) {
-            const delta = editorContent.deltaStatic;
-            const html = editorContent.htmlData;
-            let blobs = [];
-            let imageTags = [];
-            if (delta.ops) {
-                delta.ops.forEach((op, index) => {
-                    if (op.insert && op.insert.image) {
-                        const imageTag = op.insert.image;
-                        const [, contentType, base64Data] = imageTag.match(/^data:(.*?);base64,(.*)$/);
-                        const splitElement = contentType.split('/')[1];
-                        if (!splitElement) {
-                            dispatchErrorMessage('One of the Uploaded Image not Corrupted or not Valid');
-                            return;
-                        }
-                        blobs.push(Base64URItoMultipartFile(imageTag, `random.${splitElement}`));
-                        imageTags.push(imageTag);
-                    }
-                });
-            }
-            let finalHtml = html;
-            imageTags.map((tag, index) => {
-                finalHtml = finalHtml.replaceAll(tag, `bloggios-question-image-index${index}`);
-            });
-            return {
-                finalHtml: finalHtml,
-                blobs: blobs,
-                text: editorContent.text
-            }
-        }
-    }
-
     const tagListData = useCallback(() => {
         if (fetchedTagData.length > 0) {
-            return fetchedTagData.map((tag, i) => {
-                if (!tagIsError && fetchedTagData.length === i + 1) {
-                    return (
-                        <QuestionTag
-                            ref={lastTagRef}
-                            tag={tag.tag}
-                            category={tag.category}
-                            key={i + tag.category}
-                            onClick={() => handleChipClick(tag.tag)}
-                        />
-                    )
-                }
-                return (
-                    <QuestionTag
-                        tag={tag.tag}
-                        category={tag.category}
-                        key={i + tag.category}
-                        onClick={() => handleChipClick(tag.tag)}
-                    />
-                )
-            })
-        } else if (!tagIsLoading && fetchedTagData.length === 0) {
+            return fetchedTagData.map((tag, i) => (
+                <QuestionTag
+                    tag={tag.tag}
+                    category={tag.category}
+                    key={i + tag.category}
+                    onClick={() => handleChipClick(tag.tag)}
+                />
+            ))
+        } else if (!isTagLoading && fetchedTagData.length === 0) {
             return (
                 <NotResultFoundWrapper>
                     <div style={{
@@ -340,14 +239,30 @@ const AskQuestionFields = () => {
                         <VscSearchStop/>
                     </div>
                     <NotFoundMessage>
-                        {tagInputValue.length <= 3
-                            ? 'Minimum 3 Characters Required'
-                            : 'Not Data Found'}
+                        No Data Found
+                    </NotFoundMessage>
+                </NotResultFoundWrapper>
+            )
+        } else if (isTagError) {
+            return (
+                <NotResultFoundWrapper>
+                    <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '50px',
+                        color: 'rgba(255,255,255,0.6)'
+                    }}>
+                        <VscSearchStop/>
+                    </div>
+                    <NotFoundMessage>
+                        Error Occurred
                     </NotFoundMessage>
                 </NotResultFoundWrapper>
             )
         }
-    }, [tagIsLoading, fetchedTagData, lastTagRef, tagIsError, tagInputValue.length])
+    }, [fetchedTagData, isTagLoading, isTagError])
 
     return (
         <>
@@ -387,7 +302,7 @@ const AskQuestionFields = () => {
                     <ReactQuill
                         ref={editorRef}
                         theme="snow"
-                        modules={modules}
+                        modules={quillBasicModules}
                         placeholder={'Please add some details for your question'}
                         onChange={handleEditorBlur}
                     />
@@ -416,8 +331,7 @@ const AskQuestionFields = () => {
                             onChange={(event) => setTagInputValue(event.target.value)}
                             onKeyDown={handleInputKeyDown}
                             placeholder={selectedChips.length === 0 && "Type to search tags"}
-                            maxLength={5}
-                            ref={tagRef}
+                            maxLength={20}
                             readOnly={selectedChips.length > 4}
                         />
                         {isSuggestion && (
@@ -429,13 +343,35 @@ const AskQuestionFields = () => {
                                     </IconButton>
                                 </SuggestionHeader>
                                 {tagListData()}
-                                {tagIsLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={2}/>}
+                                {isTagLoading && <FallbackLoader height={'20px'} width={'100%'} thickness={1}/>}
                             </SuggestionsContainer>
                         )}
                     </TagInput>
                 </Fields>
 
-                <button onClick={handleValidate}>Submit</button>
+                <FetchLoaderButton
+                    isLoading={buttonLoader}
+                    onClick={handleValidate}
+                    text={'Proceed'}
+                    loaderSize={'4px'}
+                    loaderDotsSize={'4px'}
+                    bgColor={'#4258ff'}
+                    hBgColor={'rgba(66, 88, 255, 0.9)'}
+                    aBgColor={'#4258ff'}
+                    color={'rgba(255, 255, 255, 0.8)'}
+                    hColor={'rgba(255, 255, 255, 1)'}
+                    borderRadius={'4px'}
+                    padding={'10px 0'}
+                    style={{
+                        width: '110px',
+                        height: '40px',
+                        border: 'none',
+                        outline: 'none',
+                        fontSize: '14px',
+                        fontFamily: "'Poppins', san-serif",
+                        alignSelf: 'flex-end'
+                    }}
+                />
             </ColumnWrapper>
 
             <QuestionSubmitModal

@@ -26,32 +26,83 @@ import {
     BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY
 } from "../../constant/ElementIdConstants";
 import {handleElementIdScroll} from "../../service/handleElementIdScroll";
+import {useNavigate} from "react-router-dom";
+import {SERVICES_PAGE} from "../../constant/pathConstants";
+import BgTransition from "../animations/BgTransition";
 
 const BloggiosTechIntroductionSection = () => {
+
+    const navigate = useNavigate();
+
     return (
         <Bg.Wrapper id={BLOGGIOS_TECH_INTRODUCTION_SECTION} className={'home__black-lines--background'}>
-            <Bg.Introducing>
+            <BgTransition
+                component={'h2'}
+                type={'bg__fi'}
+                delay={0.1}
+                style={{
+                    fontSize: 'clamp(1.5625rem, 0.5093rem + 6.4815vw, 3.75rem)',
+                    color: 'rgba(255, 255, 255, 1)',
+                    fontWeight: 600,
+                    letterSpacing: '1px',
+                    fontFamily: 'Poppins, sans-serif',
+                    background: 'linear-gradient(270deg, #ee4700, #ffb628)',
+                    backgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                }}
+            >
                 Introducing
-            </Bg.Introducing>
-            <Bg.Heading>
+            </BgTransition>
+            <BgTransition
+                component={'h1'}
+                type={'bg__fi'}
+                delay={0.2}
+                style={{
+                    fontSize: 'clamp(1.875rem, 0.3704rem + 9.2593vw, 5rem)',
+                    color: 'rgba(255, 255, 255, 1)',
+                    fontWeight: 600,
+                    letterSpacing: '1px',
+                    fontFamily: 'Poppins, sans-serif',
+                }}
+            >
                 Bloggios <span className={"home__tech-span-underline"}>Tech</span>
-            </Bg.Heading>
-            <Bg.SubText>
+            </BgTransition>
+            <BgTransition
+                component={'h4'}
+                type={'bg__fi'}
+                delay={0.3}
+                style={{
+                    fontSize: 'clamp(1.125rem, 0.463rem + 4.0741vw, 2.5rem)',
+                    fontWeight: 400,
+                    letterSpacing: '1px',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                }}
+            >
                 Tech solutions, <span className={'span__yellow--gradient'}>reimagined</span>
-            </Bg.SubText>
+            </BgTransition>
 
-            <Bg.ButtonGroup>
-                <Bg.ExploreProjects>
-                    Explore our work
+            <BgTransition
+                component={'div'}
+                type={'bg__fi'}
+                delay={0.4}
+                style={{
+                    marginTop: '40px',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '20px',
+                }}
+            >
+                <Bg.ExploreProjects onClick={() => navigate(SERVICES_PAGE)}>
+                    Explore Services
                 </Bg.ExploreProjects>
 
                 <Bg.NavigateButton
-                    onClick={()=> handleElementIdScroll(BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY)}
+                    onClick={() => handleElementIdScroll(BLOGGIOS_TECH_INTRODUCTION_SECTION_SUMMARY)}
                     className={'button__scroll--icon'}
                 >
-                    Services <FaAngleDoubleDown className={'button__scroll-down--icon'} />
+                    More <FaAngleDoubleDown className={'button__scroll-down--icon'}/>
                 </Bg.NavigateButton>
-            </Bg.ButtonGroup>
+            </BgTransition>
         </Bg.Wrapper>
     );
 };

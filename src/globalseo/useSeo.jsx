@@ -19,9 +19,8 @@
  */
 
 import {useEffect} from 'react';
-import seoConfigs from "./seoConfigs";
 
-const useSeo = (pageKey) => {
+const useSeo = (seoPayload) => {
 
     useEffect(() => {
 
@@ -31,7 +30,17 @@ const useSeo = (pageKey) => {
             return;
         }
 
-        const { title, description, keywords, author, ogType, ogUrl, ogImage, ogTitle, ogDescription } = seoConfigs[pageKey];
+        const {
+            title,
+            description,
+            keywords,
+            author,
+            ogType,
+            ogUrl,
+            ogImage,
+            ogTitle,
+            ogDescription
+        } = seoPayload;
 
         document.title = title;
 
@@ -63,7 +72,7 @@ const useSeo = (pageKey) => {
                 document.head.removeChild(tag);
             });
         };
-    }, [pageKey]);
+    }, [seoPayload]);
 };
 
 export default useSeo;

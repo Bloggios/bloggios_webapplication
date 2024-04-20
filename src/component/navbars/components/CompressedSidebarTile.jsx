@@ -18,28 +18,58 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import React, {useCallback, useEffect} from 'react';
+import {
+    ADMIN_PAGE,
+    CHATS_PAGE,
+    HOME_PAGE,
+    POST_PAGE,
+    QUESTION_PAGE,
+    SETTING_PAGE
+} from "../../../constant/pathConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
-import {BiHomeAlt2} from "react-icons/bi";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {CgProfile} from "react-icons/cg";
-import {MdOutlineSecurity} from "react-icons/md";
+import {FaUserAlt} from "react-icons/fa";
 import {IoIosSettings} from "react-icons/io";
 import {useSelector} from "react-redux";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {BsPatchQuestionFill} from "react-icons/bs";
+import {GoHomeFill} from "react-icons/go";
+import {RiAdminFill, RiChatSmile2Fill} from "react-icons/ri";
+import {HiPaperAirplane} from "react-icons/hi2";
 
 const CompressedSidebarTile = () => {
 
     const PROFILE_PATH = '/profile/';
-    const ACTIVITY_PATH = '/activity/';
-    const SECURITY_PATH = '/security';
     const SETTING_PATH = '/setting';
-
-    const {userId} = useSelector((state)=> state.auth);
+    const roles = ['ROLE_MANAGER', 'ROLE_ADMIN']
+    const {userId, authorities} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
+
+    useEffect(() => {
+        const roles = ['ROLE_MANAGER', 'ROLE_ADMIN']
+        const some = authorities.every(authority => roles.includes(authority));
+        console.log(some)
+    }, [authorities]);
+
+    const getAdminContent = useCallback(()=> {
+        if (authorities.some(authority => roles.includes(authority))) {
+            return (
+                <TileWrapper>
+                    <TileIconButton
+                        active={window.location.pathname === ADMIN_PAGE}
+                        onClick={() => navigate(ADMIN_PAGE)}
+                    >
+                        <RiAdminFill />
+                    </TileIconButton>
+                    <TooltipContent>
+                        Admin Panel
+                    </TooltipContent>
+                </TileWrapper>
+            )
+        }
+    }, [authorities, navigate])
 
     return (
         <TilesWrapper style={{
@@ -51,7 +81,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname === HOME_PAGE}
                     onClick={() => navigate(HOME_PAGE)}
                 >
-                    <BiHomeAlt2/>
+                    <GoHomeFill />
                 </TileIconButton>
                 <TooltipContent>
                     Home
@@ -77,7 +107,7 @@ const CompressedSidebarTile = () => {
                     active={window.location.pathname.includes(CHATS_PAGE)}
                     onClick={() => navigate(CHATS_PAGE)}
                 >
-                    <CgProfile/>
+                    <RiChatSmile2Fill />
                 </TileIconButton>
                 <TooltipContent
 
@@ -88,15 +118,25 @@ const CompressedSidebarTile = () => {
 
             <TileWrapper>
                 <TileIconButton
-                    active={window.location.pathname === NOTIFICATIONS_PAGE}
-                    onClick={() => navigate(NOTIFICATIONS_PAGE)}
+                    active={window.location.pathname.includes(QUESTION_PAGE)}
+                    onClick={()=> navigate(QUESTION_PAGE)}
                 >
-                    <FaUserAlt/>
+                    <BsPatchQuestionFill />
                 </TileIconButton>
-                <TooltipContent
+                <TooltipContent>
+                    Q&A
+                </TooltipContent>
+            </TileWrapper>
 
+            <TileWrapper>
+                <TileIconButton
+                    active={window.location.pathname.includes(POST_PAGE)}
+                    onClick={() => navigate(POST_PAGE)}
                 >
-                    Notifications
+                    <HiPaperAirplane />
+                </TileIconButton>
+                <TooltipContent>
+                    Posts
                 </TooltipContent>
             </TileWrapper>
 
@@ -105,31 +145,7 @@ const CompressedSidebarTile = () => {
                 border: '1px dashed rgba(255, 255, 255, 0.2)'
             }}/>
 
-            <TileWrapper>
-                <TileIconButton
-                    active={window.location.pathname.includes(ACTIVITY_PATH)}
-                    onClick={() => navigate('/activity/' + userId)}
-                >
-                    <FaHistory/>
-                </TileIconButton>
-                <TooltipContent
-
-                >
-                    Activity
-                </TooltipContent>
-            </TileWrapper>
-
-            <TileWrapper>
-                <TileIconButton
-                    active={window.location.pathname === SECURITY_PATH}
-                    onClick={() => navigate(SECURITY_PAGE)}
-                >
-                    <MdOutlineSecurity/>
-                </TileIconButton>
-                <TooltipContent>
-                    Security
-                </TooltipContent>
-            </TileWrapper>
+            {getAdminContent()}
 
             <TileWrapper>
                 <TileIconButton

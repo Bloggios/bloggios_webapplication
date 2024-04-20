@@ -19,8 +19,8 @@
  */
 
 import React from 'react';
-import bloggios_logo from "../../../asset/svg/bg-accent_rounded.svg";
 import styled from "styled-components";
+import {bgBlackRounded} from "../../../asset/svg";
 
 const SidebarProfileContainer = ({
     profileImage,
@@ -30,7 +30,7 @@ const SidebarProfileContainer = ({
     return (
         <ProfileContainer>
             <img
-                src={profileImage ? profileImage : bloggios_logo}
+                src={profileImage ? profileImage : bgBlackRounded}
                 alt={name}
                 height={'44px'}
                 style={{

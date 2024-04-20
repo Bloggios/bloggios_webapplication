@@ -25,10 +25,12 @@ import IconButton from "../../../component/buttons/IconButton";
 import {IoClose} from "react-icons/io5";
 import {Tooltip} from "react-tooltip";
 import {askQuestionDescription} from "../../../constant/listConstants";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const AskQuestionDescriptionSection = () => {
 
     const [isDescription, setIsDescription] = useState(true);
+    const {width} = useWindowDimensions();
 
     const getHtml = useCallback(()=> {
         if (isDescription) {
@@ -80,7 +82,7 @@ const AskQuestionDescriptionSection = () => {
     return (
         <>
             {getHtml()}
-            <Tooltip id={'ask-question-description-tooltip-id'} />
+            {width > 600 && <Tooltip id={'ask-question-description-tooltip-id'} />}
         </>
     );
 };

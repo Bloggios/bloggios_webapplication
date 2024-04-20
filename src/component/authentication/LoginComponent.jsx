@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {bgAccentRounded} from '../../asset/svg'
 import IconButton from "../buttons/IconButton";
 import {MdVisibility, MdVisibilityOff} from "react-icons/md";
@@ -26,34 +26,27 @@ import {Tooltip} from "react-tooltip";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import {FcGoogle} from "react-icons/fc";
 import {FaFacebook} from "react-icons/fa";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {dispatchError, dispatchErrorMessage} from "../../service/functions";
 import {loginUser} from "../../restservices/authApi";
 import {ACCOUNT_INACTIVE} from "../../constant/ExceptionCodes";
 import {authOtpUserId} from "../../service/authProviderApiService";
 import {useNavigate} from "react-router-dom";
-import {HOME_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
+import {FORGET_PASSWORD_PAGE, SIGNUP_PAGE} from "../../constant/pathConstants";
 import * as Bg from './StyledComponent';
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 
 const LoginComponent = () => {
 
     const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
     const navigate = useNavigate();
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [buttonLoader, setButtonLoader] = useState(false);
-    const {isAuthenticated} = useSelector((state)=> state.auth);
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
     });
-
-    useLayoutEffect(()=> {
-        if (isAuthenticated) {
-            navigate(HOME_PAGE, {
-                replace: true
-            });
-        }
-    }, [])
 
     const handleInputChange = (event, property) => {
         setLoginData(prevState => ({
@@ -167,7 +160,7 @@ const LoginComponent = () => {
                         {isPasswordVisible ? <MdVisibilityOff/> : <MdVisibility/>}
                     </IconButton>
                 </Bg.Field>
-                <Bg.ForgetPassword>
+                <Bg.ForgetPassword onClick={()=> navigate(FORGET_PASSWORD_PAGE)}>
                     Forget Password?
                 </Bg.ForgetPassword>
 
@@ -234,9 +227,13 @@ const LoginComponent = () => {
                 Don't have an Account?
                 <span onClick={()=> navigate(SIGNUP_PAGE)}>Create an Account</span>
             </Bg.AddAccount>
-            <Tooltip id={'password-shown-login-page'}/>
-            <Tooltip id={'login-google-login-page'}/>
-            <Tooltip id={'login-facebook-login-page'}/>
+            {width > 600 && (
+                <>
+                    <Tooltip id={'password-shown-login-page'}/>
+                    <Tooltip id={'login-google-login-page'}/>
+                    <Tooltip id={'login-facebook-login-page'}/>
+                </>
+            )}
         </Bg.Wrapper>
     );
 };

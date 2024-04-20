@@ -20,7 +20,7 @@
 
 import bloggios_logo from '../asset/svg/bg_logo_black.svg'
 
-const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Bloggios, Bloggios Social Media, Social Media, Bloggios Q & A, Q & A, Encrypted Chatting, Bloggios Chatting, Bloggios Encrypted Chatting, Bloggios IT Solutions, IT Solutions, Bloggios Software development, Software development, IT support, Bloggios IT Support, Bloggios SEO, SEO, Bloggios Marketing, Bloggios Connection platform, Connection Platform, web developer, technology, innovation, online community';
+const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Bloggios, Bloggios Social Media, Social Media, Bloggios Q & A, Q & A, Encrypted Chatting, Bloggios Chatting, Bloggios Encrypted Chatting, Bloggios IT Solutions, IT Solutions, Bloggios Software development, Software development, IT support, Bloggios IT SupportContainer, Bloggios SEO, SEO, Bloggios Marketing, Bloggios Connection platform, Connection Platform, web developer, technology, innovation, online community';
 
 const seoConfigs = {
     signup: {
@@ -52,18 +52,18 @@ const seoConfigs = {
         author: 'Rohit Parihar',
         ogType: 'website',
         ogTitle: 'Welcome to Bloggios - Empowering Connections and IT Solutions',
-        ogDescription: 'Get Started with Bloggios and explore the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!',
+        ogDescription: 'Get Started with Bloggios and explore the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, SupportContainer, SEO, and Marketing. Join us to connect and grow!',
         ogImage: bloggios_logo,
         ogUrl: 'https://bloggios.com'
     },
     authHomePage: {
         title: 'Bloggios Home',
-        description: "Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!",
+        description: "Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, SupportContainer, SEO, and Marketing. Join us to connect and grow!",
         keywords: `${RESERVED_KEYWORDS}, Bloggios Home, Create Post, Bloggios Posts, Bloggios Hashtags, #bloggios, Bloggios User Posts, User Posts, All Bloggios Posts, Bloggios data, Bloggios Profile, User Profile, Edit Profile`,
         author: 'Rohit Parihar',
         ogType: 'website',
         ogTitle: 'Welcome to Bloggios - Empowering Connections and IT Solutions',
-        ogDescription: 'Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, Support, SEO, and Marketing. Join us to connect and grow!',
+        ogDescription: 'Explore Bloggios, the dynamic platform offering Social Media, Q & A features, Real-time encrypted chatting, and comprehensive IT Solutions including Software Development, SupportContainer, SEO, and Marketing. Join us to connect and grow!',
         ogImage: bloggios_logo,
         ogUrl: 'https://bloggios.com'
     }

@@ -20,11 +20,12 @@
 
 import React from 'react';
 import styled from "styled-components";
+import {colors} from "../../styles/Theme";
 
 const NoCommentFound = () => {
     return (
         <Wrapper>
-            <Title>😒 No Comments yet</Title>
+            <Title>No Comments yet</Title>
             <SubTitle>
                 Be the first to share your thoughts and insights on this Post
             </SubTitle>
@@ -38,20 +39,23 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 10px;
     text-align: center;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
 `;
 
 const Title = styled.h1`
-    font-size: 20px;
+    font-size: clamp(1rem, 0.9515rem + 0.2985vw, 1.25rem);
     letter-spacing: 1px;
     font-weight: 500;
-    color: #7080ff;
+    color: #7687ff;
+    font-family: inherit;
 `;
 
 const SubTitle = styled.h4`
-    font-size: 14px;
+    font-size: clamp(0.75rem, 0.7257rem + 0.1493vw, 0.875rem);
     letter-spacing: 1px;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+    color: ${colors.white60};
 `;
 
 export default NoCommentFound;

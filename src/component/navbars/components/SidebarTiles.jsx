@@ -18,23 +18,24 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
-import {CHATS_PAGE, HOME_PAGE, NOTIFICATIONS_PAGE, SECURITY_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
-import {BiHomeAlt2} from "react-icons/bi";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
-import {MdOutlineSecurity} from "react-icons/md";
+import React, {useCallback, useEffect} from 'react';
+import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
+import {FaUserAlt} from "react-icons/fa";
 import {IoIosSettings} from "react-icons/io";
 import styled from "styled-components";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import {ACTIVITY_PATH_MATCHER} from "../../../constant/ServiceConstants";
-import {BsChatDots} from "react-icons/bs";
-import {IoNotificationsOutline} from "react-icons/io5";
+import {BsPatchQuestionFill} from "react-icons/bs";
+import {RiChatSmile2Fill} from "react-icons/ri";
+import {GoHomeFill} from "react-icons/go";
+import {HiPaperAirplane} from "react-icons/hi2";
+import {colors} from "../../../styles/Theme";
+import Divider from "../../divider/divider";
 
 const SidebarTiles = () => {
 
-    const {userId} = useSelector((state)=> state.auth);
+    const {userId, authorities} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
     const profilePath = `/profile/${userId}`;
@@ -49,7 +50,7 @@ const SidebarTiles = () => {
                 active={window.location.pathname === HOME_PAGE}
                 onClick={() => navigate(HOME_PAGE)}
             >
-                <BiHomeAlt2/>
+                <GoHomeFill />
                 <TileSpan>Home</TileSpan>
             </Tile>
 
@@ -65,38 +66,27 @@ const SidebarTiles = () => {
                 active={window.location.pathname.includes(CHATS_PAGE)}
                 onClick={() => navigate(CHATS_PAGE)}
             >
-                <BsChatDots />
+                <RiChatSmile2Fill />
                 <TileSpan>Chats</TileSpan>
             </Tile>
 
             <Tile
-                active={window.location.pathname === NOTIFICATIONS_PAGE}
-                onClick={() => navigate(NOTIFICATIONS_PAGE)}
+                active={window.location.pathname.includes(QUESTION_PAGE)}
+                onClick={() => navigate(QUESTION_PAGE)}
             >
-                <IoNotificationsOutline />
-                <TileSpan>Notifications</TileSpan>
-            </Tile>
-
-            <div style={{
-                width: '100%',
-                border: '1px dashed rgba(255, 255, 255, 0.2)'
-            }}/>
-
-            <Tile
-                active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
-                onClick={() => navigate('/activity/' + userId)}
-            >
-                <FaHistory/>
-                <TileSpan>Activity</TileSpan>
+                <BsPatchQuestionFill />
+                <TileSpan>Q&A</TileSpan>
             </Tile>
 
             <Tile
-                active={window.location.pathname === SECURITY_PAGE}
-                onClick={() => navigate(SECURITY_PAGE)}
+                active={window.location.pathname.includes(POST_PAGE)}
+                onClick={() => navigate(POST_PAGE)}
             >
-                <MdOutlineSecurity/>
-                <TileSpan>Security</TileSpan>
+                <HiPaperAirplane />
+                <TileSpan>Posts</TileSpan>
             </Tile>
+
+            <Divider width={'90%'} color={colors.white20} verticalSpacing={'10px'}/>
 
             <Tile
                 active={window.location.pathname === SETTING_PAGE}

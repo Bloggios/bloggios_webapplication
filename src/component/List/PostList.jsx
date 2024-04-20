@@ -98,6 +98,7 @@ const Wrapper = styled.div`
     max-width: 250px; /* Set a maximum width to prevent it from growing indefinitely */
     display: flex;
     flex-direction: column;
+    align-self: center;
     gap: 25px;
 `;
 

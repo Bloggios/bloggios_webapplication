@@ -22,9 +22,7 @@ import {Navigate, Outlet, useNavigate} from "react-router-dom";
 import {LOGIN_PAGE} from "../constant/pathConstants";
 import PropTypes from "prop-types";
 
-const ProtectedRoute = ({isAuthenticated, authorities}) => {
-
-    const navigate = useNavigate();
+const ProtectedRoute = ({isAuthenticated}) => {
 
     if (!isAuthenticated) {
         return <Navigate to={LOGIN_PAGE} state={{from: window.location.pathname}} />

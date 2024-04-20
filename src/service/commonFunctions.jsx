@@ -18,9 +18,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-export const handleDivScroll = (direction, id) => {
+export const handleDivScroll = (direction, id, threshold) => {
     const scrollContainer = document.getElementById(id ? id : 'suggestionWrapper');
-    const scrollAmount = 150;
+    const scrollAmount = threshold ? threshold : 150;
 
     if (direction === 'left') {
         scrollContainer.scrollLeft -= scrollAmount;

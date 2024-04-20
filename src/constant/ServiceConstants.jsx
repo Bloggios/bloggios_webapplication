@@ -22,3 +22,4 @@ export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-f
 export const PROFILE_PATH_MATCHER = '/profile/';
 export const ACTIVITY_PATH_MATCHER = '/activity/';
 export const BLOGGIOS_TECH_LINK = 'https://tech.bloggios.com'
+export const PRIVACY_TERMS_KEY_LOCAL_STORAGE = 'bg__privacy--term-accepted';

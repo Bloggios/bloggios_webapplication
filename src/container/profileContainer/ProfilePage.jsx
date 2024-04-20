@@ -66,58 +66,76 @@ const ProfilePage = () => {
     })
 
     const getMainContent = useCallback(() => {
-        if (isLoading) {
-            return <FallbackLoader width={'100%'} height={'400px'}/>
-        } else if (isSuccess && profileData) {
-            return (
-                <>
-                    <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
-                        {id === authUserId ? (
-                            <ProfileHeader
-                                name={profileSelector.name}
-                                email={profileSelector.email}
-                                profileImage={profileSelector.profileImage}
-                                coverImage={profileSelector.coverImage}
-                                bio={profileSelector.bio}
-                                id={id}
-                                follower={profileSelector.followers}
-                                following={profileSelector.following}
-                                profileTag={profileSelector.profileTag}
-                                isBadge={profileSelector.isBadge}
-                                profileBadges={profileSelector.profileBadges}
-                                link={profileSelector.link}
-                            />
-                        ) : (
-                            <ProfileHeader
-                                name={profileData.name}
-                                email={profileData.email}
-                                profileImage={profileData.profileImage}
-                                coverImage={profileData.coverImage}
-                                bio={profileData.bio}
-                                id={id}
-                                follower={profileData.followers}
-                                following={profileData.following}
-                                profileTag={profileData.profileTag}
-                                isBadge={profileData.isBadge}
-                                profileBadges={profileData.profileBadges}
-                                link={profileData.link}
-                            />
-                        )}
-                    </Suspense>
-
-                    <ProfileContent>
-                        <Suspense>
-                            <HorizontalTabs id={id}/>
+            if (isLoading) {
+                return <FallbackLoader width={'100%'} height={'400px'}/>
+            } else if (isSuccess && profileData) {
+                return (
+                    <>
+                        <Suspense fallback={<FallbackLoader width={'100%'} height={'100%'}/>}>
+                            {id === authUserId ? (
+                                <ProfileHeader
+                                    name={profileSelector.name}
+                                    email={profileSelector.email}
+                                    profileImage={profileSelector.profileImage}
+                                    coverImage={profileSelector.coverImage}
+                                    bio={profileSelector.bio}
+                                    id={id}
+                                    follower={profileSelector.followers}
+                                    following={profileSelector.following}
+                                    profileTag={profileSelector.profileTag}
+                                    isBadge={profileSelector.isBadge}
+                                    profileBadges={profileSelector.profileBadges}
+                                    link={profileSelector.link}
+                                />
+                            ) : (
+                                <ProfileHeader
+                                    name={profileData.name}
+                                    email={profileData.email}
+                                    profileImage={profileData.profileImage}
+                                    coverImage={profileData.coverImage}
+                                    bio={profileData.bio}
+                                    id={id}
+                                    follower={profileData.followers}
+                                    following={profileData.following}
+                                    profileTag={profileData.profileTag}
+                                    isBadge={profileData.isBadge}
+                                    profileBadges={profileData.profileBadges}
+                                    link={profileData.link}
+                                />
+                            )}
                         </Suspense>
 
-                        <Suspense>
-                            <Outlet/>
-                        </Suspense>
-                    </ProfileContent>
-                </>
-            )
-        }
-    }, [isLoading, isSuccess, profileData, id, profileSelector])
+                        <ProfileContent>
+                            <Suspense>
+                                <HorizontalTabs id={id}/>
+                            </Suspense>
+
+                            <Suspense>
+                                <Outlet/>
+                            </Suspense>
+                        </ProfileContent>
+                    </>
+                )
+            }
+        }, [
+            isLoading,
+            isSuccess,
+            profileData,
+            id,
+            authUserId,
+            profileSelector.name,
+            profileSelector.email,
+            profileSelector.profileImage,
+            profileSelector.coverImage,
+            profileSelector.bio,
+            profileSelector.followers,
+            profileSelector.following,
+            profileSelector.profileTag,
+            profileSelector.isBadge,
+            profileSelector.profileBadges,
+            profileSelector.link
+        ]
+    )
 
     const getPageContent = useCallback(() => {
         if (uuidValidator(id)) {
@@ -128,7 +146,7 @@ const ProfilePage = () => {
                             {getMainContent()}
                         </LeftSection>
                         <RightSection ref={rightSectionRef}>
-                            {width > 1050 && <ProfileSuggestions />}
+                            {width > 1050 && <ProfileSuggestions/>}
                         </RightSection>
                     </Wrapper>
                 </BloggiosSidebarBase>
@@ -136,7 +154,7 @@ const ProfilePage = () => {
         } else {
             return <PageNotFound/>
         }
-    }, [leftSectionRef, rightSectionRef, width, profileData, id, getMainContent])
+    }, [leftSectionRef, rightSectionRef, width, id, getMainContent])
 
     return (
         isError || error ?

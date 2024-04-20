@@ -21,25 +21,18 @@
 import React from 'react';
 import styled from "styled-components";
 
-const QuestionTag = React.forwardRef(({
-                                          tag,
-                                          category,
-                                          onClick
-                                      }, ref) => {
+const QuestionTag = ({
+                         tag,
+                         category,
+                         onClick
+                     }) => {
     return (
-        ref ? (
-            <Wrapper ref={ref} onClick={onClick}>
-                <h5 title={'Tag'}>{tag}</h5>
-                <span title={'Tag Category'}>{category}</span>
-            </Wrapper>
-        ) : (
-            <Wrapper onClick={onClick}>
-                <h5 title={'Tag'}>{tag}</h5>
-                <span title={'Tag Category'}>{category}</span>
-            </Wrapper>
-        )
+        <Wrapper onClick={onClick}>
+            <h5 title={'Tag'}>{tag}</h5>
+            <span title={'Tag Category'}>{category}</span>
+        </Wrapper>
     )
-});
+};
 
 const Wrapper = styled.div`
     width: 100%;

@@ -25,6 +25,21 @@ import defaultCover from './home-header_bg.svg';
 import askQuestionYellow from './ask-question-yellow.svg';
 import askQuestionWhite from './ask-question-white.svg';
 import underline from './underline.svg';
+import notFound from './not_found.svg';
+import laptopSvg from './laptop.svg';
+import mobileSvg from './mobile.svg';
+import posts from './posts.svg';
+import notification from './notification.svg';
+import notificationActive from './notification_active.svg';
+import meshBackground from './mesh_background.svg';
+import ecommerceDevelopment from './ecommerce_development.svg';
+import healthcareDevelopment from './healthcare_development.svg';
+import bankingDevelopment from './banking_development.svg';
+import ottDevelopment from './ott_development.svg';
+import educationDevelopment from './education_development.svg';
+import erpDevelopment from './erp_development.svg';
+import blueBadge from './blue_badge.svg';
+import goldenBadge from './golden_badge.svg';
 
 export {
     bgAccentRounded,
@@ -33,5 +48,20 @@ export {
     defaultCover,
     askQuestionYellow,
     askQuestionWhite,
-    underline
+    underline,
+    notFound,
+    laptopSvg,
+    mobileSvg,
+    posts,
+    notification,
+    notificationActive,
+    meshBackground,
+    ecommerceDevelopment,
+    healthcareDevelopment,
+    bankingDevelopment,
+    ottDevelopment,
+    educationDevelopment,
+    erpDevelopment,
+    blueBadge,
+    goldenBadge
 };

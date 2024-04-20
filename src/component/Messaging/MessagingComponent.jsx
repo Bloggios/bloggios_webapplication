@@ -18,22 +18,30 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy} from 'react';
 import styled from "styled-components";
 import {colors} from "../../styles/Theme";
-import FallbackLoader from "../loaders/fallbackLoader";
 import {Outlet} from "react-router-dom";
 
 const MessagingUserList = lazy(()=> import('./NestedComponents/MessagingUserList'));
+// const MobileUserSearchList = lazy(()=> import('./NestedComponents/MobileUserSearchList'));
 
 const MessagingComponent = () => {
 
     return (
         <Wrapper>
 
-            <Suspense fallback={<FallbackLoader width={'32%'} height={'100%'} />}>
-                <MessagingUserList />
-            </Suspense>
+            {/*{width > 600 ? (*/}
+            {/*    <Suspense fallback={<FallbackLoader width={'32%'} height={'100%'} />}>*/}
+            {/*        <MessagingUserList />*/}
+            {/*    </Suspense>*/}
+            {/*) : (*/}
+            {/*    <Suspense fallback={<FallbackLoader width={'100%'} height={'70px'} thickness={2} />}>*/}
+            {/*        <MobileUserSearchList />*/}
+            {/*    </Suspense>*/}
+            {/*)}*/}
+
+            <MessagingUserList/>
 
             <MessageContainer>
                 <Outlet />
@@ -44,21 +52,35 @@ const MessagingComponent = () => {
 
 const Wrapper = styled.div`
     width: 100%;
-    
+    max-width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
-    gap: 16px;
+    justify-content: space-between;
+    
+    @media (max-width: 600px) {
+        flex-direction: column;
+    }
 `;
 
 const MessageContainer = styled.div`
-    width: 68%;
+    width: 67%;
     height: 100%;
     display: flex;
     flex-direction: column;
     background: ${colors.black150};
     border-radius: 20px;
     padding: 20px;
+    
+    @media (max-width: 1000px) {
+        width: 60%;
+    }
+    
+    @media (max-width: 600px) {
+        width: 100%;
+        padding: 10px;
+        height: calc(100% - 50px);
+    }
 `;
 
 export default MessagingComponent;

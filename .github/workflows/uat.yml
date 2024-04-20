@@ -1,0 +1,31 @@
+name: Deploy UAT
+
+on:
+  push:
+    branches: [ uat ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.V8_HOST }}
+          username: ${{ secrets.V8_USERNAME }}
+          key: ${{ secrets.V8_VPS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /root/bloggios_uat/bloggios_webapplication
+            pm2 stop bloggios-uat
+            rm .env
+            rm build -r
+            rm node_modules -r
+            git stash
+            git pull
+            cp /root/secrets/bloggios_webapplication/.env /root/bloggios_uat/bloggios_webapplication
+            npm cache clean --force 
+            npm install
+            npm run build
+            pm2 restart uat.config.json

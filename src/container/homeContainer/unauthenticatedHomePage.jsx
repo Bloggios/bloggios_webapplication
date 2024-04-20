@@ -18,12 +18,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useEffect} from 'react';
 import styled from "styled-components";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useSeo from "../../globalseo/useSeo";
 import Sizedbox from "../../component/spacers/sizedbox";
 import UnAuthBloggiosBase from "../boundries/UnAuthBloggiosBase";
+import {useLocation} from "react-router-dom";
 
 const MemoizedHomeHeader = lazy(()=> import('../../component/sections/HomeHeader'));
 const MemoizedHomeTransitionSection = lazy(()=> import('../../component/sections/HomeTransitionSection'));
@@ -35,7 +36,25 @@ const MemoizedBloggiosTechServicesSection = lazy(()=> import('../../component/se
 
 const UnauthenticatedHomePage = () => {
 
+    const {hash} = useLocation();
     useSeo('homePage')
+
+    const scrollToSection = () => {
+        if (hash) {
+            const id = hash.substring(1);
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        } else {
+            window.scrollTo(0, 0);
+        }
+    };
+
+    useEffect(() => {
+        scrollToSection();
+    }, [hash]);
+
     return (
         <UnAuthBloggiosBase>
             <Wrapper>

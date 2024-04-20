@@ -22,11 +22,11 @@ import React, {lazy, Suspense, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import SimpleLoader from "../loaders/simpleLoader";
 import {initLogout} from "../../service/functions";
 import {IoIosSearch, IoMdLogOut} from "react-icons/io";
 import FallbackLoader from "../loaders/fallbackLoader";
+import {bgBlackRounded} from "../../asset/svg";
 
 const MemoizedCompressedSidebarTile = lazy(()=> import('./components/CompressedSidebarTile'));
 const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
@@ -34,13 +34,13 @@ const MemoizedWebSearchBar = lazy(()=> import('../modal/WebSearchBar'));
 const SidebarCompressed = () => {
 
     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
-    const {isAdded, name, bio, email, profileImage, coverImage, followers, following} = useSelector((state) => state.profile);
+    const {name, profileImage,} = useSelector((state) => state.profile);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(()=> {
         const handleKeyPress = (event) => {
-            if (event.key === '/') {
+            if (event.key === '\\') {
                 if (!isSearchBarOpen) {
                     event.preventDefault();
                     setIsSearchBarOpen(true);
@@ -62,7 +62,7 @@ const SidebarCompressed = () => {
             <Wrapper>
                 <SideBarRoundedWrapper>
                     <SidebarPrimarySection>
-                        <UserAvatar src={profileImage ? profileImage : bloggios_logo} alt={name} />
+                        <UserAvatar src={profileImage ? profileImage : bgBlackRounded} alt={name} />
                         <SearchBarIcon onClick={()=> setIsSearchBarOpen(!isSearchBarOpen)}>
                             <IoIosSearch/>
                         </SearchBarIcon>

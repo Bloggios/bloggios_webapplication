@@ -21,7 +21,7 @@
 import {authenticatedAxios} from "./baseAxios";
 import {
     COUNT_FOLLOW,
-    DETAILED_PROFILE,
+    DETAILED_PROFILE, FOLLOWER_FOLLOWING_LIST_API,
     GET_PROFILE,
     GET_USER_PROFILE,
     PROFILE_LIST,
@@ -72,4 +72,15 @@ export const searchProfileData = (text) => {
             "size": 20
         }
     }).then((response)=> response);
+}
+
+export const followerFollowingListApi = (key, userId, page) => {
+    return authenticatedAxios.get(FOLLOWER_FOLLOWING_LIST_API, {
+        params: {
+            key: key,
+            userId: userId,
+            page: page
+        }
+    })
+        .then(response => response.data);
 }

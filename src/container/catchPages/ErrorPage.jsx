@@ -23,7 +23,7 @@ import styled from "styled-components";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import {errorPageList} from "../../constant/listConstants";
 
-const NotFound = lazy(() => import('../../component/NotFound/NotFound'))
+const NotFound = lazy(() => import('../../component/NotFound/NotFound'));
 
 const ErrorPage = () => {
     return (

@@ -21,28 +21,45 @@
 import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
-    ACTIVITY_PAGE,
+    ACTIVITY_PAGE, ADMIN_PAGE,
     ASK_QUESTION_OUTLET_PAGE,
-    CHATS_PAGE,
+    BLOGGIOS_MESSAGING_HELP,
+    BLOGGIOS_OTHERS_HELP,
+    BLOGGIOS_POST_HELP,
+    BLOGGIOS_QAA_HELP,
+    BLOGGIOS_TECH_HELP,
+    CHATS_PAGE, EDIT_PROFILE_SETTING,
+    FORGET_PASSWORD_PAGE,
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
     NOT_FOUND_PAGE,
     OAUTH_REDIRECT,
     OTP_PAGE,
-    POST_OUTLET_PAGE,
+    POST_PAGE,
+    PRIVACY_POLICY,
+    PRODUCT_DEVELOPMENT_SERVICE,
     PROFILE_ADDITION_INITIAL,
     PROFILE_PAGE,
+    PROFILE_POST_OUTLET_PAGE,
     QUESTION_PAGE,
+    REPORT_BUG_PAGE,
     SECURITY_PAGE,
+    SERVICES_PAGE,
     SETTING_PAGE,
-    SIGNUP_PAGE
+    SIGNUP_PAGE,
+    SUPPORT_PAGE,
+    TERMS_CONDITION
 } from "../constant/pathConstants";
 import FallbackLoader from "../component/loaders/fallbackLoader";
 import ProtectedRoute from "./ProtectedRoute";
 import {useSelector} from "react-redux";
 import OAuthRedirectHandler from "./OAuthRedirectHandler";
 import ChatUserOutlet from "../container/ChatsContainer/Outlet/ChatUserOutlet";
+import BloggiosTechHelpOutlet from "../container/SupportContainer/Outlet/BloggiosTechHelpOutlet";
+import DefaultServiceOutlet from "../container/ServiceContainer/Outlets/DefaultServiceOutlet";
+import AdminProtectedRoute from "./AdminProtectedRoute";
+import ProductIdeationOutlet from "../container/ServiceContainer/Outlets/ProductIdeationOutlet";
 
 const AuthenticatedHomePage = lazy(() => import('../container/homeContainer/AuthenticatedHomePage'));
 const UnauthenticatedHomePage = lazy(() => import('../container/homeContainer/unauthenticatedHomePage'));
@@ -53,7 +70,7 @@ const ProfileAdditionInitial = lazy(() => import('../container/profileContainer/
 const ProfilePage = lazy(()=> import('../container/profileContainer/ProfilePage'));
 const ActivityPage = lazy(()=> import('../container/activityContainer/activityPage'));
 const SecurityPage = lazy(()=> import('../container/securityContainer/securityPage'));
-const SettingPage = lazy(()=> import('../container/settingContainer/settingPage'));
+const SettingPage = lazy(()=> import('../container/settingContainer/SettingPage'));
 const PageNotFound = lazy(()=> import('../container/catchPages/PageNotFound'));
 const QuestionPage = lazy(()=> import('../container/questionContainer/QuestionPage'));
 const ProfileAboutOutlet = lazy(()=> import('../container/profileContainer/outlets/ProfileAboutOutlet'));
@@ -62,6 +79,25 @@ const QuestionOutlet = lazy(()=> import('../container/questionContainer/outlet/Q
 const QuestionAskOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionAskOutlet'));
 const ChatPage = lazy(()=> import('../container/ChatsContainer/ChatPage'));
 const ChatDefaultOutlet = lazy(()=> import('../container/ChatsContainer/Outlet/ChatDefaultOutlet'));
+const PrivacyPolicy = lazy(()=> import('../container/TermsContainer/PrivacyPolicy'));
+const TermsCondition = lazy(()=> import('../container/TermsContainer/TermsCondition'));
+const ReportBugPage = lazy(()=> import('../container/ReportContainer/ReportBugPage'));
+const SupportPage = lazy(()=> import('../container/SupportContainer/SupportPage'));
+const DefaultHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/DefaultHelpOutlet'));
+const BloggiosQAAHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosQAAHelpOutlet'));
+const ForgetPasswordPage = lazy(()=> import('../container/userAuthenticationContainer/forgetPasswordPage'));
+const QuestionDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionDetailsOutlet'));
+const PostPage = lazy(()=> import('../container/PostContainer/PostPage'));
+const PostSectionOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostSectionOutlet'));
+const PostDetailsOutlet = lazy(()=> import('../container/PostContainer/Outlet/PostDetailsOutlet'));
+const ServicePage = lazy(()=> import('../container/ServiceContainer/ServicePage'));
+const ProductDevelopmentOutlet = lazy(()=> import('../container/ServiceContainer/Outlets/ProductDevelopmentOutlet'));
+const BloggiosMessagingHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosMessagingHelpOutlet'));
+const BloggiosPostHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosPostHelpOutlet'));
+const BloggiosOthersHelpOutlet = lazy(()=> import('../container/SupportContainer/Outlet/BloggiosOthersHelpOutlet'));
+const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContainer/outlet/QuestionTagDetailsOutlet'));
+const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
+const EditProfileSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/EditProfileOutlet'));
 
 const Router = () => {
 
@@ -76,25 +112,55 @@ const Router = () => {
                     <Route path={OTP_PAGE} element={<OtpPage/>}/>
                     <Route path={OAUTH_REDIRECT} Component={OAuthRedirectHandler}/>
                     <Route path={NOT_FOUND_PAGE} element={<PageNotFound />} />
+                    <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
+                    <Route path={TERMS_CONDITION} element={<TermsCondition />} />
+                    <Route path={REPORT_BUG_PAGE} element={<ReportBugPage />} />
+                    <Route path={FORGET_PASSWORD_PAGE} element={<ForgetPasswordPage />} />
+                    <Route path={SUPPORT_PAGE} element={<SupportPage />} >
+                        <Route index element={<DefaultHelpOutlet />} />
+                        <Route path={BLOGGIOS_TECH_HELP} element={<BloggiosTechHelpOutlet />} />
+                        <Route path={BLOGGIOS_QAA_HELP} element={<BloggiosQAAHelpOutlet />} />
+                        <Route path={BLOGGIOS_MESSAGING_HELP} element={<BloggiosMessagingHelpOutlet />} />
+                        <Route path={BLOGGIOS_POST_HELP} element={<BloggiosPostHelpOutlet />} />
+                        <Route path={BLOGGIOS_OTHERS_HELP} element={<BloggiosOthersHelpOutlet />} />
+                    </Route>
+                    <Route path={SERVICES_PAGE} element={<ServicePage />} >
+                        <Route index element={<DefaultServiceOutlet />} />
+                        <Route path={PRODUCT_DEVELOPMENT_SERVICE} element={<ProductDevelopmentOutlet />} />
+                        <Route path={'product-ideation'} element={<ProductIdeationOutlet />} /> {/* Testing Purpose */}
+                    </Route>
                     <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>}>
                         <Route path={HOME_PAGE} element={<AuthenticatedHomePage />} />
                         <Route path={PROFILE_ADDITION_INITIAL} element={<ProfileAdditionInitial/>}/>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />} />
                         <Route path={ACTIVITY_PAGE} element={<ActivityPage />} />
                         <Route path={SECURITY_PAGE} element={<SecurityPage />} />
-                        <Route path={SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={SETTING_PAGE} element={<SettingPage />} >
+                            <Route path={EDIT_PROFILE_SETTING} element={<EditProfileSettingOutlet />}/>
+                        </Route>
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >
                             <Route index element={<QuestionOutlet />} />
                             <Route path={ASK_QUESTION_OUTLET_PAGE} element={<QuestionAskOutlet />} />
+                            <Route path={':questionId'} element={<QuestionDetailsOutlet />} />
+                            <Route path={'tags/:tag'} element={<QuestionTagDetailsOutlet />} />
                         </Route>
                         <Route path={PROFILE_PAGE} element={<ProfilePage />}>
                             <Route index element={<ProfileAboutOutlet />} />
-                            <Route path={POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
+                            <Route path={PROFILE_POST_OUTLET_PAGE} element={<ProfilePostOutlet />} />
                         </Route>
                         <Route path={CHATS_PAGE} element={<ChatPage />} >
                             <Route index element={<ChatDefaultOutlet />} />
                             <Route path={':userId'} element={<ChatUserOutlet />} />
                         </Route>
+
+                        <Route path={POST_PAGE} element={<PostPage />} >
+                            <Route index element={<PostSectionOutlet />} />
+                            <Route path={':postId'} element={<PostDetailsOutlet />} />
+                        </Route>
+                    </Route>
+
+                    <Route element={<AdminProtectedRoute isAuthenticated={isAuthenticated} authorities={authorities}/>} >
+                        <Route path={ADMIN_PAGE} element={<AdminPage />} />
                     </Route>
                 </Routes>
             </Suspense>

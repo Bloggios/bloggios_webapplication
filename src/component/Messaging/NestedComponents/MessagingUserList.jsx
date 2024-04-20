@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {IoSearch} from "react-icons/io5";
 import {colors} from "../../../styles/Theme";
 import IconButton from "../../buttons/IconButton";
@@ -32,16 +32,39 @@ import FallbackLoader from "../../loaders/fallbackLoader";
 import {AiOutlineClose} from "react-icons/ai";
 import {uuidValidator} from "../../../util/ComponentValidators";
 import {useNavigate} from "react-router-dom";
+import {userChatHistory as chatHistoryApi} from '../../../restservices/WebsocketsApi';
+import {useQuery} from '@tanstack/react-query';
+import MessagingUserDataCard from './MessagingUserDataCard';
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const MessagingUserList = () => {
+    const {width} = useWindowDimensions();
     const [userSearchRef, userSearchIsFocused] = useIsInputFocused();
-    const { userId } = useSelector((state) => state.auth);
+    const {userId} = useSelector((state) => state.auth);
     const [searchInput, setSearchInput] = useState('');
     const [fetchedUserList, setFetchedUserList] = useState([]);
     const [searchLoader, setSearchLoader] = useState(false);
     const [searchingCatch, setSearchingCatch] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const fetchUserChatHistory = async () => {
+        const response = await chatHistoryApi(userId);
+        return response.object;
+    }
+
+    const {
+        isLoading: isUserChatHistoryLoading,
+        error: userChatHistoryError,
+        data: userChatHistory,
+        isSuccess: isUserChatHistorySuccess,
+        isError: isUserChatHistoryError,
+        refetch: userChatHistoryRefetch
+    } = useQuery({
+        queryKey: ['userChatHistory', userId],
+        queryFn: fetchUserChatHistory,
+        staleTime: 120000
+    });
 
     useEffect(() => {
         setSearchingCatch(false);
@@ -72,23 +95,26 @@ const MessagingUserList = () => {
         } else if (!id || !uuidValidator(id)) {
             dispatchErrorMessage(dispatch, 'User not exists for given data');
         } else {
-            navigate(`${id}`);
+            if (width > 600) {
+                navigate(`${id}`);
+            } else {
+                setSearchInput('');
+                navigate(`${id}`);
+            }
         }
     };
 
-    const getUserListContent = useMemo(() => {
-        if (searchLoader && searchInput.length >= 3) {
-            return <FallbackLoader width={'100%'} height={'100%'} />;
-        }
-        if (searchingCatch) {
+    const getUserListContent = useCallback(() => {
+        if ((searchLoader && searchInput.length >= 3) || isUserChatHistoryLoading) {
+            return <FallbackLoader width={'100%'} height={'100%'}/>;
+        } else if (searchingCatch || (userChatHistoryError && isUserChatHistoryError)) {
             return <SpanText>Error Occurred</SpanText>;
-        }
-        if (!searchLoader && fetchedUserList.length > 0) {
+        } else if (!searchLoader && fetchedUserList.length > 0) {
             return (
                 <UserList>
                     {fetchedUserList.map((item) => (
                         <UserCard key={item.userId} onClick={() => handleUserCardClick(item.userId)}>
-                            <img src={item.profileImage || bgBlackRounded} alt={item.name} />
+                            <img src={item.profileImage || bgBlackRounded} alt={item.name}/>
                             <div>
                                 <h6>{item.name}</h6>
                                 <span>{item.email}</span>
@@ -97,55 +123,104 @@ const MessagingUserList = () => {
                     ))}
                 </UserList>
             );
-        }
-        if (searchInput.length === 0 && !searchLoader) {
-            return <SpanText>Search user</SpanText>;
-        }
-        if (searchInput.length < 3) {
+        } else if (searchInput.length === 0 && !searchLoader) {
+            if (!isUserChatHistoryLoading && isUserChatHistorySuccess && userChatHistory && userChatHistory.length > 0) {
+                return (
+                    <UserList>
+                        {userChatHistory.map((item) => (
+                            <MessagingUserDataCard
+                                id={item.receiverId}
+                                key={item.receiverId}
+                            />
+                        ))}
+                    </UserList>
+                )
+            } else {
+                return <SpanText>Search User</SpanText>
+            }
+        } else if (searchInput.length < 3 && searchInput.length > 0) {
             return <SpanText>Minimum 3 Characters Required</SpanText>;
-        }
-        if (!searchLoader && fetchedUserList.length === 0 && searchInput.length >= 3) {
+        } else if (!searchLoader && fetchedUserList.length === 0 && searchInput.length >= 3) {
             return <SpanText>No User(s) Found</SpanText>;
         }
-        return null;
-    }, [searchLoader, searchingCatch, searchInput, fetchedUserList, handleUserCardClick, navigate]);
+    }, [searchLoader, searchingCatch, fetchedUserList, searchInput.length, isUserChatHistoryLoading, userChatHistory, isUserChatHistoryError, isUserChatHistorySuccess]);
+
+    const getMobileUserListContent = useCallback(() => {
+        if ((searchLoader && searchInput.length >= 3) || isUserChatHistoryLoading) {
+            return <FallbackLoader width={'100%'} height={'100%'}/>;
+        } else if (searchingCatch || (userChatHistoryError && isUserChatHistoryError)) {
+            return <SpanText>Error Occurred</SpanText>;
+        } else if (!searchLoader && fetchedUserList.length > 0) {
+            return (
+                <UserList>
+                    {fetchedUserList.map((item) => (
+                        <UserCard key={item.userId} onClick={() => handleUserCardClick(item.userId)}>
+                            <img src={item.profileImage || bgBlackRounded} alt={item.name}/>
+                            <div>
+                                <h6>{item.name}</h6>
+                                <span>{item.email}</span>
+                            </div>
+                        </UserCard>
+                    ))}
+                </UserList>
+            );
+        } else if (searchInput.length < 3 && searchInput.length > 0) {
+            return <SpanText>Minimum 3 Characters Required</SpanText>;
+        } else if (!searchLoader && fetchedUserList.length === 0 && searchInput.length >= 3) {
+            return <SpanText>No User(s) Found</SpanText>;
+        }
+    }, [searchLoader, searchInput.length, isUserChatHistoryLoading, searchingCatch, userChatHistoryError, isUserChatHistoryError, fetchedUserList]);
+
+    const getMobileSearchContent = useCallback(()=> {
+        if (width <= 600 && getMobileUserListContent()) {
+            return (
+                <UserListMobileWrapper>
+                    {getMobileUserListContent()}
+                </UserListMobileWrapper>
+            )
+        }
+    }, [width, getMobileUserListContent])
 
     return (
-        <UserInfo>
-            <h5>Users</h5>
+        <>
+            <UserInfo>
+                {width > 600 && <h5>Users</h5>}
 
-            <SearchBox>
-                <IoSearch color={userSearchIsFocused ? colors.white100 : colors.white80} />
-                <input
-                    type="search"
-                    inputMode={'search'}
-                    ref={userSearchRef}
-                    maxLength={16}
-                    placeholder={'Search User'}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    value={searchInput}
-                />
-                <IconButton
-                    padding={'7px'}
-                    style={{
-                        visibility: searchInput.length > 0 ? 'visible' : 'hidden',
-                        opacity: searchInput.length > 0 ? 1 : 0,
-                    }}
-                    onClick={() => setSearchInput('')}
-                >
-                    <AiOutlineClose />
-                </IconButton>
-            </SearchBox>
+                <SearchBox>
+                    <IoSearch color={userSearchIsFocused ? colors.white100 : colors.white80}/>
+                    <input
+                        type="search"
+                        inputMode={'search'}
+                        ref={userSearchRef}
+                        maxLength={16}
+                        placeholder={'Search User'}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        value={searchInput}
+                    />
+                    <IconButton
+                        padding={'7px'}
+                        style={{
+                            visibility: searchInput.length > 0 ? 'visible' : 'hidden',
+                            opacity: searchInput.length > 0 ? 1 : 0,
+                        }}
+                        onClick={() => setSearchInput('')}
+                    >
+                        <AiOutlineClose/>
+                    </IconButton>
+                </SearchBox>
 
-            {getUserListContent}
-        </UserInfo>
+                {width > 600 && getUserListContent()}
+            </UserInfo>
+            {getMobileSearchContent()}
+        </>
     );
 };
 
 const UserInfo = styled.div`
-    width: 32%;
+    width: 31%;
+    max-width: 31%;
     height: 100%;
-    max-height: 100%;
+    flex-shrink: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -153,6 +228,7 @@ const UserInfo = styled.div`
     border-radius: 20px;
     padding: 20px;
     gap: 25px;
+    position: relative;
 
     & > h5 {
         font-size: clamp(0.875rem, 0.7713rem + 0.6383vw, 1.25rem);
@@ -165,12 +241,24 @@ const UserInfo = styled.div`
     @media (max-width: 1600px) {
         padding: 10px;
     }
+
+    @media (max-width: 1000px) {
+        width: 39%;
+        max-width: 39%;
+    }
+
+    @media (max-width: 600px) {
+        height: fit-content;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        border-radius: 10px;
+    }
 `;
 
 const SearchBox = styled.div`
     width: 100%;
     height: auto;
-    position: relative;
     background-color: ${colors.black200};
     border-radius: 7px;
     display: flex;
@@ -198,6 +286,10 @@ const SearchBox = styled.div`
         &:focus {
             color: ${colors.white100};
         }
+    }
+
+    @media (max-width: 600px) {
+        background: ${colors.black150};
     }
 `;
 
@@ -274,6 +366,20 @@ const SpanText = styled.h6`
     font-weight: 400;
     text-align: center;
     color: ${colors.white80};
+`;
+
+const UserListMobileWrapper = styled.div`
+    width: 92%;
+    height: auto;
+    max-height: 100%;
+    overflow: auto;
+    background: ${colors.black150};
+    border-radius: 10px;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
 `;
 
 export default MessagingUserList;

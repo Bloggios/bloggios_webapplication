@@ -22,6 +22,7 @@ jobs:
             rm .env
             rm build -r
             rm node_modules -r
+            git stash
             git pull
             cp /root/secrets/bloggios_webapplication/.env /root/bloggios_webapplication
             npm cache clean --force 

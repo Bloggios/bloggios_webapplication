@@ -29,12 +29,13 @@ import {initLogout} from "../../service/functions";
 import {useDispatch} from "react-redux";
 
 const NotFound = ({
-    errorStatus = '404 Not Found',
-    title = 'Page Not Found',
-    message = 'Sorry, the page you are looking for could not be found or has been removed',
-    isRefresh = false,
-    list = notFoundPageList,
-    refreshTitle
+                      errorStatus = '404 Not Found',
+                      title = 'Page Not Found',
+                      message = 'Sorry, the page you are looking for could not be found or has been removed',
+                      isRefresh = false,
+                      list = notFoundPageList,
+                      refreshTitle,
+                      alignSelf
                   }) => {
 
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ const NotFound = ({
         }
     };
 
-    const getRefreshContent = useCallback(()=> {
+    const getRefreshContent = useCallback(() => {
         if (isRefresh) {
             return (
                 <RefreshWrapper>
@@ -57,16 +58,16 @@ const NotFound = ({
                     </RefreshTitle>
 
                     <IconButtonGroup>
-                        <IconWrapper onClick={()=> window.location.reload()} style={{
+                        <IconWrapper onClick={() => window.location.reload()} style={{
                             cursor: 'pointer'
                         }}>
-                            <HiRefresh />
+                            <HiRefresh/>
                         </IconWrapper>
 
-                        <IconWrapper onClick={()=> initLogout(navigate, dispatch)} style={{
+                        <IconWrapper onClick={() => initLogout(navigate, dispatch)} style={{
                             cursor: 'pointer'
                         }}>
-                            <CiLogout />
+                            <CiLogout/>
                         </IconWrapper>
                     </IconButtonGroup>
                 </RefreshWrapper>
@@ -75,12 +76,14 @@ const NotFound = ({
     }, [isRefresh, refreshTitle, navigate, dispatch])
 
     return (
-        <Wrapper>
+        <Wrapper style={{
+            alignSelf: alignSelf
+        }}>
             <div style={{
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px'
+                gap: '10px',
             }}>
                 <NotFoundSpan>
                     {errorStatus}
@@ -98,7 +101,7 @@ const NotFound = ({
             {getRefreshContent()}
 
             <ItemsWrapper>
-                {list.map((item)=> (
+                {list.map((item) => (
                     <Item
                         key={item.id}
                         style={{
@@ -119,10 +122,10 @@ const NotFound = ({
                             </SubtitleSpan>
 
                             <RedirectButton
-                                onClick={()=> handleClick(item.clickAction)}
+                                onClick={() => handleClick(item.clickAction)}
                             >
                                 {item.button}
-                                <FaLongArrowAltRight />
+                                <FaLongArrowAltRight/>
                             </RedirectButton>
                         </ColumnWrapper>
                     </Item>
@@ -188,7 +191,7 @@ const IconWrapper = styled.div`
     border-radius: 50%;
     font-size: 20px;
     flex-shrink: 0;
-    
+
     @media (max-width: 400px) {
         height: 40px;
         width: 40px;

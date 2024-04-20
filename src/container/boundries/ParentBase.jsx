@@ -18,30 +18,52 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useBloggiosSnackbar from "../../hooks/useBloggiosSnackbar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import MemoizedLoaderPage from "../../component/loaders/loaderPage";
 import useBloggiosStomp from "../../hooks/useBloggiosStomp";
 import ErrorPage from "../catchPages/ErrorPage";
 import {Toaster} from "sonner";
-import ParentInfoModal from "../../component/modal/ParentInfoModal";
-import ComingSoonPage from "../../component/animations/ComingSoonPage";
 import ReportModal from "../../component/modal/ReportModal";
+import PrivacyModal from "../../component/modal/PrivacyModal";
+import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
+import {dispatchWarningMessage} from "../../service/functions";
+import bloggiosNotification from '../../asset/audio/bloggiosNotification.mp3';
 
 const ParentBase = ({children}) => {
 
+    const dispatch = useDispatch();
     const { width, height } = useWindowDimensions();
     const {isLoading} = useSelector(state=> state.loading);
     const {isError, errorMessage} = useSelector(state=> state.error);
-    const [isModalOpen, setIsModalOpen] = useState(true);
     const [reportModal, setReportModal] = useState(false);
     const [information, setInformation] = useState({});
-    useBloggiosSnackbar();
+    const audioRef = useRef(null);
+    const [privacyModal, setPrivacyModal] = useState(false);
+    useBloggiosSnackbar(audioRef);
     useBloggiosStomp();
+
+    useEffect(()=> {
+        if (!privacyModal) {
+            let isAccepted = localStorage.getItem(PRIVACY_TERMS_KEY_LOCAL_STORAGE);
+            if (!isAccepted || isAccepted === 'false') {
+                setPrivacyModal(true);
+            }
+        }
+    }, []);
+
+    const handlePrivacyModalClose = () => {
+        let isAccepted = localStorage.getItem(PRIVACY_TERMS_KEY_LOCAL_STORAGE);
+        if (!isAccepted || isAccepted === 'false') {
+            dispatchWarningMessage(dispatch, 'To proceed, kindly acknowledge our Terms and Privacy Policy');
+        } else {
+            window.location.reload();
+        }
+    }
 
     useEffect(() => {
         const handleKeyPress = (event) => {
@@ -57,6 +79,27 @@ const ParentBase = ({children}) => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, []);
+
+    useEffect(() => {
+        const handleShake = (event) => {
+            const { x, y, z } = event.accelerationIncludingGravity || event.acceleration;
+            const acceleration = Math.sqrt(x * x + y * y + z * z);
+            const shakeThreshold = 61;
+            if (acceleration > shakeThreshold) {
+                if (!reportModal) {
+                    if (privacyModal) {
+                        setPrivacyModal(false);
+                    }
+                    setReportModal(true)
+                }
+            }
+        };
+        window.addEventListener('devicemotion', handleShake);
+        return () => {
+            window.removeEventListener('devicemotion', handleShake);
+        };
+    }, []);
+
 
     const handleReportModalClose = () => {
         setReportModal(false);
@@ -89,42 +132,43 @@ const ParentBase = ({children}) => {
     }, [reportModal]);
 
     const getBaseContent = useCallback(()=> {
-        if (true) {
-            return <ComingSoonPage />
+        if (isError && errorMessage) {
+            return <ErrorPage />
+        } else if (isLoading) {
+            return (
+                <AppContainer>
+                    <MemoizedLoaderPage />
+                </AppContainer>
+            )
         } else {
-            if (isError && errorMessage) {
-                return <ErrorPage />
-            } else if (isLoading) {
-                return (
-                    <AppContainer>
-                        <MemoizedLoaderPage />
-                    </AppContainer>
-                )
-            } else {
-                return (
-                    <AppContainer>
-                        {children}
-                        <Toaster
-                            position={width > 600 ? "bottom-right" : "bottom-center"}
-                            richColors={true}
-                            closeButton={true}
-                        />
+            return (
+                <AppContainer>
+                    {children}
+                    <audio style={{display: "none"}} ref={audioRef} src={bloggiosNotification}/>
+                    <Toaster
+                        position={width > 600 ? "bottom-right" : "bottom-center"}
+                        richColors={true}
+                        closeButton={true}
+                    />
 
-                        <ParentInfoModal
-                            isModelOpen={isModalOpen}
-                            onClose={()=> setIsModalOpen(false)}
-                        />
-
+                    {reportModal && (
                         <ReportModal
                             isModelOpen={reportModal}
                             onClose={handleReportModalClose}
                             data={information}
                         />
-                    </AppContainer>
-                )
-            }
+                    )}
+
+                    {privacyModal && (
+                        <PrivacyModal
+                            isModelOpen={privacyModal}
+                            onClose={handlePrivacyModalClose}
+                        />
+                    )}
+                </AppContainer>
+            )
         }
-    }, [isLoading, children, width, isError, errorMessage, isModalOpen, reportModal, information])
+    }, [isLoading, children, width, isError, errorMessage, reportModal, information, privacyModal])
 
     return getBaseContent();
 };

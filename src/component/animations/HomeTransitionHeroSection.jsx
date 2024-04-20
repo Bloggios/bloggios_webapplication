@@ -23,10 +23,23 @@ import {ColumnWrapper} from "../../styles/StyledComponent";
 import styled, {css} from "styled-components";
 import BgTransition from "./BgTransition";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {BLOGGIOS_TECH_ENQUIRY_SECTION} from "../../constant/ElementIdConstants";
+import {useNavigate} from "react-router-dom";
+import {SERVICES_PAGE} from "../../constant/pathConstants";
 
 const HomeTransitionHeroSection = () => {
 
     const {width} = useWindowDimensions();
+    const navigate = useNavigate();
+
+    const handleEnquiryClick = () => {
+        const enquiryForm = document.getElementById(BLOGGIOS_TECH_ENQUIRY_SECTION);
+        if (enquiryForm) {
+            enquiryForm.scrollIntoView({
+                behavior: "smooth"
+            })
+        }
+    }
 
     const headingStyle = {
         fontSize: 'clamp(1rem, -0.0341rem + 6.3636vw, 2.75rem)',
@@ -68,10 +81,10 @@ const HomeTransitionHeroSection = () => {
             </ColumnWrapper>
 
             <BgTransition style={buttonGroupStyle} component={'div'} delay={0.7}>
-                <AskForQuoteButton>
+                <AskForQuoteButton onClick={handleEnquiryClick}>
                     Get a Quote
                 </AskForQuoteButton>
-                <LearnAboutUsButton>
+                <LearnAboutUsButton onClick={()=> navigate(SERVICES_PAGE)}>
                     Learn about us
                 </LearnAboutUsButton>
             </BgTransition>

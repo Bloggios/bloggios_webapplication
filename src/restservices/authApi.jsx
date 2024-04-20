@@ -21,8 +21,10 @@
  * limitations under the License.
  */
 
-import {gatewayAxios} from "./baseAxios";
+import {authenticatedAxios, gatewayAxios} from "./baseAxios";
 import {
+    FORGET_PASSWORD,
+    FORGET_PASSWORD_OTP,
     LOGIN_PATH,
     LOGOUT,
     OTP_USERID_REDIRECT,
@@ -90,4 +92,17 @@ export const refreshTokenSocial = (refreshToken) => {
             'token': refreshToken
         }
     }).then((response)=> response);
+}
+
+export const forgetPasswordOtp = (email) => {
+    return gatewayAxios.get(FORGET_PASSWORD_OTP, {
+        params: {
+            email: email
+        }
+    }).then(response => response.data);
+}
+
+export const forgetPassword = (payload) => {
+    return gatewayAxios.post(FORGET_PASSWORD, payload)
+        .then((response)=> response.data);
 }
