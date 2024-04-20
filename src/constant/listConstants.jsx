@@ -24,7 +24,7 @@ import {
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
-    NOTIFICATIONS_PAGE,
+    NOTIFICATIONS_PAGE, POST_PAGE, PRIVACY_POLICY,
     PROFILE_PAGE,
     QUESTION_PAGE,
     REPORT_BUG_PAGE,
@@ -37,13 +37,13 @@ import {BsChatDots, BsQuestionCircle} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
-import {FaCode, FaInfoCircle, FaQuestion, FaShoppingCart} from "react-icons/fa";
+import {FaBug, FaCode, FaInfoCircle, FaQuestion, FaShoppingCart} from "react-icons/fa";
 import bloggios_logo from '../asset/svg/bg-accent_rounded.svg'
 import {
     MdContactSupport,
     MdMiscellaneousServices,
     MdOutlineContactSupport,
-    MdOutlineNotifications
+    MdOutlineNotifications, MdOutlinePolicy
 } from "react-icons/md";
 import {CgMoreO, CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
@@ -92,6 +92,7 @@ import {
     workWithBest
 } from '../asset/whyUs/index';
 import Avatar from "../component/avatars/avatar";
+import {IoIosHelpCircleOutline} from "react-icons/io";
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
@@ -156,79 +157,46 @@ export const navItemsList = [
 
 export const bloggiosTechLinksList = [
     {
-        label: 'Home',
-        icon: <img src={bloggios_logo} alt={'Bloggios Tech'} height={'100%'}/>,
-        path: 'https://tech.bloggios.com'
+        label: 'Landing',
+        icon: <img src={bgAccentRounded} alt={'Bloggios Tech'} height={'100%'}/>,
+        path: LANDING_PAGE
     },
     {
         label: 'Services',
         icon: <MdMiscellaneousServices/>,
-        path: 'https://tech.bloggios.com/services'
+        path: SERVICES_PAGE
     },
     {
-        label: 'About Us',
-        icon: <FaInfoCircle/>,
-        path: 'https://tech.bloggios.com/about'
-    },
-    {
-        label: 'Software Development',
+        label: 'Product Development',
         icon: <FaCode />,
-        path: 'https://tech.bloggios.com/software-development'
+        path: '/services/product-development'
     },
     {
-        label: 'Website Development',
+        label: 'Web Development',
         icon: <CgWebsite />,
-        path: 'https://tech.bloggios.com/website-development'
+        path: '/services/product-development#webDevelopmentSection'
     },
     {
-        label: 'E-Commerce',
-        icon: <FaShoppingCart />,
-        path: 'https://tech.bloggios.com/ecommerce-development'
+        label: 'Privacy Policy',
+        icon: <MdOutlinePolicy />,
+        path: PRIVACY_POLICY
     },
     {
-        label: 'Software SupportContainer',
-        icon: <MdContactSupport />,
-        path: 'https://tech.bloggios.com/software-support'
+        label: 'Help',
+        icon: <IoIosHelpCircleOutline />,
+        path: SUPPORT_PAGE
     },
     {
-        label: 'Contact',
+        label: 'Report Bug',
+        icon: <FaBug />,
+        path: REPORT_BUG_PAGE
+    },
+    {
+        label: 'Contact Us',
         icon: <BiSupport />,
-        path: 'https://tech.bloggios.com/contact'
+        path: '/#bloggiosTechEnquirySection'
     }
 ]
-
-export const bloggiosLinksList = [
-    {
-        label: 'Home',
-        icon: <img src={bloggios_00_logo} alt={'Bloggios'} height={'100%'}/>,
-        path: HOME_PAGE
-    },
-    {
-        label: 'Posts',
-        icon: <TbMessage2Share />,
-        path: HOME_PAGE
-    },
-    {
-        label: 'Chat',
-        icon: <GiChatBubble />,
-        path: CHATS_PAGE
-    },
-    {
-        label: 'Profile',
-        icon: <CgProfile />,
-        path: PROFILE_PAGE
-    },
-    {
-        label: 'Notifications',
-        icon: <MdOutlineNotifications />,
-        path: NOTIFICATIONS_PAGE
-    },
-    {
-        label: 'Q & A',
-        icon: <FaQuestion />,
-        path: SERVICES_PAGE
-    }
-];
 
 export const globalSearchList = [
     {
@@ -499,22 +467,22 @@ export const mainStreamServiceBloggiosTech = [
     {
         id: 2,
         icon: scalability,
-        label: 'Concept Creation',
-        path: '/services/concept-creation',
+        label: 'Product Ideation',
+        path: '/services#productIdeationServicePageSection',
         text: 'Leverage research to inform a comprehensive product development roadmap.'
     },
     {
         id: 3,
         icon: visionarySolutions,
-        label: 'Support and Training',
-        path: '/services/support-training',
+        label: 'Technical Support',
+        path: '/services#technicalSupportServicePageSection',
         text: 'Provide ongoing technical support or deliver software development training.'
     },
     {
         id: 4,
         icon: workWithBest,
-        label: 'Tech Experts',
-        path: '/services/tech-experts',
+        label: 'Technical Training',
+        path: '/services#technicalExpertServicePageSection',
         text: 'Uncover the perfect candidate by combining technical challenges.'
     },
 ];

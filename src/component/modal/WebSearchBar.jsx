@@ -24,17 +24,34 @@ import styled from "styled-components";
 import {IoIosSearch} from "react-icons/io";
 import {bloggiosLinksList, bloggiosTechLinksList, globalSearchList} from "../../constant/listConstants";
 import {useNavigate} from "react-router-dom";
-import {BsChevronDown} from "react-icons/bs";
+import {BsChevronDown, BsFillPatchQuestionFill} from "react-icons/bs";
 import {searchPostList} from "../../restservices/postApi";
 import {searchProfileList} from "../../restservices/profileApi";
 import {setSnackbar} from "../../state/snackbarSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {SEARCH_EMPTY_RESPONSE} from "../../constant/ReponseMessages";
 import SearchPostSmallComponent from "../Cards/SearchPostSmallComponent";
 import {VscSearchStop} from "react-icons/vsc";
 import FallbackLoader from "../loaders/fallbackLoader";
 import SearchUserSmallComponent from "../Cards/SearchUserSmallComponent";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import bloggios_00_logo from "../../asset/svg/bg_logo_rounded_black.svg";
+import {
+    CHATS_PAGE,
+    HOME_PAGE,
+    NOTIFICATIONS_PAGE,
+    POST_PAGE,
+    SERVICES_PAGE,
+    SETTING_PAGE
+} from "../../constant/pathConstants";
+import {TbMessage2Share} from "react-icons/tb";
+import {GiChatBubble} from "react-icons/gi";
+import {CgProfile} from "react-icons/cg";
+import {MdOutlineNotifications} from "react-icons/md";
+import {FaQuestion} from "react-icons/fa";
+import {bgBlackRounded} from "../../asset/svg";
+import {QUESTION_LIST} from "../../constant/apiConstants";
+import {IoSettings} from "react-icons/io5";
 
 const WebSearchBar = ({
                           isOpen,
@@ -55,6 +72,40 @@ const WebSearchBar = ({
     const [emptyResponse, setEmptyResponse] = useState('')
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();
+    const {userId} = useSelector(state => state.auth);
+
+    const bloggiosLinksList = [
+        {
+            label: 'Home',
+            icon: <img src={bgBlackRounded} alt={'Bloggios'} height={'100%'}/>,
+            path: HOME_PAGE
+        },
+        {
+            label: 'Posts',
+            icon: <TbMessage2Share />,
+            path: POST_PAGE
+        },
+        {
+            label: 'Chat',
+            icon: <GiChatBubble />,
+            path: CHATS_PAGE
+        },
+        {
+            label: 'Profile',
+            icon: <CgProfile />,
+            path: `/profile/${userId}`
+        },
+        {
+            label: 'Q & A',
+            icon: <BsFillPatchQuestionFill />,
+            path: QUESTION_LIST
+        },
+        {
+            label: 'Setting',
+            icon: <IoSettings />,
+            path: '/setting/edit-profile'
+        },
+    ];
 
     const handleClickOutside = (e) => {
         if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -379,14 +430,14 @@ const WebSearchBar = ({
                                             <TextSpan style={{
                                                 textAlign: 'center'
                                             }}>
-                                                Bloggios Tech
+                                                Others
                                             </TextSpan>
 
                                             <BloggiosTechGrid>
                                                 {bloggiosTechLinksList.map((item) => (
                                                     <BloggiosTechItems
                                                         key={item.label}
-                                                        onClick={() => window.open(item.path, '_blank')}
+                                                        onClick={() => navigate(item.path)}
                                                     >
                                                         <div style={{
                                                             height: '25px',
