@@ -22,7 +22,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {
     LANDING_PAGE,
-    LOGIN_PAGE,
+    LOGIN_PAGE, PROFILE_PAGE,
     REPORT_BUG_PAGE,
     SERVICES_PAGE,
     SIGNUP_PAGE,
@@ -32,10 +32,11 @@ import {GoHome, GoPlusCircle} from "react-icons/go";
 import bloggios_logo from "../../../asset/svg/bg_logo_rounded_black.svg";
 import styled from "styled-components";
 import {GrServices} from "react-icons/gr";
-import {FaCode} from "react-icons/fa";
+import {FaCode, FaUserAlt} from "react-icons/fa";
 import {MdLogin, MdOutlineContactSupport} from "react-icons/md";
 import {LuUserPlus} from "react-icons/lu";
 import {AiOutlineBug} from "react-icons/ai";
+import {bgBlackRounded} from "../../../asset/svg";
 
 const LoggedOutMobileNavItems = () => {
 
@@ -74,16 +75,16 @@ const LoggedOutMobileNavItems = () => {
                 </NavItem>
 
                 <NavItem
-                    onClick={() => window.open('https://tech.bloggios.com', 'blank')}
+                    onClick={() => navigate('/services/product-development')}
                 >
                     <FaCode />
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate('/create')}
-                    active={window.location.pathname === '/create'}
+                    onClick={() => navigate(PROFILE_PAGE)}
+                    active={window.location.pathname === PROFILE_PAGE}
                 >
-                    <GoPlusCircle />
+                    <FaUserAlt />
                 </NavItem>
 
                 <NavItem
@@ -91,7 +92,7 @@ const LoggedOutMobileNavItems = () => {
                     onClick={()=> setIsShown(!isShown)}
                 >
                     <ProfileImage
-                        src={bloggios_logo}
+                        src={bgBlackRounded}
                         alt={'Bloggios'}
                     />
                 </NavItem>

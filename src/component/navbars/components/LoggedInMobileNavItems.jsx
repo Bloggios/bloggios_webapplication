@@ -26,13 +26,13 @@ import bloggios_logo from '../../../asset/svg/bg_logo_rounded_black.svg'
 import {
     CHATS_PAGE,
     HOME_PAGE,
-    NOTIFICATIONS_PAGE,
+    NOTIFICATIONS_PAGE, POST_PAGE,
     REPORT_BUG_PAGE,
     SETTING_PAGE,
     SUPPORT_PAGE
 } from "../../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
-import {BsChatDots} from "react-icons/bs";
+import {BsChatDots, BsPatchQuestionFill} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {FaHistory, FaUserAlt} from "react-icons/fa";
 import {IoIosSettings, IoMdLogOut} from "react-icons/io";
@@ -40,6 +40,8 @@ import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/Ser
 import {initLogout} from "../../../service/functions";
 import {BiHelpCircle} from "react-icons/bi";
 import {AiOutlineBug} from "react-icons/ai";
+import {HiPaperAirplane} from "react-icons/hi2";
+import {QUESTION_LIST} from "../../../constant/apiConstants";
 
 const LoggedInMobileNavItems = () => {
 
@@ -85,17 +87,17 @@ const LoggedInMobileNavItems = () => {
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate(NOTIFICATIONS_PAGE)}
-                    active={window.location.pathname === NOTIFICATIONS_PAGE}
+                    onClick={() => navigate(POST_PAGE)}
+                    active={window.location.pathname === POST_PAGE}
                 >
-                    <IoNotificationsOutline />
+                    <HiPaperAirplane />
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate('/create')}
-                    active={window.location.pathname === '/create'}
+                    onClick={() => navigate(QUESTION_LIST)}
+                    active={window.location.pathname === QUESTION_LIST}
                 >
-                    <GoPlusCircle />
+                    <BsPatchQuestionFill />
                 </NavItem>
 
                 <NavItem
@@ -122,6 +124,7 @@ const LoggedInMobileNavItems = () => {
                     </DropdownItem>
 
                     <DropdownItem
+                        disabled={true}
                         onClick={()=> navigate('/activity/' + userId)}
                         active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
                     >
