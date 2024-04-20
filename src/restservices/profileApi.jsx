@@ -20,6 +20,7 @@
 
 import {authenticatedAxios} from "./baseAxios";
 import {
+    ADD_PROFILE,
     COUNT_FOLLOW,
     DETAILED_PROFILE, FOLLOWER_FOLLOWING_LIST_API,
     GET_PROFILE,
@@ -82,5 +83,10 @@ export const followerFollowingListApi = (key, userId, page) => {
             page: page
         }
     })
+        .then(response => response.data);
+}
+
+export const updateProfileApi = (payload) => {
+    return authenticatedAxios.put(ADD_PROFILE, payload)
         .then(response => response.data);
 }
