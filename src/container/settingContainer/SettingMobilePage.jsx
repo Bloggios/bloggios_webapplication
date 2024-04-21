@@ -19,13 +19,40 @@
  */
 
 import React from 'react';
+import {Outlet} from "react-router-dom";
+import styled from "styled-components";
+import {colors} from "../../styles/Theme";
 
 const SettingMobilePage = () => {
     return (
-        <div>
-            Setting Mobile Page
-        </div>
+        <Wrapper>
+            <Outlet />
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    width: 97%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    background-color: ${colors.black400};
+    margin: 25px auto;
+    padding: 16px;
+    border-radius: 10px;
+    
+    & > h2 {
+        font-size: clamp(1.25rem, 1.1123rem + 0.8475vw, 1.5625rem);
+        font-family: inherit;
+        letter-spacing: inherit;
+        font-weight: 600;
+    }
+    
+    @media (max-width: 350px) {
+        padding: 16px 10px;
+    }
+`;
 
 export default SettingMobilePage;

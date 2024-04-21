@@ -8,12 +8,15 @@ import {colors} from "../../../styles/Theme";
 import {useDispatch, useSelector} from "react-redux";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {handleImageChange} from "../../../service/functions";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {TbEditCircle} from "react-icons/tb";
 
 const ProfilePhotoContainer = () => {
 
     const {name, email, profileImage, coverImage, link, profileTag} = useSelector((state)=> state.profile);
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
 
     useLayoutEffect(() => {
         if (name && name.length > 0) {
@@ -29,7 +32,7 @@ const ProfilePhotoContainer = () => {
         <ProfileContainer>
             <InfoWrapper>
                 <Avatar
-                    size={'60px'}
+                    size={width > 500 ? '60px' : '44px'}
                     image={profileImage ? profileImage : bgBlackRounded}
                     fallbackImage={notFound}
                     borderRadius={'50%'}
@@ -46,8 +49,8 @@ const ProfilePhotoContainer = () => {
                 </ColumnWrapper>
             </InfoWrapper>
 
-            <Button>
-                Change Photo
+            <Button title={'Change Profile Photo'}>
+                {width > 500 ? 'Change Photo' : <TbEditCircle />}
                 <input
                     type="file"
                     accept="image/*"
@@ -94,6 +97,16 @@ const Button = styled.label`
     font-size: clamp(0.875rem, 0.8333rem + 0.1667vw, 1rem);
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
+    
+    @media (max-width: 500px) {
+        border-radius: 50%;
+        flex-shrink: 0;
+        padding: 6px;
+        
+        & > svg {
+            font-size: 20px;
+        }
+    }
     
     &:hover, &:active {
         background-color: ${colors.accent100};

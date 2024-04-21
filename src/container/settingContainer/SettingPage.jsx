@@ -38,7 +38,9 @@ const SettingPage = () => {
                     <SettingWebPage />
                 </Suspense>
             ) : (
-                <Outlet />
+                <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                    <SettingMobilePage />
+                </Suspense>
             )}
         </BloggiosSidebarBase>
     );

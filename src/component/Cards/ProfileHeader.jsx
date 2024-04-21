@@ -39,7 +39,6 @@ const ProfileHeader = ({
     const {width} = useWindowDimensions();
     const {userId} = useSelector((state) => state.auth);
     const [isCoverImage, setIsCoverImage] = useState(false);
-    const [isImageModel, setIsImageModel] = useState(false);
     const [fetchFollowing, setFetchFollowing] = useState({
         isFollowing: false,
         isChecking: true
@@ -180,7 +179,6 @@ const ProfileHeader = ({
                         translate={width > 500 ? 'translate(20px, -50%)' : 'translate(6px, -45%)'}
                         borderRadius={'50%'}
                         border={width > 500 ? '4px solid #0c0c0c' : '2px solid #0c0c0c'}
-                        onClick={()=> setIsImageModel(true)}
                     />
 
                     {id === userId && (
@@ -273,12 +271,6 @@ const ProfileHeader = ({
                     type={followFollowingModal.type ? followFollowingModal.type : 'follower'}
                 />
             )}
-
-            <ImageModal
-                isModelOpen={isImageModel}
-                onClose={()=> setIsImageModel(false)}
-                image={profileImage}
-            />
         </>
     )
 }

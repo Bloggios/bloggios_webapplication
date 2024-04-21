@@ -44,7 +44,7 @@ const MobileSettingTiles = () => {
                 <IoMdLogOut className={'error__color'} />
             </SettingTile>
             <SettingTile>
-                <span className={'error__color'}>Logout from all Devices</span>
+                <span className={'error__color'} onClick={logoutUser}>Logout from all Devices</span>
                 <HiOutlineLogout className={'error__color'} />
             </SettingTile>
         </Wrapper>

@@ -46,10 +46,6 @@ const EditProfileOutlet = () => {
             <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
                 <ProfileDataEditFields />
             </Suspense>
-
-            <BloggiosDataFooter>
-
-            </BloggiosDataFooter>
         </Wrapper>
     );
 };
@@ -65,10 +61,15 @@ const Wrapper = styled.div`
     @media (max-width: 1600px) {
         width: 75%;
     }
-`;
-
-const BloggiosDataFooter = styled.div`
     
+    @media (max-width: 1000px) {
+        width: 85%;
+    }
+    
+    @media (max-width: 600px) {
+        width: 100%;
+        padding: 20px 0;
+    }
 `;
 
 export default EditProfileOutlet;

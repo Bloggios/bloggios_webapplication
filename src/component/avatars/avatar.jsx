@@ -18,10 +18,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import {bgBlackRounded} from "../../asset/svg";
+import ImageModal from "../modal/ImageModal";
 
 const Avatar = ({
                     image,
@@ -34,33 +35,42 @@ const Avatar = ({
                     borderRadius = '20px',
                     border = '4px solid #1a1a1a',
                     translate,
-                    fallbackImage = bgBlackRounded,
-                    onClick
+                    fallbackImage = bgBlackRounded
                 }) => {
+
+    const [isImageModel, setIsImageModel] = useState(false);
 
     const handleImageError = (event) => {
         event.target.src = fallbackImage
     }
 
     return (
-        <ProfileImageWrapper
-            onClick={onClick}
-            style={{
-                position,
-                top,
-                left,
-                right,
-                bottom,
-                height: size,
-                width: size,
-                borderRadius,
-                border,
-                transform: translate,
-                minWidth: size
-            }}
-        >
-            <ProfileImage loading={"lazy"} src={image} onError={handleImageError}/>
-        </ProfileImageWrapper>
+        <>
+            <ProfileImageWrapper
+                onClick={() => setIsImageModel(true)}
+                style={{
+                    position,
+                    top,
+                    left,
+                    right,
+                    bottom,
+                    height: size,
+                    width: size,
+                    borderRadius,
+                    border,
+                    transform: translate,
+                    minWidth: size
+                }}
+            >
+                <ProfileImage loading={"lazy"} src={image} onError={handleImageError}/>
+            </ProfileImageWrapper>
+
+            <ImageModal
+                isModelOpen={isImageModel}
+                onClose={() => setIsImageModel(false)}
+                image={image}
+            />
+        </>
     );
 };
 

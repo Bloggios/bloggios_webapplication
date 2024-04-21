@@ -28,11 +28,26 @@ export const Heading2 = styled.h2`
     letter-spacing: 1px;
 `;
 
+const TextOverflowStyle = css`
+    width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 1100px) {
+        width: 180px;
+    }
+
+    @media (max-width: 340px) {
+        width: 120px;
+    }
+`;
+
 export const Span = styled.span`
     font-size: clamp(0.875rem, 0.8333rem + 0.1667vw, 1rem); // 14px to 16px
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
     color: ${colors.white80};
+    ${TextOverflowStyle};
 `;
 
 export const Caption = styled.span`
@@ -41,6 +56,7 @@ export const Caption = styled.span`
     letter-spacing: 1px;
     color: ${colors.white60};
     font-weight: 300;
+    ${TextOverflowStyle};
 `;
 
 export const Field = styled.div`

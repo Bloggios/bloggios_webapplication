@@ -105,6 +105,7 @@ const Tile = styled.div`
         font-size: 15px;
         font-family: "Poppins", sans-serif;
         letter-spacing: 1px;
+        text-align: right;
     }
     
     &:hover, &:active {

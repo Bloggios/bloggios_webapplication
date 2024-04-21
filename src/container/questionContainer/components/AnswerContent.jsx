@@ -100,7 +100,6 @@ const AnswerContent = ({
                         borderRadius={'50%'}
                         image={profileData.profileImage ? profileData.profileImage : bgBlackRounded}
                         fallbackImage={notFound}
-                        onClick={() => navigate(`/profile/${profileData.userId}`)}
                     />
 
                     <ColumnWrapper
