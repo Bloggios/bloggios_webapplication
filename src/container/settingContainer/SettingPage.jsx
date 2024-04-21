@@ -22,6 +22,7 @@ import React, {lazy, Suspense} from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {Outlet} from "react-router-dom";
 
 const SettingWebPage = lazy(()=> import('./SettingWebPage'));
 const SettingMobilePage = lazy(()=> import('./SettingMobilePage'));

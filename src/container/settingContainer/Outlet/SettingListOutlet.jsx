@@ -11,40 +11,40 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *      
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *      
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-.gradient__light-yellow {
-    background: linear-gradient(to right, rgb(220, 164, 192), rgb(252, 239, 109));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+import React, {lazy, Suspense} from 'react';
+import styled from "styled-components";
+import {FaRegUserCircle} from "react-icons/fa";
+import {RiVerifiedBadgeLine} from "react-icons/ri";
+import {colors} from "../../../styles/Theme";
+import Divider from "../../../component/divider/divider";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
 
-.gradient__light-purple {
-    background: linear-gradient(to right, rgb(195, 184, 253), rgb(147, 120, 251));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+const MobileSettingTiles = lazy(()=> import('../Components/MobileSettingTiles'));
 
-.gradient__light-yellow-green {
-    background: linear-gradient(270deg, #dfda7d, #84e15f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+const SettingListOutlet = () => {
+    return (
+        <>
+            <h2>
+                Settings
+            </h2>
 
-.gradient__dark-orange {
-    background: linear-gradient(270deg, #ee4700, #ffb628);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+            <Divider width={'90%'} color={colors.white10} verticalSpacing={0} />
 
-.gradient__light-blue {
-    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
+                <MobileSettingTiles />
+            </Suspense>
+            
+        </>
+    );
+};
+
+
+
+export default SettingListOutlet;

@@ -50,7 +50,7 @@ const ComingSoonPage = () => {
                         The power of connection,<br/>powered by software
                     </BgTransition>
                     <LaunchingInformation>
-                        Launching Softly on<br/>April 15, 2024
+                        Launching Publicly on<br/>April 28, 2024
                     </LaunchingInformation>
                 </TextWrapper>
 
@@ -64,12 +64,12 @@ const ComingSoonPage = () => {
 
 const Wrapper = styled.main`
     width: 100vw;
-    min-height: 100vh;
+    height: auto;
 `;
 
 const InnerDiv = styled.div`
-    height: 100vh;
     width: 100%;
+    min-height: 100vh;
     background: rgba(30, 30, 30, 0.1);
     backdrop-filter: blur(16px);
     display: flex;
@@ -78,6 +78,7 @@ const InnerDiv = styled.div`
     justify-content: center;
     gap: 25px;
     user-select: none;
+    padding: 25px 0;
 `;
 
 const TextWrapper = styled.div`

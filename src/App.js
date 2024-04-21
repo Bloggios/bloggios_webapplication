@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import Router from "./util/Router";
 import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
@@ -32,6 +32,8 @@ import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInte
 import {checkIsProfileAdded} from "./service/functions";
 import './styles/GlobalStyles.css';
 import './styles/TextStyles.css';
+import {useQuery} from "@tanstack/react-query";
+import {addError} from "./state/errorSlice";
 
 const App = () => {
 
@@ -40,7 +42,7 @@ const App = () => {
     const navigate = useNavigate();
     const authenticatedAxios = AuthenticatedAxiosInterceptor();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         let isMounted = true;
         const timeoutId = setTimeout(() => {
             if (isMounted) {
@@ -49,16 +51,16 @@ const App = () => {
         }, 4000);
 
         refreshToken()
-            .then((response) => {
+            .then(async (response) => {
                 if (isMounted) {
                     clearTimeout(timeoutId);
                     const authData = {...response.data, isAuthenticated: true};
                     dispatch(setCredentials(authData));
-                    checkIsProfileAdded(
+                    await checkIsProfileAdded(
                         authData.accessToken,
                         dispatch,
                         navigate
-                    )
+                    );
                     setIsChecking(false);
                 }
             })

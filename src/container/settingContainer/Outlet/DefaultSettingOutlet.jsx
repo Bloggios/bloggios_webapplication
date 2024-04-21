@@ -18,33 +18,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-.gradient__light-yellow {
-    background: linear-gradient(to right, rgb(220, 164, 192), rgb(252, 239, 109));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+import React from 'react';
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import EditProfileOutlet from "./EditProfileOutlet";
+import SettingListOutlet from "./SettingListOutlet";
 
-.gradient__light-purple {
-    background: linear-gradient(to right, rgb(195, 184, 253), rgb(147, 120, 251));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+const DefaultSettingOutlet = () => {
 
-.gradient__light-yellow-green {
-    background: linear-gradient(270deg, #dfda7d, #84e15f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    const {width} = useWindowDimensions();
 
-.gradient__dark-orange {
-    background: linear-gradient(270deg, #ee4700, #ffb628);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    return width > 850 ? <EditProfileOutlet /> : <SettingListOutlet />
+};
 
-.gradient__light-blue {
-    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+export default DefaultSettingOutlet;

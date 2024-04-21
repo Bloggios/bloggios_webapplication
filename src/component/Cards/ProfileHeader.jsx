@@ -17,6 +17,8 @@ import {IoIosLink} from "react-icons/io";
 import * as Profile from '../../container/profileContainer/Components/StyledComponents';
 import Divider from "../divider/divider";
 import FollowFollowingModal from "../modal/FollowFollowingModal";
+import ImageModal from "../modal/ImageModal";
+import {bgBlackRounded} from "../../asset/svg";
 
 const ProfileHeader = ({
                            name,
@@ -169,7 +171,7 @@ const ProfileHeader = ({
                     )}
 
                     <Avatar
-                        image={profileImage ? profileImage : bloggios_logo}
+                        image={profileImage ? profileImage : bgBlackRounded}
                         alt={name}
                         size={width > 700 ? '140px' : width > 500 ? '120px' : '80px'}
                         position={'absolute'}

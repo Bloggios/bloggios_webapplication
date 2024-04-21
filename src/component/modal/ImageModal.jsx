@@ -18,33 +18,40 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-.gradient__light-yellow {
-    background: linear-gradient(to right, rgb(220, 164, 192), rgb(252, 239, 109));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+import React from 'react';
+import FadeModal from "./FadeModal";
+import {colors} from "../../styles/Theme";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {bgBlackRounded} from "../../asset/svg";
 
-.gradient__light-purple {
-    background: linear-gradient(to right, rgb(195, 184, 253), rgb(147, 120, 251));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+const ImageModal = ({
+    isModelOpen,
+    onClose,
+    image
+                    }) => {
 
-.gradient__light-yellow-green {
-    background: linear-gradient(270deg, #dfda7d, #84e15f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    const {width} = useWindowDimensions();
 
-.gradient__dark-orange {
-    background: linear-gradient(270deg, #ee4700, #ffb628);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+    return (
+        <FadeModal
+            isOpen={isModelOpen}
+            onClose={onClose}
+            width={width > 500 ? 500 : '80%'}
+            height={'fit-content'}
+            borderRadius={'50%'}
+            bgColor={"transparent"}
+            padding={0}
+            margin={'40px 0'}
+            overflow={'hidden'}
+            boxShadow={'none'}
+        >
+            <img src={image ? image : bgBlackRounded} alt="Bloggios" style={{
+                width: '100%',
+                aspectRatio: '1/1',
+                objectFit: 'cover'
+            }}/>
+        </FadeModal>
+    );
+};
 
-.gradient__light-blue {
-    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+export default ImageModal;

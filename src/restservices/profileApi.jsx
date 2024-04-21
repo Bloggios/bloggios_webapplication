@@ -20,6 +20,7 @@
 
 import {authenticatedAxios} from "./baseAxios";
 import {
+    ADD_PROFILE, BADGE_REQUEST,
     COUNT_FOLLOW,
     DETAILED_PROFILE, FOLLOWER_FOLLOWING_LIST_API,
     GET_PROFILE,
@@ -83,4 +84,14 @@ export const followerFollowingListApi = (key, userId, page) => {
         }
     })
         .then(response => response.data);
+}
+
+export const updateProfileApi = (payload) => {
+    return authenticatedAxios.put(ADD_PROFILE, payload)
+        .then(response => response.data);
+}
+
+export const badgeRequest = (payload) => {
+    return authenticatedAxios.post(BADGE_REQUEST, payload)
+        .then((response)=> response.data);
 }

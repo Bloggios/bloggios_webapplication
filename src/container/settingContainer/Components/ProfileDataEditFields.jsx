@@ -18,34 +18,50 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import * as Bg from "./StyledComponent";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import useIsInputFocused from "../../../hooks/useIsInputFocused";
 import {bgBlackRounded, defaultCover} from "../../../asset/svg";
-import {profileTagsList} from "../../../restservices/profileApi";
-import {dispatchError} from "../../../service/functions";
+import {profileTagsList, updateProfileApi} from "../../../restservices/profileApi";
+import {
+    dispatchError,
+    dispatchErrorMessage,
+    dispatchSuccessMessage,
+    fetchProfileAndDispatch
+} from "../../../service/functions";
 import {colors} from "../../../styles/Theme";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {useMutation} from "@tanstack/react-query";
+import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import useUserProfile from "../../../hooks/useUserProfile";
 
 const ProfileDataEditFields = () => {
 
-    const {name, bio, profileImage, coverImage, link, profileTag} = useSelector((state)=> state.profile);
+    const profileSelector = useSelector((state)=> state.profile);
     const [options, setOptions] = useState([]);
     const [linkRef, isLinkFocused] = useIsInputFocused();
     const [textAreaRef, isTextAreaFocused] = useIsInputFocused();
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();
-    const [profileData, setProfileData] = useState({
-        name: name,
-        bio: bio ? bio : '',
-        profileImage: profileImage || bgBlackRounded,
-        coverImage: coverImage || defaultCover,
-        link: link || '',
-        profileTag: profileTag || "Other",
-    });
+    const [profileData, setProfileData] = useState({});
+    const [isChecking, setIsChecking] = useState(true);
+
+    useEffect(() => {
+        if (profileSelector && profileSelector.name && profileSelector.name.length > 0) {
+            setProfileData({
+                name: profileSelector.name,
+                bio: profileSelector.bio,
+                link: profileSelector.link,
+                profileTag: profileSelector.profileTag,
+            })
+            setIsChecking(false);
+        }
+
+        return () => setIsChecking(true);
+    }, [profileSelector]);
 
     const handleChange = (event, property) => {
         setProfileData(prevState => ({
@@ -62,8 +78,62 @@ const ProfileDataEditFields = () => {
         })
     }, [])
 
-    const handleUpdate = () => {
+    const updateProfileMutation = useMutation({
+        mutationFn: () => updateProfileApi(profileData),
+        onSuccess: async () => {
+            dispatchSuccessMessage(dispatch, "Profile updated successfully to Bloggios")
+            await fetchProfileAndDispatch(dispatch);
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error)
+        }
+    })
 
+    const isButtonDisabled = () => {
+        const previousData = {
+            name: profileSelector.name,
+            bio: profileSelector.bio,
+            link: profileSelector.link,
+            profileTag: profileSelector.profileTag,
+        }
+        return JSON.stringify(previousData) === JSON.stringify(profileData);
+    }
+
+    const handleUpdate = () => {
+        if (profileData.name?.length < 2) {
+            dispatchErrorMessage(dispatch, "Please enter correct Name");
+            return;
+        } else if (profileData.link?.length > 0) {
+            if (profileData.link.startsWith('http://')) {
+                dispatchErrorMessage(dispatch, 'Unsecured Link is not allowed');
+                return;
+            }
+            setProfileData(prevState => ({
+                ...prevState,
+                link: profileData.link?.length > 0 && profileData.link.startsWith('https://') ? profileData.link : `https://${profileData.link}`
+            }))
+        } else if (profileData.link?.length > 150) {
+            dispatchErrorMessage(dispatch, 'Bio must be less than 150 Characters');
+            return;
+        } else if (profileData.bio.length > 0) {
+            const newlineCount = (profileData.bio.match(/\n/g) || []).length;
+            if (newlineCount > 3) {
+                dispatchErrorMessage(dispatch, 'Bio must be less than 3 Lines');
+                return;
+            }
+        }
+        updateProfileMutation.mutate();
+    }
+
+    const getLink = (link) => {
+        if (link?.startsWith('https://')) {
+            link = link.slice(8);
+        }
+        return link;
+    }
+
+    if (isChecking) {
+        return <FallbackLoader width={'100%'} height={'250px'} />
     }
 
     return (
@@ -121,7 +191,7 @@ const ProfileDataEditFields = () => {
                         type={'text'}
                         placeholder={'Enter Link here'}
                         maxLength={200}
-                        value={profileData.link}
+                        value={getLink(profileData.link)}
                         onChange={(e) => handleChange(e, 'link')}
                     />
                 </Bg.LinkInput>
@@ -152,6 +222,8 @@ const ProfileDataEditFields = () => {
                 onClick={handleUpdate}
                 loaderSize={'2px'}
                 loaderDotsSize={'2px'}
+                disabled={isButtonDisabled() || updateProfileMutation.isPending}
+                dBgColor={colors.accent60}
                 bgColor={colors.accent100}
                 hBgColor={colors.accent80}
                 aBgColor={colors.accent100}

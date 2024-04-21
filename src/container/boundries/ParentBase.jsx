@@ -33,6 +33,7 @@ import PrivacyModal from "../../component/modal/PrivacyModal";
 import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
 import {dispatchWarningMessage} from "../../service/functions";
 import bloggiosNotification from '../../asset/audio/bloggiosNotification.mp3';
+import ComingSoonPage from "../../component/animations/ComingSoonPage";
 
 const ParentBase = ({children}) => {
 
@@ -132,8 +133,8 @@ const ParentBase = ({children}) => {
     }, [reportModal]);
 
     const getBaseContent = useCallback(()=> {
-        if (isError && errorMessage) {
-            return <ErrorPage />
+        if (true) {
+            return <ComingSoonPage />
         } else if (isLoading) {
             return (
                 <AppContainer>

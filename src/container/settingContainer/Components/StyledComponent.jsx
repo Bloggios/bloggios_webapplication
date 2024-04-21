@@ -28,11 +28,26 @@ export const Heading2 = styled.h2`
     letter-spacing: 1px;
 `;
 
+const TextOverflowStyle = css`
+    width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 1100px) {
+        width: 180px;
+    }
+
+    @media (max-width: 340px) {
+        width: 120px;
+    }
+`;
+
 export const Span = styled.span`
     font-size: clamp(0.875rem, 0.8333rem + 0.1667vw, 1rem); // 14px to 16px
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
     color: ${colors.white80};
+    ${TextOverflowStyle};
 `;
 
 export const Caption = styled.span`
@@ -41,6 +56,7 @@ export const Caption = styled.span`
     letter-spacing: 1px;
     color: ${colors.white60};
     font-weight: 300;
+    ${TextOverflowStyle};
 `;
 
 export const Field = styled.div`
@@ -199,4 +215,40 @@ export const SelectStyle = styled.select`
         font-family: 'Poppins', sans-serif;
         letter-spacing: 1px;
     }
+`;
+
+export const Wrapper = styled.div`
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 25px 10px;
+    align-self: center;
+
+    @media (max-width: 1600px) {
+        width: 75%;
+    }
+    
+    @media (max-width: 1000px) {
+        width: 85%;
+    }
+    
+    @media (max-width: 600px) {
+        width: 100%;
+        padding: 20px 0;
+    }
+`;
+
+export const Paragraph = styled.p`
+    font-size: clamp(0.875rem, 0.6964rem + 0.5714vw, 1rem); // 14px to 16px (500px to 850px)
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    color: ${colors.white80};
+`;
+
+export const Paragraph2 = styled.p`
+    font-size: clamp(0.625rem, 0.4464rem + 0.5714vw, 0.75rem); // 10px to 12px (500px to 850px)
+    font-family: "Poppins", sans-serif;
+    letter-spacing: 1px;
+    color: ${colors.white60};
 `;
