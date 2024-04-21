@@ -22,7 +22,7 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {
     ACTIVITY_PAGE, ADMIN_PAGE,
-    ASK_QUESTION_OUTLET_PAGE,
+    ASK_QUESTION_OUTLET_PAGE, BADGE_VERIFICATION_SETTING_OUTLET,
     BLOGGIOS_MESSAGING_HELP,
     BLOGGIOS_OTHERS_HELP,
     BLOGGIOS_POST_HELP,
@@ -99,6 +99,7 @@ const QuestionTagDetailsOutlet = lazy(()=> import('../container/questionContaine
 const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
 const EditProfileSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/EditProfileOutlet'));
 const DefaultSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/DefaultSettingOutlet'));
+const BadgeVerificationOutlet = lazy(()=> import('../container/settingContainer/Outlet/BadgeVerificationOutlet'));
 
 const Router = () => {
 
@@ -139,6 +140,7 @@ const Router = () => {
                         <Route path={SETTING_PAGE} element={<SettingPage />} >
                             <Route index element={<DefaultSettingOutlet />} />
                             <Route path={EDIT_PROFILE_SETTING} element={<EditProfileSettingOutlet />}/>
+                            <Route path={BADGE_VERIFICATION_SETTING_OUTLET} element={<BadgeVerificationOutlet />} />
                         </Route>
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >
                             <Route index element={<QuestionOutlet />} />

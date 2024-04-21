@@ -41,3 +41,10 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.gradient__light-blue {
+    background: linear-gradient(to right, rgb(0, 168, 253), #fff 50%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

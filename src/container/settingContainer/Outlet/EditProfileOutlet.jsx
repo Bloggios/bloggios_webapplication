@@ -18,15 +18,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense, useEffect, useLayoutEffect, useState} from 'react';
+import React, {lazy, Suspense} from 'react';
 import styled from "styled-components";
 import * as Bg from '../Components/StyledComponent';
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
-import {useDispatch, useSelector} from "react-redux";
-import {bgBlackRounded, defaultCover} from "../../../asset/svg";
-import useIsInputFocused from "../../../hooks/useIsInputFocused";
-import {profileTagsList} from "../../../restservices/profileApi";
-import {dispatchError} from "../../../service/functions";
 
 const ProfilePhotoContainer = lazy(()=> import('../Components/ProfilePhotoContainer'));
 const ProfileDataEditFields = lazy(()=> import('../Components/ProfileDataEditFields'));
@@ -34,7 +29,7 @@ const ProfileDataEditFields = lazy(()=> import('../Components/ProfileDataEditFie
 const EditProfileOutlet = () => {
 
     return (
-        <Wrapper>
+        <Bg.Wrapper>
             <Bg.Heading2>
                 Edit Profile
             </Bg.Heading2>
@@ -46,30 +41,8 @@ const EditProfileOutlet = () => {
             <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
                 <ProfileDataEditFields />
             </Suspense>
-        </Wrapper>
+        </Bg.Wrapper>
     );
 };
-
-const Wrapper = styled.div`
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 25px 10px;
-    align-self: center;
-
-    @media (max-width: 1600px) {
-        width: 75%;
-    }
-    
-    @media (max-width: 1000px) {
-        width: 85%;
-    }
-    
-    @media (max-width: 600px) {
-        width: 100%;
-        padding: 20px 0;
-    }
-`;
 
 export default EditProfileOutlet;
