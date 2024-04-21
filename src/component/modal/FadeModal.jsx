@@ -20,6 +20,8 @@
 
 import React, {useEffect} from 'react';
 import styled from "styled-components";
+import IconButton from "../buttons/IconButton";
+import {AiOutlineClose} from "react-icons/ai";
 
 const ModalWrapper = styled.div`
     position: fixed;
@@ -40,17 +42,10 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         //transform: ${({isOpen}) => (isOpen ? 'translateY(0)' : 'translateY(-100%)')} translateZ(0); /* Hardware acceleration */
     transform: translateZ(0);
     will-change: transform;
     transition: transform 0.3s ease-in-out;
-`;
-
-const CloseButton = styled.button`
-    margin-top: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
 `;
 
 const FadeModal = ({
@@ -65,7 +60,10 @@ const FadeModal = ({
                        bgColor,
                        border,
                        ref,
-                       gap
+                       gap,
+                       aspectRatio,
+                       overflow,
+                       boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)'
                    }) => {
     const handleClose = () => {
         onClose();
@@ -99,10 +97,24 @@ const FadeModal = ({
                 border: border,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: gap
+                gap: gap,
+                aspectRatio: aspectRatio,
+                overflow: overflow,
+                boxShadow: boxShadow
             }} isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
                 {children}
             </ModalContent>
+
+            <IconButton
+                onClick={onClose}
+                style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                }}
+            >
+                <AiOutlineClose />
+            </IconButton>
         </ModalWrapper>
     );
 };

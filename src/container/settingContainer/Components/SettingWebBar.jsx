@@ -27,21 +27,8 @@ import {useNavigate} from "react-router-dom";
 import {blueBadge, goldenBadge} from "../../../asset/svg";
 import {RiVerifiedBadgeFill, RiVerifiedBadgeLine} from "react-icons/ri";
 import {GoVerified} from "react-icons/go";
+import {settingListItems} from "../../../constant/listConstants";
 
-const settingListItems = [
-    {
-        id: 1,
-        label: 'Edit Profile',
-        icon: <FaRegUserCircle />,
-        path: '/setting/edit-profile',
-    },
-    {
-        id: 2,
-        label: 'Verification',
-        icon: <RiVerifiedBadgeLine />,
-        path: '/setting/verification',
-    }
-]
 const SettingWebBar = () => {
 
     const navigate = useNavigate();
@@ -112,13 +99,6 @@ const Tile = styled.div`
     
     & > svg {
         font-size: 20px;
-    }
-    
-    & > img {
-        width: 34px;
-        height: 34px;
-        padding: 0;
-        object-fit: cover;
     }
     
     & > span {

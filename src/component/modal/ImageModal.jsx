@@ -11,62 +11,47 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *      
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *      
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import {FaRegUserCircle} from "react-icons/fa";
-import {RiVerifiedBadgeLine} from "react-icons/ri";
-import {colors} from "../../../styles/Theme";
-import Divider from "../../../component/divider/divider";
-import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import React from 'react';
+import FadeModal from "./FadeModal";
+import {colors} from "../../styles/Theme";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import {bgBlackRounded} from "../../asset/svg";
 
-const MobileSettingTiles = lazy(()=> import('../Components/MobileSettingTiles'));
+const ImageModal = ({
+    isModelOpen,
+    onClose,
+    image
+                    }) => {
 
-const SettingListOutlet = () => {
+    const {width} = useWindowDimensions();
+
     return (
-        <Wrapper>
-            <h2>
-                Settings
-            </h2>
-
-            <Divider width={'90%'} color={colors.white10} verticalSpacing={0} />
-
-            <Suspense fallback={<FallbackLoader width={'100%'} height={'250px'} />}>
-                <MobileSettingTiles />
-            </Suspense>
-            
-        </Wrapper>
+        <FadeModal
+            isOpen={isModelOpen}
+            onClose={onClose}
+            width={width > 500 ? 500 : '80%'}
+            height={'fit-content'}
+            borderRadius={'50%'}
+            bgColor={"transparent"}
+            padding={0}
+            margin={'40px 0'}
+            overflow={'hidden'}
+            boxShadow={'none'}
+        >
+            <img src={image ? image : bgBlackRounded} alt="Bloggios" style={{
+                width: '100%',
+                aspectRatio: '1/1',
+                objectFit: 'cover'
+            }}/>
+        </FadeModal>
     );
 };
 
-const Wrapper = styled.div`
-    width: 97%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    font-family: "Poppins", sans-serif;
-    letter-spacing: 1px;
-    background-color: ${colors.black400};
-    margin: 25px auto;
-    padding: 16px;
-    border-radius: 10px;
-    
-    & > h2 {
-        font-size: clamp(1.25rem, 1.1123rem + 0.8475vw, 1.5625rem);
-        font-family: inherit;
-        letter-spacing: inherit;
-        font-weight: 600;
-    }
-    
-    @media (max-width: 350px) {
-        padding: 16px 10px;
-    }
-`;
-
-export default SettingListOutlet;
+export default ImageModal;

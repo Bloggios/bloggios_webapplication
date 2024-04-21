@@ -33,11 +33,11 @@ import {
     SUPPORT_PAGE
 } from "./pathConstants";
 import {BiHelpCircle, BiHomeAlt2, BiLogInCircle, BiSupport} from "react-icons/bi";
-import {BsChatDots, BsQuestionCircle} from "react-icons/bs";
+import {BsChatDots, BsFillDatabaseFill, BsQuestionCircle} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
-import {FaBug, FaCode, FaInfoCircle, FaQuestion, FaShoppingCart} from "react-icons/fa";
+import {FaBug, FaCode, FaInfoCircle, FaQuestion, FaRegUserCircle, FaShoppingCart} from "react-icons/fa";
 import bloggios_logo from '../asset/svg/bg-accent_rounded.svg'
 import {
     MdContactSupport,
@@ -47,7 +47,7 @@ import {
 } from "react-icons/md";
 import {CgMoreO, CgProfile, CgWebsite} from "react-icons/cg";
 import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
-import {TbMessage2Share} from "react-icons/tb";
+import {TbMessage2Share, TbPasswordUser} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
 import {GrServices} from "react-icons/gr";
 import {GoHome, GoPlusCircle} from "react-icons/go";
@@ -93,6 +93,7 @@ import {
 } from '../asset/whyUs/index';
 import Avatar from "../component/avatars/avatar";
 import {IoIosHelpCircleOutline} from "react-icons/io";
+import {RiAccountPinCircleLine, RiLockPasswordLine, RiLoginCircleLine, RiVerifiedBadgeLine} from "react-icons/ri";
 
 export const loggedInNavItems = [
     {page: HOME_PAGE, tooltip: 'Home', icon: <BiHomeAlt2/>, tooltipId: 'navitems__home--tooltip'},
@@ -524,4 +525,43 @@ export const productDevelopment = [
         description: 'Maximize efficiency with our ERP development solutions. Streamline business processes, integrate operations, and enhance decision-making with real-time insights. Tailored to your needs for seamless enterprise management.',
         icon: erpDevelopment
     },
+];
+
+export const settingListItems = [
+    {
+        id: 1,
+        label: 'Edit Profile',
+        icon: <FaRegUserCircle />,
+        path: '/setting/edit-profile',
+    },
+    {
+        id: 2,
+        label: 'Verification',
+        icon: <RiVerifiedBadgeLine />,
+        path: '/setting/verification',
+    },
+    {
+        id: 3,
+        label: 'Change Password',
+        icon: <RiLockPasswordLine />,
+        path: '/setting/change-password',
+    },
+    {
+        id: 4,
+        label: 'Account',
+        icon: <RiAccountPinCircleLine />,
+        path: '/setting/privacy',
+    },
+    {
+        id: 5,
+        label: 'Login Activity',
+        icon: <RiLoginCircleLine />,
+        path: '/setting/login-activity'
+    },
+    {
+        id: 6,
+        label: 'My Data',
+        icon: <BsFillDatabaseFill />,
+        path: '/setting/my-data',
+    }
 ]
