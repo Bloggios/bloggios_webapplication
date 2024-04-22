@@ -181,6 +181,10 @@ export const LinkInput = styled.div`
         &:focus {
             color: rgba(245, 245, 245, 1);
         }
+        
+        &:disabled {
+            cursor: not-allowed;
+        }
     }
 `;
 

@@ -106,7 +106,6 @@ const CreatePost = ({
                 isImageAdded: selectedImages.length > 0,
                 body: inputValue
             }
-            console.log(inputValue);
             addPost(postPayload)
                 .then((response) => {
                     if (selectedImages.length > 0) {

@@ -18,12 +18,83 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import * as Bg from '../Components/StyledComponent';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
+import {handleImageChange} from "../../../service/postApiFunctions";
+import IconButton from "../../../component/buttons/IconButton";
+import {RiDeleteBin5Line} from "react-icons/ri";
+import useIsInputFocused from "../../../hooks/useIsInputFocused";
+import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
+import {dispatchError, dispatchErrorMessage, dispatchSuccessMessage} from "../../../service/functions";
+import {useDispatch} from "react-redux";
+import {useMutation} from "@tanstack/react-query";
+import {addAnswer} from "../../../restservices/QuestionApi";
+import useWindowDimensions from "../../../hooks/useWindowDimensions";
+import {badgeRequestApi} from "../../../restservices/profileApi";
 
 const BadgeVerificationOutlet = () => {
+
+    const [identityImage, setIdentityImage] = useState(null);
+    const [linkRef, isLinkFocused] = useIsInputFocused();
+    const [textAreaRef, isTextAreaFocused] = useIsInputFocused();
+    const [verificationData, setVerificationData] = useState({});
+    const dispatch = useDispatch();
+    const {width} = useWindowDimensions();
+
+    const handleIdentityImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const payload =  {
+                name: file.name,
+                file,
+            };
+            setIdentityImage(payload);
+        }
+    }
+
+    const deleteImage = () => {
+        setIdentityImage(null);
+    }
+
+    const handleChange = (event, property) => {
+        setVerificationData(prevState => ({
+            ...prevState, [property]: event.target.value
+        }))
+    }
+
+    const getLink = (link) => {
+        if (link?.startsWith('https://')) {
+            link = link.slice(8);
+        }
+        return link;
+    }
+
+    const badgeRequestMutation = useMutation({
+        mutationFn: (formData) => badgeRequestApi(formData),
+        onSuccess: async (response) => {
+            dispatchSuccessMessage(dispatch, response.message);
+        },
+        onError: (error) => {
+            dispatchError(dispatch, error);
+        }
+    });
+
+    const handleSubmit = () => {
+        if (!verificationData?.link && !identityImage) {
+            dispatchErrorMessage(dispatch, 'Upload Identity Proof Image or add link to it');
+            return;
+        }
+        let isFormDataAdded = false;
+        const formData = new FormData();
+        identityImage && formData.append('image', identityImage.file);
+        verificationData?.link && formData.append('link', verificationData.link);
+        verificationData?.description && formData.append('text', verificationData?.description);
+        isFormDataAdded = true;
+        isFormDataAdded && badgeRequestMutation.mutate(formData);
+    }
+
     return (
         <Bg.Wrapper>
             <Bg.Heading2>
@@ -45,8 +116,17 @@ const BadgeVerificationOutlet = () => {
                     Upload any Identity Proof
                 </Bg.Label>
 
-                <Button>
-                    Upload Identity Proof
+                <Button disabled={verificationData.link && verificationData.link.length > 0}>
+                    {verificationData.link && verificationData.link.length > 0
+                    ? 'Link of Image added' : 'Upload Identity Proof'}
+
+                    <input
+                        disabled={verificationData.link && verificationData.link.length > 0}
+                        type="file"
+                        accept={"image/*"}
+                        onChange={handleIdentityImageChange}
+                        style={{display: 'none'}}
+                    />
                 </Button>
 
                 <Bg.Paragraph2>
@@ -54,26 +134,137 @@ const BadgeVerificationOutlet = () => {
                     <br/>
                     Accepted Formats : jpg, jpeg, png, bmp
                 </Bg.Paragraph2>
+
+                {identityImage && (
+                    <ImageDetailsWrapper>
+                        <span>{identityImage.name}</span>
+                        <IconButton onClick={deleteImage}>
+                            <RiDeleteBin5Line color={'rgb(223,56,56)'}/>
+                        </IconButton>
+                    </ImageDetailsWrapper>
+                )}
             </Bg.Field>
+
+            <Bg.Field>
+                <Bg.Label>
+                    Link of Identity
+                </Bg.Label>
+
+                <Bg.Paragraph2>
+                    Either add Link of Identity Proof or Upload the Image
+                </Bg.Paragraph2>
+
+                <Bg.LinkInput
+                    isFocused={isLinkFocused}
+                >
+                        <span>
+                            https://
+                        </span>
+                    <input
+                        ref={linkRef}
+                        type={'text'}
+                        placeholder={identityImage ? 'Image already Uploaded' : 'Enter Link here'}
+                        readOnly={identityImage}
+                        disabled={identityImage}
+                        maxLength={200}
+                        value={getLink(verificationData.link)}
+                        onChange={(e) => handleChange(e, 'link')}
+                    />
+                </Bg.LinkInput>
+            </Bg.Field>
+
+            <Bg.Field>
+                <Bg.Label>
+                    Description
+                </Bg.Label>
+
+                <Bg.TextAreaContainer
+                    isFocused={isTextAreaFocused}
+                >
+                    <Bg.TextArea
+                        ref={textAreaRef}
+                        rows={4}
+                        spellCheck={false}
+                        maxLength={1000}
+                        placeholder={'Tell us more about yourself! \nThis will be helpful for Verification'}
+                        value={verificationData.description}
+                        onChange={(e)=> handleChange(e, 'description')}
+                    />
+                    <span>
+                            {verificationData.description?.length || 0}/{1000}
+                        </span>
+                </Bg.TextAreaContainer>
+            </Bg.Field>
+
+            <FetchLoaderButton
+                isLoading={false}
+                text={'Submit'}
+                onClick={handleSubmit}
+                loaderSize={'2px'}
+                loaderDotsSize={'2px'}
+                disabled={false}
+                dBgColor={colors.accent60}
+                bgColor={colors.accent100}
+                hBgColor={colors.accent80}
+                aBgColor={colors.accent100}
+                color={colors.white80}
+                hColor={colors.white100}
+                aColor={colors.white100}
+                borderRadius={'10px'}
+                padding={width > 500 ? '0 16px' : '0 8px'}
+                style={{
+                    height: width > 500 ? 40 : 34,
+                    width: width > 500 ? 140 : 100,
+                    border: 'none',
+                    outline: 'none',
+                    fontSize: width > 500 ? 16 : 14,
+                    alignSelf: 'flex-end',
+                    fontFamily: "'Poppins', san-serif",
+                    letterSpacing: 1,
+                    fontWeight: 400,
+                    marginTop: 25,
+                }}
+            />
         </Bg.Wrapper>
     );
 };
 
-const Button = styled.button`
+const Button = styled.label`
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 0;
     border-radius: 10px;
-    background-color: ${colors.accent80};
+    background-color: ${({disabled}) => (disabled ? colors.accent60 : colors.accent80)};
     color: ${colors.white80};
     font-family: "Poppins", sans-serif;
     letter-spacing: 1px;
+    cursor: ${({disabled}) => (disabled ? 'not-allowed' : 'pointer')};
     
     &:hover, &:active {
         background-color: ${colors.accent100};
         color: ${colors.white100};
+    }
+`;
+
+const ImageDetailsWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    
+    & > span {
+        font-size: clamp(0.75rem, 0.625rem + 0.4vw, 0.875rem);
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 1px;
+        color: ${colors.white80};
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 `;
 

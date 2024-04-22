@@ -91,7 +91,10 @@ export const updateProfileApi = (payload) => {
         .then(response => response.data);
 }
 
-export const badgeRequest = (payload) => {
-    return authenticatedAxios.post(BADGE_REQUEST, payload)
-        .then((response)=> response.data);
+export const badgeRequestApi = (formData) => {
+    return authenticatedAxios.post(BADGE_REQUEST, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    }).then((response)=> response.data);
 }
