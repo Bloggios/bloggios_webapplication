@@ -22,7 +22,6 @@ import React, {useState} from 'react';
 import * as Bg from '../Components/StyledComponent';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
-import {handleImageChange} from "../../../service/postApiFunctions";
 import IconButton from "../../../component/buttons/IconButton";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import useIsInputFocused from "../../../hooks/useIsInputFocused";
@@ -30,7 +29,6 @@ import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import {dispatchError, dispatchErrorMessage, dispatchSuccessMessage} from "../../../service/functions";
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {addAnswer} from "../../../restservices/QuestionApi";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {badgeRequestApi} from "../../../restservices/profileApi";
 

@@ -53,3 +53,4 @@ export const PRODUCT_DEVELOPMENT_SERVICE = 'product-development';
 export const ADMIN_PAGE = '/admin-page';
 export const EDIT_PROFILE_SETTING = 'edit-profile';
 export const BADGE_VERIFICATION_SETTING_OUTLET = 'verification';
+export const CHANGE_PASSWORD_SETTING_OUTLET = 'change-password';

@@ -23,6 +23,7 @@
 
 import {authenticatedAxios, gatewayAxios} from "./baseAxios";
 import {
+    CHANGE_PASSWORD,
     FORGET_PASSWORD,
     FORGET_PASSWORD_OTP,
     LOGIN_PATH,
@@ -104,5 +105,10 @@ export const forgetPasswordOtp = (email) => {
 
 export const forgetPassword = (payload) => {
     return gatewayAxios.post(FORGET_PASSWORD, payload)
+        .then((response)=> response.data);
+}
+
+export const changePassword = (payload) => {
+    return authenticatedAxios.post(CHANGE_PASSWORD, payload)
         .then((response)=> response.data);
 }

@@ -75,10 +75,10 @@ const useBloggiosStomp = () => {
     }
 
     const onPrivateNotification = (payload) => {
-        console.log(payload)
+        let body = JSON.parse(payload.body);
         const notificationPayload =  {
             snackbarType: 'notification',
-            message: 'You received a new notification',
+            message: body.message || 'You received a new notification',
             isSnackbar: true,
         };
         dispatch(setSnackbar(notificationPayload));

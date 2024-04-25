@@ -59,7 +59,6 @@ const ForgetPasswordComponent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [buttonLoader, setButtonLoader] = useState(false);
-    const [options, setOptions] = useState([]);
     const {width} = useWindowDimensions();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const [componentRef, size] = useComponentSize();
@@ -89,19 +88,6 @@ const ForgetPasswordComponent = () => {
             })
         }
     }, []);
-
-    const handleBioChange = (event) => {
-        const lines = event.target.value.split('\n');
-        if (lines.length <= 3) {
-            setForgetPasswordData(prevData => ({
-                ...prevData, bio: event.target.value
-            }))
-        } else {
-            setForgetPasswordData(prevData => ({
-                ...prevData, bio: event.target.value
-            }))
-        }
-    }
 
     const handleOtpInputChange = useCallback((id, value) => {
         setInputValues((prevValue) => ({
@@ -166,9 +152,6 @@ const ForgetPasswordComponent = () => {
             if (currentStep === 1) {
                 handleEmailSend();
             }
-            // if (currentStep === 4) {
-            //     handleOtpSubmit();
-            // }
         }
     };
 
@@ -304,28 +287,7 @@ const ForgetPasswordComponent = () => {
                         </span>
                         )}
                     </Field>
-                    <FetchLoaderButton
-                        isLoading={buttonLoader}
-                        text={'Next'}
-                        onClick={handleEmailSend}
-                        loaderSize={'2px'}
-                        loaderDotsSize={'2px'}
-                        bgColor={'#4258ff'}
-                        hBgColor={'rgba(66, 88, 255, 0.9)'}
-                        aBgColor={'#4258ff'}
-                        color={'rgba(245, 245, 245, 0.8)'}
-                        hColor={'rgba(245, 245, 245, 1)'}
-                        borderRadius={'10px'}
-                        padding={'8px 25px'}
-                        style={{
-                            width: '110px',
-                            height: '40px',
-                            border: 'none',
-                            outline: 'none',
-                            fontSize: 'clamp(0.75rem, 0.6622rem + 0.5405vw, 1rem)',
-                            alignSelf: 'center'
-                        }}
-                    />
+                    c
                 </>
             )
         } else if (currentStep === 2) {
@@ -438,7 +400,7 @@ const ForgetPasswordComponent = () => {
                                 New Password
                             </Bg.Label>
                             <Bg.Input
-                                type={'text'}
+                                type={'password'}
                                 maxLength={40}
                                 required={true}
                                 placeholder={'●●●●●●●●●'}

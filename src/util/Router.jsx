@@ -27,7 +27,7 @@ import {
     BLOGGIOS_OTHERS_HELP,
     BLOGGIOS_POST_HELP,
     BLOGGIOS_QAA_HELP,
-    BLOGGIOS_TECH_HELP,
+    BLOGGIOS_TECH_HELP, CHANGE_PASSWORD_SETTING_OUTLET,
     CHATS_PAGE, EDIT_PROFILE_SETTING,
     FORGET_PASSWORD_PAGE,
     HOME_PAGE,
@@ -100,6 +100,7 @@ const AdminPage = lazy(()=> import('../container/AdminContainer/AdminPage'));
 const EditProfileSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/EditProfileOutlet'));
 const DefaultSettingOutlet = lazy(()=> import('../container/settingContainer/Outlet/DefaultSettingOutlet'));
 const BadgeVerificationOutlet = lazy(()=> import('../container/settingContainer/Outlet/BadgeVerificationOutlet'));
+const ChangePasswordOutlet = lazy(()=> import('../container/settingContainer/Outlet/ChangePasswordOutlet'));
 
 const Router = () => {
 
@@ -141,6 +142,7 @@ const Router = () => {
                             <Route index element={<DefaultSettingOutlet />} />
                             <Route path={EDIT_PROFILE_SETTING} element={<EditProfileSettingOutlet />}/>
                             <Route path={BADGE_VERIFICATION_SETTING_OUTLET} element={<BadgeVerificationOutlet />} />
+                            <Route path={CHANGE_PASSWORD_SETTING_OUTLET} element={<ChangePasswordOutlet />} />
                         </Route>
                         <Route path={QUESTION_PAGE} element={<QuestionPage />} >
                             <Route index element={<QuestionOutlet />} />
