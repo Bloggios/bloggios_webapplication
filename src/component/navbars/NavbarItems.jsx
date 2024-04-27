@@ -19,15 +19,12 @@
  */
 
 import React, {useCallback} from 'react';
-import TooltipWrapper from "../tooltips/tooltipWrapper";
 import {loggedInNavItems, loggedOutNavItems} from "../../constant/listConstants";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {FaCode} from "react-icons/fa";
 import {notification, notificationActive} from '../../asset/svg';
 import {CgMoreO} from "react-icons/cg";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {Tooltip} from "react-tooltip";
 
 const NavbarItems = () => {

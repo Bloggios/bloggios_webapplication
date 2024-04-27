@@ -33,7 +33,6 @@ import PrivacyModal from "../../component/modal/PrivacyModal";
 import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
 import {dispatchWarningMessage} from "../../service/functions";
 import bloggiosNotification from '../../asset/audio/bloggiosNotification.mp3';
-import ComingSoonPage from "../../component/animations/ComingSoonPage";
 
 const ParentBase = ({children}) => {
 

@@ -63,7 +63,7 @@ const ProfilePage = () => {
         queryKey: ['userProfile', id],
         queryFn: fetchProfileData,
         staleTime: 120000
-    })
+    });
 
     const getMainContent = useCallback(() => {
             if (isLoading) {

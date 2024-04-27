@@ -20,7 +20,7 @@
 
 import bloggios_logo from '../asset/svg/bg_logo_black.svg'
 
-const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Bloggios, Bloggios Social Media, Social Media, Bloggios Q & A, Q & A, Encrypted Chatting, Bloggios Chatting, Bloggios Encrypted Chatting, Bloggios IT Solutions, IT Solutions, Bloggios Software development, Software development, IT support, Bloggios IT SupportContainer, Bloggios SEO, SEO, Bloggios Marketing, Bloggios Connection platform, Connection Platform, web developer, technology, innovation, online community';
+const RESERVED_KEYWORDS = 'Bloggios, Rohit Parihar, Rohit Parihar Bloggios, Rohit Bloggios, Bloggios Spring Boot, Bloggios Spring React Application, Bloggios Microservices, Concatenating Perceptions, Bloggios, Bloggios Social Media, Social Media, Bloggios Q & A, Q & A, Encrypted Chatting, Bloggios Chatting, Bloggios Encrypted Chatting, Bloggios IT Solutions, IT Solutions, Bloggios Software development, Software development, IT support, Bloggios IT Support, Bloggios SEO, SEO, Bloggios Marketing, Bloggios Connection platform, Connection Platform, web developer, technology, innovation, online community';
 
 const seoConfigs = {
     signup: {

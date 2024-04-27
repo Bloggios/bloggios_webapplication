@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import Router from "./util/Router";
 import {useDispatch} from "react-redux";
 import {refreshToken} from "./restservices/authApi";
@@ -32,8 +32,6 @@ import AuthenticatedAxiosInterceptor from "./restservices/AuthenticatedAxiosInte
 import {checkIsProfileAdded} from "./service/functions";
 import './styles/GlobalStyles.css';
 import './styles/TextStyles.css';
-import {useQuery} from "@tanstack/react-query";
-import {addError} from "./state/errorSlice";
 
 const App = () => {
 

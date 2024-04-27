@@ -19,10 +19,8 @@
  */
 
 import {useEffect} from 'react';
-import seoConfigs from "./seoConfigs";
 
-const useSeo = (pageKey) => {
-
+const UseDynamicSeo = (seoPayload) => {
     useEffect(() => {
 
         const environment = process.env.REACT_APP_ENVIRONMENT;
@@ -31,7 +29,17 @@ const useSeo = (pageKey) => {
             return;
         }
 
-        const { title, description, keywords, author, ogType, ogUrl, ogImage, ogTitle, ogDescription } = seoConfigs[pageKey];
+        const {
+            title,
+            description,
+            keywords,
+            author,
+            ogType,
+            ogUrl,
+            ogImage,
+            ogTitle,
+            ogDescription
+        } = seoPayload;
 
         document.title = title;
 
@@ -63,7 +71,7 @@ const useSeo = (pageKey) => {
                 document.head.removeChild(tag);
             });
         };
-    }, [pageKey]);
+    }, [seoPayload]);
 };
 
-export default useSeo;
+export default UseDynamicSeo;

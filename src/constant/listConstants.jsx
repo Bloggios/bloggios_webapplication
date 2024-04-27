@@ -24,32 +24,22 @@ import {
     HOME_PAGE,
     LANDING_PAGE,
     LOGIN_PAGE,
-    NOTIFICATIONS_PAGE, POST_PAGE, PRIVACY_POLICY,
-    PROFILE_PAGE,
-    QUESTION_PAGE,
+    NOTIFICATIONS_PAGE,
+    PRIVACY_POLICY,
     REPORT_BUG_PAGE,
     SERVICES_PAGE,
     SIGNUP_PAGE,
     SUPPORT_PAGE
 } from "./pathConstants";
 import {BiHelpCircle, BiHomeAlt2, BiLogInCircle, BiSupport} from "react-icons/bi";
-import {BsChatDots, BsFillDatabaseFill, BsQuestionCircle} from "react-icons/bs";
+import {BsChatDots, BsFillDatabaseFill} from "react-icons/bs";
 import {IoNotificationsOutline} from "react-icons/io5";
 import {VscSettingsGear} from "react-icons/vsc";
 import {AiOutlineBug, AiOutlineUserAdd} from "react-icons/ai";
-import {FaBug, FaCode, FaInfoCircle, FaQuestion, FaRegUserCircle, FaShoppingCart} from "react-icons/fa";
+import {FaBug, FaCode, FaRegUserCircle} from "react-icons/fa";
 import bloggios_logo from '../asset/svg/bg-accent_rounded.svg'
-import {
-    MdContactSupport,
-    MdMiscellaneousServices,
-    MdOutlineContactSupport,
-    MdOutlineNotifications, MdOutlinePolicy
-} from "react-icons/md";
-import {CgMoreO, CgProfile, CgWebsite} from "react-icons/cg";
-import bloggios_00_logo from '../asset/svg/bg_logo_rounded_black.svg'
-import {TbMessage2Share, TbPasswordUser} from "react-icons/tb";
-import {GiChatBubble} from "react-icons/gi";
-import {GrServices} from "react-icons/gr";
+import {MdMiscellaneousServices, MdOutlineContactSupport, MdOutlinePolicy} from "react-icons/md";
+import {CgWebsite} from "react-icons/cg";
 import {GoHome, GoPlusCircle} from "react-icons/go";
 import React from "react";
 import {BLOGGIOS_TECH_LINK} from "./ServiceConstants";
@@ -68,7 +58,7 @@ import {
 } from "../asset/marquee";
 import {
     bankingDevelopment,
-    bgAccentRounded, bgBlackRounded,
+    bgAccentRounded,
     ecommerceDevelopment,
     educationDevelopment,
     erpDevelopment,
@@ -91,7 +81,6 @@ import {
     visionarySolutions,
     workWithBest
 } from '../asset/whyUs/index';
-import Avatar from "../component/avatars/avatar";
 import {IoIosHelpCircleOutline} from "react-icons/io";
 import {RiAccountPinCircleLine, RiLockPasswordLine, RiLoginCircleLine, RiVerifiedBadgeLine} from "react-icons/ri";
 

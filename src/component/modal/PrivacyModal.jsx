@@ -23,11 +23,7 @@ import {colors} from "../../styles/Theme";
 import FadeModal from "./FadeModal";
 import styled from "styled-components";
 import {bgBlackRounded} from "../../asset/svg";
-import {
-    PRIVACY_POLICY_PAGE,
-    PRIVACY_TERMS_KEY_LOCAL_STORAGE,
-    TERMS_AND_CONDITION_PAGE
-} from "../../constant/ServiceConstants";
+import {PRIVACY_TERMS_KEY_LOCAL_STORAGE} from "../../constant/ServiceConstants";
 import {dispatchWarningMessage} from "../../service/functions";
 import {useDispatch} from "react-redux";
 

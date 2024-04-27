@@ -20,7 +20,6 @@
 
 import React, {memo} from 'react';
 import ListConfiguration from "../../../asset/configurations/static/BloggiosTechServicesConfiguration.json";
-import {useNavigate} from "react-router-dom";
 import {Card, CardButton, Heading4, Heading6, NfCards, Paragraph1, Paragraph2} from "./DefaultServiceStyledComponents";
 import {FaArrowRightLong} from "react-icons/fa6";
 import styled from "styled-components";

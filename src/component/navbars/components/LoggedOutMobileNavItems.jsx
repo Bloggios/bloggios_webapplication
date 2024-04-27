@@ -22,14 +22,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {
     LANDING_PAGE,
-    LOGIN_PAGE, PROFILE_PAGE,
+    LOGIN_PAGE,
+    PROFILE_PAGE,
     REPORT_BUG_PAGE,
     SERVICES_PAGE,
     SIGNUP_PAGE,
     SUPPORT_PAGE
 } from "../../../constant/pathConstants";
-import {GoHome, GoPlusCircle} from "react-icons/go";
-import bloggios_logo from "../../../asset/svg/bg_logo_rounded_black.svg";
+import {GoHome} from "react-icons/go";
 import styled from "styled-components";
 import {GrServices} from "react-icons/gr";
 import {FaCode, FaUserAlt} from "react-icons/fa";

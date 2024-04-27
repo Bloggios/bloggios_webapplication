@@ -20,20 +20,19 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
-import {GoHome, GoPlusCircle} from "react-icons/go";
+import {GoHome} from "react-icons/go";
 import {useDispatch, useSelector} from "react-redux";
 import bloggios_logo from '../../../asset/svg/bg_logo_rounded_black.svg'
 import {
     CHATS_PAGE,
     HOME_PAGE,
-    NOTIFICATIONS_PAGE, POST_PAGE,
+    POST_PAGE,
     REPORT_BUG_PAGE,
     SETTING_PAGE,
     SUPPORT_PAGE
 } from "../../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
 import {BsChatDots, BsPatchQuestionFill} from "react-icons/bs";
-import {IoNotificationsOutline} from "react-icons/io5";
 import {FaHistory, FaUserAlt} from "react-icons/fa";
 import {IoIosSettings, IoMdLogOut} from "react-icons/io";
 import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";

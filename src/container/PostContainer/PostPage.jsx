@@ -20,8 +20,22 @@
 
 import React from 'react';
 import {Outlet} from "react-router-dom";
+import useDynamicSeo from "../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../asset/svg";
 
 const PostPage = () => {
+
+    useDynamicSeo({
+        title: `Bloggios Posts`,
+        description: 'View Posts at Bloggios | Share your perceptions at Bloggios',
+        keywords: 'Bloggios Home, Create Post, Bloggios Posts, Bloggios Hashtags, #bloggios, Bloggios User Posts, User Posts, All Bloggios Posts, Bloggios data, Bloggios Profile, User Profile, Edit Profile, Bloggios Perceptions',
+        author: 'Rohit Parihar',
+        ogType: `website`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Bloggios Posts',
+        ogDescription: `View Posts at Bloggios | Share your perceptions at Bloggios`
+    });
 
     return <Outlet />
 };

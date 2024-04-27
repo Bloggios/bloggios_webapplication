@@ -7,7 +7,6 @@ import {setIsCreated} from '../../state/isCreatedSlice'
 import {MdOutlinePhotoCameraFront} from "react-icons/md";
 import {CgClose} from "react-icons/cg";
 import {handleImageChange} from "../../service/functions";
-import bloggios_logo from '../../asset/svg/bg_logo_rounded_black.svg'
 import Avatar from "../avatars/avatar";
 import FetchLoaderButton from "../buttons/FetchLoaderButton";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
@@ -17,8 +16,8 @@ import {IoIosLink} from "react-icons/io";
 import * as Profile from '../../container/profileContainer/Components/StyledComponents';
 import Divider from "../divider/divider";
 import FollowFollowingModal from "../modal/FollowFollowingModal";
-import ImageModal from "../modal/ImageModal";
 import {bgBlackRounded} from "../../asset/svg";
+import useDynamicSeo from "../../globalseo/useDynamicSeo";
 
 const ProfileHeader = ({
                            name,
@@ -34,6 +33,18 @@ const ProfileHeader = ({
                            profileBadges,
                            link
                        }) => {
+
+    useDynamicSeo({
+        title: `${name} - ${bio ? bio : email} | View profile at Bloggios`,
+        description: `View Profile of ${name} - ${profileTag} at Bloggios, Connect and engage with vibrant community of Bloggios`,
+        keywords: `${name}, ${email}, ${bio ? bio : ''}, Bloggios Profile ${name}, ${name} Bloggios, Bloggios, Bloggios Tech, Bloggios WebApplication, Bloggios User Profile`,
+        author: 'Rohit Parihar',
+        ogType: `profile:${email}`,
+        ogUrl: window.location.href,
+        ogImage: profileImage,
+        ogTitle: `${name} - ${bio ? bio : email} | View profile at Bloggios`,
+        ogDescription: `View Profile of ${name} - ${profileTag} at Bloggios, Connect and engage with vibrant community of Bloggios`
+    });
 
     const dispatch = useDispatch();
     const {width} = useWindowDimensions();

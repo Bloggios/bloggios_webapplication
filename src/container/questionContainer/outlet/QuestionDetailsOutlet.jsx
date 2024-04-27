@@ -39,6 +39,7 @@ import HtmlContent from "../../../component/HtmlContent/HtmlContent";
 import useComponentSize from "../../../hooks/useComponentSize";
 import Divider from "../../../component/divider/divider";
 import QuestionAnswersSection from "../components/QuestionAnswersSection";
+import useDynamicSeo from "../../../globalseo/useDynamicSeo";
 
 const NotFound = lazy(() => import('../../../component/NotFound/NotFound'));
 const YourAnswerSection = lazy(()=> import('../components/YourAnswerSection'));
@@ -93,6 +94,18 @@ const QuestionDetailsOutlet = () => {
         queryFn: () => fetchQuestionDetail(questionId),
         staleTime: 600000,
         retry: 4
+    });
+
+    useDynamicSeo({
+        title: `${questionData?.title} - Bloggios`,
+        description: `Bloggios Questions - ${questionData?.title}`,
+        keywords: 'Bloggios Questions, Q&A, Bloggios Q&A, Ask Questions, Questions, Bloggios Questions and Answers',
+        author: 'Rohit Parihar',
+        ogType: `article`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: `${questionData?.title} - Bloggios`,
+        ogDescription: `Bloggios Questions - ${questionData?.title}`
     });
 
     useEffect(() => {

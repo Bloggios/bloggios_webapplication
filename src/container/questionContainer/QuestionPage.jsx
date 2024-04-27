@@ -25,12 +25,26 @@ import useWindowDimensions from "../../hooks/useWindowDimensions";
 import useComponentSize from "../../hooks/useComponentSize";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import {Outlet} from "react-router-dom";
+import useDynamicSeo from "../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../asset/svg";
 
 const ProfileSuggestions = lazy(()=> import('../../component/Cards/ProfileSuggestions'));
 const QuestionsTabBar = lazy(()=> import('../../component/navbars/QuestionsTabBar'));
 const BloggiosQuestionsHeader = lazy(()=> import('./components/BloggiosQuestionsHeader'));
 
 const QuestionPage = () => {
+
+    useDynamicSeo({
+        title: `Bloggios Q&A`,
+        description: 'Bloggios Questions and Answers | Bloggios Questions',
+        keywords: 'Bloggios Questions, Q&A, Bloggios Q&A, Ask Questions, Questions, Bloggios Questions and Answers',
+        author: 'Rohit Parihar',
+        ogType: `article`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Bloggios Q&A',
+        ogDescription: `Bloggios Questions and Answers | Bloggios Questions`
+    })
 
     const {width} = useWindowDimensions();
     const [suggestionRef, suggestionSize] = useComponentSize();

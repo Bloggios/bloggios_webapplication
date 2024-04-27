@@ -22,11 +22,7 @@ import React from 'react';
 import styled from "styled-components";
 import {colors} from "../../../styles/Theme";
 import Divider from "../../../component/divider/divider";
-import {FaRegUserCircle} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-import {blueBadge, goldenBadge} from "../../../asset/svg";
-import {RiVerifiedBadgeFill, RiVerifiedBadgeLine} from "react-icons/ri";
-import {GoVerified} from "react-icons/go";
 import {settingListItems} from "../../../constant/listConstants";
 
 const SettingWebBar = () => {

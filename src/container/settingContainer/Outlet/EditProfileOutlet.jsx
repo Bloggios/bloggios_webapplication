@@ -19,14 +19,27 @@
  */
 
 import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
 import * as Bg from '../Components/StyledComponent';
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
+import useDynamicSeo from "../../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../../asset/svg";
 
 const ProfilePhotoContainer = lazy(()=> import('../Components/ProfilePhotoContainer'));
 const ProfileDataEditFields = lazy(()=> import('../Components/ProfileDataEditFields'));
 
 const EditProfileOutlet = () => {
+
+    useDynamicSeo({
+        title: `Edit Profile | Bloggios`,
+        description: `Bloggios Setting | Edit Profile setting at Bloggios`,
+        keywords: 'Bloggios Setting, Setting',
+        author: 'Rohit Parihar',
+        ogType: `website`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Edit Profile | Bloggios',
+        ogDescription: `Bloggios Setting | Edit Profile setting at Bloggios`
+    });
 
     return (
         <Bg.Wrapper>
