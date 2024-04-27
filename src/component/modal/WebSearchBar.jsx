@@ -22,7 +22,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import FadeModal from "./FadeModal";
 import styled from "styled-components";
 import {IoIosSearch} from "react-icons/io";
-import {bloggiosLinksList, bloggiosTechLinksList, globalSearchList} from "../../constant/listConstants";
+import {bloggiosTechLinksList, globalSearchList} from "../../constant/listConstants";
 import {useNavigate} from "react-router-dom";
 import {BsChevronDown, BsFillPatchQuestionFill} from "react-icons/bs";
 import {searchPostList} from "../../restservices/postApi";
@@ -35,20 +35,10 @@ import {VscSearchStop} from "react-icons/vsc";
 import FallbackLoader from "../loaders/fallbackLoader";
 import SearchUserSmallComponent from "../Cards/SearchUserSmallComponent";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import bloggios_00_logo from "../../asset/svg/bg_logo_rounded_black.svg";
-import {
-    CHATS_PAGE,
-    HOME_PAGE,
-    NOTIFICATIONS_PAGE,
-    POST_PAGE,
-    SERVICES_PAGE,
-    SETTING_PAGE
-} from "../../constant/pathConstants";
+import {CHATS_PAGE, HOME_PAGE, POST_PAGE} from "../../constant/pathConstants";
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
 import {CgProfile} from "react-icons/cg";
-import {MdOutlineNotifications} from "react-icons/md";
-import {FaQuestion} from "react-icons/fa";
 import {bgBlackRounded} from "../../asset/svg";
 import {QUESTION_LIST} from "../../constant/apiConstants";
 import {IoSettings} from "react-icons/io5";

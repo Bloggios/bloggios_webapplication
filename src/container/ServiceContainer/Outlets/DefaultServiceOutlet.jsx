@@ -24,7 +24,6 @@ import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import Divider from "../../../component/divider/divider";
 import {colors} from "../../../styles/Theme";
 import {useLocation} from "react-router-dom";
-import useWindowDimensions from "../../../hooks/useWindowDimensions";
 
 const DefaultServiceHeader = lazy(()=> import('../Components/DefaultServiceHeader'));
 const DefaultServiceProductDevelopment = lazy(()=> import('../Components/DefaultServiceProductDevelopment'));

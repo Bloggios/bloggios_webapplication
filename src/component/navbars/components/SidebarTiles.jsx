@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE, SETTING_PAGE} from "../../../constant/pathConstants";
 import {FaUserAlt} from "react-icons/fa";
 import {IoIosSettings} from "react-icons/io";

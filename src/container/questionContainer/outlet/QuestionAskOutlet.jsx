@@ -21,11 +21,26 @@
 import React, {lazy, Suspense} from 'react';
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
 import {ColumnWrapper} from "../../../styles/StyledComponent";
+import useDynamicSeo from "../../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../../asset/svg";
 
 const AskQuestionDescription = lazy(()=> import('../components/AskQuestionDescriptionSection'));
 const AskQuestionFields = lazy(()=> import('../components/AskQuestionFields'));
 
 const QuestionAskOutlet = () => {
+
+    useDynamicSeo({
+        title: `Bloggios | Ask Question`,
+        description: 'Bloggios Questions and Answers | Bloggios Ask Questions',
+        keywords: 'Bloggios Questions, Q&A, Bloggios Q&A, Ask Questions, Questions, Bloggios Questions and Answers',
+        author: 'Rohit Parihar',
+        ogType: `article`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Bloggios | Ask Question',
+        ogDescription: `Bloggios Questions and Answers | Bloggios Ask Questions`
+    });
+
     return (
         <ColumnWrapper style={{gap: '20px'}}>
             <Suspense fallback={<FallbackLoader width={'100%'} height={'400px'} />}>

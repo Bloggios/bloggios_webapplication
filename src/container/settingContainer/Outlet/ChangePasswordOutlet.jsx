@@ -25,7 +25,6 @@ import {MdVisibility, MdVisibilityOff} from "react-icons/md";
 import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import {colors} from "../../../styles/Theme";
 import {useMutation} from "@tanstack/react-query";
-import {deleteComment} from "../../../restservices/commentApi";
 import {dispatchError, dispatchSuccessMessage} from "../../../service/functions";
 import {changePassword, logoutUser} from "../../../restservices/authApi";
 import {useDispatch} from "react-redux";

@@ -22,13 +22,25 @@ import React, {lazy, Suspense} from 'react';
 import BloggiosSidebarBase from "../boundries/bloggiosSidebarBase";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {Outlet} from "react-router-dom";
+import useDynamicSeo from "../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../asset/svg";
 
 const SettingWebPage = lazy(()=> import('./SettingWebPage'));
 const SettingMobilePage = lazy(()=> import('./SettingMobilePage'));
 
 const SettingPage = () => {
 
+    useDynamicSeo({
+        title: `Setting | Bloggios`,
+        description: `Bloggios Setting | Change settings at Bloggios`,
+        keywords: 'Bloggios Setting, Setting',
+        author: 'Rohit Parihar',
+        ogType: `website`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Setting | Bloggios',
+        ogDescription: `Bloggios Setting | Change settings at Bloggios`
+    });
     const {width} = useWindowDimensions();
 
     return (

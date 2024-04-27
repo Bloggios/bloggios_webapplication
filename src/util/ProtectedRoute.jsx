@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import {Navigate, Outlet, useNavigate} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
 import {LOGIN_PAGE} from "../constant/pathConstants";
 import PropTypes from "prop-types";
 

@@ -21,7 +21,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import Avatar from "../avatars/avatar";
-import bloggios_logo from '../../asset/svg/bg-accent_rounded.svg'
 import {useDispatch, useSelector} from "react-redux";
 import {checkFollowing, followUser, unfollowUser} from "../../restservices/followApi";
 import {setSnackbar} from "../../state/snackbarSlice";

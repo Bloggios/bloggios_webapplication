@@ -19,9 +19,6 @@
  */
 
 import React, {lazy, Suspense} from 'react';
-import styled from "styled-components";
-import {FaRegUserCircle} from "react-icons/fa";
-import {RiVerifiedBadgeLine} from "react-icons/ri";
 import {colors} from "../../../styles/Theme";
 import Divider from "../../../component/divider/divider";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";

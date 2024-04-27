@@ -18,12 +18,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Bg from "./StyledComponent";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import useIsInputFocused from "../../../hooks/useIsInputFocused";
-import {bgBlackRounded, defaultCover} from "../../../asset/svg";
 import {profileTagsList, updateProfileApi} from "../../../restservices/profileApi";
 import {
     dispatchError,
@@ -36,7 +35,6 @@ import FetchLoaderButton from "../../../component/buttons/FetchLoaderButton";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
 import {useMutation} from "@tanstack/react-query";
 import FallbackLoader from "../../../component/loaders/fallbackLoader";
-import useUserProfile from "../../../hooks/useUserProfile";
 
 const ProfileDataEditFields = () => {
 

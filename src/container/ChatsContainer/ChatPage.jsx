@@ -27,8 +27,22 @@ import ProfileSuggestions from "../../component/Cards/ProfileSuggestions";
 import {colors} from "../../styles/Theme";
 import FallbackLoader from "../../component/loaders/fallbackLoader";
 import MessagingComponent from "../../component/Messaging/MessagingComponent";
+import useDynamicSeo from "../../globalseo/useDynamicSeo";
+import {bgBlackRounded} from "../../asset/svg";
 
 const ChatPage = () => {
+
+    useDynamicSeo({
+        title: `Bloggios Messaging`,
+        description: `Bloggios Messaging | Private messaging at Bloggios`,
+        keywords: 'Bloggios Chatting, Bloggios Messaging, Private Messaging at Bloggios, Private Chatting at Bloggios, Bloggios Questions and Answers',
+        author: 'Rohit Parihar',
+        ogType: `website`,
+        ogUrl: window.location.href,
+        ogImage: bgBlackRounded,
+        ogTitle: 'Bloggios Messaging',
+        ogDescription: `Bloggios Messaging | Private messaging at Bloggios`
+    });
 
     const [sectionRef, sectionSize] = useComponentSize();
     const {width} = useWindowDimensions();

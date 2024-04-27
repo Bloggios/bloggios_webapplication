@@ -20,7 +20,6 @@
 
 import React from 'react';
 import FadeModal from "./FadeModal";
-import {colors} from "../../styles/Theme";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {bgBlackRounded} from "../../asset/svg";
 
