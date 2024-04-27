@@ -217,7 +217,7 @@ const ProfileDataEditFields = () => {
             </Bg.Field>
 
             <FetchLoaderButton
-                isLoading={false}
+                isLoading={updateProfileMutation.isPending}
                 text={'Update'}
                 onClick={handleUpdate}
                 loaderSize={'2px'}

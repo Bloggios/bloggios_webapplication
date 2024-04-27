@@ -65,3 +65,4 @@ export const FOLLOWER_FOLLOWING_LIST_API = '/user-provider/v1.0/follow-api/follo
 export const FORGET_PASSWORD_OTP = '/auth-provider/v1.0/user-auth/auth/forget-password-otp';
 export const FORGET_PASSWORD = '/auth-provider/v1.0/user-auth/auth/forget-password';
 export const BADGE_REQUEST = '/user-provider/v1.0/profile/badge-request';
+export const CHANGE_PASSWORD = '/auth-provider/v1.0/user-auth/read/change-password';
