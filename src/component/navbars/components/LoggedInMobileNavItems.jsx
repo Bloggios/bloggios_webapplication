@@ -26,14 +26,14 @@ import bloggios_logo from '../../../asset/svg/bg_logo_rounded_black.svg'
 import {
     CHATS_PAGE,
     HOME_PAGE,
-    POST_PAGE,
-    REPORT_BUG_PAGE,
+    POST_PAGE, QUESTION_PAGE,
+    REPORT_BUG_PAGE, SERVICES_PAGE,
     SETTING_PAGE,
     SUPPORT_PAGE
 } from "../../../constant/pathConstants";
 import {useNavigate} from "react-router-dom";
 import {BsChatDots, BsPatchQuestionFill} from "react-icons/bs";
-import {FaHistory, FaUserAlt} from "react-icons/fa";
+import {FaCode, FaHistory, FaUserAlt} from "react-icons/fa";
 import {IoIosSettings, IoMdLogOut} from "react-icons/io";
 import {ACTIVITY_PATH_MATCHER, PROFILE_PATH_MATCHER} from "../../../constant/ServiceConstants";
 import {initLogout} from "../../../service/functions";
@@ -93,8 +93,8 @@ const LoggedInMobileNavItems = () => {
                 </NavItem>
 
                 <NavItem
-                    onClick={() => navigate(QUESTION_LIST)}
-                    active={window.location.pathname === QUESTION_LIST}
+                    onClick={() => navigate(QUESTION_PAGE)}
+                    active={window.location.pathname === QUESTION_PAGE}
                 >
                     <BsPatchQuestionFill />
                 </NavItem>
@@ -123,12 +123,11 @@ const LoggedInMobileNavItems = () => {
                     </DropdownItem>
 
                     <DropdownItem
-                        disabled={true}
-                        onClick={()=> navigate('/activity/' + userId)}
-                        active={window.location.pathname.includes(ACTIVITY_PATH_MATCHER)}
+                        onClick={()=> navigate(SERVICES_PAGE)}
+                        active={window.location.pathname.includes(SERVICES_PAGE)}
                     >
-                        <FaHistory fontSize={'16px'}/>
-                        Activity
+                        <FaCode fontSize={'16px'}/>
+                        Services
                     </DropdownItem>
 
                     <DropdownItem

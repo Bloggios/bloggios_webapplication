@@ -281,7 +281,28 @@ const ForgetPasswordComponent = () => {
                         </span>
                         )}
                     </Field>
-                    c
+                    <FetchLoaderButton
+                        isLoading={buttonLoader}
+                        text={'Next'}
+                        onClick={handleEmailSend}
+                        loaderSize={'2px'}
+                        loaderDotsSize={'2px'}
+                        bgColor={'#4258ff'}
+                        hBgColor={'rgba(66, 88, 255, 0.9)'}
+                        aBgColor={'#4258ff'}
+                        color={'rgba(245, 245, 245, 0.8)'}
+                        hColor={'rgba(245, 245, 245, 1)'}
+                        borderRadius={'10px'}
+                        padding={'8px 25px'}
+                        style={{
+                            width: '110px',
+                            height: '40px',
+                            border: 'none',
+                            outline: 'none',
+                            fontSize: 'clamp(0.75rem, 0.6622rem + 0.5405vw, 1rem)',
+                            alignSelf: 'center'
+                        }}
+                    />
                 </>
             )
         } else if (currentStep === 2) {

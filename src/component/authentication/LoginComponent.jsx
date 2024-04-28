@@ -189,39 +189,39 @@ const LoginComponent = () => {
                 />
             </Bg.Form>
 
-            <Bg.Divider>
-                <div/>
-                <span>Or Continue With</span>
-                <div/>
-            </Bg.Divider>
+            {/*<Bg.Divider>*/}
+            {/*    <div/>*/}
+            {/*    <span>Or Continue With</span>*/}
+            {/*    <div/>*/}
+            {/*</Bg.Divider>*/}
 
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: '10px'
-            }}>
-                <IconButton
-                    bgColor={'rgba(255, 255, 255, 0.1)'}
-                    borderRadius={'4px'}
-                    tooltipId={'login-google-login-page'}
-                    tooltipContent={'Login with Google'}
-                    tooltipDelay={0}
-                >
-                    <FcGoogle/>
-                </IconButton>
+            {/*<div style={{*/}
+            {/*    width: '100%',*/}
+            {/*    display: 'flex',*/}
+            {/*    flexDirection: 'row',*/}
+            {/*    justifyContent: 'center',*/}
+            {/*    gap: '10px'*/}
+            {/*}}>*/}
+            {/*    <IconButton*/}
+            {/*        bgColor={'rgba(255, 255, 255, 0.1)'}*/}
+            {/*        borderRadius={'4px'}*/}
+            {/*        tooltipId={'login-google-login-page'}*/}
+            {/*        tooltipContent={'Login with Google'}*/}
+            {/*        tooltipDelay={0}*/}
+            {/*    >*/}
+            {/*        <FcGoogle/>*/}
+            {/*    </IconButton>*/}
 
-                <IconButton
-                    bgColor={'rgba(255, 255, 255, 0.1)'}
-                    borderRadius={'4px'}
-                    tooltipId={'login-facebook-login-page'}
-                    tooltipContent={'Login with Facebook'}
-                    tooltipDelay={0}
-                >
-                    <FaFacebook color={'#187bf0'}/>
-                </IconButton>
-            </div>
+            {/*    <IconButton*/}
+            {/*        bgColor={'rgba(255, 255, 255, 0.1)'}*/}
+            {/*        borderRadius={'4px'}*/}
+            {/*        tooltipId={'login-facebook-login-page'}*/}
+            {/*        tooltipContent={'Login with Facebook'}*/}
+            {/*        tooltipDelay={0}*/}
+            {/*    >*/}
+            {/*        <FaFacebook color={'#187bf0'}/>*/}
+            {/*    </IconButton>*/}
+            {/*</div>*/}
 
             <Bg.AddAccount>
                 Don't have an Account?

@@ -30,6 +30,7 @@ import {detailedProfile} from "../../restservices/profileApi";
 import PageNotFound from "../catchPages/PageNotFound";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import {useQuery} from "@tanstack/react-query";
+import ProfilePostOutlet from "./outlets/ProfilePostOutlet";
 
 const HorizontalTabs = lazy(() => import("../../component/tabs/HorizontalTabs"));
 const ProfileHeader = lazy(() => import("../../component/Cards/ProfileHeader"));
@@ -106,12 +107,12 @@ const ProfilePage = () => {
                         </Suspense>
 
                         <ProfileContent>
-                            <Suspense>
-                                <HorizontalTabs id={id}/>
-                            </Suspense>
+                            {/*<Suspense>*/}
+                            {/*    <HorizontalTabs id={id}/>*/}
+                            {/*</Suspense>*/}
 
                             <Suspense>
-                                <Outlet/>
+                                <ProfilePostOutlet />
                             </Suspense>
                         </ProfileContent>
                     </>
