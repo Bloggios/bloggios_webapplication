@@ -55,12 +55,12 @@ const NavbarItems = () => {
                     >
                         <CgMoreO/>
                     </NavItem>
-                    <NavItem>
-                        {isSnackbar && snackbarType === 'notification' ?
-                            <Icon src={notificationActive} alt="notification"/> :
-                            <Icon src={notification} alt="notification"/>
-                        }
-                    </NavItem>
+                    {/*<NavItem>*/}
+                    {/*    {isSnackbar && snackbarType === 'notification' ?*/}
+                    {/*        <Icon src={notificationActive} alt="notification"/> :*/}
+                    {/*        <Icon src={notification} alt="notification"/>*/}
+                    {/*    }*/}
+                    {/*</NavItem>*/}
                 </>
             ) : (
                 loggedOutNavItems.map((item) => (

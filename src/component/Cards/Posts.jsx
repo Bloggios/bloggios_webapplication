@@ -198,9 +198,9 @@ const Posts = React.forwardRef(({
                         <IconButton>
                             <FaRegCommentDots onClick={()=> navigate(postDetails)} />
                         </IconButton>
-                        <IconButton>
-                            <IoShareSocialOutline />
-                        </IconButton>
+                        {/*<IconButton>*/}
+                        {/*    <IoShareSocialOutline />*/}
+                        {/*</IconButton>*/}
                     </LikeCommentShareWrapper>
                 </PostFooter>
             )
@@ -298,7 +298,7 @@ const Posts = React.forwardRef(({
                             <CgProfile fontSize={'18px'} />
                         </DropDownItemWrapper>
 
-                        <DropDownItemWrapper>
+                        <DropDownItemWrapper onClick={()=> dispatchWarningMessage(dispatch, 'Coming Soon')}>
                             <Typography text={'Report Post'} type={'custom'} size={'14px'} />
                             <MdOutlineReport fontSize={'20px'} />
                         </DropDownItemWrapper>

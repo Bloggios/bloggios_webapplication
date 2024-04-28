@@ -35,7 +35,7 @@ import {VscSearchStop} from "react-icons/vsc";
 import FallbackLoader from "../loaders/fallbackLoader";
 import SearchUserSmallComponent from "../Cards/SearchUserSmallComponent";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
-import {CHATS_PAGE, HOME_PAGE, POST_PAGE} from "../../constant/pathConstants";
+import {CHATS_PAGE, HOME_PAGE, POST_PAGE, QUESTION_PAGE} from "../../constant/pathConstants";
 import {TbMessage2Share} from "react-icons/tb";
 import {GiChatBubble} from "react-icons/gi";
 import {CgProfile} from "react-icons/cg";
@@ -88,7 +88,7 @@ const WebSearchBar = ({
         {
             label: 'Q & A',
             icon: <BsFillPatchQuestionFill />,
-            path: QUESTION_LIST
+            path: QUESTION_PAGE
         },
         {
             label: 'Setting',

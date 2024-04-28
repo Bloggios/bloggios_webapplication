@@ -33,7 +33,7 @@ import {setSnackbar} from "../../state/snackbarSlice";
 import {useDispatch} from "react-redux";
 import {FaLocationDot} from "react-icons/fa6";
 import SimpleLoader from "../loaders/simpleLoader";
-import {dispatchError} from "../../service/functions";
+import {dispatchError, dispatchWarningMessage} from "../../service/functions";
 import {
     addHashTag,
     fetchTags,
@@ -252,7 +252,8 @@ const CreatePost = ({
                             text={'Location'}
                             icon={<FaLocationDot color={'#d9b25f'} fontSize={'20px'}/>}
                             cursor={'not-allowed'}
-                            onClick={handleLocation}
+                            onClick={()=> dispatchWarningMessage(dispatch, 'Coming Soon')}
+                            // onClick={handleLocation}
                         />
                     </ButtonsWrapper>
 
